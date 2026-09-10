@@ -7,6 +7,7 @@ from app.decorators import ensure_farm_access, owner_required
 from app.extensions import db
 from app.models.poultry import Batch, Farm
 from app.utils.audit import log_action
+from app.utils.plans import get_current_plan
 
 
 @poultry_bp.route("/fermes")
@@ -22,6 +23,15 @@ def farms_list():
 @poultry_bp.route("/fermes/nouvelle", methods=["GET", "POST"])
 @owner_required
 def farm_new():
+    plan = get_current_plan(current_user.tenant)
+    if plan.max_farms is not None and Farm.query.count() >= plan.max_farms:
+        flash(
+            f"Votre plan {plan.name} est limite a {plan.max_farms} ferme(s). "
+            "Passez a un plan superieur pour en ajouter davantage.",
+            "warning",
+        )
+        return redirect(url_for("billing.pricing"))
+
     form = FarmForm()
     if form.validate_on_submit():
         farm = Farm(

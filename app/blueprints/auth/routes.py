@@ -12,9 +12,12 @@ from app.blueprints.auth.forms import (
     SignupForm,
 )
 from app.extensions import db
+from app.models import utcnow
+from app.models.billing import SUBSCRIPTION_STATUS_TRIALING, Subscription
 from app.models.core import ROLE_OWNER, PasswordResetToken, Tenant, User
 from app.utils.audit import log_action
 from app.utils.emailing import send_password_reset_email, send_welcome_email
+from app.utils.plans import get_free_plan
 from app.utils.security import generate_unique_slug, validate_password_policy
 from app.utils.tenant import tenant_bypass
 
@@ -113,6 +116,19 @@ def signup():
             owner.set_password(form.password.data)
             db.session.add(owner)
             db.session.flush()
+
+            free_plan = get_free_plan()
+            tenant.plan = free_plan.code
+            db.session.add(
+                Subscription(
+                    tenant_id=tenant.id,
+                    plan_id=free_plan.id,
+                    status=SUBSCRIPTION_STATUS_TRIALING,
+                    current_period_start=utcnow(),
+                    current_period_end=None,
+                )
+            )
+
             log_action("create", "tenants", tenant.id, {"name": tenant.name, "slug": tenant.slug, "via": "signup"})
             db.session.commit()
 

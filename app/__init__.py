@@ -53,12 +53,14 @@ def _init_extensions(app):
 
 def _register_blueprints(app):
     from app.blueprints.auth import auth_bp
+    from app.blueprints.billing import billing_bp
     from app.blueprints.core import core_bp
     from app.blueprints.poultry import poultry_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(core_bp)
     app.register_blueprint(poultry_bp)
+    app.register_blueprint(billing_bp)
 
 
 def _register_request_hooks(app):
@@ -107,9 +109,10 @@ def _register_template_helpers(app):
 
     @app.template_filter("currency")
     def currency_filter(value):
+        # FCFA (XAF) n'a pas de sous-unite en circulation : pas de decimales.
         if value is None:
             return "-"
-        return f"{float(value):,.2f} €".replace(",", " ").replace(".", ",")
+        return f"{float(value):,.0f} FCFA".replace(",", " ")
 
     @app.template_filter("number")
     def number_filter(value, decimals=0):
@@ -119,6 +122,8 @@ def _register_template_helpers(app):
 
     @app.context_processor
     def inject_globals():
+        from flask import current_app
+
         unread_alerts_count = 0
         if current_user.is_authenticated and not current_user.is_super_admin():
             from app.models.poultry import Alert
@@ -128,4 +133,5 @@ def _register_template_helpers(app):
             "role_labels": ROLE_LABELS,
             "current_user_obj": current_user,
             "unread_alerts_count": unread_alerts_count,
+            "cinetpay_enabled": current_app.config.get("CINETPAY_ENABLED"),
         }

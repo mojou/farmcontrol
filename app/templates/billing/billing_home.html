@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Facturation - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Facturation</h1>
+  <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-secondary btn-sm">Voir tous les plans</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">Abonnement actuel</h6>
+    {% if subscription %}
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <span class="h4 fw-bold">{{ subscription.plan.name }}</span>
+        {% if subscription.status == 'active' %}<span class="badge bg-success ms-2">Actif</span>
+        {% elif subscription.status == 'trialing' %}<span class="badge bg-secondary ms-2">Gratuit</span>
+        {% else %}<span class="badge bg-danger ms-2">{{ subscription.status }}</span>{% endif %}
+      </div>
+      <div class="text-muted small">
+        {% if subscription.current_period_end %}
+        Renouvellement / expiration le {{ subscription.current_period_end.strftime('%d/%m/%Y') }}
+        {% else %}
+        Plan gratuit, sans expiration
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <p class="text-muted mb-0">Aucun abonnement actif.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% include "billing/_pricing_cards.html" %}
+
+<div class="card mt-4">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">Historique des paiements</h6>
+    {% if transactions %}
+    <table class="table table-sm">
+      <thead><tr><th>Date</th><th>Plan</th><th>Montant</th><th>Methode</th><th>Statut</th></tr></thead>
+      <tbody>
+        {% for tx in transactions %}
+        <tr>
+          <td>{{ tx.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td>{{ tx.plan.name }}</td>
+          <td>{{ tx.amount_xaf|number }} FCFA</td>
+          <td>{{ tx.payment_method or "-" }}</td>
+          <td>
+            {% if tx.status == 'completed' %}<span class="badge bg-success">Reussi</span>
+            {% elif tx.status == 'pending' %}<span class="badge bg-warning text-dark">En attente</span>
+            {% else %}<span class="badge bg-danger">Echoue</span>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mb-0">Aucun paiement pour le moment.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

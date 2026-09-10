@@ -11,8 +11,8 @@ class TenantForm(FlaskForm):
     slug = StringField("Identifiant (slug)", validators=[DataRequired(), Length(max=80)])
     plan = SelectField(
         "Formule",
-        choices=[("standard", "Standard"), ("premium", "Premium")],
-        default="standard",
+        choices=[("decouverte", "Decouverte (gratuit)"), ("standard", "Standard"), ("pro", "Pro")],
+        default="decouverte",
     )
     is_demo = BooleanField("Tenant de demonstration")
 

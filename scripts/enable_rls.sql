@@ -40,7 +40,9 @@ DECLARE
         'poultry_sanitary_program_items',
         'poultry_daily_reports',
         'poultry_growth_references',
-        'poultry_growth_reference_points'
+        'poultry_growth_reference_points',
+        'billing_subscriptions',
+        'billing_payment_transactions'
     ];
 BEGIN
     FOREACH t IN ARRAY tenant_scoped_tables LOOP
@@ -69,3 +71,6 @@ END $$;
 -- la gestion (creation/desactivation de clients) passe toujours par le role
 -- super_admin cote application (app.utils.tenant.tenant_bypass), qui positionne
 -- app.is_superadmin = 'true'.
+--
+-- La table `billing_plans` (catalogue des formules tarifaires) n'est pas non
+-- plus filtree par tenant : c'est un referentiel commun a tous les clients.

@@ -3,75 +3,94 @@
 {% block guest_content %}
 <div style="background-color: #ffffff;">
 
-  <nav class="navbar navbar-expand navbar-light border-bottom">
+  <nav class="navbar navbar-expand navbar-light border-bottom bg-white">
     <div class="container">
-      <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
-      <div class="d-flex gap-2">
+      <a class="navbar-brand fw-bold fs-4" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="{{ url_for('billing.pricing') }}" class="small text-decoration-none text-dark fw-semibold">Tarifs</a>
         <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
         <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
       </div>
     </div>
   </nav>
 
-  <header class="py-5" style="background-color: var(--fc-bg);">
+  <header class="py-5" style="background: radial-gradient(circle at 15% 20%, var(--fc-primary-light) 0%, var(--fc-bg) 55%);">
     <div class="container py-5 text-center">
-      <h1 class="fw-bold mb-3" style="font-size: 2.4rem; color: #1c2a1f; max-width: 760px; margin-inline: auto;">
+      <span class="badge rounded-pill mb-3" style="background-color: var(--fc-primary-light); color: var(--fc-primary-dark); font-weight: 600; padding: 0.45rem 1rem;">
+        <i class="bi bi-geo-alt-fill"></i> Pense pour l'Afrique - tarifs en FCFA
+      </span>
+      <h1 class="fw-bold mb-3" style="font-size: 2.6rem; color: #16211a; max-width: 760px; margin-inline: auto; line-height: 1.15;">
         La plateforme de gestion d'elevage qui vous dit si votre lot est rentable.
       </h1>
-      <p class="text-muted mb-4" style="font-size: 1.1rem; max-width: 620px; margin-inline: auto;">
+      <p class="text-muted mb-4" style="font-size: 1.15rem; max-width: 620px; margin-inline: auto;">
         Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques
         pour les elevages de poulets de chair. Multitenant, securise, accessible partout.
       </p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Creer mon compte gratuitement</a>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">J'ai deja un compte</a>
+        <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-secondary btn-lg">Voir les tarifs</a>
       </div>
-      <p class="text-muted small mt-3 mb-0">Aucune carte bancaire requise. Votre espace est pret en 1 minute.</p>
+      <p class="text-muted small mt-3 mb-0">Formule gratuite disponible. Votre espace est pret en 1 minute.</p>
     </div>
   </header>
 
   <section class="py-5">
     <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold h3">Tout ce qu'il faut pour piloter votre elevage</h2>
+      </div>
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-graph-up-arrow fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Performance zootechnique</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-graph-up-arrow fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Performance zootechnique</h5>
             <p class="text-muted mb-0">Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-cash-coin fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Rentabilite par lot</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-cash-coin fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Rentabilite par lot</h5>
             <p class="text-muted mb-0">Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-bell fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Alertes automatiques</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-bell fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Alertes automatiques</h5>
             <p class="text-muted mb-0">Mortalite elevee, stock faible ou observation urgente : notification immediate par email au proprietaire.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-people fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Equipe et roles</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-people fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Equipe et roles</h5>
             <p class="text-muted mb-0">Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-shield-lock fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Donnees isolees et securisees</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-shield-lock fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Donnees isolees et securisees</h5>
             <p class="text-muted mb-0">Isolation stricte entre clients a deux niveaux, y compris au niveau de la base de donnees (Row Level Security).</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body">
-            <i class="bi bi-file-earmark-pdf fs-2" style="color: var(--fc-primary);"></i>
-            <h5 class="mt-3">Rapports exportables</h5>
+          <div class="card h-100"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+              <i class="bi bi-file-earmark-pdf fs-4" style="color: var(--fc-primary);"></i>
+            </div>
+            <h5>Rapports exportables</h5>
             <p class="text-muted mb-0">Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.</p>
           </div></div>
         </div>
@@ -81,8 +100,9 @@
 
   <section class="py-5 text-center" style="background-color: var(--fc-bg);">
     <div class="container">
-      <h2 class="h4 fw-bold mb-3">Pret a piloter votre elevage ?</h2>
-      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Creer mon compte</a>
+      <h2 class="h3 fw-bold mb-2">Des tarifs accessibles, en FCFA</h2>
+      <p class="text-muted mb-4">A partir de gratuit. Sans engagement.</p>
+      <a href="{{ url_for('billing.pricing') }}" class="btn btn-primary btn-lg">Voir les tarifs</a>
     </div>
   </section>
 

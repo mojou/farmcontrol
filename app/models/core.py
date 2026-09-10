@@ -39,6 +39,12 @@ class Tenant(TimestampMixin, db.Model):
 
     users = db.relationship("User", back_populates="tenant", cascade="all, delete-orphan")
     farms = db.relationship("Farm", back_populates="tenant", cascade="all, delete-orphan")
+    subscription = db.relationship(
+        "Subscription", uselist=False, cascade="all, delete-orphan", backref="tenant"
+    )
+    payment_transactions = db.relationship(
+        "PaymentTransaction", cascade="all, delete-orphan", backref="tenant"
+    )
 
     def __repr__(self):
         return f"<Tenant {self.slug}>"

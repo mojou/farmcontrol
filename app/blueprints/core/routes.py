@@ -8,9 +8,12 @@ from app.blueprints.core import core_bp
 from app.blueprints.core.forms import ProfileForm, TenantForm, UserForm
 from app.decorators import owner_required, super_admin_required
 from app.extensions import db
+from app.models import utcnow
+from app.models.billing import SUBSCRIPTION_STATUS_ACTIVE, SUBSCRIPTION_STATUS_TRIALING, Plan, Subscription
 from app.models.core import ROLE_OWNER, Tenant, User
 from app.models.poultry import Alert, Batch, Farm
 from app.utils.audit import log_action
+from app.utils.plans import ensure_plans_seeded, get_current_plan
 from app.utils.security import validate_password_policy
 from app.utils.tenant import tenant_bypass
 from app.utils.uploads import delete_photo, save_avatar_photo
@@ -172,6 +175,15 @@ def users_list():
 @core_bp.route("/users/new", methods=["GET", "POST"])
 @owner_required
 def user_new():
+    plan = get_current_plan(current_user.tenant)
+    if plan.max_users is not None and User.query.count() >= plan.max_users:
+        flash(
+            f"Votre plan {plan.name} est limite a {plan.max_users} utilisateur(s). "
+            "Passez a un plan superieur pour en ajouter davantage.",
+            "warning",
+        )
+        return redirect(url_for("billing.pricing"))
+
     form = UserForm()
     form.farm_id.choices = [(0, "Toutes les fermes")] + [
         (f.id, f.name) for f in Farm.query.order_by(Farm.name).all()
@@ -276,6 +288,20 @@ def tenant_new():
             )
             owner.set_password(form.owner_password.data)
             db.session.add(owner)
+            db.session.flush()
+
+            ensure_plans_seeded()
+            selected_plan = Plan.query.filter_by(code=form.plan.data).first()
+            db.session.add(
+                Subscription(
+                    tenant_id=tenant.id,
+                    plan_id=selected_plan.id,
+                    status=SUBSCRIPTION_STATUS_ACTIVE if selected_plan.price_xaf > 0 else SUBSCRIPTION_STATUS_TRIALING,
+                    current_period_start=utcnow(),
+                    current_period_end=None,
+                )
+            )
+
             log_action("create", "tenants", tenant.id, {"name": tenant.name, "slug": tenant.slug})
             db.session.commit()
 

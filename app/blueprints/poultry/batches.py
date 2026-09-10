@@ -22,6 +22,7 @@ from app.models.poultry import (
     SanitaryProgramItem,
 )
 from app.utils.audit import log_action
+from app.utils.plans import get_current_plan
 from app.utils.zootechnie import (
     compute_fcr,
     feed_series,
@@ -61,6 +62,17 @@ def batches_list():
 @poultry_bp.route("/lots/nouveau", methods=["GET", "POST"])
 @owner_required
 def batch_new():
+    plan = get_current_plan(current_user.tenant)
+    if plan.max_active_batches is not None:
+        active_count = Batch.query.filter_by(status=BATCH_STATUS_ACTIVE).count()
+        if active_count >= plan.max_active_batches:
+            flash(
+                f"Votre plan {plan.name} est limite a {plan.max_active_batches} lot(s) actif(s). "
+                "Cloturez un lot existant ou passez a un plan superieur.",
+                "warning",
+            )
+            return redirect(url_for("billing.pricing"))
+
     form = BatchForm()
     form.farm_id.choices = [(f.id, f.name) for f in Farm.query.order_by(Farm.name).all()]
     form.growth_reference_id.choices = [(0, "Aucune")] + [

@@ -44,6 +44,16 @@ class Config:
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_UPLOAD_SIZE_MB", 2)) * 1024 * 1024
     ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
+    # Paiement (CinetPay - Mobile Money / carte, tarifs en FCFA/XAF)
+    CINETPAY_API_KEY = os.environ.get("CINETPAY_API_KEY")
+    CINETPAY_SITE_ID = os.environ.get("CINETPAY_SITE_ID")
+    CINETPAY_BASE_URL = os.environ.get("CINETPAY_BASE_URL", "https://api-checkout.cinetpay.com/v2")
+    CINETPAY_CURRENCY = "XAF"
+    # Actif seulement si les identifiants marchand sont renseignes. Sinon
+    # l'abonnement passe en mode demonstration (paiement simule, clairement
+    # annonce a l'ecran) pour ne jamais bloquer la demonstration du produit.
+    CINETPAY_ENABLED = bool(CINETPAY_API_KEY and CINETPAY_SITE_ID)
+
     # Securite authentification
     PASSWORD_MIN_LENGTH = int(os.environ.get("PASSWORD_MIN_LENGTH", 10))
     MAX_LOGIN_ATTEMPTS = int(os.environ.get("MAX_LOGIN_ATTEMPTS", 5))
