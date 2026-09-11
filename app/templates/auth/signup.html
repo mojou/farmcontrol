@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}Creer mon compte - Farm Control{% endblock %}
+{% block guest_content %}
+<div class="d-flex align-items-center justify-content-center py-5" style="min-height: 100vh; background-color: var(--fc-bg);">
+  <div class="card shadow-sm" style="width: 100%; max-width: 460px;">
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <h1 class="h4 fw-bold" style="color: var(--fc-primary);">Creer mon compte</h1>
+        <p class="text-muted small mb-0">Votre espace Farm Control est cree immediatement.</p>
+      </div>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {{ fm.render_field(form.organization_name) }}
+        <div class="row">
+          <div class="col-6">{{ fm.render_field(form.first_name) }}</div>
+          <div class="col-6">{{ fm.render_field(form.last_name) }}</div>
+        </div>
+        {{ fm.render_field(form.email) }}
+        {{ fm.render_field(form.password) }}
+        {{ fm.render_field(form.password_confirm) }}
+        <button type="submit" class="btn btn-primary w-100">{{ form.submit.label.text }}</button>
+      </form>
+      <div class="text-center mt-3">
+        <span class="small text-muted">Deja un compte ?</span>
+        <a href="{{ url_for('auth.login') }}" class="small">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

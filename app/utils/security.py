@@ -1,7 +1,27 @@
 """Politique de mot de passe et aides de securite (paragraphe 8)."""
 import re
+import secrets
+import unicodedata
 
 from flask import current_app
+
+
+def slugify(value: str) -> str:
+    """Convertit un nom libre en identifiant (slug) URL-safe et minuscule."""
+    normalized = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    slug = re.sub(r"[^a-z0-9]+", "-", normalized.lower()).strip("-")
+    return slug or "exploitation"
+
+
+def generate_unique_slug(base_name: str, exists_fn) -> str:
+    """Genere un slug unique a partir d'un nom libre, en ajoutant si besoin un
+    court suffixe aleatoire tant que `exists_fn(slug)` renvoie True.
+    """
+    base = slugify(base_name)
+    slug = base
+    while exists_fn(slug):
+        slug = f"{base}-{secrets.token_hex(2)}"
+    return slug
 
 
 def validate_password_policy(raw_password: str) -> list:

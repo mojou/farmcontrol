@@ -9,12 +9,13 @@ from app.blueprints.auth.forms import (
     ForgotPasswordForm,
     LoginForm,
     ResetPasswordForm,
+    SignupForm,
 )
 from app.extensions import db
-from app.models.core import PasswordResetToken, User
+from app.models.core import ROLE_OWNER, PasswordResetToken, Tenant, User
 from app.utils.audit import log_action
-from app.utils.emailing import send_password_reset_email
-from app.utils.security import validate_password_policy
+from app.utils.emailing import send_password_reset_email, send_welcome_email
+from app.utils.security import generate_unique_slug, validate_password_policy
 from app.utils.tenant import tenant_bypass
 
 
@@ -67,6 +68,64 @@ def login():
         return _redirect_after_login()
 
     return render_template("auth/login.html", form=form)
+
+
+@auth_bp.route("/inscription", methods=["GET", "POST"])
+def signup():
+    """Creation libre d'un compte (chacun cree sa propre exploitation), a la
+    maniere d'un produit SaaS grand public (ex. Odoo) : cree un nouveau
+    tenant et son premier utilisateur, avec le role proprietaire.
+    """
+    if current_user.is_authenticated:
+        return _redirect_after_login()
+
+    form = SignupForm()
+    if form.validate_on_submit():
+        errors = validate_password_policy(form.password.data)
+        if errors:
+            for error in errors:
+                flash(error, "danger")
+            return render_template("auth/signup.html", form=form)
+
+        email = form.email.data.strip().lower()
+        with tenant_bypass():
+            email_taken = User.query.filter_by(email=email).first()
+            if email_taken:
+                flash("Un compte existe deja avec cet email. Connectez-vous.", "danger")
+                return render_template("auth/signup.html", form=form)
+
+            slug = generate_unique_slug(
+                form.organization_name.data,
+                lambda candidate: Tenant.query.filter_by(slug=candidate).first() is not None,
+            )
+
+            tenant = Tenant(name=form.organization_name.data.strip(), slug=slug)
+            db.session.add(tenant)
+            db.session.flush()
+
+            owner = User(
+                tenant_id=tenant.id,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                email=email,
+                role=ROLE_OWNER,
+            )
+            owner.set_password(form.password.data)
+            db.session.add(owner)
+            db.session.flush()
+            log_action("create", "tenants", tenant.id, {"name": tenant.name, "slug": tenant.slug, "via": "signup"})
+            db.session.commit()
+
+        try:
+            send_welcome_email(owner)
+        except Exception:
+            current_app.logger.exception("Echec de l'envoi de l'email de bienvenue")
+
+        login_user(owner)
+        flash(f"Bienvenue sur Farm Control, {owner.first_name}. Votre espace est pret.", "success")
+        return _redirect_after_login()
+
+    return render_template("auth/signup.html", form=form)
 
 
 @auth_bp.route("/logout")

@@ -13,6 +13,7 @@ from app.models.poultry import Alert, Batch, Farm
 from app.utils.audit import log_action
 from app.utils.security import validate_password_policy
 from app.utils.tenant import tenant_bypass
+from app.utils.uploads import delete_photo, save_avatar_photo
 from app.utils.zootechnie import compute_fcr
 
 
@@ -22,7 +23,7 @@ def index():
         if current_user.is_super_admin():
             return redirect(url_for("core.admin_dashboard"))
         return redirect(url_for("core.dashboard"))
-    return redirect(url_for("auth.login"))
+    return render_template("home.html")
 
 
 # --------------------------------------------------------------------------
@@ -94,14 +95,46 @@ def dashboard():
 @login_required
 def profile():
     form = ProfileForm(obj=current_user)
+
     if form.validate_on_submit():
+        new_email = form.email.data.strip().lower()
+        if new_email != current_user.email:
+            with tenant_bypass():
+                existing = User.query.filter(
+                    User.email == new_email, User.id != current_user.id
+                ).first()
+            if existing:
+                flash("Un utilisateur existe deja avec cet email.", "danger")
+                return render_template("core/profile.html", form=form)
+            current_user.email = new_email
+
+        if form.avatar.data:
+            try:
+                new_avatar = save_avatar_photo(form.avatar.data, current_user.tenant_id or 0)
+            except ValueError as exc:
+                flash(str(exc), "danger")
+                return render_template("core/profile.html", form=form)
+            delete_photo(current_user.avatar_path)
+            current_user.avatar_path = new_avatar
+
         current_user.first_name = form.first_name.data
         current_user.last_name = form.last_name.data
         current_user.email_notifications_enabled = form.email_notifications_enabled.data
+        log_action("update", "users", current_user.id, {"action": "profile_update"})
         db.session.commit()
         flash("Profil mis a jour.", "success")
         return redirect(url_for("core.profile"))
     return render_template("core/profile.html", form=form)
+
+
+@core_bp.route("/profile/avatar/remove", methods=["POST"])
+@login_required
+def profile_avatar_remove():
+    delete_photo(current_user.avatar_path)
+    current_user.avatar_path = None
+    db.session.commit()
+    flash("Photo de profil supprimee.", "success")
+    return redirect(url_for("core.profile"))
 
 
 # --------------------------------------------------------------------------

@@ -1,8 +1,8 @@
-"""Gestion des photos jointes aux observations (paragraphe 5).
+"""Gestion des photos jointes aux observations et des avatars utilisateur.
 
 Stockage local dans /uploads pour la V1 (migration vers un stockage cloud
-possible plus tard sans changer le modele : seul photo_path est stocke en
-base, relatif au dossier UPLOAD_FOLDER).
+possible plus tard sans changer le modele : seul le chemin relatif est
+stocke en base, relatif au dossier UPLOAD_FOLDER).
 """
 import os
 import uuid
@@ -11,7 +11,8 @@ from flask import current_app
 from PIL import Image
 from werkzeug.utils import secure_filename
 
-MAX_DIMENSION = 1600  # px, redimensionnement automatique cote serveur
+MAX_DIMENSION_OBSERVATION = 1600  # px, redimensionnement automatique cote serveur
+MAX_DIMENSION_AVATAR = 512
 
 
 def allowed_image(filename: str) -> bool:
@@ -21,9 +22,9 @@ def allowed_image(filename: str) -> bool:
     return ext in current_app.config["ALLOWED_IMAGE_EXTENSIONS"]
 
 
-def save_observation_photo(file_storage, tenant_id: int) -> str:
-    """Enregistre la photo sur disque, la redimensionne si besoin et retourne
-    le chemin relatif (a stocker dans Observation.photo_path).
+def save_photo(file_storage, tenant_id: int, category: str, max_dimension: int) -> str:
+    """Enregistre une photo sur disque sous UPLOAD_FOLDER/<category>/<tenant_id>/,
+    la redimensionne si besoin et retourne le chemin relatif a stocker en base.
     """
     if not file_storage or not file_storage.filename:
         return None
@@ -32,7 +33,7 @@ def save_observation_photo(file_storage, tenant_id: int) -> str:
 
     ext = secure_filename(file_storage.filename).rsplit(".", 1)[1].lower()
     unique_name = f"{uuid.uuid4().hex}.{ext}"
-    relative_dir = os.path.join("observations", str(tenant_id))
+    relative_dir = os.path.join(category, str(tenant_id))
     absolute_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], relative_dir)
     os.makedirs(absolute_dir, exist_ok=True)
 
@@ -42,13 +43,23 @@ def save_observation_photo(file_storage, tenant_id: int) -> str:
     try:
         with Image.open(absolute_path) as image:
             image = image.convert("RGB") if image.mode not in ("RGB", "RGBA") else image
-            if max(image.size) > MAX_DIMENSION:
-                image.thumbnail((MAX_DIMENSION, MAX_DIMENSION))
+            if max(image.size) > max_dimension:
+                image.thumbnail((max_dimension, max_dimension))
             image.save(absolute_path)
     except Exception:
         current_app.logger.warning("Redimensionnement de l'image impossible pour %s", absolute_path)
 
     return os.path.join(relative_dir, unique_name).replace("\\", "/")
+
+
+def save_observation_photo(file_storage, tenant_id: int) -> str:
+    """Photo jointe a une observation quotidienne (paragraphe 5)."""
+    return save_photo(file_storage, tenant_id, "observations", MAX_DIMENSION_OBSERVATION)
+
+
+def save_avatar_photo(file_storage, tenant_id: int) -> str:
+    """Photo de profil d'un utilisateur."""
+    return save_photo(file_storage, tenant_id, "avatars", MAX_DIMENSION_AVATAR)
 
 
 def delete_photo(relative_path: str):

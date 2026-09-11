@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Farm Control - Gestion d'elevage professionnelle{% endblock %}
+{% block guest_content %}
+<div style="background-color: #ffffff;">
+
+  <nav class="navbar navbar-expand navbar-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="py-5" style="background-color: var(--fc-bg);">
+    <div class="container py-5 text-center">
+      <h1 class="fw-bold mb-3" style="font-size: 2.4rem; color: #1c2a1f; max-width: 760px; margin-inline: auto;">
+        La plateforme de gestion d'elevage qui vous dit si votre lot est rentable.
+      </h1>
+      <p class="text-muted mb-4" style="font-size: 1.1rem; max-width: 620px; margin-inline: auto;">
+        Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques
+        pour les elevages de poulets de chair. Multitenant, securise, accessible partout.
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Creer mon compte gratuitement</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">J'ai deja un compte</a>
+      </div>
+      <p class="text-muted small mt-3 mb-0">Aucune carte bancaire requise. Votre espace est pret en 1 minute.</p>
+    </div>
+  </header>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-graph-up-arrow fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Performance zootechnique</h5>
+            <p class="text-muted mb-0">Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche.</p>
+          </div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-cash-coin fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Rentabilite par lot</h5>
+            <p class="text-muted mb-0">Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.</p>
+          </div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-bell fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Alertes automatiques</h5>
+            <p class="text-muted mb-0">Mortalite elevee, stock faible ou observation urgente : notification immediate par email au proprietaire.</p>
+          </div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-people fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Equipe et roles</h5>
+            <p class="text-muted mb-0">Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier.</p>
+          </div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-shield-lock fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Donnees isolees et securisees</h5>
+            <p class="text-muted mb-0">Isolation stricte entre clients a deux niveaux, y compris au niveau de la base de donnees (Row Level Security).</p>
+          </div></div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100"><div class="card-body">
+            <i class="bi bi-file-earmark-pdf fs-2" style="color: var(--fc-primary);"></i>
+            <h5 class="mt-3">Rapports exportables</h5>
+            <p class="text-muted mb-0">Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 text-center" style="background-color: var(--fc-bg);">
+    <div class="container">
+      <h2 class="h4 fw-bold mb-3">Pret a piloter votre elevage ?</h2>
+      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Creer mon compte</a>
+    </div>
+  </section>
+
+  <footer class="py-4 border-top text-center text-muted small">
+    Farm Control - Plateforme de gestion d'elevage
+  </footer>
+
+</div>
+{% endblock %}

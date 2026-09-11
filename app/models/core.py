@@ -59,6 +59,7 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     is_active = db.Column(db.Boolean, nullable=False, default=True)
 
     email_notifications_enabled = db.Column(db.Boolean, nullable=False, default=True)
+    avatar_path = db.Column(db.String(255), nullable=True)
 
     failed_login_count = db.Column(db.Integer, nullable=False, default=0)
     locked_until = db.Column(db.DateTime(timezone=True), nullable=True)

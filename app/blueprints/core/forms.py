@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import BooleanField, PasswordField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
@@ -39,5 +40,10 @@ class UserForm(FlaskForm):
 class ProfileForm(FlaskForm):
     first_name = StringField("Prenom", validators=[DataRequired(), Length(max=80)])
     last_name = StringField("Nom", validators=[DataRequired(), Length(max=80)])
+    email = StringField("Adresse email", validators=[DataRequired(), Email()])
+    avatar = FileField(
+        "Photo de profil",
+        validators=[Optional(), FileAllowed(["png", "jpg", "jpeg", "webp"], "Format d'image non autorise.")],
+    )
     email_notifications_enabled = BooleanField("Recevoir les alertes urgentes par email")
     submit = SubmitField("Enregistrer")

@@ -16,7 +16,13 @@
     </a>
     <div class="dropdown">
       <button class="btn btn-sm btn-light dropdown-toggle border" type="button" data-bs-toggle="dropdown">
-        <i class="bi bi-person-circle me-1"></i>{{ current_user.full_name }}
+        {% if current_user.avatar_path %}
+        <img src="{{ url_for('core.uploaded_file', filename=current_user.avatar_path) }}" alt=""
+             class="rounded-circle me-1" style="width: 20px; height: 20px; object-fit: cover;">
+        {% else %}
+        <i class="bi bi-person-circle me-1"></i>
+        {% endif %}
+        {{ current_user.full_name }}
         <span class="badge bg-secondary ms-1">{{ current_user.role_label }}</span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
