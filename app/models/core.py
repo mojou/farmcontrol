@@ -162,7 +162,9 @@ class AuditLog(TenantMixin, db.Model):
     __tablename__ = "audit_log"
 
     id = db.Column(db.Integer, primary_key=True)
-    tenant_id = db.Column(db.Integer, db.ForeignKey("tenants.id"), nullable=True, index=True)
+    tenant_id = db.Column(
+        db.Integer, db.ForeignKey("tenants.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     user_id = db.Column(
         db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
     )
