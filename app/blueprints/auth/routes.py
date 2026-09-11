@@ -31,32 +31,37 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
+        # Le tenant de l'utilisateur n'est pas encore connu avant de l'avoir
+        # trouve : toute la sequence recherche + mises a jour (compteur
+        # d'echecs, verrouillage, derniere connexion) reste donc dans un seul
+        # contexte de bypass RLS, jusqu'au commit final inclus.
         with tenant_bypass():
             user = User.query.filter_by(email=form.email.data.strip().lower()).first()
 
-        if user is None or not user.is_active:
-            flash("Identifiants incorrects.", "danger")
-            return render_template("auth/login.html", form=form)
+            if user is None or not user.is_active:
+                flash("Identifiants incorrects.", "danger")
+                return render_template("auth/login.html", form=form)
 
-        if user.is_locked():
-            minutes = max(int((user.locked_until - datetime.now(timezone.utc)).total_seconds() // 60) + 1, 1)
-            flash(f"Compte temporairement verrouille. Reessayez dans {minutes} minute(s).", "danger")
-            return render_template("auth/login.html", form=form)
+            if user.is_locked():
+                minutes = max(int((user.locked_until - datetime.now(timezone.utc)).total_seconds() // 60) + 1, 1)
+                flash(f"Compte temporairement verrouille. Reessayez dans {minutes} minute(s).", "danger")
+                return render_template("auth/login.html", form=form)
 
-        if not user.check_password(form.password.data):
-            user.register_failed_login(
-                current_app.config["MAX_LOGIN_ATTEMPTS"], current_app.config["LOGIN_LOCKOUT_MINUTES"]
-            )
+            if not user.check_password(form.password.data):
+                user.register_failed_login(
+                    current_app.config["MAX_LOGIN_ATTEMPTS"], current_app.config["LOGIN_LOCKOUT_MINUTES"]
+                )
+                db.session.commit()
+                flash("Identifiants incorrects.", "danger")
+                return render_template("auth/login.html", form=form)
+
+            if user.tenant and not user.tenant.is_active:
+                flash("Ce compte est desactive. Contactez votre administrateur.", "danger")
+                return render_template("auth/login.html", form=form)
+
+            user.register_successful_login()
             db.session.commit()
-            flash("Identifiants incorrects.", "danger")
-            return render_template("auth/login.html", form=form)
 
-        if user.tenant and not user.tenant.is_active:
-            flash("Ce compte est desactive. Contactez votre administrateur.", "danger")
-            return render_template("auth/login.html", form=form)
-
-        user.register_successful_login()
-        db.session.commit()
         login_user(user, remember=form.remember_me.data)
         flash(f"Bienvenue, {user.first_name}.", "success")
         return _redirect_after_login()
@@ -79,20 +84,25 @@ def forgot_password():
 
     form = ForgotPasswordForm()
     if form.validate_on_submit():
+        # Recherche + creation du jeton dans le meme contexte de bypass RLS :
+        # le tenant de l'utilisateur n'est pas connu avant de l'avoir trouve,
+        # et la requete est anonyme (pas de tenant_id de session a utiliser).
         with tenant_bypass():
             user = User.query.filter_by(email=form.email.data.strip().lower()).first()
 
+            if user:
+                raw_token = PasswordResetToken.generate_raw_token()
+                reset_token = PasswordResetToken(
+                    tenant_id=user.tenant_id,
+                    user_id=user.id,
+                    token_hash=PasswordResetToken.hash_token(raw_token),
+                    expires_at=datetime.now(timezone.utc)
+                    + timedelta(minutes=current_app.config["PASSWORD_RESET_TOKEN_MINUTES"]),
+                )
+                db.session.add(reset_token)
+                db.session.commit()
+
         if user:
-            raw_token = PasswordResetToken.generate_raw_token()
-            reset_token = PasswordResetToken(
-                tenant_id=user.tenant_id,
-                user_id=user.id,
-                token_hash=PasswordResetToken.hash_token(raw_token),
-                expires_at=datetime.now(timezone.utc)
-                + timedelta(minutes=current_app.config["PASSWORD_RESET_TOKEN_MINUTES"]),
-            )
-            db.session.add(reset_token)
-            db.session.commit()
             reset_url = url_for("auth.reset_password", token=raw_token, _external=True)
             try:
                 send_password_reset_email(user, reset_url)
@@ -131,10 +141,10 @@ def reset_password(token):
 
         with tenant_bypass():
             user = db.session.get(User, matching_token.user_id)
-        user.set_password(form.password.data)
-        matching_token.used_at = datetime.now(timezone.utc)
-        log_action("update", "users", user.id, {"action": "password_reset"})
-        db.session.commit()
+            user.set_password(form.password.data)
+            matching_token.used_at = datetime.now(timezone.utc)
+            log_action("update", "users", user.id, {"action": "password_reset"})
+            db.session.commit()
         flash("Votre mot de passe a ete reinitialise. Vous pouvez vous connecter.", "success")
         return redirect(url_for("auth.login"))
 
