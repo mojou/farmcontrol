@@ -13,7 +13,7 @@
 # minutes d'inactivite (premiere requete plus lente le temps du reveil), et
 # le disque est ephemere (les photos uploadees dans /uploads sont perdues a
 # chaque redeploiement - prevoir un stockage externe pour un usage reel).
-# La base PostgreSQL gratuite Render expire au bout de 90 jours ; pour une
+# La base PostgreSQL gratuite Render expire au bout de 30 jours ; pour une
 # base gratuite permanente, remplacez `fromDatabase` par l'URL de connexion
 # d'un service comme https://neon.tech ou https://supabase.com (tier gratuit
 # perenne) dans la variable DATABASE_URL.
