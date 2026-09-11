@@ -1,5 +1,7 @@
 # Image de production pour Farm Control (Flask + Gunicorn + WeasyPrint).
-FROM python:3.12-slim
+# Fixee sur bookworm (Debian 12) plutot que la derniere slim (trixie) pour
+# eviter les renommages de paquets systeme entre versions de Debian.
+FROM python:3.12-slim-bookworm
 
 # Dependances systeme requises par WeasyPrint (Pango/Cairo/GDK-Pixbuf) et psycopg2.
 RUN apt-get update && apt-get install -y --no-install-recommends \
