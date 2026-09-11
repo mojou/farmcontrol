@@ -85,9 +85,11 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=True)
     status = db.Column(db.String(20), nullable=False, default=BATCH_STATUS_ACTIVE)
-    growth_reference_id = db.Column(db.Integer, db.ForeignKey("poultry_growth_references.id"), nullable=True)
+    growth_reference_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_growth_references.id", ondelete="SET NULL"), nullable=True
+    )
 
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     farm = db.relationship("Farm", back_populates="batches")
     growth_reference = db.relationship("GrowthReference")
@@ -209,7 +211,7 @@ class FeedRecord(TimestampMixin, TenantMixin, db.Model):
     quantity_kg = db.Column(db.Numeric(10, 2), nullable=False)
     unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
 
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="feed_records")
     stock_item = db.relationship("StockItem", foreign_keys=[stock_item_id])
@@ -227,7 +229,7 @@ class WaterRecord(TimestampMixin, TenantMixin, db.Model):
     batch_day_id = db.Column(db.Integer, db.ForeignKey("poultry_batch_days.id"), nullable=False, index=True)
 
     quantity_liters = db.Column(db.Numeric(10, 2), nullable=False)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="water_records")
 
@@ -241,7 +243,7 @@ class MortalityRecord(TimestampMixin, TenantMixin, db.Model):
 
     quantity_dead = db.Column(db.Integer, nullable=False)
     cause = db.Column(db.String(255), nullable=True)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="mortality_records")
 
@@ -256,7 +258,7 @@ class WoodRecord(TimestampMixin, TenantMixin, db.Model):
 
     quantity = db.Column(db.Numeric(10, 2), nullable=False)
     unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="wood_records")
     stock_item = db.relationship("StockItem", foreign_keys=[stock_item_id])
@@ -278,7 +280,7 @@ class MedicationRecord(TimestampMixin, TenantMixin, db.Model):
     quantity = db.Column(db.Numeric(10, 2), nullable=False)
     unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     notes = db.Column(db.Text, nullable=True)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="medication_records")
     stock_item = db.relationship("StockItem", foreign_keys=[stock_item_id])
@@ -298,7 +300,7 @@ class Observation(TimestampMixin, TenantMixin, db.Model):
     description = db.Column(db.Text, nullable=False)
     severity = db.Column(db.String(20), nullable=False, default=OBS_SEVERITY_NORMAL)
     photo_path = db.Column(db.String(255), nullable=True)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="observations")
 
@@ -316,7 +318,7 @@ class WeightRecord(TimestampMixin, TenantMixin, db.Model):
     average_weight = db.Column(db.Numeric(10, 2), nullable=False)  # grammes
     sample_size = db.Column(db.Integer, nullable=False)
     observation = db.Column(db.Text, nullable=True)
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="weight_records")
 
@@ -395,7 +397,7 @@ class SanitaryProgramItem(TimestampMixin, TenantMixin, db.Model):
 
     is_done = db.Column(db.Boolean, nullable=False, default=False)
     done_at = db.Column(db.DateTime(timezone=True), nullable=True)
-    done_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    done_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch = db.relationship("Batch", back_populates="sanitary_items")
 
@@ -412,9 +414,9 @@ class DailyReport(TimestampMixin, TenantMixin, db.Model):
     status = db.Column(db.String(20), nullable=False, default=REPORT_STATUS_DRAFT)
     notes = db.Column(db.Text, nullable=True)
 
-    submitted_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    submitted_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     submitted_at = db.Column(db.DateTime(timezone=True), nullable=True)
-    reviewed_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    reviewed_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     reviewed_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     batch = db.relationship("Batch")
@@ -428,7 +430,7 @@ class GrowthReference(TimestampMixin, TenantMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)  # ex: "Ross 308"
-    created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     points = db.relationship(
         "GrowthReferencePoint", back_populates="reference", cascade="all, delete-orphan",

@@ -66,6 +66,13 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
 
     tenant = db.relationship("Tenant", back_populates="users")
     farm = db.relationship("Farm", back_populates="workers", foreign_keys=[farm_id])
+    # Sans cascade explicite : a la suppression d'un utilisateur, ses entrees
+    # d'audit sont conservees (traçabilite, paragraphe 7.3) et simplement
+    # detachees (user_id mis a NULL, colonne nullable) plutot que supprimees.
+    audit_logs = db.relationship("AuditLog", back_populates="user")
+    password_reset_tokens = db.relationship(
+        "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
+    )
 
     __table_args__ = (
         db.UniqueConstraint("tenant_id", "email", name="uq_users_tenant_email"),
@@ -130,7 +137,7 @@ class PasswordResetToken(TimestampMixin, TenantMixin, db.Model):
     expires_at = db.Column(db.DateTime(timezone=True), nullable=False)
     used_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
-    user = db.relationship("User")
+    user = db.relationship("User", back_populates="password_reset_tokens")
 
     @staticmethod
     def generate_raw_token() -> str:
@@ -156,14 +163,16 @@ class AuditLog(TenantMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     tenant_id = db.Column(db.Integer, db.ForeignKey("tenants.id"), nullable=True, index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True, index=True)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     action = db.Column(db.String(20), nullable=False)  # create / update / delete
     table_name = db.Column(db.String(100), nullable=False)
     record_id = db.Column(db.Integer, nullable=True)
     details = db.Column(db.JSON, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow, nullable=False)
 
-    user = db.relationship("User")
+    user = db.relationship("User", back_populates="audit_logs")
 
     def __repr__(self):
         return f"<AuditLog {self.action} {self.table_name}#{self.record_id}>"
