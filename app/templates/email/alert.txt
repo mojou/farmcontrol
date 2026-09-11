@@ -1,0 +1,8 @@
+Farm Control - Alerte : {{ alert.title }}
+
+{{ alert.message }}
+
+Priorite : {{ alert.priority }}
+Date : {{ alert.created_at.strftime('%d/%m/%Y %H:%M') }}
+
+Connectez-vous a Farm Control pour plus de details.

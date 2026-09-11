@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Rapport - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <div>
+    <h1 class="fc-page-title">Rapport du lot {{ batch.code }}</h1>
+    <p class="text-muted mb-0">{{ batch.farm.name }} - {{ batch.start_date.strftime('%d/%m/%Y') }} {% if batch.end_date %}au {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}</p>
+  </div>
+  <a href="{{ url_for('poultry.batch_report_pdf', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+    <i class="bi bi-file-earmark-pdf"></i> Exporter en PDF
+  </a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
+      <div class="fc-kpi-label">FCR</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.total_mortality }}</div>
+      <div class="fc-kpi-label">Mortalite totale</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
+      <div class="fc-kpi-label">Resultat net</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.finance.cost_per_kg|currency if batch.finance and batch.finance.cost_per_kg is not none else "-" }}</div>
+      <div class="fc-kpi-label">Cout de revient / kg</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h6 class="text-muted small text-uppercase">Mortalite cumulee</h6>
+      <canvas id="mortalityChart" height="200"></canvas>
+    </div></div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h6 class="text-muted small text-uppercase">Consommation d'aliment cumulee</h6>
+      <canvas id="feedChart" height="200"></canvas>
+    </div></div>
+  </div>
+</div>
+
+{% if growth_data %}
+<div class="card mb-4"><div class="card-body">
+  <h6 class="text-muted small text-uppercase">Courbe de croissance (reel vs reference)</h6>
+  <canvas id="growthChart" height="120"></canvas>
+</div></div>
+{% endif %}
+
+<div class="card">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">Detail financier</h6>
+    {% if batch.finance %}
+    <table class="table table-sm">
+      <tr><td>Cout poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+      <tr><td>Cout aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
+      <tr><td>Cout medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
+      <tr><td>Cout bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
+      <tr><td>Cout main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
+      <tr class="fw-bold"><td>Total des charges</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
+      <tr><td>Revenu de vente</td><td class="text-end">{{ batch.finance.sale_revenue|currency }}</td></tr>
+      <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
+    </table>
+    {% else %}
+    <p class="text-muted mb-0">Aucune donnee financiere pour ce lot.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var mortalityData = {{ mortality_data|tojson }};
+  var feedData = {{ feed_data|tojson }};
+  var growthData = {{ growth_data|tojson }};
+
+  renderBatchCharts({ mortality: "mortalityChart", feed: "feedChart" }, { mortality: mortalityData, feed: feedData });
+
+  var growthCanvas = document.getElementById("growthChart");
+  if (growthCanvas && growthData.length) {
+    new Chart(growthCanvas, {
+      type: "line",
+      data: {
+        labels: growthData.map(function (p) { return "J" + p.day; }),
+        datasets: [
+          {
+            label: "Poids reel (g)",
+            data: growthData.map(function (p) { return p.actual_weight; }),
+            borderColor: "#2f5233",
+            tension: 0.25,
+          },
+          {
+            label: "Poids de reference (g)",
+            data: growthData.map(function (p) { return p.expected_weight; }),
+            borderColor: "#c98a2c",
+            borderDash: [6, 4],
+            tension: 0.25,
+          },
+        ],
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } },
+    });
+  }
+</script>
+{% endblock %}

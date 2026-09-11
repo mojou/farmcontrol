@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Administration plateforme - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Clients de la plateforme</h1>
+  <a href="{{ url_for('core.tenant_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouveau client</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Nom</th><th>Identifiant</th><th>Formule</th><th>Demo</th><th>Statut</th><th>Cree le</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tenant in tenants %}
+        <tr>
+          <td>{{ tenant.name }}</td>
+          <td><code>{{ tenant.slug }}</code></td>
+          <td>{{ tenant.plan }}</td>
+          <td>{% if tenant.is_demo %}<span class="badge bg-secondary">Demo</span>{% endif %}</td>
+          <td>
+            {% if tenant.is_active %}<span class="badge bg-success">Actif</span>{% else %}<span class="badge bg-danger">Desactive</span>{% endif %}
+          </td>
+          <td>{{ tenant.created_at.strftime('%d/%m/%Y') }}</td>
+          <td>
+            <form method="post" action="{{ url_for('core.tenant_toggle', tenant_id=tenant.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-secondary">
+                {{ "Desactiver" if tenant.is_active else "Activer" }}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-muted text-center py-4">Aucun client pour le moment.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

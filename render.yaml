@@ -1,0 +1,48 @@
+# Blueprint Render (https://render.com) - deploiement gratuit de Farm Control.
+#
+# Utilisation :
+#   1. Poussez ce depot sur GitHub.
+#   2. Sur https://dashboard.render.com -> New -> Blueprint -> selectionnez le depot.
+#   3. Render lit ce fichier et cree automatiquement le service web + la base
+#      PostgreSQL gratuite, relies entre eux.
+#   4. Une fois deploye, executez une fois (onglet "Shell" du service Render) :
+#        psql "$DATABASE_URL" -f scripts/enable_rls.sql
+#      pour activer la Row Level Security (paragraphe 7.2).
+#
+# Limites du tier gratuit Render : le service web se met en veille apres 15
+# minutes d'inactivite (premiere requete plus lente le temps du reveil), et
+# le disque est ephemere (les photos uploadees dans /uploads sont perdues a
+# chaque redeploiement - prevoir un stockage externe pour un usage reel).
+# La base PostgreSQL gratuite Render expire au bout de 90 jours ; pour une
+# base gratuite permanente, remplacez `fromDatabase` par l'URL de connexion
+# d'un service comme https://neon.tech ou https://supabase.com (tier gratuit
+# perenne) dans la variable DATABASE_URL.
+
+services:
+  - type: web
+    name: farmcontrol
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /auth/login
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: farmcontrol-db
+          property: connectionString
+      - key: ENFORCE_RLS
+        value: "True"
+      - key: MAIL_SUPPRESS_SEND
+        value: "True"
+      - key: UPLOAD_FOLDER
+        value: uploads
+      - key: DEMO_TENANT_SLUG
+        value: demo
+
+databases:
+  - name: farmcontrol-db
+    plan: free

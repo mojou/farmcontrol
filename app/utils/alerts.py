@@ -1,0 +1,131 @@
+"""Creation d'alertes et declenchement des notifications email (paragraphe 3).
+
+Regle d'envoi (3.2) :
+- Alertes urgentes ou importantes (mortalite elevee, stock critique,
+  observation urgente) -> email automatique immediat au proprietaire.
+- Alertes normales -> pas d'email, consultation dans l'app suffit.
+- Le proprietaire peut desactiver les notifications email dans ses parametres.
+"""
+from datetime import datetime, timezone
+
+from app.extensions import db
+from app.models.core import ROLE_OWNER, User
+from app.models.poultry import (
+    ALERT_PRIORITY_IMPORTANT,
+    ALERT_PRIORITY_NORMAL,
+    ALERT_PRIORITY_URGENT,
+    Alert,
+)
+from app.utils.emailing import send_alert_email
+from app.utils.tenant import get_current_tenant_id, tenant_bypass
+
+# Seuil de mortalite journaliere (% de l'effectif courant) au-dela duquel une
+# alerte urgente est levee. Reste simple et documente pour la V1.
+MORTALITY_ALERT_THRESHOLD_PERCENT = 3
+
+
+def _owners_for_tenant(tenant_id):
+    with tenant_bypass():
+        return (
+            User.query.filter_by(tenant_id=tenant_id, role=ROLE_OWNER, is_active=True)
+            .all()
+        )
+
+
+def create_alert(title, message, alert_type, priority=ALERT_PRIORITY_NORMAL, farm=None, batch=None):
+    """Cree une alerte et envoie un email si sa priorite l'exige."""
+    tenant_id = get_current_tenant_id()
+    alert = Alert(
+        tenant_id=tenant_id,
+        farm_id=farm.id if farm else (batch.farm_id if batch else None),
+        batch_id=batch.id if batch else None,
+        title=title,
+        message=message,
+        type=alert_type,
+        priority=priority,
+    )
+    db.session.add(alert)
+    db.session.flush()
+
+    if alert.requires_email:
+        recipients = [
+            owner.email
+            for owner in _owners_for_tenant(tenant_id)
+            if owner.email_notifications_enabled
+        ]
+        if recipients:
+            try:
+                send_alert_email(alert, recipients)
+                alert.email_sent = True
+                alert.email_sent_at = datetime.now(timezone.utc)
+            except Exception:
+                # Une panne SMTP ne doit jamais bloquer la saisie metier :
+                # l'alerte reste visible dans l'application.
+                alert.email_sent = False
+
+    return alert
+
+
+def check_stock_alert(stock_item):
+    """Cree une alerte de stock faible si le seuil est franchi (paragraphe 14)."""
+    if not stock_item.is_low:
+        return None
+    return create_alert(
+        title=f"Stock faible : {stock_item.name}",
+        message=(
+            f"Le stock de {stock_item.name} sur la ferme {stock_item.farm.name} "
+            f"est descendu a {stock_item.quantity_on_hand} {stock_item.unit} "
+            f"(seuil : {stock_item.min_threshold} {stock_item.unit})."
+        ),
+        alert_type="stock",
+        priority=ALERT_PRIORITY_URGENT,
+        farm=stock_item.farm,
+    )
+
+
+def check_mortality_alert(batch, batch_day):
+    """Cree une alerte si la mortalite du jour depasse le seuil critique."""
+    current_count = batch.current_count or 1
+    daily_deaths = batch_day.mortality_count
+    if daily_deaths <= 0:
+        return None
+
+    ratio_percent = (daily_deaths / max(current_count, 1)) * 100
+    if ratio_percent < MORTALITY_ALERT_THRESHOLD_PERCENT:
+        return None
+
+    return create_alert(
+        title=f"Mortalite elevee - Lot {batch.code}",
+        message=(
+            f"{daily_deaths} sujets morts le jour {batch_day.day_number} "
+            f"({ratio_percent:.1f} % de l'effectif courant), au-dela du seuil "
+            f"de {MORTALITY_ALERT_THRESHOLD_PERCENT} %."
+        ),
+        alert_type="mortality",
+        priority=ALERT_PRIORITY_URGENT,
+        batch=batch,
+    )
+
+
+def check_urgent_observation_alert(observation, batch):
+    from app.models.poultry import OBS_SEVERITY_URGENT
+
+    if observation.severity != OBS_SEVERITY_URGENT:
+        return None
+    return create_alert(
+        title=f"Observation urgente - Lot {batch.code}",
+        message=observation.description,
+        alert_type="observation",
+        priority=ALERT_PRIORITY_IMPORTANT,
+        batch=batch,
+    )
+
+
+def create_missing_report_alert(batch, batch_day):
+    return create_alert(
+        title=f"Rapport journalier manquant - Lot {batch.code}",
+        message=f"Aucun rapport n'a ete soumis pour le jour {batch_day.day_number}.",
+        alert_type="report_missing",
+        priority=ALERT_PRIORITY_NORMAL,
+        batch=batch,
+    )

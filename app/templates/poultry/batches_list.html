@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Lots - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Lots</h1>
+  {% if current_user.has_role('owner') %}
+  <a href="{{ url_for('poultry.batch_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouveau lot</a>
+  {% endif %}
+</div>
+
+<ul class="nav nav-pills mb-3">
+  <li class="nav-item"><a class="nav-link {{ 'active' if status == 'active' }}" href="{{ url_for('poultry.batches_list', status='active') }}">En cours</a></li>
+  <li class="nav-item"><a class="nav-link {{ 'active' if status == 'closed' }}" href="{{ url_for('poultry.batches_list', status='closed') }}">Clotures</a></li>
+</ul>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table align-middle">
+      <thead><tr><th>Ferme</th><th>Lot</th><th>Souche</th><th>Debut</th><th>Effectif courant</th><th></th></tr></thead>
+      <tbody>
+        {% for batch in batches %}
+        <tr>
+          <td>{{ batch.farm.name }}</td>
+          <td>{{ batch.code }}</td>
+          <td>{{ batch.breed or "-" }}</td>
+          <td>{{ batch.start_date.strftime('%d/%m/%Y') }}</td>
+          <td>{{ batch.current_count }} / {{ batch.initial_count }}</td>
+          <td>
+            <a href="{{ url_for('poultry.batch_detail', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a>
+            <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Rapport</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-muted text-center py-4">Aucun lot.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

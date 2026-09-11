@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}Programme sanitaire - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Programme sanitaire - Lot {{ batch.code }}</h1>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-body">
+        <table class="table align-middle">
+          <thead><tr><th>Jour</th><th>Type</th><th>Produit</th><th>Statut</th><th></th></tr></thead>
+          <tbody>
+            {% for item in items %}
+            <tr>
+              <td>J{{ item.day_number }}</td>
+              <td>{{ item.program_type }}</td>
+              <td>{{ item.product_name }}</td>
+              <td>{% if item.is_done %}<span class="badge bg-success">Realise</span>{% else %}<span class="badge bg-secondary">Planifie</span>{% endif %}</td>
+              <td>
+                {% if not item.is_done %}
+                <form method="post" action="{{ url_for('poultry.sanitary_program_mark_done', item_id=item.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button class="btn btn-sm btn-outline-success">Marquer realise</button>
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-muted text-center py-4">Aucun element planifie.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% if current_user.has_role('owner', 'manager') %}
+  <div class="col-lg-5">
+    {{ fm.form_card(form, "Ajouter un element") }}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

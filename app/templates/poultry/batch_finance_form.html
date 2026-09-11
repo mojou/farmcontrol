@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}Rentabilite du lot - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Rentabilite - Lot {{ batch.code }}</h1>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    {{ fm.form_card(form, "Revenu de vente et cout main d'oeuvre") }}
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="text-muted small text-uppercase mb-3">Charges calculees automatiquement</h6>
+        {% if batch.finance %}
+        <table class="table table-sm mb-0">
+          <tr><td>Cout poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+          <tr><td>Cout aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
+          <tr><td>Cout medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
+          <tr><td>Cout bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
+          <tr><td>Cout main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
+          <tr class="fw-bold"><td>Total des charges</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
+          <tr><td>Revenu de vente</td><td class="text-end">{{ batch.finance.sale_revenue|currency }}</td></tr>
+          <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
+          <tr class="fw-bold"><td>Cout de revient / kg</td><td class="text-end">{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
+        </table>
+        {% else %}
+        <p class="text-muted mb-0">Les charges seront calculees des l'enregistrement d'un premier cout.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

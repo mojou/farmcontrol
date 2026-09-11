@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Tableau de bord responsable</h1>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ active_batches|length }}</div>
+      <div class="fc-kpi-label">Lots en cours</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ pending_reports|length }}</div>
+      <div class="fc-kpi-label">Rapports a valider</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ unread_alerts|length }}</div>
+      <div class="fc-kpi-label">Alertes non lues</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">Rapports en attente de validation</h6>
+    {% if pending_reports %}
+    <table class="table table-sm align-middle">
+      <thead><tr><th>Lot</th><th>Jour</th><th>Soumis le</th><th></th></tr></thead>
+      <tbody>
+        {% for report in pending_reports %}
+        <tr>
+          <td>{{ report.batch.code }}</td>
+          <td>{{ report.batch_day.day_number }}</td>
+          <td>{{ report.submitted_at.strftime('%d/%m/%Y %H:%M') if report.submitted_at }}</td>
+          <td><a href="{{ url_for('poultry.batch_day_detail', day_id=report.batch_day_id) }}" class="btn btn-sm btn-outline-primary">Examiner</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mb-0">Aucun rapport en attente.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">Lots actifs</h6>
+    <table class="table table-sm align-middle">
+      <thead><tr><th>Ferme</th><th>Lot</th><th>Effectif courant</th><th></th></tr></thead>
+      <tbody>
+        {% for batch in active_batches %}
+        <tr>
+          <td>{{ batch.farm.name }}</td>
+          <td>{{ batch.code }}</td>
+          <td>{{ batch.current_count }}</td>
+          <td><a href="{{ url_for('poultry.batch_detail', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

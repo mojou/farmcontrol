@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Rapport - Lot {{ batch.code }}</title>
+<style>
+  @page { size: A4; margin: 2cm 1.5cm; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; color: #22291f; font-size: 11pt; }
+  h1 { font-size: 18pt; color: #2f5233; margin-bottom: 0; }
+  .subtitle { color: #667066; font-size: 10pt; margin-top: 0.2cm; }
+  .kpi-row { display: flex; margin: 0.8cm 0; }
+  .kpi { flex: 1; border: 1px solid #dde3df; padding: 0.3cm 0.4cm; margin-right: 0.3cm; }
+  .kpi:last-child { margin-right: 0; }
+  .kpi-value { font-size: 15pt; font-weight: bold; color: #2f5233; }
+  .kpi-label { font-size: 8pt; text-transform: uppercase; color: #667066; }
+  table { width: 100%; border-collapse: collapse; margin-top: 0.4cm; }
+  th, td { border-bottom: 1px solid #dde3df; padding: 0.2cm 0.3cm; text-align: left; font-size: 10pt; }
+  th { text-transform: uppercase; font-size: 8pt; color: #576057; }
+  .section-title { font-size: 12pt; color: #2f5233; margin-top: 0.8cm; margin-bottom: 0.1cm; border-bottom: 2px solid #2f5233; padding-bottom: 0.1cm; }
+  .total-row td { font-weight: bold; border-top: 2px solid #2f5233; }
+  .footer { margin-top: 1cm; font-size: 8pt; color: #8a938b; }
+</style>
+</head>
+<body>
+  <h1>Rapport de lot - {{ batch.code }}</h1>
+  <p class="subtitle">
+    Ferme : {{ batch.farm.name }} | Souche : {{ batch.breed or "-" }} |
+    Periode : {{ batch.start_date.strftime('%d/%m/%Y') }}
+    {% if batch.end_date %} au {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}
+  </p>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-value">{{ fcr if fcr is not none else "-" }}</div>
+      <div class="kpi-label">FCR (indice de consommation)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">{{ batch.total_mortality }}</div>
+      <div class="kpi-label">Mortalite totale</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">{{ batch.current_count }} / {{ batch.initial_count }}</div>
+      <div class="kpi-label">Effectif final / initial</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
+      <div class="kpi-label">Resultat net</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rentabilite du lot</div>
+  {% if batch.finance %}
+  <table>
+    <tr><td>Cout poussins</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
+    <tr><td>Cout aliment</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
+    <tr><td>Cout medicaments</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
+    <tr><td>Cout bois / litiere</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>
+    <tr><td>Cout main d'oeuvre</td><td>{{ batch.finance.labor_cost|currency }}</td></tr>
+    <tr class="total-row"><td>Total des charges</td><td>{{ batch.finance.total_charges|currency }}</td></tr>
+    <tr><td>Revenu de vente</td><td>{{ batch.finance.sale_revenue|currency }}</td></tr>
+    <tr class="total-row"><td>Resultat net</td><td>{{ batch.finance.net_result|currency }}</td></tr>
+    <tr class="total-row"><td>Cout de revient / kg</td><td>{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
+  </table>
+  {% else %}
+  <p>Aucune donnee financiere disponible pour ce lot.</p>
+  {% endif %}
+
+  <div class="section-title">Suivi de mortalite (par jour)</div>
+  <table>
+    <thead><tr><th>Jour</th><th>Date</th><th>Morts du jour</th><th>Cumul</th></tr></thead>
+    <tbody>
+      {% for row in mortality_data %}
+      <tr><td>J{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.daily }}</td><td>{{ row.cumulative }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-title">Consommation d'aliment (par jour)</div>
+  <table>
+    <thead><tr><th>Jour</th><th>Date</th><th>Aliment du jour (kg)</th><th>Cumul (kg)</th></tr></thead>
+    <tbody>
+      {% for row in feed_data %}
+      <tr><td>J{{ row.day }}</td><td>{{ row.date }}</td><td>{{ "%.1f"|format(row.daily) }}</td><td>{{ "%.1f"|format(row.cumulative) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if growth_data %}
+  <div class="section-title">Suivi de croissance</div>
+  <table>
+    <thead><tr><th>Jour</th><th>Poids reel (g)</th><th>Poids de reference (g)</th></tr></thead>
+    <tbody>
+      {% for row in growth_data %}
+      <tr><td>J{{ row.day }}</td><td>{{ row.actual_weight }}</td><td>{{ row.expected_weight if row.expected_weight is not none else "-" }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <p class="footer">Document genere automatiquement par Farm Control le {{ batch.updated_at.strftime('%d/%m/%Y') if batch.updated_at else "" }}.</p>
+</body>
+</html>

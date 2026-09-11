@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Suivi quotidien - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <div>
+    <h1 class="fc-page-title">Suivi quotidien - Lot {{ batch.code }}</h1>
+    <p class="text-muted mb-0">{{ batch.farm.name }}</p>
+  </div>
+  {% if batch.is_active %}
+  <form method="post" action="{{ url_for('poultry.batch_day_new', batch_id=batch.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouveau jour</button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table align-middle">
+      <thead>
+        <tr><th>Jour</th><th>Date</th><th>Aliment (kg)</th><th>Morts</th><th>Statut rapport</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for day in batch.days|reverse %}
+        <tr>
+          <td>J{{ day.day_number }}</td>
+          <td>{{ day.date.strftime('%d/%m/%Y') }}</td>
+          <td>{{ day.feed_kg|number(1) }}</td>
+          <td>{{ day.mortality_count }}</td>
+          <td>
+            {% if day.report %}
+              {% if day.report.status == 'draft' %}<span class="badge bg-secondary">Brouillon</span>
+              {% elif day.report.status == 'submitted' %}<span class="badge bg-warning text-dark">Soumis</span>
+              {% else %}<span class="badge bg-success">Valide</span>{% endif %}
+            {% endif %}
+          </td>
+          <td><a href="{{ url_for('poultry.batch_day_detail', day_id=day.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-muted text-center py-4">Aucun jour enregistre pour ce lot.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

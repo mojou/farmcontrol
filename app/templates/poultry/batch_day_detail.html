@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}Jour {{ day.day_number }} - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <div>
+    <h1 class="fc-page-title">Lot {{ batch.code }} - Jour {{ day.day_number }}</h1>
+    <p class="text-muted mb-0">{{ day.date.strftime('%d/%m/%Y') }} - {{ batch.farm.name }}</p>
+  </div>
+  <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Retour au suivi</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <div>
+      <h6 class="text-muted small text-uppercase mb-1">Rapport journalier</h6>
+      {% if day.report %}
+        {% if day.report.status == 'draft' %}<span class="badge bg-secondary">Brouillon</span>
+        {% elif day.report.status == 'submitted' %}<span class="badge bg-warning text-dark">Soumis, en attente de validation</span>
+        {% else %}<span class="badge bg-success">Valide</span>{% endif %}
+      {% endif %}
+    </div>
+    <div class="d-flex gap-2">
+      {% if day.report and day.report.status == 'draft' %}
+      <form method="post" action="{{ url_for('poultry.daily_report_submit', day_id=day.id) }}" class="d-flex gap-2">
+        {{ submit_form.hidden_tag() }}
+        <input type="text" name="notes" class="form-control form-control-sm" placeholder="Notes (optionnel)">
+        <button class="btn btn-primary btn-sm">Soumettre le rapport</button>
+      </form>
+      {% elif day.report and day.report.status == 'submitted' and current_user.has_role('owner', 'manager', 'super_admin') %}
+      <form method="post" action="{{ url_for('poultry.daily_report_review', day_id=day.id) }}" class="d-flex gap-2">
+        {{ review_form.hidden_tag() }}
+        <input type="text" name="notes" class="form-control form-control-sm" placeholder="Commentaire (optionnel)">
+        <button class="btn btn-success btn-sm">Valider le rapport</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="accordion" id="dayAccordion">
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#feedSection">Aliment</button></h2>
+    <div id="feedSection" class="accordion-collapse collapse show" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Type</th><th>Quantite (kg)</th><th>Prix unitaire</th></tr></thead>
+          <tbody>
+            {% for r in day.feed_records %}
+            <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }}</td><td>{{ r.unit_price|currency }}</td></tr>
+            {% else %}<tr><td colspan="3" class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.feed_record_new', day_id=day.id) }}" class="row g-2">
+          {{ feed_form.hidden_tag() }}
+          <div class="col-md-3">{{ fm.render_field(feed_form.stock_item_id) }}</div>
+          <div class="col-md-3">{{ fm.render_field(feed_form.feed_type) }}</div>
+          <div class="col-md-2">{{ fm.render_field(feed_form.quantity_kg) }}</div>
+          <div class="col-md-2">{{ fm.render_field(feed_form.unit_price) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#waterSection">Eau</button></h2>
+    <div id="waterSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Quantite (litres)</th></tr></thead>
+          <tbody>
+            {% for r in day.water_records %}
+            <tr><td>{{ r.quantity_liters }}</td></tr>
+            {% else %}<tr><td class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.water_record_new', day_id=day.id) }}" class="row g-2">
+          {{ water_form.hidden_tag() }}
+          <div class="col-md-3">{{ fm.render_field(water_form.quantity_liters) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mortalitySection">Mortalite</button></h2>
+    <div id="mortalitySection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Nombre de morts</th><th>Cause</th></tr></thead>
+          <tbody>
+            {% for r in day.mortality_records %}
+            <tr><td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td></tr>
+            {% else %}<tr><td colspan="2" class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.mortality_record_new', day_id=day.id) }}" class="row g-2">
+          {{ mortality_form.hidden_tag() }}
+          <div class="col-md-2">{{ fm.render_field(mortality_form.quantity_dead) }}</div>
+          <div class="col-md-4">{{ fm.render_field(mortality_form.cause) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#woodSection">Bois / litiere</button></h2>
+    <div id="woodSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Quantite</th><th>Prix unitaire</th></tr></thead>
+          <tbody>
+            {% for r in day.wood_records %}
+            <tr><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td></tr>
+            {% else %}<tr><td colspan="2" class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.wood_record_new', day_id=day.id) }}" class="row g-2">
+          {{ wood_form.hidden_tag() }}
+          <div class="col-md-3">{{ fm.render_field(wood_form.stock_item_id) }}</div>
+          <div class="col-md-2">{{ fm.render_field(wood_form.quantity) }}</div>
+          <div class="col-md-2">{{ fm.render_field(wood_form.unit_price) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#medicationSection">Medicaments</button></h2>
+    <div id="medicationSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Medicament</th><th>Quantite</th><th>Prix unitaire</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for r in day.medication_records %}
+            <tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td><td>{{ r.notes or "-" }}</td></tr>
+            {% else %}<tr><td colspan="4" class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.medication_record_new', day_id=day.id) }}" class="row g-2">
+          {{ medication_form.hidden_tag() }}
+          <div class="col-md-3">{{ fm.render_field(medication_form.stock_item_id) }}</div>
+          <div class="col-md-2">{{ fm.render_field(medication_form.medication_name) }}</div>
+          <div class="col-md-2">{{ fm.render_field(medication_form.quantity) }}</div>
+          <div class="col-md-2">{{ fm.render_field(medication_form.unit_price) }}</div>
+          <div class="col-md-3">{{ fm.render_field(medication_form.notes) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#observationSection">Observations</button></h2>
+    <div id="observationSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <div class="row g-3 mb-3">
+          {% for r in day.observations %}
+          <div class="col-md-4">
+            <div class="card h-100">
+              {% if r.photo_path %}
+              <img src="{{ url_for('core.uploaded_file', filename=r.photo_path) }}" class="card-img-top" alt="Photo observation">
+              {% endif %}
+              <div class="card-body">
+                <span class="badge {{ 'bg-danger' if r.severity == 'urgent' else 'bg-secondary' }} mb-2">{{ r.severity }}</span>
+                <p class="card-text small">{{ r.description }}</p>
+              </div>
+            </div>
+          </div>
+          {% else %}<div class="col-12 text-muted">Aucune observation.</div>{% endfor %}
+        </div>
+        <form method="post" action="{{ url_for('poultry.observation_new', day_id=day.id) }}" enctype="multipart/form-data" class="row g-2">
+          {{ observation_form.hidden_tag() }}
+          <div class="col-md-5">{{ fm.render_field(observation_form.description) }}</div>
+          <div class="col-md-2">{{ fm.render_field(observation_form.severity) }}</div>
+          <div class="col-md-3">{{ fm.render_field(observation_form.photo) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#weightSection">Pesees</button></h2>
+    <div id="weightSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
+      <div class="accordion-body">
+        <table class="table table-sm">
+          <thead><tr><th>Poids moyen (g)</th><th>Echantillon</th><th>Observation</th></tr></thead>
+          <tbody>
+            {% for r in day.weight_records %}
+            <tr><td>{{ r.average_weight }}</td><td>{{ r.sample_size }}</td><td>{{ r.observation or "-" }}</td></tr>
+            {% else %}<tr><td colspan="3" class="text-muted">Aucune entree.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <form method="post" action="{{ url_for('poultry.weight_record_new', day_id=day.id) }}" class="row g-2">
+          {{ weight_form.hidden_tag() }}
+          <div class="col-md-3">{{ fm.render_field(weight_form.average_weight) }}</div>
+          <div class="col-md-2">{{ fm.render_field(weight_form.sample_size) }}</div>
+          <div class="col-md-4">{{ fm.render_field(weight_form.observation) }}</div>
+          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

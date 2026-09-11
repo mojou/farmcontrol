@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}{{ reference.name }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Courbe de reference : {{ reference.name }}</h1>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-body">
+        <table class="table align-middle">
+          <thead><tr><th>Jour</th><th>Poids attendu (g)</th></tr></thead>
+          <tbody>
+            {% for point in reference.points %}
+            <tr><td>J{{ point.day_number }}</td><td>{{ point.expected_weight }}</td></tr>
+            {% else %}
+            <tr><td colspan="2" class="text-muted text-center py-4">Aucun point defini.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    {{ fm.form_card(form, "Ajouter un point") }}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">Tableau de bord</h1>
+  <a href="{{ url_for('poultry.batch_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouveau lot</a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ farms|length }}</div>
+      <div class="fc-kpi-label">Fermes</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ active_batches|length }}</div>
+      <div class="fc-kpi-label">Lots en cours</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ selected_batch_fcr if selected_batch_fcr is not none else "-" }}</div>
+      <div class="fc-kpi-label">FCR du lot selectionne</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ unread_alerts|length }}</div>
+      <div class="fc-kpi-label">Alertes non lues</div>
+    </div></div>
+  </div>
+</div>
+
+{% if active_batches %}
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end mb-3">
+      <div class="col-auto">
+        <label class="form-label small mb-0">Lot affiche</label>
+        <select name="batch_id" class="form-select form-select-sm" onchange="this.form.submit()">
+          {% for b in active_batches %}
+          <option value="{{ b.id }}" {{ 'selected' if selected_batch and b.id == selected_batch.id }}>
+            {{ b.farm.name }} - {{ b.code }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+
+    {% if selected_batch %}
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <h6 class="text-muted small text-uppercase">Mortalite cumulee - Lot {{ selected_batch.code }}</h6>
+        <canvas id="mortalityChart" height="180"></canvas>
+      </div>
+      <div class="col-lg-6">
+        <h6 class="text-muted small text-uppercase">Consommation d'aliment cumulee - Lot {{ selected_batch.code }}</h6>
+        <canvas id="feedChart" height="180"></canvas>
+      </div>
+    </div>
+    <div class="mt-3">
+      <a href="{{ url_for('poultry.batch_report', batch_id=selected_batch.id) }}" class="btn btn-sm btn-outline-secondary">
+        Voir le rapport complet du lot
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info">Aucun lot en cours. Creez votre premier lot pour commencer le suivi.</div>
+{% endif %}
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="text-muted small text-uppercase mb-3">Rapports en attente de validation</h6>
+        {% if pending_reports %}
+        <ul class="list-group list-group-flush">
+          {% for report in pending_reports %}
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <span>Lot {{ report.batch.code }} - Jour {{ report.batch_day.day_number }}</span>
+            <a href="{{ url_for('poultry.batch_day_detail', day_id=report.batch_day_id) }}" class="btn btn-sm btn-outline-primary">Examiner</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-muted mb-0">Aucun rapport en attente.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="text-muted small text-uppercase mb-3">Dernieres alertes</h6>
+        {% if unread_alerts %}
+        <ul class="list-group list-group-flush">
+          {% for alert in unread_alerts %}
+          <li class="list-group-item px-0">
+            <span class="badge badge-priority-{{ alert.priority }}">{{ alert.priority }}</span>
+            {{ alert.title }}
+          </li>
+          {% endfor %}
+        </ul>
+        <a href="{{ url_for('core.alerts_list') }}" class="small">Voir toutes les alertes</a>
+        {% else %}
+        <p class="text-muted mb-0">Aucune alerte non lue.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if selected_batch %}
+<script>
+  fetch("{{ url_for('poultry.batch_series_json', batch_id=selected_batch.id) }}")
+    .then(function (r) { return r.json(); })
+    .then(function (series) {
+      renderBatchCharts({ mortality: "mortalityChart", feed: "feedChart" }, series);
+    });
+</script>
+{% endif %}
+{% endblock %}

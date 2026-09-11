@@ -1,0 +1,54 @@
+<aside class="fc-sidebar">
+  <div class="fc-sidebar-brand">
+    Farm Control
+    <small>Gestion d'elevage</small>
+  </div>
+  <nav class="fc-nav">
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.dashboard' or request.endpoint == 'core.admin_dashboard' }}"
+       href="{{ url_for('core.admin_dashboard') if current_user.is_super_admin() else url_for('core.dashboard') }}">
+      <i class="bi bi-speedometer2"></i> Tableau de bord
+    </a>
+
+    {% if not current_user.is_super_admin() %}
+    <div class="fc-nav-section">Elevage</div>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.farms_list' }}" href="{{ url_for('poultry.farms_list') }}">
+      <i class="bi bi-houses"></i> Fermes
+    </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.batches_list' }}" href="{{ url_for('poultry.batches_list') }}">
+      <i class="bi bi-egg-fried"></i> Lots
+    </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.stock_list' }}" href="{{ url_for('poultry.stock_list') }}">
+      <i class="bi bi-box-seam"></i> Stock
+    </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.alerts_list' }}" href="{{ url_for('core.alerts_list') }}">
+      <i class="bi bi-bell"></i> Alertes
+      {% if unread_alerts_count %}<span class="badge bg-danger ms-1">{{ unread_alerts_count }}</span>{% endif %}
+    </a>
+
+    {% if current_user.has_role('owner') %}
+    <div class="fc-nav-section">Administration</div>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.users_list' }}" href="{{ url_for('core.users_list') }}">
+      <i class="bi bi-people"></i> Utilisateurs
+    </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.growth_reference') }}" href="{{ url_for('poultry.growth_references') }}">
+      <i class="bi bi-graph-up"></i> Courbes de reference
+    </a>
+    {% endif %}
+    {% endif %}
+
+    {% if current_user.is_super_admin() %}
+    <div class="fc-nav-section">Plateforme</div>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.admin_dashboard' }}" href="{{ url_for('core.admin_dashboard') }}">
+      <i class="bi bi-building"></i> Clients (tenants)
+    </a>
+    {% endif %}
+
+    <div class="fc-nav-section">Mon compte</div>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.profile' }}" href="{{ url_for('core.profile') }}">
+      <i class="bi bi-person-circle"></i> Profil
+    </a>
+    <a class="fc-nav-link" href="{{ url_for('auth.logout') }}">
+      <i class="bi bi-box-arrow-right"></i> Deconnexion
+    </a>
+  </nav>
+</aside>

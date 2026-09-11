@@ -1,0 +1,9 @@
+Farm Control - Votre compte a ete cree
+
+Bonjour {{ user.first_name }},
+
+Un compte Farm Control a ete cree pour vous, avec le role : {{ user.role_label }}.
+Adresse de connexion : {{ user.email }}
+{% if temporary_password %}Mot de passe temporaire : {{ temporary_password }}{% endif %}
+
+Nous vous recommandons de changer votre mot de passe des la premiere connexion.

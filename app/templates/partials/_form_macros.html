@@ -1,0 +1,43 @@
+{% macro render_field(field, extra_class="") %}
+<div class="mb-3">
+  {% if field.type != 'BooleanField' %}
+    {{ field.label(class="form-label") }}
+  {% endif %}
+
+  {% if field.type == 'BooleanField' %}
+    <div class="form-check">
+      {{ field(class="form-check-input" ~ (" is-invalid" if field.errors else "")) }}
+      {{ field.label(class="form-check-label") }}
+    </div>
+  {% elif field.type == 'SelectField' %}
+    {{ field(class="form-select" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class) }}
+  {% elif field.type == 'FileField' %}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else "")) }}
+  {% elif field.type == 'TextAreaField' %}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else ""), rows=3) }}
+  {% else %}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class) }}
+  {% endif %}
+
+  {% if field.errors %}
+    <div class="invalid-feedback d-block">
+      {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro form_card(form, title, submit_label=None, action="") %}
+<div class="card">
+  <div class="card-body">
+    {% if title %}<h5 class="card-title mb-3">{{ title }}</h5>{% endif %}
+    <form method="post" action="{{ action }}" enctype="multipart/form-data" novalidate>
+      {{ form.hidden_tag() }}
+      {% for field in form if field.type not in ('CSRFTokenField', 'SubmitField', 'HiddenField') %}
+        {{ render_field(field) }}
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">{{ submit_label or form.submit.label.text }}</button>
+    </form>
+  </div>
+</div>
+{% endmacro %}
