@@ -12,11 +12,25 @@ les produits reellement disponibles / les instructions du couvoir) :
 Ces deux sources convergent sur un meme calendrier J1-J21 (Newcastle +
 bronchite infectieuse, Gumboro simple puis fort, rappel Newcastle/bronchite),
 complete par les phases d'alimentation demarrage/croissance/finition.
+
+Les produits de complementation (Bio Select, Harmony, Belgo Fresh, Belgo
+Protect, Belgo Thermo, Belgo Vitesse, Belgo Dry Litter, vermifuge) sont
+positionnes a des jours coherents avec leur fonction habituelle (probiotique,
+anti-stress, qualite de l'eau, soutien immunitaire, gestion de la chaleur,
+croissance, litiere, deparasitage), mais leur posologie exacte n'a pas pu
+etre verifiee aupres d'une fiche technique fiable au moment de la redaction :
+elle doit imperativement etre reprise depuis l'etiquette/notice du produit
+reellement utilise (voir DOSAGE_A_VERIFIER dans les notes correspondantes).
 """
 from datetime import date, timedelta
 
 from app.extensions import db
 from app.models.poultry import SanitaryProgramItem
+
+DOSAGE_A_VERIFIER = (
+    " [Posologie non verifiee par l'application - se referer imperativement "
+    "a l'etiquette/notice du produit reellement utilise avant administration.]"
+)
 
 # -- Programme sanitaire et alimentaire de reference (jour = BatchDay.day_number, J1 = mise en place) --
 
@@ -29,6 +43,25 @@ DEFAULT_SANITARY_PROGRAM = [
             "Des l'arrivee : eau sucree (20 g de sucre par litre d'eau de boisson) pour lutter "
             "contre le stress du transport et la deshydratation. Debuter l'aliment chair "
             "demarrage (jusqu'au jour 14)."
+        ),
+    },
+    {
+        "day_number": 1,
+        "program_type": "complement",
+        "product_name": "Bio Select (probiotique)",
+        "notes": (
+            "A donner des le 1er jour dans l'eau de boisson pour installer une flore intestinale "
+            "saine chez le poussin. A renouveler apres toute cure d'anti-infectieux/antibiotique "
+            "(voir rappel J6)." + DOSAGE_A_VERIFIER
+        ),
+    },
+    {
+        "day_number": 1,
+        "program_type": "complement",
+        "product_name": "Belgo Fresh (conditionneur d'eau)",
+        "notes": (
+            "A ajouter regulierement a l'eau de boisson pendant tout le cycle pour ameliorer sa "
+            "qualite et l'appetence, en particulier en saison chaude." + DOSAGE_A_VERIFIER
         ),
     },
     {
@@ -52,6 +85,24 @@ DEFAULT_SANITARY_PROGRAM = [
         ),
     },
     {
+        "day_number": 3,
+        "program_type": "complement",
+        "product_name": "Harmony (anti-stress)",
+        "notes": (
+            "Anti-stress a donner avant et apres chaque vaccination (voir aussi J7, J14, "
+            "J18)." + DOSAGE_A_VERIFIER
+        ),
+    },
+    {
+        "day_number": 6,
+        "program_type": "complement",
+        "product_name": "Bio Select (rappel probiotique)",
+        "notes": (
+            "Rappel juste apres la cure d'anti-infectieux du J1-J5 pour restaurer la flore "
+            "intestinale." + DOSAGE_A_VERIFIER
+        ),
+    },
+    {
         "day_number": 7,
         "program_type": "vaccination",
         "product_name": "Gumboro - souche intermediaire (1ere dose)",
@@ -59,6 +110,24 @@ DEFAULT_SANITARY_PROGRAM = [
             "Vaccin en eau de boisson, meme protocole (assoiffer 1h-1h30 puis diluer dans l'eau "
             "consommee en 2h, avec un peu de lait en poudre si recommande par le fabricant). "
             "Ne pas faire si vaccination Gumboro deja realisee au couvoir par injection."
+        ),
+    },
+    {
+        "day_number": 7,
+        "program_type": "complement",
+        "product_name": "Harmony + Belgo Protect (anti-stress et soutien immunitaire)",
+        "notes": (
+            "A associer a la vaccination Gumboro pour reduire le stress et soutenir la reponse "
+            "immunitaire." + DOSAGE_A_VERIFIER
+        ),
+    },
+    {
+        "day_number": 7,
+        "program_type": "complement",
+        "product_name": "Belgo Dry Litter (litiere)",
+        "notes": (
+            "Controler l'etat de la litiere (humidite, odeur d'ammoniac) et traiter si "
+            "necessaire. A renouveler chaque semaine (voir J14, J21, J28)." + DOSAGE_A_VERIFIER
         ),
     },
     {
@@ -74,10 +143,31 @@ DEFAULT_SANITARY_PROGRAM = [
         "notes": "Traitement anticoccidien en eau de boisson pendant 3 a 5 jours (coccidiose).",
     },
     {
+        "day_number": 14,
+        "program_type": "complement",
+        "product_name": "Harmony + Belgo Protect (anti-stress et soutien immunitaire)",
+        "notes": "A associer au rappel Gumboro, meme logique qu'au jour 7." + DOSAGE_A_VERIFIER,
+    },
+    {
+        "day_number": 14,
+        "program_type": "complement",
+        "product_name": "Belgo Dry Litter (litiere)",
+        "notes": "Controle hebdomadaire de la litiere." + DOSAGE_A_VERIFIER,
+    },
+    {
         "day_number": 15,
         "program_type": "alimentation",
         "product_name": "Passage a l'aliment croissance",
         "notes": "Aliment chair croissance du jour 15 au jour 28.",
+    },
+    {
+        "day_number": 15,
+        "program_type": "complement",
+        "product_name": "Belgo Vitesse (activateur de croissance)",
+        "notes": (
+            "A partir du passage en phase croissance, pour soutenir la vitesse de croissance "
+            "(voir aussi J29)." + DOSAGE_A_VERIFIER
+        ),
     },
     {
         "day_number": 18,
@@ -89,6 +179,33 @@ DEFAULT_SANITARY_PROGRAM = [
         ),
     },
     {
+        "day_number": 18,
+        "program_type": "complement",
+        "product_name": "Harmony (anti-stress)",
+        "notes": "A associer au rappel Newcastle/Bronchite, meme logique qu'aux jours precedents." + DOSAGE_A_VERIFIER,
+    },
+    {
+        "day_number": 21,
+        "program_type": "complement",
+        "product_name": "Belgo Dry Litter (litiere)",
+        "notes": "Controle hebdomadaire de la litiere." + DOSAGE_A_VERIFIER,
+    },
+    {
+        "day_number": 22,
+        "program_type": "complement",
+        "product_name": "Belgo Thermo (gestion du stress thermique)",
+        "notes": (
+            "Les sujets plus lourds supportent moins bien la chaleur : a utiliser en periode "
+            "chaude ou en cas de forte densite/ventilation insuffisante." + DOSAGE_A_VERIFIER
+        ),
+    },
+    {
+        "day_number": 28,
+        "program_type": "complement",
+        "product_name": "Belgo Dry Litter (litiere)",
+        "notes": "Controle hebdomadaire de la litiere avant la phase de finition." + DOSAGE_A_VERIFIER,
+    },
+    {
         "day_number": 29,
         "program_type": "alimentation",
         "product_name": "Passage a l'aliment finition",
@@ -96,8 +213,14 @@ DEFAULT_SANITARY_PROGRAM = [
     },
     {
         "day_number": 29,
+        "program_type": "complement",
+        "product_name": "Belgo Vitesse (rappel croissance/finition)",
+        "notes": "Rappel pour soutenir la croissance en phase de finition." + DOSAGE_A_VERIFIER,
+    },
+    {
+        "day_number": 29,
         "program_type": "traitement",
-        "product_name": "Deparasitage (si necessaire)",
+        "product_name": "Vermifuge / deparasitage (si necessaire)",
         "notes": (
             "Deparasitage en dose unique en cas de suspicion de parasitisme. Eviter les "
             "traitements lourds en fin de cycle : respecter le delai d'attente avant l'abattage."

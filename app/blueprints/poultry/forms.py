@@ -124,7 +124,14 @@ class GrowthReferencePointForm(FlaskForm):
 class SanitaryProgramItemForm(FlaskForm):
     day_number = IntegerField("Jour", validators=[DataRequired(), NumberRange(min=0)])
     program_type = SelectField(
-        "Type", choices=[("vaccination", "Vaccination"), ("traitement", "Traitement")], default="vaccination"
+        "Type",
+        choices=[
+            ("vaccination", "Vaccination"),
+            ("traitement", "Traitement"),
+            ("alimentation", "Alimentation"),
+            ("complement", "Complement (probiotique, anti-stress, litiere...)"),
+        ],
+        default="vaccination",
     )
     product_name = StringField("Produit", validators=[DataRequired()])
     notes = TextAreaField("Notes", validators=[Optional()])

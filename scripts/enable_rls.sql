@@ -42,7 +42,8 @@ DECLARE
         'poultry_growth_references',
         'poultry_growth_reference_points',
         'billing_subscriptions',
-        'billing_payment_transactions'
+        'billing_payment_transactions',
+        'messages'
     ];
 BEGIN
     FOREACH t IN ARRAY tenant_scoped_tables LOOP

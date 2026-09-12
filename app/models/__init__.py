@@ -74,7 +74,7 @@ def register_tenant_filter(sa_db):
 
 # Import des modeles pour qu'ils soient enregistres aupres de SQLAlchemy /
 # Flask-Migrate (necessaire pour la detection automatique des migrations).
-from app.models.core import Tenant, User, AuditLog, PasswordResetToken  # noqa: E402,F401
+from app.models.core import Tenant, User, AuditLog, PasswordResetToken, Message  # noqa: E402,F401
 from app.models.poultry import (  # noqa: E402,F401
     Farm,
     Batch,

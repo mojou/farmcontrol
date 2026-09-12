@@ -55,12 +55,14 @@ def _register_blueprints(app):
     from app.blueprints.auth import auth_bp
     from app.blueprints.billing import billing_bp
     from app.blueprints.core import core_bp
+    from app.blueprints.messaging import messaging_bp
     from app.blueprints.poultry import poultry_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(core_bp)
     app.register_blueprint(poultry_bp)
     app.register_blueprint(billing_bp)
+    app.register_blueprint(messaging_bp)
 
 
 def _register_request_hooks(app):
@@ -125,13 +127,19 @@ def _register_template_helpers(app):
         from flask import current_app
 
         unread_alerts_count = 0
+        unread_messages_count = 0
         if current_user.is_authenticated and not current_user.is_super_admin():
+            from app.models.core import Message
             from app.models.poultry import Alert
 
             unread_alerts_count = Alert.query.filter_by(is_read=False).count()
+            unread_messages_count = Message.query.filter_by(
+                recipient_id=current_user.id, is_read=False
+            ).count()
         return {
             "role_labels": ROLE_LABELS,
             "current_user_obj": current_user,
             "unread_alerts_count": unread_alerts_count,
+            "unread_messages_count": unread_messages_count,
             "cinetpay_enabled": current_app.config.get("CINETPAY_ENABLED"),
         }

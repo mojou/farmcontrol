@@ -24,6 +24,10 @@
       <i class="bi bi-bell"></i> Alertes
       {% if unread_alerts_count %}<span class="badge bg-danger ms-1">{{ unread_alerts_count }}</span>{% endif %}
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('messaging.') }}" href="{{ url_for('messaging.inbox') }}">
+      <i class="bi bi-chat-dots"></i> Messages
+      {% if unread_messages_count %}<span class="badge bg-danger ms-1">{{ unread_messages_count }}</span>{% endif %}
+    </a>
 
     {% if current_user.has_role('owner') %}
     <div class="fc-nav-section">Administration</div>

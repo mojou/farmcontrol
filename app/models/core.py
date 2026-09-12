@@ -185,3 +185,29 @@ class AuditLog(TenantMixin, db.Model):
 
     def __repr__(self):
         return f"<AuditLog {self.action} {self.table_name}#{self.record_id}>"
+
+
+class Message(TimestampMixin, TenantMixin, db.Model):
+    """Messagerie interne entre utilisateurs d'un meme tenant (ex : entre un
+    travailleur et le proprietaire/responsable de son exploitation).
+
+    Volontairement simple pour la V1 : pas de fils de discussion structures,
+    une reponse est un nouveau message dont le sujet est prefixe "Re:".
+    """
+
+    __tablename__ = "messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+
+    subject = db.Column(db.String(200), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, nullable=False, default=False)
+    read_at = db.Column(db.DateTime(timezone=True), nullable=True)
+
+    sender = db.relationship("User", foreign_keys=[sender_id])
+    recipient = db.relationship("User", foreign_keys=[recipient_id])
+
+    def __repr__(self):
+        return f"<Message {self.subject!r} -> user#{self.recipient_id}>"
