@@ -43,7 +43,8 @@ DECLARE
         'poultry_growth_reference_points',
         'billing_subscriptions',
         'billing_payment_transactions',
-        'messages'
+        'messages',
+        'poultry_sanitary_program_template_items'
     ];
 BEGIN
     FOREACH t IN ARRAY tenant_scoped_tables LOOP

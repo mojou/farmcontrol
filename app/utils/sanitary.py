@@ -265,22 +265,70 @@ def current_batch_day_number(batch) -> int:
     return (date.today() - batch.start_date).days + 1
 
 
-def seed_default_sanitary_program(batch):
-    """Cree les elements du programme sanitaire de reference pour un lot qui
-    vient d'etre creee. N'ecrase rien si le lot a deja des elements (evite
-    les doublons en cas de nouvel appel)."""
-    if batch.sanitary_items:
+def ensure_tenant_template(tenant_id):
+    """Cree le modele de programme sanitaire d'un tenant a partir de la
+    reference generique s'il n'en a pas encore (premiere utilisation). Une
+    fois cree, le tenant peut le modifier librement (ses propres produits,
+    ses propres jours, sa propre posologie) : ce modele sert ensuite de base
+    a chaque nouveau lot de ce tenant.
+    """
+    from app.models.poultry import SanitaryProgramTemplateItem
+
+    if SanitaryProgramTemplateItem.query.filter_by(tenant_id=tenant_id).first() is not None:
         return
 
-    for item in DEFAULT_SANITARY_PROGRAM:
+    for order, item in enumerate(DEFAULT_SANITARY_PROGRAM):
         db.session.add(
-            SanitaryProgramItem(
-                tenant_id=batch.tenant_id,
-                batch_id=batch.id,
+            SanitaryProgramTemplateItem(
+                tenant_id=tenant_id,
                 day_number=item["day_number"],
                 program_type=item["program_type"],
                 product_name=item["product_name"],
                 notes=item["notes"],
+                sort_order=order,
+            )
+        )
+    db.session.commit()
+
+
+def get_tenant_template(tenant_id):
+    """Modele de programme sanitaire du tenant (le cree si besoin)."""
+    from app.models.poultry import SanitaryProgramTemplateItem
+
+    ensure_tenant_template(tenant_id)
+    return (
+        SanitaryProgramTemplateItem.query.filter_by(tenant_id=tenant_id)
+        .order_by(SanitaryProgramTemplateItem.day_number, SanitaryProgramTemplateItem.sort_order)
+        .all()
+    )
+
+
+def reset_tenant_template(tenant_id):
+    """Reinitialise le modele du tenant sur la reference generique
+    (supprime ses personnalisations)."""
+    from app.models.poultry import SanitaryProgramTemplateItem
+
+    SanitaryProgramTemplateItem.query.filter_by(tenant_id=tenant_id).delete()
+    db.session.flush()
+    ensure_tenant_template(tenant_id)
+
+
+def seed_batch_program_from_template(batch):
+    """Copie le modele sanitaire du tenant dans les elements du nouveau lot.
+    N'ecrase rien si le lot a deja des elements (evite les doublons en cas
+    de nouvel appel)."""
+    if batch.sanitary_items:
+        return
+
+    for template_item in get_tenant_template(batch.tenant_id):
+        db.session.add(
+            SanitaryProgramItem(
+                tenant_id=batch.tenant_id,
+                batch_id=batch.id,
+                day_number=template_item.day_number,
+                program_type=template_item.program_type,
+                product_name=template_item.product_name,
+                notes=template_item.notes,
             )
         )
 

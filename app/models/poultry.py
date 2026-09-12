@@ -402,6 +402,28 @@ class SanitaryProgramItem(TimestampMixin, TenantMixin, db.Model):
     batch = db.relationship("Batch", back_populates="sanitary_items")
 
 
+class SanitaryProgramTemplateItem(TimestampMixin, TenantMixin, db.Model):
+    """Modele de programme sanitaire propre a chaque tenant.
+
+    Chaque proprietaire definit ici SA propre facon de gerer ses lots (ses
+    produits, ses jours, sa posologie). Ce modele est copie automatiquement
+    dans poultry_sanitary_program_items a la creation de chaque nouveau lot
+    (voir app.utils.sanitary.seed_batch_program_from_template). Independant
+    de tout lot en particulier : modifier le modele n'affecte pas les lots
+    deja crees.
+    """
+
+    __tablename__ = "poultry_sanitary_program_template_items"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    day_number = db.Column(db.Integer, nullable=False)
+    program_type = db.Column(db.String(30), nullable=False, default="vaccination")
+    product_name = db.Column(db.String(150), nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+    sort_order = db.Column(db.Integer, nullable=False, default=0)
+
+
 class DailyReport(TimestampMixin, TenantMixin, db.Model):
     """Workflow de validation du rapport journalier (paragraphe 9)."""
 

@@ -90,6 +90,7 @@ from app.models.poultry import (  # noqa: E402,F401
     BatchFinance,
     Alert,
     SanitaryProgramItem,
+    SanitaryProgramTemplateItem,
     DailyReport,
     GrowthReference,
     GrowthReferencePoint,

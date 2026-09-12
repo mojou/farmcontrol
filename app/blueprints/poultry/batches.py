@@ -28,7 +28,7 @@ from app.utils.sanitary import (
     estimate_daily_feed_kg,
     estimate_daily_water_liters,
     get_pending_items,
-    seed_default_sanitary_program,
+    seed_batch_program_from_template,
 )
 from app.utils.zootechnie import (
     compute_fcr,
@@ -106,7 +106,7 @@ def batch_new():
         db.session.add(batch)
         db.session.flush()
         recompute_batch_finance(batch)
-        seed_default_sanitary_program(batch)
+        seed_batch_program_from_template(batch)
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
         flash(
