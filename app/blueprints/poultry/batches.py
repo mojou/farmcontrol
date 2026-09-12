@@ -23,6 +23,13 @@ from app.models.poultry import (
 )
 from app.utils.audit import log_action
 from app.utils.plans import get_current_plan
+from app.utils.sanitary import (
+    current_batch_day_number,
+    estimate_daily_feed_kg,
+    estimate_daily_water_liters,
+    get_pending_items,
+    seed_default_sanitary_program,
+)
 from app.utils.zootechnie import (
     compute_fcr,
     feed_series,
@@ -99,10 +106,15 @@ def batch_new():
         db.session.add(batch)
         db.session.flush()
         recompute_batch_finance(batch)
+        seed_default_sanitary_program(batch)
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
-        flash(f"Lot {batch.code} cree avec succes.", "success")
-        return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
+        flash(
+            f"Lot {batch.code} cree avec succes. Sa feuille de route sanitaire "
+            "(vaccins, traitements, alimentation) a ete generee automatiquement.",
+            "success",
+        )
+        return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
 
     return render_template("poultry/batch_form.html", form=form)
 
@@ -171,7 +183,7 @@ def batch_report(batch_id):
 
 
 # --------------------------------------------------------------------------
-# Programme sanitaire (identique v1.0, inchange)
+# Feuille de route sanitaire (vaccins, traitements, alimentation, eau)
 # --------------------------------------------------------------------------
 
 @poultry_bp.route("/lots/<int:batch_id>/programme-sanitaire", methods=["GET", "POST"])
@@ -199,7 +211,18 @@ def sanitary_program(batch_id):
         .order_by(SanitaryProgramItem.day_number)
         .all()
     )
-    return render_template("poultry/sanitary_program.html", batch=batch, items=items, form=form)
+    today_day_number = current_batch_day_number(batch)
+    pending_items = get_pending_items(batch, upto_day=today_day_number)
+    return render_template(
+        "poultry/sanitary_program.html",
+        batch=batch,
+        items=items,
+        form=form,
+        today_day_number=today_day_number,
+        pending_items=pending_items,
+        water_today=estimate_daily_water_liters(batch, today_day_number),
+        feed_today=estimate_daily_feed_kg(batch, today_day_number),
+    )
 
 
 @poultry_bp.route("/programme-sanitaire/<int:item_id>/valider", methods=["POST"])

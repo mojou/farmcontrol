@@ -1,23 +1,76 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Programme sanitaire - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}Feuille de route - Lot {{ batch.code }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Programme sanitaire - Lot {{ batch.code }}</h1>
+  <div>
+    <h1 class="fc-page-title">Feuille de route - Lot {{ batch.code }}</h1>
+    <p class="text-muted mb-0">{{ batch.farm.name }} - Jour {{ today_day_number }} depuis la mise en place</p>
+  </div>
 </div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ water_today }} L</div>
+      <div class="fc-kpi-label">Eau de boisson recommandee aujourd'hui</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ feed_today }} kg</div>
+      <div class="fc-kpi-label">Aliment recommande aujourd'hui</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-4">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ pending_items|length }}</div>
+      <div class="fc-kpi-label">Tache(s) en attente</div>
+    </div></div>
+  </div>
+</div>
+
+{% if pending_items %}
+<div class="card mb-4 border-danger">
+  <div class="card-body">
+    <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--fc-danger);">
+      <i class="bi bi-exclamation-triangle-fill"></i> A administrer maintenant
+    </h6>
+    {% for item in pending_items %}
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 py-2 {{ 'border-top' if not loop.first }}">
+      <div>
+        <span class="badge bg-secondary me-2">Jour {{ item.day_number }}</span>
+        <strong>{{ item.product_name }}</strong>
+        <p class="text-muted small mb-0 mt-1">{{ item.notes }}</p>
+      </div>
+      <form method="post" action="{{ url_for('poultry.sanitary_program_mark_done', item_id=item.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Administre</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="alert alert-success"><i class="bi bi-check-circle"></i> Aucune tache en attente pour aujourd'hui.</div>
+{% endif %}
 
 <div class="row g-3">
   <div class="col-lg-7">
     <div class="card">
       <div class="card-body">
-        <table class="table align-middle">
-          <thead><tr><th>Jour</th><th>Type</th><th>Produit</th><th>Statut</th><th></th></tr></thead>
+        <h6 class="text-muted small text-uppercase mb-3">Programme complet du lot</h6>
+        <table class="table table-sm align-middle">
+          <thead><tr><th>Jour</th><th>Type</th><th>Produit / action</th><th>Statut</th><th></th></tr></thead>
           <tbody>
             {% for item in items %}
-            <tr>
+            <tr class="{{ 'table-warning' if item.day_number == today_day_number and not item.is_done }}">
               <td>J{{ item.day_number }}</td>
-              <td>{{ item.program_type }}</td>
-              <td>{{ item.product_name }}</td>
+              <td><span class="badge bg-secondary">{{ item.program_type }}</span></td>
+              <td>
+                {{ item.product_name }}
+                {% if item.notes %}<div class="text-muted small">{{ item.notes }}</div>{% endif %}
+              </td>
               <td>{% if item.is_done %}<span class="badge bg-success">Realise</span>{% else %}<span class="badge bg-secondary">Planifie</span>{% endif %}</td>
               <td>
                 {% if not item.is_done %}
@@ -33,6 +86,10 @@
             {% endfor %}
           </tbody>
         </table>
+        <p class="text-muted small mb-0">
+          Programme indicatif base sur des references CEVA Sante Animale Afrique et GIZ-Nafa. A adapter
+          selon les produits reellement disponibles et les recommandations de votre veterinaire ou de votre couvoir.
+        </p>
       </div>
     </div>
   </div>

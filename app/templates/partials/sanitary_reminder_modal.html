@@ -1,0 +1,23 @@
+<!-- Pop-up de rappel sanitaire (verifie toutes les 10 minutes, voir dashboard.js) -->
+<div class="modal fade" id="sanitaryReminderModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: var(--fc-primary); color: #fff;">
+        <h5 class="modal-title"><i class="bi bi-bell-fill"></i> Rappel a administrer</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-2" id="sanitaryReminderContext"></p>
+        <h5 id="sanitaryReminderProduct" class="mb-2"></h5>
+        <p id="sanitaryReminderNotes" class="mb-0"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="sanitaryReminderRoadmapLink" class="btn btn-outline-secondary btn-sm">Voir la feuille de route</a>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Plus tard</button>
+        <button type="button" class="btn btn-success btn-sm" id="sanitaryReminderDoneBtn">
+          <i class="bi bi-check-lg"></i> C'est fait
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

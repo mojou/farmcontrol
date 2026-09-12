@@ -63,3 +63,57 @@ function renderBatchCharts(canvasIds, series) {
     });
   }
 }
+
+// Pop-up de rappel sanitaire : verifie periodiquement (toutes les
+// `intervalMinutes` minutes, plus une premiere fois au chargement) si une
+// tache du programme sanitaire (vaccin, traitement, alimentation) est en
+// attente pour le lot de l'utilisateur, et affiche un pop-up bloquant tant
+// qu'elle n'est pas traitee ou reportee.
+function initSanitaryReminders(options) {
+  var checkUrl = options.checkUrl;
+  var intervalMs = (options.intervalMinutes || 10) * 60 * 1000;
+  var modalEl = document.getElementById("sanitaryReminderModal");
+  if (!modalEl || !window.bootstrap) {
+    return;
+  }
+  var modal = new bootstrap.Modal(modalEl);
+  var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+  var csrfToken = csrfMeta ? csrfMeta.content : "";
+
+  function checkReminder() {
+    // Ne pas interrompre l'utilisateur s'il a deja le pop-up ouvert, ou s'il
+    // est en train de remplir un formulaire de saisie.
+    if (modalEl.classList.contains("show")) {
+      return;
+    }
+    fetch(checkUrl, { headers: { Accept: "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : { has_reminder: false }; })
+      .then(function (data) {
+        if (!data.has_reminder) {
+          return;
+        }
+        document.getElementById("sanitaryReminderContext").textContent =
+          "Lot " + data.batch_code + " (" + data.farm_name + ") - Jour " + data.day_number;
+        document.getElementById("sanitaryReminderProduct").textContent = data.product_name;
+        document.getElementById("sanitaryReminderNotes").textContent = data.notes || "";
+        document.getElementById("sanitaryReminderRoadmapLink").href = data.roadmap_url;
+
+        var doneBtn = document.getElementById("sanitaryReminderDoneBtn");
+        doneBtn.onclick = function () {
+          var formData = new FormData();
+          formData.append("csrf_token", csrfToken);
+          fetch(data.mark_done_url, { method: "POST", body: formData }).finally(function () {
+            modal.hide();
+          });
+        };
+
+        modal.show();
+      })
+      .catch(function () {
+        // Silencieux : une panne reseau temporaire ne doit pas gener l'utilisateur.
+      });
+  }
+
+  checkReminder();
+  setInterval(checkReminder, intervalMs);
+}
