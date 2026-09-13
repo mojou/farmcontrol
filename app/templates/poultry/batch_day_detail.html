@@ -10,13 +10,58 @@
   <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Retour au suivi</a>
 </div>
 
+<div class="alert alert-light border d-flex align-items-start gap-2 mb-4">
+  <i class="bi bi-lightbulb fs-5" style="color: var(--fc-accent);"></i>
+  <div>
+    <strong>Comment utiliser cette page ?</strong>
+    Cliquez sur une des cases ci-dessous (Aliment, Eau, Mortalite...) pour enregistrer ce qui a ete fait
+    aujourd'hui pour ce lot. Une petite fenetre s'ouvre : remplissez-la, puis validez. Vous pouvez ajouter
+    plusieurs entrees dans une meme case si besoin (par exemple deux distributions d'aliment).
+  </div>
+</div>
+
+{% if pending_today %}
+<div class="alert alert-warning">
+  <i class="bi bi-exclamation-triangle-fill"></i> <strong>A ne pas oublier aujourd'hui :</strong>
+  {% for item in pending_today %}{{ item.product_name }}{% if not loop.last %}, {% endif %}{% endfor %}.
+  <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="alert-link">Voir la feuille de route complete</a>.
+</div>
+{% endif %}
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ total_feed_kg|number(1) }} kg</div>
+      <div class="fc-kpi-label">Aliment donne aujourd'hui</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ total_water_liters|number(1) }} L</div>
+      <div class="fc-kpi-label">Eau donnee aujourd'hui</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ total_mortality }}</div>
+      <div class="fc-kpi-label">Morts aujourd'hui</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.current_count }}</div>
+      <div class="fc-kpi-label">Effectif restant</div>
+    </div></div>
+  </div>
+</div>
+
 <div class="card mb-4">
   <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
     <div>
       <h6 class="text-muted small text-uppercase mb-1">Rapport journalier</h6>
       {% if day.report %}
-        {% if day.report.status == 'draft' %}<span class="badge bg-secondary">Brouillon</span>
-        {% elif day.report.status == 'submitted' %}<span class="badge bg-warning text-dark">Soumis, en attente de validation</span>
+        {% if day.report.status == 'draft' %}<span class="badge bg-secondary">Brouillon - pas encore envoye</span>
+        {% elif day.report.status == 'submitted' %}<span class="badge bg-warning text-dark">Envoye, en attente de validation</span>
         {% else %}<span class="badge bg-success">Valide</span>{% endif %}
       {% endif %}
     </div>
@@ -24,8 +69,8 @@
       {% if day.report and day.report.status == 'draft' %}
       <form method="post" action="{{ url_for('poultry.daily_report_submit', day_id=day.id) }}" class="d-flex gap-2">
         {{ submit_form.hidden_tag() }}
-        <input type="text" name="notes" class="form-control form-control-sm" placeholder="Notes (optionnel)">
-        <button class="btn btn-primary btn-sm">Soumettre le rapport</button>
+        <input type="text" name="notes" class="form-control form-control-sm" placeholder="Remarque (optionnel)">
+        <button class="btn btn-primary btn-sm">Envoyer le rapport du jour</button>
       </form>
       {% elif day.report and day.report.status == 'submitted' and current_user.has_role('owner', 'manager', 'super_admin') %}
       <form method="post" action="{{ url_for('poultry.daily_report_review', day_id=day.id) }}" class="d-flex gap-2">
@@ -38,175 +83,259 @@
   </div>
 </div>
 
-<div class="accordion" id="dayAccordion">
+<h6 class="text-muted small text-uppercase mb-3">Que voulez-vous enregistrer ?</h6>
+<div class="row g-3">
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#feedSection">Aliment</button></h2>
-    <div id="feedSection" class="accordion-collapse collapse show" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Type</th><th>Quantite (kg)</th><th>Prix unitaire</th></tr></thead>
-          <tbody>
-            {% for r in day.feed_records %}
-            <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }}</td><td>{{ r.unit_price|currency }}</td></tr>
-            {% else %}<tr><td colspan="3" class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.feed_record_new', day_id=day.id) }}" class="row g-2">
-          {{ feed_form.hidden_tag() }}
-          <div class="col-md-3">{{ fm.render_field(feed_form.stock_item_id) }}</div>
-          <div class="col-md-3">{{ fm.render_field(feed_form.feed_type) }}</div>
-          <div class="col-md-2">{{ fm.render_field(feed_form.quantity_kg) }}</div>
-          <div class="col-md-2">{{ fm.render_field(feed_form.unit_price) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
+  {% macro tile(id, icon, title, subtitle) %}
+  <div class="col-6 col-md-4 col-lg-3">
+    <button type="button" class="card h-100 w-100 border-0 text-start fc-day-tile" data-bs-toggle="modal" data-bs-target="#{{ id }}Modal">
+      <div class="card-body">
+        <i class="bi {{ icon }} fs-2 mb-2 d-block" style="color: var(--fc-primary);"></i>
+        <div class="fw-bold">{{ title }}</div>
+        <div class="text-muted small">{{ subtitle }}</div>
       </div>
+    </button>
+  </div>
+  {% endmacro %}
+
+  {{ tile("feed", "bi-basket2-fill", "Aliment", day.feed_records|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("water", "bi-droplet-fill", "Eau", day.water_records|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("mortality", "bi-exclamation-octagon-fill", "Mortalite", day.mortality_records|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("wood", "bi-layers-fill", "Bois / litiere", day.wood_records|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("medication", "bi-capsule", "Medicaments / vaccins", day.medication_records|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("observation", "bi-eye-fill", "Observation", day.observations|length ~ " entree(s) aujourd'hui") }}
+  {{ tile("weight", "bi-speedometer2", "Pesee", day.weight_records|length ~ " entree(s) aujourd'hui") }}
+</div>
+
+<!-- ============================= Modale Aliment ============================= -->
+<div class="modal fade" id="feedModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.feed_record_new', day_id=day.id) }}" enctype="multipart/form-data">
+        {{ feed_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-basket2-fill"></i> Aliment donne aujourd'hui</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.feed_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Type</th><th>Quantite</th><th>Prix/kg</th></tr></thead>
+            <tbody>
+              {% for r in day.feed_records %}
+              <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }} kg</td><td>{{ r.unit_price|currency }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Indiquez le type d'aliment donne (ex : Demarrage, Croissance) et la quantite en kilogrammes.</p>
+          {{ fm.render_field(feed_form.feed_type) }}
+          {{ fm.render_field(feed_form.quantity_kg) }}
+          {{ fm.render_field(feed_form.unit_price) }}
+          <p class="text-muted small mb-1">Si cet aliment vient de votre stock enregistre, selectionnez-le ici pour que la quantite soit deduite automatiquement (facultatif) :</p>
+          {{ fm.render_field(feed_form.stock_item_id) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#waterSection">Eau</button></h2>
-    <div id="waterSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Quantite (litres)</th></tr></thead>
-          <tbody>
-            {% for r in day.water_records %}
-            <tr><td>{{ r.quantity_liters }}</td></tr>
-            {% else %}<tr><td class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.water_record_new', day_id=day.id) }}" class="row g-2">
-          {{ water_form.hidden_tag() }}
-          <div class="col-md-3">{{ fm.render_field(water_form.quantity_liters) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
+<!-- ============================= Modale Eau ============================= -->
+<div class="modal fade" id="waterModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.water_record_new', day_id=day.id) }}">
+        {{ water_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-droplet-fill"></i> Eau donnee aujourd'hui</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.water_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Quantite</th></tr></thead>
+            <tbody>{% for r in day.water_records %}<tr><td>{{ r.quantity_liters }} L</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Combien de litres d'eau de boisson avez-vous donne au total aujourd'hui ?</p>
+          {{ fm.render_field(water_form.quantity_liters) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mortalitySection">Mortalite</button></h2>
-    <div id="mortalitySection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Nombre de morts</th><th>Cause</th></tr></thead>
-          <tbody>
-            {% for r in day.mortality_records %}
-            <tr><td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td></tr>
-            {% else %}<tr><td colspan="2" class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.mortality_record_new', day_id=day.id) }}" class="row g-2">
-          {{ mortality_form.hidden_tag() }}
-          <div class="col-md-2">{{ fm.render_field(mortality_form.quantity_dead) }}</div>
-          <div class="col-md-4">{{ fm.render_field(mortality_form.cause) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
+<!-- ============================= Modale Mortalite ============================= -->
+<div class="modal fade" id="mortalityModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.mortality_record_new', day_id=day.id) }}">
+        {{ mortality_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill"></i> Mortalite du jour</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.mortality_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Nombre</th><th>Cause</th></tr></thead>
+            <tbody>{% for r in day.mortality_records %}<tr><td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Combien de poulets sont morts aujourd'hui ? Mettez 0 si aucun.</p>
+          {{ fm.render_field(mortality_form.quantity_dead) }}
+          {{ fm.render_field(mortality_form.cause) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#woodSection">Bois / litiere</button></h2>
-    <div id="woodSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Quantite</th><th>Prix unitaire</th></tr></thead>
-          <tbody>
-            {% for r in day.wood_records %}
-            <tr><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td></tr>
-            {% else %}<tr><td colspan="2" class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.wood_record_new', day_id=day.id) }}" class="row g-2">
-          {{ wood_form.hidden_tag() }}
-          <div class="col-md-3">{{ fm.render_field(wood_form.stock_item_id) }}</div>
-          <div class="col-md-2">{{ fm.render_field(wood_form.quantity) }}</div>
-          <div class="col-md-2">{{ fm.render_field(wood_form.unit_price) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
+<!-- ============================= Modale Bois / litiere ============================= -->
+<div class="modal fade" id="woodModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.wood_record_new', day_id=day.id) }}">
+        {{ wood_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-layers-fill"></i> Bois / litiere</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.wood_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Quantite</th><th>Prix</th></tr></thead>
+            <tbody>{% for r in day.wood_records %}<tr><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Quantite de bois / copeaux / litiere ajoutee aujourd'hui.</p>
+          {{ fm.render_field(wood_form.quantity) }}
+          {{ fm.render_field(wood_form.unit_price) }}
+          {{ fm.render_field(wood_form.stock_item_id) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#medicationSection">Medicaments</button></h2>
-    <div id="medicationSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Medicament</th><th>Quantite</th><th>Prix unitaire</th><th>Notes</th></tr></thead>
-          <tbody>
-            {% for r in day.medication_records %}
-            <tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td><td>{{ r.notes or "-" }}</td></tr>
-            {% else %}<tr><td colspan="4" class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.medication_record_new', day_id=day.id) }}" class="row g-2">
-          {{ medication_form.hidden_tag() }}
-          <div class="col-md-3">{{ fm.render_field(medication_form.stock_item_id) }}</div>
-          <div class="col-md-2">{{ fm.render_field(medication_form.medication_name) }}</div>
-          <div class="col-md-2">{{ fm.render_field(medication_form.quantity) }}</div>
-          <div class="col-md-2">{{ fm.render_field(medication_form.unit_price) }}</div>
-          <div class="col-md-3">{{ fm.render_field(medication_form.notes) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
+<!-- ============================= Modale Medicaments ============================= -->
+<div class="modal fade" id="medicationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.medication_record_new', day_id=day.id) }}">
+        {{ medication_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-capsule"></i> Medicament / vaccin administre</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.medication_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Produit</th><th>Quantite</th></tr></thead>
+            <tbody>{% for r in day.medication_records %}<tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }}</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Astuce : consultez la <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">feuille de route</a> pour savoir quoi administrer aujourd'hui.</p>
+          {{ fm.render_field(medication_form.medication_name) }}
+          {{ fm.render_field(medication_form.quantity) }}
+          {{ fm.render_field(medication_form.unit_price) }}
+          {{ fm.render_field(medication_form.notes) }}
+          {{ fm.render_field(medication_form.stock_item_id) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#observationSection">Observations</button></h2>
-    <div id="observationSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <div class="row g-3 mb-3">
-          {% for r in day.observations %}
-          <div class="col-md-4">
-            <div class="card h-100">
-              {% if r.photo_path %}
-              <img src="{{ url_for('core.uploaded_file', filename=r.photo_path) }}" class="card-img-top" alt="Photo observation">
-              {% endif %}
-              <div class="card-body">
-                <span class="badge {{ 'bg-danger' if r.severity == 'urgent' else 'bg-secondary' }} mb-2">{{ r.severity }}</span>
-                <p class="card-text small">{{ r.description }}</p>
+<!-- ============================= Modale Observation ============================= -->
+<div class="modal fade" id="observationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.observation_new', day_id=day.id) }}" enctype="multipart/form-data">
+        {{ observation_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-eye-fill"></i> Signaler une observation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.observations %}
+          <div class="row g-2 mb-3">
+            {% for r in day.observations %}
+            <div class="col-6">
+              <div class="card h-100">
+                {% if r.photo_path %}<img src="{{ url_for('core.uploaded_file', filename=r.photo_path) }}" class="card-img-top" alt="">{% endif %}
+                <div class="card-body p-2">
+                  <span class="badge {{ 'bg-danger' if r.severity == 'urgent' else 'bg-secondary' }}">{{ r.severity }}</span>
+                  <p class="small mb-0">{{ r.description }}</p>
+                </div>
               </div>
             </div>
+            {% endfor %}
           </div>
-          {% else %}<div class="col-12 text-muted">Aucune observation.</div>{% endfor %}
+          {% endif %}
+          <p class="text-muted small">Decrivez ce que vous avez remarque (poussin malade, probleme de materiel...). Choisissez "Urgente" si le proprietaire doit etre prevenu immediatement.</p>
+          {{ fm.render_field(observation_form.description) }}
+          {{ fm.render_field(observation_form.severity) }}
+          {{ fm.render_field(observation_form.photo) }}
         </div>
-        <form method="post" action="{{ url_for('poultry.observation_new', day_id=day.id) }}" enctype="multipart/form-data" class="row g-2">
-          {{ observation_form.hidden_tag() }}
-          <div class="col-md-5">{{ fm.render_field(observation_form.description) }}</div>
-          <div class="col-md-2">{{ fm.render_field(observation_form.severity) }}</div>
-          <div class="col-md-3">{{ fm.render_field(observation_form.photo) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
     </div>
   </div>
-
-  <div class="accordion-item">
-    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#weightSection">Pesees</button></h2>
-    <div id="weightSection" class="accordion-collapse collapse" data-bs-parent="#dayAccordion">
-      <div class="accordion-body">
-        <table class="table table-sm">
-          <thead><tr><th>Poids moyen (g)</th><th>Echantillon</th><th>Observation</th></tr></thead>
-          <tbody>
-            {% for r in day.weight_records %}
-            <tr><td>{{ r.average_weight }}</td><td>{{ r.sample_size }}</td><td>{{ r.observation or "-" }}</td></tr>
-            {% else %}<tr><td colspan="3" class="text-muted">Aucune entree.</td></tr>{% endfor %}
-          </tbody>
-        </table>
-        <form method="post" action="{{ url_for('poultry.weight_record_new', day_id=day.id) }}" class="row g-2">
-          {{ weight_form.hidden_tag() }}
-          <div class="col-md-3">{{ fm.render_field(weight_form.average_weight) }}</div>
-          <div class="col-md-2">{{ fm.render_field(weight_form.sample_size) }}</div>
-          <div class="col-md-4">{{ fm.render_field(weight_form.observation) }}</div>
-          <div class="col-md-2 d-flex align-items-start pt-1"><button class="btn btn-primary btn-sm mt-1">Ajouter</button></div>
-        </form>
-      </div>
-    </div>
-  </div>
-
 </div>
+
+<!-- ============================= Modale Pesee ============================= -->
+<div class="modal fade" id="weightModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('poultry.weight_record_new', day_id=day.id) }}">
+        {{ weight_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-speedometer2"></i> Pesee</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.weight_records %}
+          <table class="table table-sm mb-3">
+            <thead><tr><th>Poids moyen</th><th>Sujets peses</th></tr></thead>
+            <tbody>{% for r in day.weight_records %}<tr><td>{{ r.average_weight }} g</td><td>{{ r.sample_size }}</td></tr>{% endfor %}</tbody>
+          </table>
+          {% endif %}
+          <p class="text-muted small">Pesez quelques poussins au hasard et indiquez leur poids moyen en grammes.</p>
+          {{ fm.render_field(weight_form.average_weight) }}
+          {{ fm.render_field(weight_form.sample_size) }}
+          {{ fm.render_field(weight_form.observation) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

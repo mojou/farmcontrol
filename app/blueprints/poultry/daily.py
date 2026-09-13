@@ -37,6 +37,7 @@ from app.models.poultry import (
 )
 from app.utils.alerts import check_mortality_alert, check_stock_alert, check_urgent_observation_alert
 from app.utils.audit import log_action
+from app.utils.sanitary import get_pending_items
 from app.utils.uploads import save_observation_photo
 from app.utils.zootechnie import recompute_batch_finance
 
@@ -117,19 +118,33 @@ def batch_day_new(batch_id):
 @login_required
 def batch_day_detail(day_id):
     day = _get_day_or_403(day_id)
+
+    feed_form = FeedRecordForm()
+    feed_form.stock_item_id.choices = _stock_choices(day.batch.farm_id, "feed")
+    wood_form = WoodRecordForm()
+    wood_form.stock_item_id.choices = _stock_choices(day.batch.farm_id, "wood")
+    medication_form = MedicationRecordForm()
+    medication_form.stock_item_id.choices = _stock_choices(day.batch.farm_id, "medication")
+
+    pending_today = get_pending_items(day.batch, upto_day=day.day_number)
+
     return render_template(
         "poultry/batch_day_detail.html",
         day=day,
         batch=day.batch,
-        feed_form=FeedRecordForm(),
+        feed_form=feed_form,
         water_form=WaterRecordForm(),
         mortality_form=MortalityRecordForm(),
-        wood_form=WoodRecordForm(),
-        medication_form=MedicationRecordForm(),
+        wood_form=wood_form,
+        medication_form=medication_form,
         observation_form=ObservationForm(),
         weight_form=WeightRecordForm(),
         submit_form=DailyReportSubmitForm(),
         review_form=DailyReportReviewForm(),
+        pending_today=pending_today,
+        total_feed_kg=day.feed_kg,
+        total_water_liters=sum((r.quantity_liters or 0) for r in day.water_records),
+        total_mortality=day.mortality_count,
     )
 
 

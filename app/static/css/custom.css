@@ -192,6 +192,18 @@ h1, h2, h3, h4, h5, h6, .fw-bold {
   font-weight: 600;
 }
 
+/* Tuiles cliquables de la saisie quotidienne (ouvrent une modale) */
+.fc-day-tile {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.fc-day-tile:hover, .fc-day-tile:focus {
+  box-shadow: var(--fc-shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--fc-primary);
+}
+
 .btn {
   border-radius: var(--fc-radius-sm);
   font-weight: 600;
