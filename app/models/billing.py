@@ -41,6 +41,7 @@ class Plan(TimestampMixin, db.Model):
     max_farms = db.Column(db.Integer, nullable=True)  # None = illimite
     max_active_batches = db.Column(db.Integer, nullable=True)  # None = illimite
     max_users = db.Column(db.Integer, nullable=True)  # None = illimite
+    max_messages_per_day = db.Column(db.Integer, nullable=True)  # None = illimite
     description = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     sort_order = db.Column(db.Integer, nullable=False, default=0)

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "partials/_pagination.html" as pg %}
 {% block title %}Suivi quotidien - Lot {{ batch.code }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
@@ -21,7 +22,7 @@
         <tr><th>Jour</th><th>Date</th><th>Aliment (kg)</th><th>Morts</th><th>Statut rapport</th><th></th></tr>
       </thead>
       <tbody>
-        {% for day in batch.days|reverse %}
+        {% for day in pagination.items %}
         <tr>
           <td>J{{ day.day_number }}</td>
           <td>{{ day.date.strftime('%d/%m/%Y') }}</td>
@@ -41,6 +42,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {{ pg.render_pagination(pagination, 'poultry.batch_days_list', batch_id=batch.id) }}
   </div>
 </div>
 {% endblock %}

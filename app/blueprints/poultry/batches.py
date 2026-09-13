@@ -62,8 +62,9 @@ def batches_list():
     query = Batch.query.filter(Batch.farm_id.in_(farm_ids)) if farm_ids else Batch.query.filter(False)
     if status in ("active", "closed"):
         query = query.filter_by(status=status)
-    batches = query.order_by(Batch.start_date.desc()).all()
-    return render_template("poultry/batches_list.html", batches=batches, status=status)
+    page = request.args.get("page", 1, type=int)
+    pagination = query.order_by(Batch.start_date.desc()).paginate(page=page, per_page=20)
+    return render_template("poultry/batches_list.html", pagination=pagination, status=status)
 
 
 @poultry_bp.route("/lots/nouveau", methods=["GET", "POST"])

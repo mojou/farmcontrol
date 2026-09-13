@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app.blueprints.poultry import poultry_bp
@@ -16,8 +16,9 @@ def farms_list():
     query = Farm.query
     if current_user.farm_id:
         query = query.filter_by(id=current_user.farm_id)
-    farms = query.order_by(Farm.name).all()
-    return render_template("poultry/farms_list.html", farms=farms)
+    page = request.args.get("page", 1, type=int)
+    pagination = query.order_by(Farm.name).paginate(page=page, per_page=20)
+    return render_template("poultry/farms_list.html", pagination=pagination)
 
 
 @poultry_bp.route("/fermes/nouvelle", methods=["GET", "POST"])

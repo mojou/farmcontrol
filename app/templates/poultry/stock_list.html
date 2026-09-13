@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "partials/_pagination.html" as pg %}
 {% block title %}Stock - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
@@ -13,7 +14,7 @@
     <table class="table align-middle">
       <thead><tr><th>Ferme</th><th>Categorie</th><th>Article</th><th>Quantite</th><th>Seuil</th><th>Statut</th><th></th></tr></thead>
       <tbody>
-        {% for item in items %}
+        {% for item in pagination.items %}
         <tr class="{{ 'table-danger' if item.is_low }}">
           <td>{{ item.farm.name }}</td>
           <td>{{ {"feed": "Aliment", "wood": "Bois / litiere", "medication": "Medicament"}[item.category] }}</td>
@@ -34,6 +35,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {{ pg.render_pagination(pagination, 'poultry.stock_list') }}
   </div>
 </div>
 {% endblock %}

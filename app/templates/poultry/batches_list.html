@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "partials/_pagination.html" as pg %}
 {% block title %}Lots - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
@@ -18,7 +19,7 @@
     <table class="table align-middle">
       <thead><tr><th>Ferme</th><th>Lot</th><th>Souche</th><th>Debut</th><th>Effectif courant</th><th></th></tr></thead>
       <tbody>
-        {% for batch in batches %}
+        {% for batch in pagination.items %}
         <tr>
           <td>{{ batch.farm.name }}</td>
           <td>{{ batch.code }}</td>
@@ -35,6 +36,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {{ pg.render_pagination(pagination, 'poultry.batches_list', status=status) }}
   </div>
 </div>
 {% endblock %}

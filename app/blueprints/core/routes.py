@@ -168,8 +168,9 @@ def mark_alert_read(alert_id):
 @core_bp.route("/users")
 @owner_required
 def users_list():
-    users = User.query.order_by(User.role, User.last_name).all()
-    return render_template("core/users_list.html", users=users)
+    page = request.args.get("page", 1, type=int)
+    pagination = User.query.order_by(User.role, User.last_name).paginate(page=page, per_page=20)
+    return render_template("core/users_list.html", pagination=pagination)
 
 
 @core_bp.route("/users/new", methods=["GET", "POST"])
@@ -242,9 +243,10 @@ def user_toggle(user_id):
 @core_bp.route("/admin")
 @super_admin_required
 def admin_dashboard():
+    page = request.args.get("page", 1, type=int)
     with tenant_bypass():
-        tenants = Tenant.query.order_by(Tenant.created_at.desc()).all()
-    return render_template("core/admin_dashboard.html", tenants=tenants)
+        pagination = Tenant.query.order_by(Tenant.created_at.desc()).paginate(page=page, per_page=10)
+    return render_template("core/admin_dashboard.html", pagination=pagination)
 
 
 @core_bp.route("/admin/tenants/new", methods=["GET", "POST"])

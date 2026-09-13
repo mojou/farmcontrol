@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Farm Control - Gestion d'elevage professionnelle{% endblock %}
 {% block guest_content %}
-<div style="background-color: #ffffff;">
+<div style="background-color: #ffffff; overflow-x: hidden;">
 
-  <nav class="navbar navbar-expand navbar-light border-bottom bg-white">
+  <nav class="navbar navbar-expand navbar-light bg-white">
     <div class="container">
       <a class="navbar-brand fw-bold fs-4" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
       <div class="d-flex align-items-center gap-3">
@@ -14,35 +14,93 @@
     </div>
   </nav>
 
-  <header class="py-5" style="background: radial-gradient(circle at 15% 20%, var(--fc-primary-light) 0%, var(--fc-bg) 55%);">
-    <div class="container py-5 text-center">
-      <span class="badge rounded-pill mb-3" style="background-color: var(--fc-primary-light); color: var(--fc-primary-dark); font-weight: 600; padding: 0.45rem 1rem;">
-        <i class="bi bi-geo-alt-fill"></i> Pense pour l'Afrique - tarifs en FCFA
-      </span>
-      <h1 class="fw-bold mb-3" style="font-size: 2.6rem; color: #16211a; max-width: 760px; margin-inline: auto; line-height: 1.15;">
-        La plateforme de gestion d'elevage qui vous dit si votre lot est rentable.
-      </h1>
-      <p class="text-muted mb-4" style="font-size: 1.15rem; max-width: 620px; margin-inline: auto;">
-        Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques
-        pour les elevages de poulets de chair. Multitenant, securise, accessible partout.
-      </p>
-      <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Creer mon compte gratuitement</a>
-        <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-secondary btn-lg">Voir les tarifs</a>
+  <!-- ============================= Hero ============================= -->
+  <header class="position-relative" style="background: linear-gradient(135deg, var(--fc-primary-dark) 0%, var(--fc-primary) 55%, #3f7a4a 100%); overflow: hidden;">
+    <div class="position-absolute" style="width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(217,154,61,0.35) 0%, transparent 70%); top: -180px; right: -120px;"></div>
+    <div class="position-absolute" style="width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); bottom: -160px; left: -100px;"></div>
+
+    <div class="container py-5 position-relative">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-7 text-white">
+          <span class="badge rounded-pill mb-3" style="background-color: rgba(255,255,255,0.15); color: #fff; font-weight: 600; padding: 0.5rem 1.1rem; backdrop-filter: blur(4px);">
+            <i class="bi bi-geo-alt-fill"></i> Pense pour l'Afrique - tarifs en FCFA
+          </span>
+          <h1 class="fw-bold mb-3" style="font-size: 2.75rem; line-height: 1.15;">
+            La plateforme qui vous dit si votre elevage
+            <span style="background: linear-gradient(90deg, #f3cd7e, #d99a3d); -webkit-background-clip: text; background-clip: text; color: transparent;">est vraiment rentable.</span>
+          </h1>
+          <p class="mb-4" style="font-size: 1.15rem; color: rgba(255,255,255,0.85); max-width: 560px;">
+            Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques
+            pour les elevages de poulets de chair. Multitenant, securise, accessible partout.
+          </p>
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">Creer mon compte gratuitement</a>
+            <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-light btn-lg">Voir les tarifs</a>
+          </div>
+          <p class="small mt-3 mb-0" style="color: rgba(255,255,255,0.7);">Formule gratuite disponible. Votre espace est pret en 1 minute.</p>
+        </div>
+
+        <div class="col-lg-5 d-none d-lg-block">
+          <div class="rounded-4 p-4" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(6px);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-white-50 small text-uppercase fw-bold">Lot LOT-04 - Jour 21</span>
+              <span class="badge bg-success">Actif</span>
+            </div>
+            <div class="row g-3 text-center">
+              <div class="col-6">
+                <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
+                  <div class="fw-bold fs-4" style="color: var(--fc-primary);">1.8</div>
+                  <div class="small text-muted">FCR</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
+                  <div class="fw-bold fs-4" style="color: var(--fc-accent);">+238 000</div>
+                  <div class="small text-muted">FCFA de resultat net</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
+                  <div class="fw-bold fs-4">972</div>
+                  <div class="small text-muted">Effectif courant</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
+                  <div class="fw-bold fs-4">98,5%</div>
+                  <div class="small text-muted">Taux de survie</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="text-muted small mt-3 mb-0">Formule gratuite disponible. Votre espace est pret en 1 minute.</p>
     </div>
   </header>
 
-  <section class="py-5">
+  <!-- ============================= Bandeau de confiance ============================= -->
+  <div class="py-3" style="background-color: var(--fc-primary-dark);">
+    <div class="container">
+      <div class="row text-center text-white-50 small g-3">
+        <div class="col-6 col-md-3"><i class="bi bi-shield-check"></i> Donnees isolees et securisees</div>
+        <div class="col-6 col-md-3"><i class="bi bi-phone"></i> Accessible sur mobile</div>
+        <div class="col-6 col-md-3"><i class="bi bi-cash-coin"></i> Tarifs en FCFA</div>
+        <div class="col-6 col-md-3"><i class="bi bi-headset"></i> Support en francais</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= Fonctionnalites ============================= -->
+  <section class="py-5" style="background-color: var(--fc-bg);">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 class="fw-bold h3">Tout ce qu'il faut pour piloter votre elevage</h2>
+        <span class="text-uppercase small fw-bold" style="color: var(--fc-primary); letter-spacing: 0.05em;">Fonctionnalites</span>
+        <h2 class="fw-bold h3 mt-2">Tout ce qu'il faut pour piloter votre elevage</h2>
       </div>
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-graph-up-arrow fs-4" style="color: var(--fc-primary);"></i>
             </div>
             <h5>Performance zootechnique</h5>
@@ -50,17 +108,17 @@
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
-              <i class="bi bi-cash-coin fs-4" style="color: var(--fc-primary);"></i>
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
+              <i class="bi bi-cash-coin fs-4" style="color: var(--fc-accent);"></i>
             </div>
             <h5>Rentabilite par lot</h5>
             <p class="text-muted mb-0">Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-bell fs-4" style="color: var(--fc-primary);"></i>
             </div>
             <h5>Alertes automatiques</h5>
@@ -68,17 +126,17 @@
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
-              <i class="bi bi-people fs-4" style="color: var(--fc-primary);"></i>
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
+              <i class="bi bi-people fs-4" style="color: var(--fc-accent);"></i>
             </div>
             <h5>Equipe et roles</h5>
             <p class="text-muted mb-0">Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier.</p>
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-shield-lock fs-4" style="color: var(--fc-primary);"></i>
             </div>
             <h5>Donnees isolees et securisees</h5>
@@ -86,9 +144,9 @@
           </div></div>
         </div>
         <div class="col-md-4">
-          <div class="card h-100"><div class="card-body p-4">
-            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px; height:48px; background-color: var(--fc-primary-light);">
-              <i class="bi bi-file-earmark-pdf fs-4" style="color: var(--fc-primary);"></i>
+          <div class="card h-100 border-0" style="box-shadow: var(--fc-shadow);"><div class="card-body p-4">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
+              <i class="bi bi-file-earmark-pdf fs-4" style="color: var(--fc-accent);"></i>
             </div>
             <h5>Rapports exportables</h5>
             <p class="text-muted mb-0">Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.</p>
@@ -98,11 +156,13 @@
     </div>
   </section>
 
-  <section class="py-5 text-center" style="background-color: var(--fc-bg);">
-    <div class="container">
-      <h2 class="h3 fw-bold mb-2">Des tarifs accessibles, en FCFA</h2>
-      <p class="text-muted mb-4">A partir de gratuit. Sans engagement.</p>
-      <a href="{{ url_for('billing.pricing') }}" class="btn btn-primary btn-lg">Voir les tarifs</a>
+  <!-- ============================= CTA final ============================= -->
+  <section class="py-5 text-center position-relative" style="background: linear-gradient(120deg, var(--fc-primary-dark), var(--fc-primary)); overflow: hidden;">
+    <div class="position-absolute" style="width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(217,154,61,0.3) 0%, transparent 70%); top: -140px; left: 10%;"></div>
+    <div class="container position-relative">
+      <h2 class="h3 fw-bold mb-2 text-white">Des tarifs accessibles, en FCFA</h2>
+      <p class="mb-4" style="color: rgba(255,255,255,0.8);">A partir de gratuit. Sans engagement. Mobile Money et carte acceptes.</p>
+      <a href="{{ url_for('billing.pricing') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">Voir les tarifs</a>
     </div>
   </section>
 

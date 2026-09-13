@@ -1,6 +1,6 @@
 from datetime import date, datetime, timezone
 
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 
@@ -84,7 +84,13 @@ def _apply_stock_consumption(stock_item_id, quantity):
 @login_required
 def batch_days_list(batch_id):
     batch = _get_batch_or_403(batch_id)
-    return render_template("poultry/batch_days_list.html", batch=batch)
+    page = request.args.get("page", 1, type=int)
+    pagination = (
+        BatchDay.query.filter_by(batch_id=batch.id)
+        .order_by(BatchDay.day_number.desc())
+        .paginate(page=page, per_page=20)
+    )
+    return render_template("poultry/batch_days_list.html", batch=batch, pagination=pagination)
 
 
 @poultry_bp.route("/lots/<int:batch_id>/jours/nouveau", methods=["POST"])

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "partials/_pagination.html" as pg %}
 {% block title %}Utilisateurs - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
@@ -13,7 +14,7 @@
         <tr><th>Nom</th><th>Email</th><th>Role</th><th>Ferme assignee</th><th>Statut</th><th></th></tr>
       </thead>
       <tbody>
-        {% for user in users %}
+        {% for user in pagination.items %}
         <tr>
           <td>{{ user.full_name }}</td>
           <td>{{ user.email }}</td>
@@ -29,9 +30,12 @@
             {% endif %}
           </td>
         </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-muted text-center py-4">Aucun utilisateur.</td></tr>
         {% endfor %}
       </tbody>
     </table>
+    {{ pg.render_pagination(pagination, 'core.users_list') }}
   </div>
 </div>
 {% endblock %}

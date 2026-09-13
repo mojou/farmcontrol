@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from wtforms import DecimalField
 from wtforms.validators import DataRequired, NumberRange
@@ -24,8 +24,9 @@ def stock_list():
     query = StockItem.query
     if current_user.farm_id:
         query = query.filter_by(farm_id=current_user.farm_id)
-    items = query.order_by(StockItem.category, StockItem.name).all()
-    return render_template("poultry/stock_list.html", items=items)
+    page = request.args.get("page", 1, type=int)
+    pagination = query.order_by(StockItem.category, StockItem.name).paginate(page=page, per_page=20)
+    return render_template("poultry/stock_list.html", pagination=pagination)
 
 
 @poultry_bp.route("/stock/nouveau", methods=["GET", "POST"])

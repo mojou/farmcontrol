@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "partials/_pagination.html" as pg %}
 {% block title %}Administration plateforme - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
@@ -15,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for tenant in tenants %}
+        {% for tenant in pagination.items %}
         <tr>
           <td>{{ tenant.name }}</td>
           <td><code>{{ tenant.slug }}</code></td>
@@ -39,6 +40,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {{ pg.render_pagination(pagination, 'core.admin_dashboard') }}
   </div>
 </div>
 {% endblock %}

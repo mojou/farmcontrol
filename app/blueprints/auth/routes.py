@@ -149,7 +149,7 @@ def signup():
 def logout():
     logout_user()
     flash("Vous avez ete deconnecte.", "info")
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("core.index"))
 
 
 @auth_bp.route("/mot-de-passe-oublie", methods=["GET", "POST"])

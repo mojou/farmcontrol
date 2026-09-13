@@ -172,11 +172,36 @@ class StockItemForm(FlaskForm):
         "Categorie",
         choices=[("feed", "Aliment"), ("wood", "Bois / litiere"), ("medication", "Medicament")],
     )
-    name = StringField("Nom de l'article", validators=[DataRequired()])
-    unit = StringField("Unite", validators=[DataRequired()], default="kg")
-    quantity_on_hand = DecimalField("Quantite en stock", validators=[DataRequired(), NumberRange(min=0)], places=2)
-    min_threshold = DecimalField("Seuil d'alerte", validators=[DataRequired(), NumberRange(min=0)], places=2)
-    unit_price = DecimalField("Prix unitaire", validators=[DataRequired(), NumberRange(min=0)], places=2)
+    name = StringField(
+        "Nom de l'article",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Ex : Aliment demarrage, Copeaux de bois, Vitamines..."},
+    )
+    unit = StringField(
+        "Unite de mesure",
+        validators=[DataRequired()],
+        default="sac",
+        render_kw={"placeholder": "Ex : sac, morceau, ml, kg..."},
+        id="stock-unit",
+    )
+    quantity_on_hand = DecimalField(
+        "Quantite actuellement en stock",
+        validators=[DataRequired(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 10"},
+    )
+    min_threshold = DecimalField(
+        "Seuil d'alerte (stock faible)",
+        validators=[DataRequired(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 2"},
+    )
+    unit_price = DecimalField(
+        "Prix par unite (FCFA)",
+        validators=[DataRequired(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 15000"},
+    )
     submit = SubmitField("Enregistrer")
 
 
