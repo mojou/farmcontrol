@@ -182,11 +182,16 @@ class StockItem(TimestampMixin, TenantMixin, db.Model):
 
     category = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(150), nullable=False)
-    unit = db.Column(db.String(20), nullable=False, default="kg")
+    unit = db.Column(db.String(20), nullable=False, default="sac")
     quantity_on_hand = db.Column(db.Numeric(12, 2), nullable=False, default=0)
     min_threshold = db.Column(db.Numeric(12, 2), nullable=False, default=0)
     unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
+    # Poids en kg d'une unite de stock (ex : 50 pour un sac d'aliment de 50kg).
+    # Necessaire car la saisie quotidienne d'aliment se fait en kg (pour le
+    # calcul de l'indice de consommation/FCR) alors que le stock d'aliment
+    # se gere en sacs : on convertit les kg consommes en sacs a decompter.
+    kg_per_unit = db.Column(db.Numeric(10, 2), nullable=True)
 
     farm = db.relationship("Farm", back_populates="stock_items")
 

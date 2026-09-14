@@ -1,4 +1,5 @@
 from datetime import date, datetime, timezone
+from decimal import Decimal
 
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
@@ -58,7 +59,13 @@ def _get_day_or_403(day_id):
 
 def _stock_choices(farm_id, category):
     items = StockItem.query.filter_by(farm_id=farm_id, category=category, is_active=True).order_by(StockItem.name).all()
-    return [(0, "Aucun (saisie libre)")] + [(i.id, f"{i.name} ({i.quantity_on_hand} {i.unit} en stock)") for i in items]
+    choices = [(0, "Aucun (saisie libre)")]
+    for i in items:
+        label = f"{i.name} ({i.quantity_on_hand} {i.unit} en stock)"
+        if i.kg_per_unit:
+            label += f" - 1 {i.unit} = {i.kg_per_unit} kg"
+        choices.append((i.id, label))
+    return choices
 
 
 def _farm_has_manager(farm):
@@ -70,12 +77,23 @@ def _farm_has_manager(farm):
     )
 
 
-def _apply_stock_consumption(stock_item_id, quantity):
+def _apply_stock_consumption(stock_item_id, quantity, quantity_is_kg=False):
+    """Decompte une consommation du stock enregistre.
+
+    Le bois/litiere et les medicaments sont saisis directement dans l'unite
+    de stock (morceau, ml...) donc `quantity` s'y soustrait telle quelle.
+    L'aliment est saisi en kg (necessaire pour le calcul du FCR) alors que
+    le stock d'aliment se gere en sacs : si l'article de stock precise un
+    poids par unite (`kg_per_unit`), on convertit les kg donnes en sacs
+    avant de decompter, pour ne pas melanger les unites.
+    """
     if not stock_item_id:
         return None
     stock_item = db.session.get(StockItem, stock_item_id)
     if stock_item is None:
         return None
+    if quantity_is_kg and stock_item.kg_per_unit:
+        quantity = Decimal(quantity) / Decimal(stock_item.kg_per_unit)
     stock_item.quantity_on_hand = max((stock_item.quantity_on_hand or 0) - quantity, 0)
     return stock_item
 
@@ -178,7 +196,7 @@ def feed_record_new(day_id):
             created_by=current_user.id,
         )
         db.session.add(record)
-        stock_item = _apply_stock_consumption(form.stock_item_id.data, form.quantity_kg.data)
+        stock_item = _apply_stock_consumption(form.stock_item_id.data, form.quantity_kg.data, quantity_is_kg=True)
         recompute_batch_finance(day.batch)
         db.session.flush()
         if stock_item:

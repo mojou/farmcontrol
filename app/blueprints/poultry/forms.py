@@ -202,6 +202,13 @@ class StockItemForm(FlaskForm):
         places=2,
         render_kw={"placeholder": "Ex : 15000"},
     )
+    kg_per_unit = DecimalField(
+        "Poids en kg d'une unite (uniquement pour l'aliment)",
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 50 (un sac de 50 kg)"},
+        id="stock-kg-per-unit",
+    )
     submit = SubmitField("Enregistrer")
 
 

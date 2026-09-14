@@ -45,6 +45,7 @@ def stock_item_new():
             quantity_on_hand=form.quantity_on_hand.data,
             min_threshold=form.min_threshold.data,
             unit_price=form.unit_price.data,
+            kg_per_unit=form.kg_per_unit.data if form.category.data == StockItem.CATEGORY_FEED else None,
         )
         db.session.add(item)
         db.session.flush()

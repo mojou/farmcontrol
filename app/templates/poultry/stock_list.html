@@ -18,7 +18,10 @@
         <tr class="{{ 'table-danger' if item.is_low }}">
           <td>{{ item.farm.name }}</td>
           <td>{{ {"feed": "Aliment", "wood": "Bois / litiere", "medication": "Medicament"}[item.category] }}</td>
-          <td>{{ item.name }}</td>
+          <td>
+            {{ item.name }}
+            {% if item.kg_per_unit %}<br><span class="text-muted small">1 {{ item.unit }} = {{ item.kg_per_unit }} kg</span>{% endif %}
+          </td>
           <td>{{ item.quantity_on_hand }} {{ item.unit }}</td>
           <td>{{ item.min_threshold }} {{ item.unit }}</td>
           <td>{% if item.is_low %}<span class="badge bg-danger">Faible</span>{% else %}<span class="badge bg-success">OK</span>{% endif %}</td>

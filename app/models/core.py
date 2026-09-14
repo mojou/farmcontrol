@@ -45,6 +45,9 @@ class Tenant(TimestampMixin, db.Model):
     payment_transactions = db.relationship(
         "PaymentTransaction", cascade="all, delete-orphan", backref="tenant"
     )
+    sanitary_program_templates = db.relationship(
+        "SanitaryProgramTemplateItem", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Tenant {self.slug}>"
