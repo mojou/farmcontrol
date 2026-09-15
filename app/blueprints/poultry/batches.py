@@ -324,6 +324,25 @@ def sanitary_program_mark_done(item_id):
     return redirect(url_for("poultry.sanitary_program", batch_id=item.batch_id))
 
 
+@poultry_bp.route("/programme-sanitaire/<int:item_id>/supprimer", methods=["POST"])
+@login_required
+def sanitary_program_item_delete(item_id):
+    """Retire un element ajoute par erreur au calendrier des soins (le
+    calendrier demarre vide et est rempli entierement a la main, une
+    saisie en trop ou un jour errone doit pouvoir se corriger)."""
+    item = SanitaryProgramItem.query.get_or_404(item_id)
+    if not current_user.has_role("owner", "manager"):
+        abort(403)
+    if not ensure_farm_access(item.batch.farm):
+        abort(403)
+    batch_id = item.batch_id
+    log_action("delete", "poultry_sanitary_program_items", item.id, {"product_name": item.product_name})
+    db.session.delete(item)
+    db.session.commit()
+    flash("Element retire du calendrier des soins.", "success")
+    return redirect(url_for("poultry.sanitary_program", batch_id=batch_id))
+
+
 # --------------------------------------------------------------------------
 # Courbes de reference de croissance (paragraphe 1.3)
 # --------------------------------------------------------------------------

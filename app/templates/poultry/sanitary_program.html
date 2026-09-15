@@ -75,7 +75,7 @@
                 {% if item.notes %}<div class="text-muted small">{{ item.notes }}</div>{% endif %}
               </td>
               <td>{% if item.is_done %}<span class="badge bg-success">Realise</span>{% else %}<span class="badge bg-secondary">Planifie</span>{% endif %}</td>
-              <td>
+              <td class="d-flex gap-1">
                 {% if not item.is_done %}
                 <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#doneModalTable{{ item.id }}">
                   Marquer realise
@@ -83,6 +83,12 @@
                 {% with modal_id="doneModalTable" ~ item.id %}
                   {% include "poultry/_sanitary_done_modal.html" %}
                 {% endwith %}
+                {% endif %}
+                {% if current_user.has_role('owner', 'manager') %}
+                <form method="post" action="{{ url_for('poultry.sanitary_program_item_delete', item_id=item.id) }}" onsubmit="return confirm('Retirer cet element du calendrier ?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                </form>
                 {% endif %}
               </td>
             </tr>
@@ -93,8 +99,8 @@
         </table>
         </div>
         <p class="text-muted small mb-0">
-          Programme indicatif base sur des references CEVA Sante Animale Afrique et GIZ-Nafa. A adapter
-          selon les produits reellement disponibles et les recommandations de votre veterinaire ou de votre couvoir.
+          Ajoutez ici chaque vaccin, traitement ou vitamine prevu pour ce lot, au jour par jour, selon les
+          recommandations de votre veterinaire ou de votre couvoir.
         </p>
       </div>
     </div>
