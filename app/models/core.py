@@ -70,6 +70,7 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
 
     email_notifications_enabled = db.Column(db.Boolean, nullable=False, default=True)
     avatar_path = db.Column(db.String(255), nullable=True)
+    email_verified_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     failed_login_count = db.Column(db.Integer, nullable=False, default=0)
     locked_until = db.Column(db.DateTime(timezone=True), nullable=True)
@@ -83,6 +84,9 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     audit_logs = db.relationship("AuditLog", back_populates="user")
     password_reset_tokens = db.relationship(
         "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
+    )
+    email_verification_tokens = db.relationship(
+        "EmailVerificationToken", back_populates="user", cascade="all, delete-orphan"
     )
 
     __table_args__ = (
@@ -134,6 +138,10 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     def has_role(self, *roles) -> bool:
         return self.role in roles
 
+    @property
+    def is_email_verified(self) -> bool:
+        return self.email_verified_at is not None
+
     def __repr__(self):
         return f"<User {self.email} ({self.role})>"
 
@@ -149,6 +157,37 @@ class PasswordResetToken(TimestampMixin, TenantMixin, db.Model):
     used_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     user = db.relationship("User", back_populates="password_reset_tokens")
+
+    @staticmethod
+    def generate_raw_token() -> str:
+        return secrets.token_urlsafe(48)
+
+    @staticmethod
+    def hash_token(raw_token: str) -> str:
+        return generate_password_hash(raw_token)
+
+    def check_token(self, raw_token: str) -> bool:
+        return check_password_hash(self.token_hash, raw_token)
+
+    def is_valid(self) -> bool:
+        return self.used_at is None and self.expires_at > utcnow()
+
+
+class EmailVerificationToken(TimestampMixin, TenantMixin, db.Model):
+    """Jeton envoye par email a la creation d'un compte pour confirmer que
+    l'adresse email est valide et joignable (important puisque c'est aussi
+    l'adresse utilisee pour la reinitialisation de mot de passe)."""
+
+    __tablename__ = "email_verification_tokens"
+
+    id = db.Column(db.Integer, primary_key=True)
+    tenant_id = db.Column(db.Integer, db.ForeignKey("tenants.id"), nullable=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    token_hash = db.Column(db.String(255), nullable=False, index=True)
+    expires_at = db.Column(db.DateTime(timezone=True), nullable=False)
+    used_at = db.Column(db.DateTime(timezone=True), nullable=True)
+
+    user = db.relationship("User", back_populates="email_verification_tokens")
 
     @staticmethod
     def generate_raw_token() -> str:

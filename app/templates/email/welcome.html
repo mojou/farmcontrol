@@ -8,5 +8,9 @@
     <p>Adresse de connexion : {{ user.email }}</p>
     {% if temporary_password %}<p>Mot de passe temporaire : <strong>{{ temporary_password }}</strong></p>{% endif %}
     <p style="color: #667066; font-size: 13px;">Nous vous recommandons de changer votre mot de passe des la premiere connexion.</p>
+    {% if verify_url %}
+    <p><a href="{{ verify_url }}" style="background-color: #2f5233; color: #ffffff; padding: 10px 18px; text-decoration: none; display: inline-block;">Confirmer mon email</a></p>
+    <p style="color: #667066; font-size: 13px;">Important : c'est cette adresse qui sera utilisee si vous devez reinitialiser votre mot de passe.</p>
+    {% endif %}
   </div>
 </div>

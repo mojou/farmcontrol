@@ -1,0 +1,11 @@
+Farm Control - Confirmez votre adresse email
+
+Bonjour {{ user.first_name }},
+
+Merci de vous etre inscrit sur Farm Control. Confirmez votre adresse email en cliquant sur le lien suivant :
+
+{{ verify_url }}
+
+C'est important : c'est cette adresse qui sera utilisee si vous devez reinitialiser votre mot de passe.
+
+Si vous n'etes pas a l'origine de cette inscription, ignorez cet email.

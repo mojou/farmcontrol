@@ -46,7 +46,8 @@ DECLARE
         'messages',
         'poultry_sanitary_program_template_items',
         'poultry_suppliers',
-        'poultry_sales'
+        'poultry_sales',
+        'email_verification_tokens'
     ];
 BEGIN
     FOREACH t IN ARRAY tenant_scoped_tables LOOP

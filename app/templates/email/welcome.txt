@@ -7,3 +7,9 @@ Adresse de connexion : {{ user.email }}
 {% if temporary_password %}Mot de passe temporaire : {{ temporary_password }}{% endif %}
 
 Nous vous recommandons de changer votre mot de passe des la premiere connexion.
+{% if verify_url %}
+Merci de confirmer votre adresse email en cliquant sur ce lien (important : c'est cette adresse
+qui sera utilisee si vous devez reinitialiser votre mot de passe) :
+
+{{ verify_url }}
+{% endif %}

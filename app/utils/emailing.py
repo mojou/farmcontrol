@@ -28,6 +28,15 @@ def send_password_reset_email(user, reset_url: str):
     _send(subject, [user.email], "email/password_reset", user=user, reset_url=reset_url)
 
 
-def send_welcome_email(user, temporary_password: str = None):
+def send_welcome_email(user, temporary_password: str = None, verify_url: str = None):
     subject = "Farm Control - Votre compte a ete cree"
-    _send(subject, [user.email], "email/welcome", user=user, temporary_password=temporary_password)
+    _send(
+        subject, [user.email], "email/welcome",
+        user=user, temporary_password=temporary_password, verify_url=verify_url,
+    )
+
+
+def send_email_verification_email(user, verify_url: str):
+    """Renvoi independant du mail de bienvenue (voir auth.resend_verification_email)."""
+    subject = "Farm Control - Confirmez votre adresse email"
+    _send(subject, [user.email], "email/verify_email", user=user, verify_url=verify_url)
