@@ -6,6 +6,7 @@ les futurs modules (porcs, pisciculture, etc.).
 import secrets
 from datetime import timedelta
 
+from flask_babel import lazy_gettext as _l
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -19,11 +20,14 @@ ROLE_WORKER = "worker"
 
 ROLES = [ROLE_SUPER_ADMIN, ROLE_OWNER, ROLE_MANAGER, ROLE_WORKER]
 
+# lazy_gettext (pas gettext) : ce dictionnaire est construit une seule fois
+# a l'import du module, avant qu'aucune requete/langue ne soit connue - la
+# traduction doit donc etre differee jusqu'au rendu reel (paragraphe bilingue).
 ROLE_LABELS = {
-    ROLE_SUPER_ADMIN: "Super administrateur",
-    ROLE_OWNER: "Proprietaire",
-    ROLE_MANAGER: "Responsable",
-    ROLE_WORKER: "Travailleur",
+    ROLE_SUPER_ADMIN: _l("Super administrateur"),
+    ROLE_OWNER: _l("Proprietaire"),
+    ROLE_MANAGER: _l("Responsable"),
+    ROLE_WORKER: _l("Travailleur"),
 }
 
 
@@ -71,6 +75,7 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     email_notifications_enabled = db.Column(db.Boolean, nullable=False, default=True)
     avatar_path = db.Column(db.String(255), nullable=True)
     email_verified_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    preferred_language = db.Column(db.String(5), nullable=False, default="fr")
 
     failed_login_count = db.Column(db.Integer, nullable=False, default=0)
     locked_until = db.Column(db.DateTime(timezone=True), nullable=True)

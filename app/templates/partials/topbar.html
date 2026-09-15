@@ -6,7 +6,8 @@
     <span class="text-muted small">{{ current_user.tenant.name if current_user.tenant else "Plateforme" }}</span>
   </div>
   <div class="d-flex align-items-center gap-3">
-    <a href="{{ url_for('core.alerts_list') }}" class="text-decoration-none text-dark position-relative" title="Alertes">
+    {% include "partials/language_switcher.html" %}
+    <a href="{{ url_for('core.alerts_list') }}" class="text-decoration-none text-dark position-relative" title="{{ _('Alertes') }}">
       <i class="bi bi-bell fs-5"></i>
       {% if unread_alerts_count %}
       <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
@@ -15,7 +16,7 @@
       {% endif %}
     </a>
     {% if not current_user.is_super_admin() %}
-    <a href="{{ url_for('messaging.inbox') }}" class="text-decoration-none text-dark position-relative" title="Messages">
+    <a href="{{ url_for('messaging.inbox') }}" class="text-decoration-none text-dark position-relative" title="{{ _('Messagerie') }}">
       <i class="bi bi-chat-dots fs-5"></i>
       {% if unread_messages_count %}
       <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
@@ -36,10 +37,10 @@
         <span class="badge bg-secondary ms-1">{{ current_user.role_label }}</span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="{{ url_for('core.profile') }}">Mon profil</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}">Changer le mot de passe</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('core.profile') }}">{{ _('Mon profil') }}</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}">{{ _('Changer le mot de passe') }}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Deconnexion</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">{{ _('Deconnexion') }}</a></li>
       </ul>
     </div>
   </div>

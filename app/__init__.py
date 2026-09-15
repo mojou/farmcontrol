@@ -1,11 +1,14 @@
 """Fabrique de l'application Farm Control (application factory pattern)."""
 import os
 
-from flask import Flask, g, render_template
+from flask import Flask, g, render_template, request, session
 from flask_login import current_user
 
 from app.config import config_by_name
-from app.extensions import csrf, db, login_manager, mail, migrate
+from app.extensions import babel, csrf, db, login_manager, mail, migrate
+
+SUPPORTED_LANGUAGES = ["fr", "en"]
+DEFAULT_LANGUAGE = "fr"
 
 
 def create_app(config_name=None):
@@ -28,12 +31,30 @@ def create_app(config_name=None):
     return app
 
 
+def _select_locale():
+    """Determine la langue de la requete courante (paragraphe accessibilite -
+    Cameroun bilingue francais/anglais) : choix explicite en session en
+    priorite (voir core.set_language), puis preference sauvegardee sur le
+    profil utilisateur, puis langue du navigateur, puis francais par defaut.
+    """
+    if "lang" in session and session["lang"] in SUPPORTED_LANGUAGES:
+        return session["lang"]
+    if current_user.is_authenticated and getattr(current_user, "preferred_language", None) in SUPPORTED_LANGUAGES:
+        return current_user.preferred_language
+    return request.accept_languages.best_match(SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE)
+
+
 def _init_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     mail.init_app(app)
     csrf.init_app(app)
+    babel.init_app(app, locale_selector=_select_locale)
+
+    from flask_babel import get_locale
+
+    app.jinja_env.globals["get_locale"] = get_locale
 
     from app.models import register_tenant_filter
 

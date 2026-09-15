@@ -1,75 +1,75 @@
 <aside class="fc-sidebar">
   <div class="fc-sidebar-brand">
     Farm Control
-    <small>Gestion d'elevage</small>
+    <small>{{ _('Gestion d\'elevage') }}</small>
   </div>
   <nav class="fc-nav">
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.dashboard' or request.endpoint == 'core.admin_dashboard' }}"
        href="{{ url_for('core.admin_dashboard') if current_user.is_super_admin() else url_for('core.dashboard') }}">
-      <i class="bi bi-speedometer2"></i> Tableau de bord
+      <i class="bi bi-speedometer2"></i> {{ _('Tableau de bord') }}
     </a>
 
     {% if not current_user.is_super_admin() %}
-    <div class="fc-nav-section">Elevage</div>
+    <div class="fc-nav-section">{{ _('Elevage') }}</div>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.farms_list' }}" href="{{ url_for('poultry.farms_list') }}">
-      <i class="bi bi-houses"></i> Fermes
+      <i class="bi bi-houses"></i> {{ _('Fermes') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.batches_list' }}" href="{{ url_for('poultry.batches_list') }}">
-      <i class="bi bi-egg-fried"></i> Lots
+      <i class="bi bi-egg-fried"></i> {{ _('Lots') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.stock_list' }}" href="{{ url_for('poultry.stock_list') }}">
-      <i class="bi bi-box-seam"></i> Stock
+      <i class="bi bi-box-seam"></i> {{ _('Stock') }}
     </a>
     {% if current_user.has_role('owner') %}
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.suppliers_list' }}" href="{{ url_for('poultry.suppliers_list') }}">
-      <i class="bi bi-truck"></i> Fournisseurs
+      <i class="bi bi-truck"></i> {{ _('Fournisseurs') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.credits_list' }}" href="{{ url_for('poultry.credits_list') }}">
-      <i class="bi bi-cash-coin"></i> Creances
+      <i class="bi bi-cash-coin"></i> {{ _('Creances') }}
     </a>
     {% endif %}
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.alerts_list' }}" href="{{ url_for('core.alerts_list') }}">
-      <i class="bi bi-bell"></i> Alertes
+      <i class="bi bi-bell"></i> {{ _('Alertes') }}
       {% if unread_alerts_count %}<span class="badge bg-danger ms-1">{{ unread_alerts_count }}</span>{% endif %}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('messaging.') }}" href="{{ url_for('messaging.inbox') }}">
-      <i class="bi bi-chat-dots"></i> Messages
+      <i class="bi bi-chat-dots"></i> {{ _('Messages') }}
       {% if unread_messages_count %}<span class="badge bg-danger ms-1">{{ unread_messages_count }}</span>{% endif %}
     </a>
 
     {% if current_user.has_role('owner') %}
-    <div class="fc-nav-section">Administration</div>
+    <div class="fc-nav-section">{{ _('Administration') }}</div>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.users_list' }}" href="{{ url_for('core.users_list') }}">
-      <i class="bi bi-people"></i> Utilisateurs
+      <i class="bi bi-people"></i> {{ _('Utilisateurs') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.growth_reference') }}" href="{{ url_for('poultry.growth_references') }}">
-      <i class="bi bi-graph-up"></i> Courbes de reference
+      <i class="bi bi-graph-up"></i> {{ _('Courbes de reference') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.sanitary_template') }}" href="{{ url_for('poultry.sanitary_template') }}">
-      <i class="bi bi-clipboard2-pulse"></i> Mon modele sanitaire
+      <i class="bi bi-clipboard2-pulse"></i> {{ _('Mon modele sanitaire') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('billing.') }}" href="{{ url_for('billing.billing_home') }}">
-      <i class="bi bi-credit-card"></i> Facturation
+      <i class="bi bi-credit-card"></i> {{ _('Facturation') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.audit_log_list' }}" href="{{ url_for('core.audit_log_list') }}">
-      <i class="bi bi-journal-text"></i> Journal d'activite
+      <i class="bi bi-journal-text"></i> {{ _('Journal d\'activite') }}
     </a>
     {% endif %}
     {% endif %}
 
     {% if current_user.is_super_admin() %}
-    <div class="fc-nav-section">Plateforme</div>
+    <div class="fc-nav-section">{{ _('Plateforme') }}</div>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.admin_dashboard' }}" href="{{ url_for('core.admin_dashboard') }}">
-      <i class="bi bi-building"></i> Clients (tenants)
+      <i class="bi bi-building"></i> {{ _('Clients (tenants)') }}
     </a>
     {% endif %}
 
-    <div class="fc-nav-section">Mon compte</div>
+    <div class="fc-nav-section">{{ _('Mon compte') }}</div>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.profile' }}" href="{{ url_for('core.profile') }}">
-      <i class="bi bi-person-circle"></i> Profil
+      <i class="bi bi-person-circle"></i> {{ _('Profil') }}
     </a>
     <a class="fc-nav-link" href="{{ url_for('auth.logout') }}">
-      <i class="bi bi-box-arrow-right"></i> Deconnexion
+      <i class="bi bi-box-arrow-right"></i> {{ _('Deconnexion') }}
     </a>
   </nav>
 </aside>

@@ -1,0 +1,5 @@
+{% set current_locale = get_locale()|string %}
+<div class="btn-group btn-group-sm" role="group" aria-label="Language">
+  <a href="{{ url_for('core.set_language', code='fr') }}" class="btn btn-outline-secondary {{ 'active' if current_locale == 'fr' }}">FR</a>
+  <a href="{{ url_for('core.set_language', code='en') }}" class="btn btn-outline-secondary {{ 'active' if current_locale == 'en' }}">EN</a>
+</div>

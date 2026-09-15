@@ -2,12 +2,13 @@
 {% import "partials/_form_macros.html" as fm %}
 {% block title %}Connexion - Farm Control{% endblock %}
 {% block guest_content %}
+<div class="position-absolute top-0 end-0 p-3">{% include "partials/language_switcher.html" %}</div>
 <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: var(--fc-bg);">
   <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
     <div class="card-body p-4">
       <div class="text-center mb-4">
         <h1 class="h4 fw-bold" style="color: var(--fc-primary);">Farm Control</h1>
-        <p class="text-muted small mb-0">Plateforme de gestion d'elevage</p>
+        <p class="text-muted small mb-0">{{ _("Plateforme de gestion d'elevage") }}</p>
       </div>
       <form method="post" novalidate>
         {{ form.hidden_tag() }}
@@ -17,12 +18,12 @@
         <button type="submit" class="btn btn-primary w-100">{{ form.submit.label.text }}</button>
       </form>
       <div class="text-center mt-3">
-        <a href="{{ url_for('auth.forgot_password') }}" class="small">Mot de passe oublie ?</a>
+        <a href="{{ url_for('auth.forgot_password') }}" class="small">{{ _('Mot de passe oublie ?') }}</a>
       </div>
       <hr class="my-3">
       <div class="text-center">
-        <span class="small text-muted">Pas encore de compte ?</span>
-        <a href="{{ url_for('auth.signup') }}" class="small">Creer mon compte</a>
+        <span class="small text-muted">{{ _('Pas encore de compte ?') }}</span>
+        <a href="{{ url_for('auth.signup') }}" class="small">{{ _('Creer mon compte') }}</a>
       </div>
     </div>
   </div>

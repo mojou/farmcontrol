@@ -1,6 +1,6 @@
 import json
 
-from flask import Response, abort, current_app, flash, redirect, render_template, request, url_for
+from flask import Response, abort, current_app, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 from werkzeug.utils import safe_join
 from werkzeug.exceptions import NotFound
@@ -21,6 +21,22 @@ from app.utils.security import validate_password_policy
 from app.utils.tenant import tenant_bypass
 from app.utils.uploads import delete_photo, save_avatar_photo
 from app.utils.zootechnie import compute_fcr
+
+
+@core_bp.route("/langue/<code>")
+def set_language(code):
+    """Change la langue de l'interface (francais/anglais) - voir
+    app._select_locale. Sauvegarde aussi le choix sur le profil si
+    l'utilisateur est connecte, pour qu'il retrouve sa langue sur un
+    autre appareil."""
+    from app import SUPPORTED_LANGUAGES
+
+    if code in SUPPORTED_LANGUAGES:
+        session["lang"] = code
+        if current_user.is_authenticated and not current_user.is_super_admin():
+            current_user.preferred_language = code
+            db.session.commit()
+    return redirect(request.referrer or url_for("core.index"))
 
 
 @core_bp.route("/")

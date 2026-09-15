@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 from flask import current_app, flash, redirect, render_template, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required, login_user, logout_user
 
 from app.blueprints.auth import auth_bp
@@ -57,12 +58,12 @@ def login():
             user = User.query.filter_by(email=form.email.data.strip().lower()).first()
 
             if user is None or not user.is_active:
-                flash("Identifiants incorrects.", "danger")
+                flash(_("Identifiants incorrects."), "danger")
                 return render_template("auth/login.html", form=form)
 
             if user.is_locked():
                 minutes = max(int((user.locked_until - datetime.now(timezone.utc)).total_seconds() // 60) + 1, 1)
-                flash(f"Compte temporairement verrouille. Reessayez dans {minutes} minute(s).", "danger")
+                flash(_("Compte temporairement verrouille. Reessayez dans %(minutes)s minute(s).", minutes=minutes), "danger")
                 return render_template("auth/login.html", form=form)
 
             if not user.check_password(form.password.data):
@@ -70,18 +71,18 @@ def login():
                     current_app.config["MAX_LOGIN_ATTEMPTS"], current_app.config["LOGIN_LOCKOUT_MINUTES"]
                 )
                 db.session.commit()
-                flash("Identifiants incorrects.", "danger")
+                flash(_("Identifiants incorrects."), "danger")
                 return render_template("auth/login.html", form=form)
 
             if user.tenant and not user.tenant.is_active:
-                flash("Ce compte est desactive. Contactez votre administrateur.", "danger")
+                flash(_("Ce compte est desactive. Contactez votre administrateur."), "danger")
                 return render_template("auth/login.html", form=form)
 
             user.register_successful_login()
             db.session.commit()
 
         login_user(user, remember=form.remember_me.data)
-        flash(f"Bienvenue, {user.first_name}.", "success")
+        flash(_("Bienvenue, %(name)s.", name=user.first_name), "success")
         return _redirect_after_login()
 
     return render_template("auth/login.html", form=form)
@@ -108,7 +109,7 @@ def signup():
         with tenant_bypass():
             email_taken = User.query.filter_by(email=email).first()
             if email_taken:
-                flash("Un compte existe deja avec cet email. Connectez-vous.", "danger")
+                flash(_("Un compte existe deja avec cet email. Connectez-vous."), "danger")
                 return render_template("auth/signup.html", form=form)
 
             slug = generate_unique_slug(
@@ -145,8 +146,11 @@ def signup():
 
         login_user(owner)
         flash(
-            f"Bienvenue sur Farm Control, {owner.first_name}. Votre espace est pret, avec "
-            f"{TRIAL_DAYS} jours d'essai gratuit du plan Pro (toutes les fonctionnalites debloquees).",
+            _(
+                "Bienvenue sur Farm Control, %(name)s. Votre espace est pret, avec %(days)s jours "
+                "d'essai gratuit du plan Pro (toutes les fonctionnalites debloquees).",
+                name=owner.first_name, days=TRIAL_DAYS,
+            ),
             "success",
         )
         return _redirect_after_login()
@@ -161,7 +165,7 @@ def verify_email(token):
         matching_token = next((t for t in candidates if t.check_token(token) and t.is_valid()), None)
 
         if matching_token is None:
-            flash("Ce lien de confirmation est invalide ou a expire.", "danger")
+            flash(_("Ce lien de confirmation est invalide ou a expire."), "danger")
             return redirect(url_for("auth.login"))
 
         user = db.session.get(User, matching_token.user_id)
@@ -170,7 +174,7 @@ def verify_email(token):
         log_action("update", "users", user.id, {"action": "email_verified"})
         db.session.commit()
 
-    flash("Votre adresse email est confirmee. Merci !", "success")
+    flash(_("Votre adresse email est confirmee. Merci !"), "success")
     if current_user.is_authenticated:
         return _redirect_after_login()
     return redirect(url_for("auth.login"))
@@ -180,7 +184,7 @@ def verify_email(token):
 @login_required
 def resend_verification_email():
     if current_user.is_email_verified:
-        flash("Votre email est deja confirme.", "info")
+        flash(_("Votre email est deja confirme."), "info")
         return redirect(url_for("core.dashboard"))
 
     raw_token = _create_verification_token(current_user)
@@ -189,10 +193,10 @@ def resend_verification_email():
     try:
         verify_url = url_for("auth.verify_email", token=raw_token, _external=True)
         send_email_verification_email(current_user, verify_url)
-        flash("Email de confirmation renvoye. Verifiez votre boite de reception.", "success")
+        flash(_("Email de confirmation renvoye. Verifiez votre boite de reception."), "success")
     except Exception:
         current_app.logger.exception("Echec du renvoi de l'email de confirmation")
-        flash("Impossible d'envoyer l'email pour le moment. Reessayez plus tard.", "danger")
+        flash(_("Impossible d'envoyer l'email pour le moment. Reessayez plus tard."), "danger")
 
     return redirect(url_for("core.dashboard"))
 
@@ -201,7 +205,7 @@ def resend_verification_email():
 @login_required
 def logout():
     logout_user()
-    flash("Vous avez ete deconnecte.", "info")
+    flash(_("Vous avez ete deconnecte."), "info")
     return redirect(url_for("core.index"))
 
 
@@ -238,7 +242,7 @@ def forgot_password():
                 current_app.logger.exception("Echec de l'envoi de l'email de reinitialisation")
 
         # Message identique que l'email existe ou non (evite l'enumeration de comptes).
-        flash("Si un compte existe avec cet email, un lien de reinitialisation a ete envoye.", "info")
+        flash(_("Si un compte existe avec cet email, un lien de reinitialisation a ete envoye."), "info")
         return redirect(url_for("auth.login"))
 
     return render_template("auth/forgot_password.html", form=form)
@@ -256,7 +260,7 @@ def reset_password(token):
     matching_token = next((t for t in candidates if t.check_token(token) and t.is_valid()), None)
 
     if matching_token is None:
-        flash("Ce lien de reinitialisation est invalide ou a expire.", "danger")
+        flash(_("Ce lien de reinitialisation est invalide ou a expire."), "danger")
         return redirect(url_for("auth.forgot_password"))
 
     form = ResetPasswordForm()
@@ -273,7 +277,7 @@ def reset_password(token):
             matching_token.used_at = datetime.now(timezone.utc)
             log_action("update", "users", user.id, {"action": "password_reset"})
             db.session.commit()
-        flash("Votre mot de passe a ete reinitialise. Vous pouvez vous connecter.", "success")
+        flash(_("Votre mot de passe a ete reinitialise. Vous pouvez vous connecter."), "success")
         return redirect(url_for("auth.login"))
 
     return render_template("auth/reset_password.html", form=form)
@@ -285,7 +289,7 @@ def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if not current_user.check_password(form.current_password.data):
-            flash("Mot de passe actuel incorrect.", "danger")
+            flash(_("Mot de passe actuel incorrect."), "danger")
             return render_template("auth/change_password.html", form=form)
 
         errors = validate_password_policy(form.password.data)
@@ -297,7 +301,7 @@ def change_password():
         current_user.set_password(form.password.data)
         log_action("update", "users", current_user.id, {"action": "password_change"})
         db.session.commit()
-        flash("Mot de passe mis a jour avec succes.", "success")
+        flash(_("Mot de passe mis a jour avec succes."), "success")
         return redirect(url_for("core.profile"))
 
     return render_template("auth/change_password.html", form=form)

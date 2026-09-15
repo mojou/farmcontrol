@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Farm Control - Gestion d'elevage professionnelle{% endblock %}
+{% block title %}Farm Control - {{ _('Gestion d\'elevage professionnelle') }}{% endblock %}
 {% block guest_content %}
 <div style="background-color: #ffffff; overflow-x: hidden;">
 
@@ -7,9 +7,10 @@
     <div class="container">
       <a class="navbar-brand fw-bold fs-4" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
       <div class="d-flex align-items-center gap-3">
-        <a href="{{ url_for('billing.pricing') }}" class="small text-decoration-none text-dark fw-semibold">Tarifs</a>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
-        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
+        {% include "partials/language_switcher.html" %}
+        <a href="{{ url_for('billing.pricing') }}" class="small text-decoration-none text-dark fw-semibold">{{ _('Tarifs') }}</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">{{ _('Se connecter') }}</a>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">{{ _('Creer mon compte') }}</a>
       </div>
     </div>
   </nav>
@@ -23,28 +24,27 @@
       <div class="row align-items-center py-4">
         <div class="col-lg-7 text-white">
           <span class="badge rounded-pill mb-3" style="background-color: rgba(255,255,255,0.15); color: #fff; font-weight: 600; padding: 0.5rem 1.1rem; backdrop-filter: blur(4px);">
-            <i class="bi bi-geo-alt-fill"></i> Pense pour l'Afrique - tarifs en FCFA
+            <i class="bi bi-geo-alt-fill"></i> {{ _("Pense pour l'Afrique - tarifs en FCFA") }}
           </span>
           <h1 class="fw-bold mb-3" style="font-size: 2.75rem; line-height: 1.15;">
-            La plateforme qui vous dit si votre elevage
-            <span style="background: linear-gradient(90deg, #f3cd7e, #d99a3d); -webkit-background-clip: text; background-clip: text; color: transparent;">est vraiment rentable.</span>
+            {{ _('La plateforme qui vous dit si votre elevage') }}
+            <span style="background: linear-gradient(90deg, #f3cd7e, #d99a3d); -webkit-background-clip: text; background-clip: text; color: transparent;">{{ _('est vraiment rentable.') }}</span>
           </h1>
           <p class="mb-4" style="font-size: 1.15rem; color: rgba(255,255,255,0.85); max-width: 560px;">
-            Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques
-            pour les elevages de poulets de chair. Multitenant, securise, accessible partout.
+            {{ _('Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout.') }}
           </p>
           <div class="d-flex gap-3 flex-wrap">
-            <a href="{{ url_for('auth.signup') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">Creer mon compte gratuitement</a>
-            <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-light btn-lg">Voir les tarifs</a>
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">{{ _('Creer mon compte gratuitement') }}</a>
+            <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-light btn-lg">{{ _('Voir les tarifs') }}</a>
           </div>
-          <p class="small mt-3 mb-0" style="color: rgba(255,255,255,0.7);">Formule gratuite disponible. Votre espace est pret en 1 minute.</p>
+          <p class="small mt-3 mb-0" style="color: rgba(255,255,255,0.7);">{{ _('Formule gratuite disponible. Votre espace est pret en 1 minute.') }}</p>
         </div>
 
         <div class="col-lg-5 d-none d-lg-block">
           <div class="rounded-4 p-4" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(6px);">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-white-50 small text-uppercase fw-bold">Lot LOT-04 - Jour 21</span>
-              <span class="badge bg-success">Actif</span>
+              <span class="text-white-50 small text-uppercase fw-bold">{{ _('Lot LOT-04 - Jour 21') }}</span>
+              <span class="badge bg-success">{{ _('Actif') }}</span>
             </div>
             <div class="row g-3 text-center">
               <div class="col-6">
@@ -56,19 +56,19 @@
               <div class="col-6">
                 <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
                   <div class="fw-bold fs-4" style="color: var(--fc-accent);">+238 000</div>
-                  <div class="small text-muted">FCFA de resultat net</div>
+                  <div class="small text-muted">{{ _('FCFA de resultat net') }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
                   <div class="fw-bold fs-4">972</div>
-                  <div class="small text-muted">Effectif courant</div>
+                  <div class="small text-muted">{{ _('Effectif courant') }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
                   <div class="fw-bold fs-4">98,5%</div>
-                  <div class="small text-muted">Taux de survie</div>
+                  <div class="small text-muted">{{ _('Taux de survie') }}</div>
                 </div>
               </div>
             </div>
@@ -82,10 +82,10 @@
   <div class="py-3" style="background-color: var(--fc-primary-dark);">
     <div class="container">
       <div class="row text-center text-white-50 small g-3">
-        <div class="col-6 col-md-3"><i class="bi bi-shield-check"></i> Donnees isolees et securisees</div>
-        <div class="col-6 col-md-3"><i class="bi bi-phone"></i> Accessible sur mobile</div>
-        <div class="col-6 col-md-3"><i class="bi bi-cash-coin"></i> Tarifs en FCFA</div>
-        <div class="col-6 col-md-3"><i class="bi bi-headset"></i> Support en francais</div>
+        <div class="col-6 col-md-3"><i class="bi bi-shield-check"></i> {{ _('Donnees isolees et securisees') }}</div>
+        <div class="col-6 col-md-3"><i class="bi bi-phone"></i> {{ _('Accessible sur mobile') }}</div>
+        <div class="col-6 col-md-3"><i class="bi bi-cash-coin"></i> {{ _('Tarifs en FCFA') }}</div>
+        <div class="col-6 col-md-3"><i class="bi bi-headset"></i> {{ _('Support en francais et en anglais') }}</div>
       </div>
     </div>
   </div>
@@ -94,8 +94,8 @@
   <section class="py-5" style="background-color: var(--fc-bg);">
     <div class="container">
       <div class="text-center mb-5">
-        <span class="text-uppercase small fw-bold" style="color: var(--fc-primary); letter-spacing: 0.05em;">Fonctionnalites</span>
-        <h2 class="fw-bold h3 mt-2">Tout ce qu'il faut pour piloter votre elevage</h2>
+        <span class="text-uppercase small fw-bold" style="color: var(--fc-primary); letter-spacing: 0.05em;">{{ _('Fonctionnalites') }}</span>
+        <h2 class="fw-bold h3 mt-2">{{ _("Tout ce qu'il faut pour piloter votre elevage") }}</h2>
       </div>
       <div class="row g-4">
         <div class="col-md-4">
@@ -103,8 +103,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-graph-up-arrow fs-4" style="color: var(--fc-primary);"></i>
             </div>
-            <h5>Performance zootechnique</h5>
-            <p class="text-muted mb-0">Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche.</p>
+            <h5>{{ _('Performance zootechnique') }}</h5>
+            <p class="text-muted mb-0">{{ _('Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -112,8 +112,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
               <i class="bi bi-cash-coin fs-4" style="color: var(--fc-accent);"></i>
             </div>
-            <h5>Rentabilite par lot</h5>
-            <p class="text-muted mb-0">Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.</p>
+            <h5>{{ _('Rentabilite par lot') }}</h5>
+            <p class="text-muted mb-0">{{ _('Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -121,8 +121,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-bell fs-4" style="color: var(--fc-primary);"></i>
             </div>
-            <h5>Alertes automatiques</h5>
-            <p class="text-muted mb-0">Mortalite elevee, stock faible ou observation urgente : notification immediate par email au proprietaire.</p>
+            <h5>{{ _('Alertes automatiques') }}</h5>
+            <p class="text-muted mb-0">{{ _('Mortalite elevee, stock faible ou observation urgente : notification immediate par email au proprietaire.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -130,8 +130,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
               <i class="bi bi-people fs-4" style="color: var(--fc-accent);"></i>
             </div>
-            <h5>Equipe et roles</h5>
-            <p class="text-muted mb-0">Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier.</p>
+            <h5>{{ _('Equipe et roles') }}</h5>
+            <p class="text-muted mb-0">{{ _('Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -139,8 +139,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, var(--fc-primary-light), #d7e9db);">
               <i class="bi bi-shield-lock fs-4" style="color: var(--fc-primary);"></i>
             </div>
-            <h5>Donnees isolees et securisees</h5>
-            <p class="text-muted mb-0">Isolation stricte entre clients a deux niveaux, y compris au niveau de la base de donnees (Row Level Security).</p>
+            <h5>{{ _('Donnees isolees et securisees') }}</h5>
+            <p class="text-muted mb-0">{{ _('Isolation stricte entre clients a deux niveaux, y compris au niveau de la base de donnees (Row Level Security).') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -148,8 +148,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
               <i class="bi bi-file-earmark-pdf fs-4" style="color: var(--fc-accent);"></i>
             </div>
-            <h5>Rapports exportables</h5>
-            <p class="text-muted mb-0">Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.</p>
+            <h5>{{ _('Rapports exportables') }}</h5>
+            <p class="text-muted mb-0">{{ _('Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.') }}</p>
           </div></div>
         </div>
       </div>
@@ -160,14 +160,14 @@
   <section class="py-5 text-center position-relative" style="background: linear-gradient(120deg, var(--fc-primary-dark), var(--fc-primary)); overflow: hidden;">
     <div class="position-absolute" style="width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(217,154,61,0.3) 0%, transparent 70%); top: -140px; left: 10%;"></div>
     <div class="container position-relative">
-      <h2 class="h3 fw-bold mb-2 text-white">Des tarifs accessibles, en FCFA</h2>
-      <p class="mb-4" style="color: rgba(255,255,255,0.8);">A partir de gratuit. Sans engagement. Mobile Money et carte acceptes.</p>
-      <a href="{{ url_for('billing.pricing') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">Voir les tarifs</a>
+      <h2 class="h3 fw-bold mb-2 text-white">{{ _('Des tarifs accessibles, en FCFA') }}</h2>
+      <p class="mb-4" style="color: rgba(255,255,255,0.8);">{{ _('A partir de gratuit. Sans engagement. Mobile Money et carte acceptes.') }}</p>
+      <a href="{{ url_for('billing.pricing') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">{{ _('Voir les tarifs') }}</a>
     </div>
   </section>
 
   <footer class="py-4 border-top text-center text-muted small">
-    Farm Control - Plateforme de gestion d'elevage
+    Farm Control - {{ _("Plateforme de gestion d'elevage") }}
   </footer>
 
 </div>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="{{ get_locale() }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,10 +23,10 @@
         {% include "partials/flash_messages.html" %}
         {% if not current_user.is_super_admin() and not current_user.is_email_verified %}
         <div class="alert alert-warning d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <span><i class="bi bi-envelope-exclamation"></i> Votre adresse email n'est pas encore confirmee. Verifiez votre boite de reception (et vos spams).</span>
+          <span><i class="bi bi-envelope-exclamation"></i> {{ _("Votre adresse email n'est pas encore confirmee. Verifiez votre boite de reception (et vos spams).") }}</span>
           <form method="post" action="{{ url_for('auth.resend_verification_email') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button class="btn btn-sm btn-outline-dark">Renvoyer l'email de confirmation</button>
+            <button class="btn btn-sm btn-outline-dark">{{ _("Renvoyer l'email de confirmation") }}</button>
           </form>
         </div>
         {% endif %}

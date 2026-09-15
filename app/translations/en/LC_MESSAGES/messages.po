@@ -1,0 +1,506 @@
+# English translations for Farm Control.
+msgid ""
+msgstr ""
+"Project-Id-Version: Farm Control\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-09-15 14:07+0100\n"
+"PO-Revision-Date: 2026-09-15 14:07+0100\n"
+"Last-Translator: Farm Control\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: app/blueprints/auth/forms.py:9
+msgid "Nom de votre exploitation / entreprise"
+msgstr "Name of your farm / business"
+
+#: app/blueprints/auth/forms.py:11
+msgid "Prenom"
+msgstr "First name"
+
+#: app/blueprints/auth/forms.py:12
+msgid "Nom"
+msgstr "Last name"
+
+#: app/blueprints/auth/forms.py:13 app/blueprints/auth/forms.py:23
+#: app/blueprints/auth/forms.py:30
+msgid "Adresse email"
+msgstr "Email address"
+
+#: app/blueprints/auth/forms.py:14 app/blueprints/auth/forms.py:24
+msgid "Mot de passe"
+msgstr "Password"
+
+#: app/blueprints/auth/forms.py:16 app/blueprints/auth/forms.py:37
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
+
+#: app/blueprints/auth/forms.py:17 app/blueprints/auth/forms.py:38
+#: app/blueprints/auth/forms.py:48
+msgid "Les mots de passe ne correspondent pas."
+msgstr "Passwords do not match."
+
+#: app/blueprints/auth/forms.py:19 app/templates/auth/login.html:26
+#: app/templates/auth/signup.html:9 app/templates/home.html:13
+msgid "Creer mon compte"
+msgstr "Create my account"
+
+#: app/blueprints/auth/forms.py:25
+msgid "Se souvenir de moi"
+msgstr "Remember me"
+
+#: app/blueprints/auth/forms.py:26 app/templates/auth/signup.html:26
+#: app/templates/home.html:12
+msgid "Se connecter"
+msgstr "Log in"
+
+#: app/blueprints/auth/forms.py:31
+msgid "Envoyer le lien de reinitialisation"
+msgstr "Send reset link"
+
+#: app/blueprints/auth/forms.py:35 app/blueprints/auth/forms.py:45
+#: app/templates/auth/reset_password.html:8
+msgid "Nouveau mot de passe"
+msgstr "New password"
+
+#: app/blueprints/auth/forms.py:40
+msgid "Reinitialiser le mot de passe"
+msgstr "Reset password"
+
+#: app/blueprints/auth/forms.py:44
+msgid "Mot de passe actuel"
+msgstr "Current password"
+
+#: app/blueprints/auth/forms.py:47
+msgid "Confirmer le nouveau mot de passe"
+msgstr "Confirm new password"
+
+#: app/blueprints/auth/forms.py:50
+msgid "Mettre a jour le mot de passe"
+msgstr "Update password"
+
+#: app/blueprints/auth/routes.py:61 app/blueprints/auth/routes.py:74
+msgid "Identifiants incorrects."
+msgstr "Incorrect credentials."
+
+#: app/blueprints/auth/routes.py:66
+#, python-format
+msgid "Compte temporairement verrouille. Reessayez dans %(minutes)s minute(s)."
+msgstr "Account temporarily locked. Try again in %(minutes)s minute(s)."
+
+#: app/blueprints/auth/routes.py:78
+msgid "Ce compte est desactive. Contactez votre administrateur."
+msgstr "This account is disabled. Contact your administrator."
+
+#: app/blueprints/auth/routes.py:85
+#, python-format
+msgid "Bienvenue, %(name)s."
+msgstr "Welcome, %(name)s."
+
+#: app/blueprints/auth/routes.py:112
+msgid "Un compte existe deja avec cet email. Connectez-vous."
+msgstr "An account already exists with this email. Please log in."
+
+#: app/blueprints/auth/routes.py:150
+#, python-format
+msgid ""
+"Bienvenue sur Farm Control, %(name)s. Votre espace est pret, avec "
+"%(days)s jours d'essai gratuit du plan Pro (toutes les fonctionnalites "
+"debloquees)."
+msgstr ""
+"Welcome to Farm Control, %(name)s. Your workspace is ready, with "
+"%(days)s days of free trial of the Pro plan (all features unlocked)."
+
+#: app/blueprints/auth/routes.py:168
+msgid "Ce lien de confirmation est invalide ou a expire."
+msgstr "This confirmation link is invalid or has expired."
+
+#: app/blueprints/auth/routes.py:177
+msgid "Votre adresse email est confirmee. Merci !"
+msgstr "Your email address is confirmed. Thank you!"
+
+#: app/blueprints/auth/routes.py:187
+msgid "Votre email est deja confirme."
+msgstr "Your email is already confirmed."
+
+#: app/blueprints/auth/routes.py:196
+msgid "Email de confirmation renvoye. Verifiez votre boite de reception."
+msgstr "Confirmation email resent. Check your inbox."
+
+#: app/blueprints/auth/routes.py:199
+msgid "Impossible d'envoyer l'email pour le moment. Reessayez plus tard."
+msgstr "Unable to send the email right now. Please try again later."
+
+#: app/blueprints/auth/routes.py:208
+msgid "Vous avez ete deconnecte."
+msgstr "You have been logged out."
+
+#: app/blueprints/auth/routes.py:245
+msgid ""
+"Si un compte existe avec cet email, un lien de reinitialisation a ete "
+"envoye."
+msgstr ""
+"If an account exists with this email, a reset link has been sent."
+
+#: app/blueprints/auth/routes.py:263
+msgid "Ce lien de reinitialisation est invalide ou a expire."
+msgstr "This reset link is invalid or has expired."
+
+#: app/blueprints/auth/routes.py:280
+msgid "Votre mot de passe a ete reinitialise. Vous pouvez vous connecter."
+msgstr "Your password has been reset. You can now log in."
+
+#: app/blueprints/auth/routes.py:292
+msgid "Mot de passe actuel incorrect."
+msgstr "Current password is incorrect."
+
+#: app/blueprints/auth/routes.py:304
+msgid "Mot de passe mis a jour avec succes."
+msgstr "Password updated successfully."
+
+#: app/models/core.py:27
+msgid "Super administrateur"
+msgstr "Super administrator"
+
+#: app/models/core.py:28
+msgid "Proprietaire"
+msgstr "Owner"
+
+#: app/models/core.py:29
+msgid "Responsable"
+msgstr "Manager"
+
+#: app/models/core.py:30
+msgid "Travailleur"
+msgstr "Worker"
+
+#: app/templates/base.html:26
+msgid ""
+"Votre adresse email n'est pas encore confirmee. Verifiez votre boite de "
+"reception (et vos spams)."
+msgstr ""
+"Your email address is not confirmed yet. Check your inbox (and spam "
+"folder)."
+
+#: app/templates/base.html:29
+msgid "Renvoyer l'email de confirmation"
+msgstr "Resend confirmation email"
+
+#: app/templates/home.html:2
+msgid "Gestion d'elevage professionnelle"
+msgstr "Professional farm management"
+
+#: app/templates/home.html:11
+msgid "Tarifs"
+msgstr "Pricing"
+
+#: app/templates/home.html:27
+msgid "Pense pour l'Afrique - tarifs en FCFA"
+msgstr "Built for Africa - pricing in FCFA"
+
+#: app/templates/home.html:30
+msgid "La plateforme qui vous dit si votre elevage"
+msgstr "The platform that tells you whether your farm"
+
+#: app/templates/home.html:31
+msgid "est vraiment rentable."
+msgstr "is truly profitable."
+
+#: app/templates/home.html:34
+msgid ""
+"Suivi quotidien, indice de consommation (FCR), rentabilite par lot et "
+"alertes automatiques pour les elevages de poulets de chair. Multitenant, "
+"securise, accessible partout."
+msgstr ""
+"Daily tracking, feed conversion ratio (FCR), profitability per batch "
+"and automatic alerts for broiler farms. Multitenant, secure, accessible "
+"everywhere."
+
+#: app/templates/home.html:37
+msgid "Creer mon compte gratuitement"
+msgstr "Create my free account"
+
+#: app/templates/home.html:38 app/templates/home.html:165
+msgid "Voir les tarifs"
+msgstr "View pricing"
+
+#: app/templates/home.html:40
+msgid "Formule gratuite disponible. Votre espace est pret en 1 minute."
+msgstr "Free plan available. Your workspace is ready in 1 minute."
+
+#: app/templates/home.html:46
+msgid "Lot LOT-04 - Jour 21"
+msgstr "Batch LOT-04 - Day 21"
+
+#: app/templates/home.html:47
+msgid "Actif"
+msgstr "Active"
+
+#: app/templates/home.html:59
+msgid "FCFA de resultat net"
+msgstr "FCFA net profit"
+
+#: app/templates/home.html:65
+msgid "Effectif courant"
+msgstr "Current headcount"
+
+#: app/templates/home.html:71
+msgid "Taux de survie"
+msgstr "Survival rate"
+
+#: app/templates/home.html:85 app/templates/home.html:142
+msgid "Donnees isolees et securisees"
+msgstr "Isolated and secure data"
+
+#: app/templates/home.html:86
+msgid "Accessible sur mobile"
+msgstr "Accessible on mobile"
+
+#: app/templates/home.html:87
+msgid "Tarifs en FCFA"
+msgstr "Pricing in FCFA"
+
+#: app/templates/home.html:88
+msgid "Support en francais et en anglais"
+msgstr "Support in French and English"
+
+#: app/templates/home.html:97
+msgid "Fonctionnalites"
+msgstr "Features"
+
+#: app/templates/home.html:98
+msgid "Tout ce qu'il faut pour piloter votre elevage"
+msgstr "Everything you need to run your farm"
+
+#: app/templates/home.html:106
+msgid "Performance zootechnique"
+msgstr "Zootechnical performance"
+
+#: app/templates/home.html:107
+msgid ""
+"Indice de consommation (FCR) calcule automatiquement et courbe de "
+"croissance comparee a une reference par souche."
+msgstr ""
+"Feed conversion ratio (FCR) calculated automatically and growth curve "
+"compared against a reference for each breed."
+
+#: app/templates/home.html:115
+msgid "Rentabilite par lot"
+msgstr "Profitability per batch"
+
+#: app/templates/home.html:116
+msgid ""
+"Charges (aliment, poussins, medicaments, bois), revenu de vente et "
+"resultat net calcules a chaque saisie."
+msgstr ""
+"Costs (feed, chicks, medication, litter), sales revenue and net result "
+"calculated with every entry."
+
+#: app/templates/home.html:124
+msgid "Alertes automatiques"
+msgstr "Automatic alerts"
+
+#: app/templates/home.html:125
+msgid ""
+"Mortalite elevee, stock faible ou observation urgente : notification "
+"immediate par email au proprietaire."
+msgstr ""
+"High mortality, low stock or urgent observation: instant email "
+"notification to the owner."
+
+#: app/templates/home.html:133
+msgid "Equipe et roles"
+msgstr "Team and roles"
+
+#: app/templates/home.html:134
+msgid ""
+"Proprietaire, responsable, travailleur : chacun saisit ou valide au bon "
+"niveau, avec un workflow de rapport journalier."
+msgstr ""
+"Owner, manager, worker: everyone enters or validates at the right "
+"level, with a daily report workflow."
+
+#: app/templates/home.html:143
+msgid ""
+"Isolation stricte entre clients a deux niveaux, y compris au niveau de la"
+" base de donnees (Row Level Security)."
+msgstr ""
+"Strict two-layer isolation between customers, including at the "
+"database level (Row Level Security)."
+
+#: app/templates/home.html:151
+msgid "Rapports exportables"
+msgstr "Exportable reports"
+
+#: app/templates/home.html:152
+msgid ""
+"Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour "
+"votre banquier ou votre veterinaire."
+msgstr ""
+"Complete batch report (FCR, mortality, finances) exportable as PDF for "
+"your banker or veterinarian."
+
+#: app/templates/home.html:163
+msgid "Des tarifs accessibles, en FCFA"
+msgstr "Affordable pricing, in FCFA"
+
+#: app/templates/home.html:164
+msgid "A partir de gratuit. Sans engagement. Mobile Money et carte acceptes."
+msgstr "Starting free. No commitment. Mobile Money and cards accepted."
+
+#: app/templates/auth/login.html:11 app/templates/home.html:170
+msgid "Plateforme de gestion d'elevage"
+msgstr "Farm management platform"
+
+#: app/templates/auth/change_password.html:6
+msgid "Changer mon mot de passe"
+msgstr "Change my password"
+
+#: app/templates/auth/forgot_password.html:8
+msgid "Mot de passe oublie"
+msgstr "Forgot password"
+
+#: app/templates/auth/forgot_password.html:9
+msgid ""
+"Renseignez votre adresse email : un lien de reinitialisation vous sera "
+"envoye s'il existe un compte associe."
+msgstr ""
+"Enter your email address: a reset link will be sent to you if an "
+"account exists."
+
+#: app/templates/auth/forgot_password.html:16
+msgid "Retour a la connexion"
+msgstr "Back to login"
+
+#: app/templates/auth/login.html:21
+msgid "Mot de passe oublie ?"
+msgstr "Forgot password?"
+
+#: app/templates/auth/login.html:25
+msgid "Pas encore de compte ?"
+msgstr "No account yet?"
+
+#: app/templates/auth/signup.html:10
+msgid "Votre espace Farm Control est cree immediatement."
+msgstr "Your Farm Control workspace is created immediately."
+
+#: app/templates/auth/signup.html:25
+msgid "Deja un compte ?"
+msgstr "Already have an account?"
+
+#: app/templates/partials/sidebar.html:4
+msgid "Gestion d'elevage"
+msgstr "Farm management"
+
+#: app/templates/partials/sidebar.html:9
+msgid "Tableau de bord"
+msgstr "Dashboard"
+
+#: app/templates/partials/sidebar.html:13
+msgid "Elevage"
+msgstr "Farming"
+
+#: app/templates/partials/sidebar.html:15
+msgid "Fermes"
+msgstr "Farms"
+
+#: app/templates/partials/sidebar.html:18
+msgid "Lots"
+msgstr "Batches"
+
+#: app/templates/partials/sidebar.html:21
+msgid "Stock"
+msgstr "Stock"
+
+#: app/templates/partials/sidebar.html:25
+msgid "Fournisseurs"
+msgstr "Suppliers"
+
+#: app/templates/partials/sidebar.html:28
+msgid "Creances"
+msgstr "Receivables"
+
+#: app/templates/partials/sidebar.html:32 app/templates/partials/topbar.html:10
+msgid "Alertes"
+msgstr "Alerts"
+
+#: app/templates/partials/sidebar.html:36
+msgid "Messages"
+msgstr "Messages"
+
+#: app/templates/partials/sidebar.html:41
+msgid "Administration"
+msgstr "Administration"
+
+#: app/templates/partials/sidebar.html:43
+msgid "Utilisateurs"
+msgstr "Users"
+
+#: app/templates/partials/sidebar.html:46
+msgid "Courbes de reference"
+msgstr "Growth reference curves"
+
+#: app/templates/partials/sidebar.html:49
+msgid "Mon modele sanitaire"
+msgstr "My health program template"
+
+#: app/templates/partials/sidebar.html:52
+msgid "Facturation"
+msgstr "Billing"
+
+#: app/templates/partials/sidebar.html:55
+msgid "Journal d'activite"
+msgstr "Activity log"
+
+#: app/templates/partials/sidebar.html:61
+msgid "Plateforme"
+msgstr "Platform"
+
+#: app/templates/partials/sidebar.html:63
+msgid "Clients (tenants)"
+msgstr "Customers (tenants)"
+
+#: app/templates/partials/sidebar.html:67
+msgid "Mon compte"
+msgstr "My account"
+
+#: app/templates/partials/sidebar.html:69
+msgid "Profil"
+msgstr "Profile"
+
+#: app/templates/partials/sidebar.html:72 app/templates/partials/topbar.html:43
+msgid "Deconnexion"
+msgstr "Log out"
+
+#: app/templates/partials/topbar.html:19
+msgid "Messagerie"
+msgstr "Messaging"
+
+#: app/templates/partials/topbar.html:40
+msgid "Mon profil"
+msgstr "My profile"
+
+#: app/templates/partials/topbar.html:41
+msgid "Changer le mot de passe"
+msgstr "Change password"
+
+#: app/utils/security.py:38
+#, python-format
+msgid "Le mot de passe doit contenir au moins %(length)s caracteres."
+msgstr "Password must be at least %(length)s characters long."
+
+#: app/utils/security.py:40
+msgid "Le mot de passe doit contenir au moins une lettre minuscule."
+msgstr "Password must contain at least one lowercase letter."
+
+#: app/utils/security.py:42
+msgid "Le mot de passe doit contenir au moins une lettre majuscule."
+msgstr "Password must contain at least one uppercase letter."
+
+#: app/utils/security.py:44
+msgid "Le mot de passe doit contenir au moins un chiffre."
+msgstr "Password must contain at least one digit."

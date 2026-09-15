@@ -23,6 +23,10 @@ class Config:
         "DATABASE_URL",
         "postgresql+psycopg2://farmcontrol:farmcontrol@localhost:5432/farmcontrol",
     )
+
+    # Bilingue francais/anglais (Cameroun) - voir app._select_locale.
+    BABEL_DEFAULT_LOCALE = "fr"
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASE_DIR, "app", "translations")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
 

@@ -4,6 +4,7 @@ import secrets
 import unicodedata
 
 from flask import current_app
+from flask_babel import gettext as _
 
 
 def slugify(value: str) -> str:
@@ -34,12 +35,12 @@ def validate_password_policy(raw_password: str) -> list:
     min_length = current_app.config.get("PASSWORD_MIN_LENGTH", 10)
 
     if len(raw_password) < min_length:
-        errors.append(f"Le mot de passe doit contenir au moins {min_length} caracteres.")
+        errors.append(_("Le mot de passe doit contenir au moins %(length)s caracteres.", length=min_length))
     if not re.search(r"[a-z]", raw_password):
-        errors.append("Le mot de passe doit contenir au moins une lettre minuscule.")
+        errors.append(_("Le mot de passe doit contenir au moins une lettre minuscule."))
     if not re.search(r"[A-Z]", raw_password):
-        errors.append("Le mot de passe doit contenir au moins une lettre majuscule.")
+        errors.append(_("Le mot de passe doit contenir au moins une lettre majuscule."))
     if not re.search(r"\d", raw_password):
-        errors.append("Le mot de passe doit contenir au moins un chiffre.")
+        errors.append(_("Le mot de passe doit contenir au moins un chiffre."))
 
     return errors
