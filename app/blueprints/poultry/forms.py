@@ -104,10 +104,10 @@ class MedicationRecordForm(FlaskForm):
         render_kw={"placeholder": "Ex : Newcastle, Vitamines, Anticoccidien..."},
     )
     quantity = DecimalField(
-        "Quantite utilisee",
+        "Quantite administree (en ml)",
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 1"},
+        render_kw={"placeholder": "Ex : 50 (pour 50 ml, verse dans l'eau de boisson)"},
     )
     unit_price = DecimalField(
         "Prix (FCFA)",
@@ -181,7 +181,7 @@ class StockItemForm(FlaskForm):
         "Unite de mesure",
         validators=[DataRequired()],
         default="sac",
-        render_kw={"placeholder": "Ex : sac, morceau, ml, kg..."},
+        render_kw={"placeholder": "Ex : sac, morceau, L (litre), kg..."},
         id="stock-unit",
     )
     quantity_on_hand = DecimalField(
@@ -208,6 +208,13 @@ class StockItemForm(FlaskForm):
         places=2,
         render_kw={"placeholder": "Ex : 50 (un sac de 50 kg)"},
         id="stock-kg-per-unit",
+    )
+    ml_per_unit = DecimalField(
+        "Volume en ml d'une unite (uniquement pour les medicaments liquides)",
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 1000 (1 litre) ou 3000 (bouteille de 3 litres)"},
+        id="stock-ml-per-unit",
     )
     submit = SubmitField("Enregistrer")
 

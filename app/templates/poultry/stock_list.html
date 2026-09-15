@@ -21,6 +21,7 @@
           <td>
             {{ item.name }}
             {% if item.kg_per_unit %}<br><span class="text-muted small">1 {{ item.unit }} = {{ item.kg_per_unit }} kg</span>{% endif %}
+            {% if item.ml_per_unit %}<br><span class="text-muted small">1 {{ item.unit }} = {{ item.ml_per_unit }} ml</span>{% endif %}
           </td>
           <td>{{ item.quantity_on_hand }} {{ item.unit }}</td>
           <td>{{ item.min_threshold }} {{ item.unit }}</td>

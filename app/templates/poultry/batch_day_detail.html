@@ -247,8 +247,8 @@
         <div class="modal-body">
           {% if day.medication_records %}
           <table class="table table-sm mb-3">
-            <thead><tr><th>Produit</th><th>Quantite</th></tr></thead>
-            <tbody>{% for r in day.medication_records %}<tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }}</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Produit</th><th>Quantite (ml)</th></tr></thead>
+            <tbody>{% for r in day.medication_records %}<tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }} ml</td></tr>{% endfor %}</tbody>
           </table>
           {% endif %}
           <p class="text-muted small">Astuce : consultez la <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">feuille de route</a> pour savoir quoi administrer aujourd'hui.</p>

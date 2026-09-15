@@ -201,7 +201,18 @@ def seed_demo():
                 min_threshold=Decimal("100"),
                 unit_price=Decimal("50"),
             )
-            db.session.add_all([stock_feed, stock_wood])
+            stock_medication = StockItem(
+                tenant_id=tenant.id,
+                farm_id=farm1.id,
+                category=StockItem.CATEGORY_MEDICATION,
+                name="Belgo Protect",
+                unit="L",
+                quantity_on_hand=Decimal("3"),
+                min_threshold=Decimal("1"),
+                unit_price=Decimal("4500"),
+                ml_per_unit=Decimal("1000"),
+            )
+            db.session.add_all([stock_feed, stock_wood, stock_medication])
             db.session.flush()
 
             create_alert(

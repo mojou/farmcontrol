@@ -192,6 +192,12 @@ class StockItem(TimestampMixin, TenantMixin, db.Model):
     # calcul de l'indice de consommation/FCR) alors que le stock d'aliment
     # se gere en sacs : on convertit les kg consommes en sacs a decompter.
     kg_per_unit = db.Column(db.Numeric(10, 2), nullable=True)
+    # Volume en ml d'une unite de stock (ex : 1000 si vous stockez en litres,
+    # 3000 pour une bouteille/boite de 3 litres comme les produits Belgo).
+    # Les medicaments/complements liquides s'achetent en litres mais
+    # s'administrent en ml : on convertit les ml donnes en unites de stock
+    # a decompter, comme pour l'aliment (kg_per_unit) ci-dessus.
+    ml_per_unit = db.Column(db.Numeric(10, 2), nullable=True)
 
     farm = db.relationship("Farm", back_populates="stock_items")
 

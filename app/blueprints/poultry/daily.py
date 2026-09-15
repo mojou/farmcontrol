@@ -64,6 +64,8 @@ def _stock_choices(farm_id, category):
         label = f"{i.name} ({i.quantity_on_hand} {i.unit} en stock)"
         if i.kg_per_unit:
             label += f" - 1 {i.unit} = {i.kg_per_unit} kg"
+        elif i.ml_per_unit:
+            label += f" - 1 {i.unit} = {i.ml_per_unit} ml"
         choices.append((i.id, label))
     return choices
 
@@ -77,15 +79,17 @@ def _farm_has_manager(farm):
     )
 
 
-def _apply_stock_consumption(stock_item_id, quantity, quantity_is_kg=False):
+def _apply_stock_consumption(stock_item_id, quantity, quantity_is_kg=False, quantity_is_ml=False):
     """Decompte une consommation du stock enregistre.
 
-    Le bois/litiere et les medicaments sont saisis directement dans l'unite
-    de stock (morceau, ml...) donc `quantity` s'y soustrait telle quelle.
-    L'aliment est saisi en kg (necessaire pour le calcul du FCR) alors que
-    le stock d'aliment se gere en sacs : si l'article de stock precise un
-    poids par unite (`kg_per_unit`), on convertit les kg donnes en sacs
-    avant de decompter, pour ne pas melanger les unites.
+    Le bois/litiere est saisi directement dans l'unite de stock (morceau...)
+    donc `quantity` s'y soustrait telle quelle. L'aliment est saisi en kg
+    (necessaire pour le calcul du FCR) et les medicaments/complements
+    liquides en ml (dose administree), alors que leur stock se gere
+    respectivement en sacs et en litres/bouteilles : si l'article de stock
+    precise une conversion (`kg_per_unit` ou `ml_per_unit`), on convertit la
+    quantite donnee dans l'unite de stock avant de decompter, pour ne pas
+    melanger les unites.
     """
     if not stock_item_id:
         return None
@@ -94,6 +98,8 @@ def _apply_stock_consumption(stock_item_id, quantity, quantity_is_kg=False):
         return None
     if quantity_is_kg and stock_item.kg_per_unit:
         quantity = Decimal(quantity) / Decimal(stock_item.kg_per_unit)
+    elif quantity_is_ml and stock_item.ml_per_unit:
+        quantity = Decimal(quantity) / Decimal(stock_item.ml_per_unit)
     stock_item.quantity_on_hand = max((stock_item.quantity_on_hand or 0) - quantity, 0)
     return stock_item
 
@@ -305,7 +311,7 @@ def medication_record_new(day_id):
             created_by=current_user.id,
         )
         db.session.add(record)
-        stock_item = _apply_stock_consumption(form.stock_item_id.data, form.quantity.data)
+        stock_item = _apply_stock_consumption(form.stock_item_id.data, form.quantity.data, quantity_is_ml=True)
         recompute_batch_finance(day.batch)
         db.session.flush()
         if stock_item:
