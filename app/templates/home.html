@@ -9,6 +9,7 @@
       <div class="d-flex align-items-center gap-3">
         {% include "partials/language_switcher.html" %}
         <a href="{{ url_for('billing.pricing') }}" class="small text-decoration-none text-dark fw-semibold">{{ _('Tarifs') }}</a>
+        <a href="{{ url_for('core.documentation') }}" class="small text-decoration-none text-dark fw-semibold"><i class="bi bi-book"></i> {{ _('Documentation') }}</a>
         <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">{{ _('Se connecter') }}</a>
         <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">{{ _('Creer mon compte') }}</a>
       </div>
@@ -36,6 +37,7 @@
           <div class="d-flex gap-3 flex-wrap">
             <a href="{{ url_for('auth.signup') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">{{ _('Creer mon compte gratuitement') }}</a>
             <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-light btn-lg">{{ _('Voir les tarifs') }}</a>
+            <a href="{{ url_for('core.documentation') }}" class="btn btn-outline-light btn-lg"><i class="bi bi-book"></i> {{ _('Documentation') }}</a>
           </div>
           <p class="small mt-3 mb-0" style="color: rgba(255,255,255,0.7);">{{ _('Formule gratuite disponible. Votre espace est pret en 1 minute.') }}</p>
         </div>

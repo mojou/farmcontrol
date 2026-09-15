@@ -71,6 +71,9 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.profile' }}" href="{{ url_for('core.profile') }}">
       <i class="bi bi-person-circle"></i> {{ _('Profil') }}
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.documentation' }}" href="{{ url_for('core.documentation') }}" target="_blank">
+      <i class="bi bi-book"></i> {{ _('Documentation') }}
+    </a>
     <a class="fc-nav-link" href="{{ url_for('auth.logout') }}">
       <i class="bi bi-box-arrow-right"></i> {{ _('Deconnexion') }}
     </a>

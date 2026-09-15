@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 15:39+0100\n"
+"POT-Creation-Date: 2026-09-15 22:37+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -46,7 +46,8 @@ msgid "Les mots de passe ne correspondent pas."
 msgstr "Passwords do not match."
 
 #: app/blueprints/auth/forms.py:19 app/templates/auth/login.html:26
-#: app/templates/auth/signup.html:9 app/templates/home.html:13
+#: app/templates/auth/signup.html:9 app/templates/core/documentation.html:253
+#: app/templates/home.html:14
 msgid "Creer mon compte"
 msgstr "Create my account"
 
@@ -55,7 +56,7 @@ msgid "Se souvenir de moi"
 msgstr "Remember me"
 
 #: app/blueprints/auth/forms.py:26 app/templates/auth/signup.html:26
-#: app/templates/home.html:12
+#: app/templates/core/documentation.html:252 app/templates/home.html:13
 msgid "Se connecter"
 msgstr "Log in"
 
@@ -108,13 +109,8 @@ msgstr "An account already exists with this email. Please log in."
 
 #: app/blueprints/auth/routes.py:150
 #, python-format
-msgid ""
-"Bienvenue sur Farm Control, %(name)s. Votre espace est pret, avec "
-"%(days)s jours d'essai gratuit du plan Pro (toutes les fonctionnalites "
-"debloquees)."
-msgstr ""
-"Welcome to Farm Control, %(name)s. Your workspace is ready, with %(days)s"
-" days of free trial of the Pro plan (all features unlocked)."
+msgid "Bienvenue sur Farm Control, %(name)s. Votre espace est pret, avec %(days)s jours d'essai gratuit du plan Pro (toutes les fonctionnalites debloquees)."
+msgstr "Welcome to Farm Control, %(name)s. Your workspace is ready, with %(days)s days of free trial of the Pro plan (all features unlocked)."
 
 #: app/blueprints/auth/routes.py:168
 msgid "Ce lien de confirmation est invalide ou a expire."
@@ -141,9 +137,7 @@ msgid "Vous avez ete deconnecte."
 msgstr "You have been logged out."
 
 #: app/blueprints/auth/routes.py:245
-msgid ""
-"Si un compte existe avec cet email, un lien de reinitialisation a ete "
-"envoye."
+msgid "Si un compte existe avec cet email, un lien de reinitialisation a ete envoye."
 msgstr "If an account exists with this email, a reset link has been sent."
 
 #: app/blueprints/auth/routes.py:263
@@ -234,7 +228,7 @@ msgstr "Lockout duration after failures (minutes)"
 msgid "Enregistrer"
 msgstr "Save"
 
-#: app/blueprints/core/routes.py:211
+#: app/blueprints/core/routes.py:218
 msgid "Parametres enregistres."
 msgstr "Settings saved."
 
@@ -242,25 +236,21 @@ msgstr "Settings saved."
 msgid "Super administrateur"
 msgstr "Super administrator"
 
-#: app/models/core.py:28
+#: app/models/core.py:28 app/templates/core/documentation.html:63
 msgid "Proprietaire"
 msgstr "Owner"
 
-#: app/models/core.py:29
+#: app/models/core.py:29 app/templates/core/documentation.html:67
 msgid "Responsable"
 msgstr "Manager"
 
-#: app/models/core.py:30
+#: app/models/core.py:30 app/templates/core/documentation.html:71
 msgid "Travailleur"
 msgstr "Worker"
 
 #: app/templates/base.html:33
-msgid ""
-"Votre adresse email n'est pas encore confirmee. Verifiez votre boite de "
-"reception (et vos spams)."
-msgstr ""
-"Your email address is not confirmed yet. Check your inbox (and spam "
-"folder)."
+msgid "Votre adresse email n'est pas encore confirmee. Verifiez votre boite de reception (et vos spams)."
+msgstr "Your email address is not confirmed yet. Check your inbox (and spam folder)."
 
 #: app/templates/base.html:36
 msgid "Renvoyer l'email de confirmation"
@@ -274,161 +264,137 @@ msgstr "Professional farm management"
 msgid "Tarifs"
 msgstr "Pricing"
 
-#: app/templates/home.html:27
+#: app/templates/core/documentation.html:2 app/templates/home.html:12
+#: app/templates/home.html:40 app/templates/partials/sidebar.html:75
+msgid "Documentation"
+msgstr "Documentation"
+
+#: app/templates/home.html:28
 msgid "Pense pour l'Afrique - tarifs en FCFA"
 msgstr "Built for Africa - pricing in FCFA"
 
-#: app/templates/home.html:30
+#: app/templates/home.html:31
 msgid "La plateforme qui vous dit si votre elevage"
 msgstr "The platform that tells you whether your farm"
 
-#: app/templates/home.html:31
+#: app/templates/home.html:32
 msgid "est vraiment rentable."
 msgstr "is truly profitable."
 
-#: app/templates/home.html:34
-msgid ""
-"Suivi quotidien, indice de consommation (FCR), rentabilite par lot et "
-"alertes automatiques pour les elevages de poulets de chair. Multitenant, "
-"securise, accessible partout."
-msgstr ""
-"Daily tracking, feed conversion ratio (FCR), profitability per batch and "
-"automatic alerts for broiler farms. Multitenant, secure, accessible "
-"everywhere."
+#: app/templates/home.html:35
+msgid "Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout."
+msgstr "Daily tracking, feed conversion ratio (FCR), profitability per batch and automatic alerts for broiler farms. Multitenant, secure, accessible everywhere."
 
-#: app/templates/home.html:37
+#: app/templates/home.html:38
 msgid "Creer mon compte gratuitement"
 msgstr "Create my free account"
 
-#: app/templates/home.html:38 app/templates/home.html:165
+#: app/templates/home.html:39 app/templates/home.html:167
 msgid "Voir les tarifs"
 msgstr "View pricing"
 
-#: app/templates/home.html:40
+#: app/templates/home.html:42
 msgid "Formule gratuite disponible. Votre espace est pret en 1 minute."
 msgstr "Free plan available. Your workspace is ready in 1 minute."
 
-#: app/templates/home.html:46
+#: app/templates/home.html:48
 msgid "Lot LOT-04 - Jour 21"
 msgstr "Batch LOT-04 - Day 21"
 
-#: app/templates/home.html:47
+#: app/templates/home.html:49
 msgid "Actif"
 msgstr "Active"
 
-#: app/templates/home.html:59
+#: app/templates/home.html:61
 msgid "FCFA de resultat net"
 msgstr "FCFA net profit"
 
-#: app/templates/home.html:65
+#: app/templates/home.html:67
 msgid "Effectif courant"
 msgstr "Current headcount"
 
-#: app/templates/home.html:71
+#: app/templates/home.html:73
 msgid "Taux de survie"
 msgstr "Survival rate"
 
-#: app/templates/home.html:85 app/templates/home.html:142
+#: app/templates/home.html:87 app/templates/home.html:144
 msgid "Donnees isolees et securisees"
 msgstr "Isolated and secure data"
 
-#: app/templates/home.html:86
+#: app/templates/home.html:88
 msgid "Accessible sur mobile"
 msgstr "Accessible on mobile"
 
-#: app/templates/home.html:87
+#: app/templates/home.html:89
 msgid "Tarifs en FCFA"
 msgstr "Pricing in FCFA"
 
-#: app/templates/home.html:88
+#: app/templates/home.html:90
 msgid "Support en francais et en anglais"
 msgstr "Support in French and English"
 
-#: app/templates/home.html:97
+#: app/templates/home.html:99
 msgid "Fonctionnalites"
 msgstr "Features"
 
-#: app/templates/home.html:98
+#: app/templates/home.html:100
 msgid "Tout ce qu'il faut pour piloter votre elevage"
 msgstr "Everything you need to run your farm"
 
-#: app/templates/home.html:106
+#: app/templates/home.html:108
 msgid "Performance zootechnique"
 msgstr "Zootechnical performance"
 
-#: app/templates/home.html:107
-msgid ""
-"Indice de consommation (FCR) calcule automatiquement et courbe de "
-"croissance comparee a une reference par souche."
-msgstr ""
-"Feed conversion ratio (FCR) calculated automatically and growth curve "
-"compared against a reference for each breed."
+#: app/templates/home.html:109
+msgid "Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche."
+msgstr "Feed conversion ratio (FCR) calculated automatically and growth curve compared against a reference for each breed."
 
-#: app/templates/home.html:115
+#: app/templates/home.html:117
 msgid "Rentabilite par lot"
 msgstr "Profitability per batch"
 
-#: app/templates/home.html:116
-msgid ""
-"Charges (aliment, poussins, medicaments, bois), revenu de vente et "
-"resultat net calcules a chaque saisie."
-msgstr ""
-"Costs (feed, chicks, medication, litter), sales revenue and net result "
-"calculated with every entry."
+#: app/templates/home.html:118
+msgid "Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie."
+msgstr "Costs (feed, chicks, medication, litter), sales revenue and net result calculated with every entry."
 
-#: app/templates/home.html:124
+#: app/templates/core/documentation.html:26
+#: app/templates/core/documentation.html:160 app/templates/home.html:126
 msgid "Alertes automatiques"
 msgstr "Automatic alerts"
 
-#: app/templates/home.html:125
-msgid ""
-"Mortalite elevee, stock faible ou observation urgente : notification "
-"immediate par email au proprietaire."
-msgstr ""
-"High mortality, low stock or urgent observation: instant email "
-"notification to the owner."
+#: app/templates/home.html:127
+msgid "Mortalite elevee, stock faible ou observation urgente : notification immediate par email au proprietaire."
+msgstr "High mortality, low stock or urgent observation: instant email notification to the owner."
 
-#: app/templates/home.html:133
+#: app/templates/home.html:135
 msgid "Equipe et roles"
 msgstr "Team and roles"
 
-#: app/templates/home.html:134
-msgid ""
-"Proprietaire, responsable, travailleur : chacun saisit ou valide au bon "
-"niveau, avec un workflow de rapport journalier."
-msgstr ""
-"Owner, manager, worker: everyone enters or validates at the right level, "
-"with a daily report workflow."
+#: app/templates/home.html:136
+msgid "Proprietaire, responsable, travailleur : chacun saisit ou valide au bon niveau, avec un workflow de rapport journalier."
+msgstr "Owner, manager, worker: everyone enters or validates at the right level, with a daily report workflow."
 
-#: app/templates/home.html:143
-msgid ""
-"Isolation stricte entre clients a deux niveaux, y compris au niveau de la"
-" base de donnees (Row Level Security)."
-msgstr ""
-"Strict two-layer isolation between customers, including at the database "
-"level (Row Level Security)."
+#: app/templates/home.html:145
+msgid "Isolation stricte entre clients a deux niveaux, y compris au niveau de la base de donnees (Row Level Security)."
+msgstr "Strict two-layer isolation between customers, including at the database level (Row Level Security)."
 
-#: app/templates/home.html:151
+#: app/templates/home.html:153
 msgid "Rapports exportables"
 msgstr "Exportable reports"
 
-#: app/templates/home.html:152
-msgid ""
-"Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour "
-"votre banquier ou votre veterinaire."
-msgstr ""
-"Complete batch report (FCR, mortality, finances) exportable as PDF for "
-"your banker or veterinarian."
+#: app/templates/home.html:154
+msgid "Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire."
+msgstr "Complete batch report (FCR, mortality, finances) exportable as PDF for your banker or veterinarian."
 
-#: app/templates/home.html:163
+#: app/templates/home.html:165
 msgid "Des tarifs accessibles, en FCFA"
 msgstr "Affordable pricing, in FCFA"
 
-#: app/templates/home.html:164
+#: app/templates/home.html:166
 msgid "A partir de gratuit. Sans engagement. Mobile Money et carte acceptes."
 msgstr "Starting free. No commitment. Mobile Money and cards accepted."
 
-#: app/templates/auth/login.html:11 app/templates/home.html:170
+#: app/templates/auth/login.html:11 app/templates/home.html:172
 msgid "Plateforme de gestion d'elevage"
 msgstr "Farm management platform"
 
@@ -441,12 +407,8 @@ msgid "Mot de passe oublie"
 msgstr "Forgot password"
 
 #: app/templates/auth/forgot_password.html:9
-msgid ""
-"Renseignez votre adresse email : un lien de reinitialisation vous sera "
-"envoye s'il existe un compte associe."
-msgstr ""
-"Enter your email address: a reset link will be sent to you if an account "
-"exists."
+msgid "Renseignez votre adresse email : un lien de reinitialisation vous sera envoye s'il existe un compte associe."
+msgstr "Enter your email address: a reset link will be sent to you if an account exists."
 
 #: app/templates/auth/forgot_password.html:16
 msgid "Retour a la connexion"
@@ -468,10 +430,316 @@ msgstr "Your Farm Control workspace is created immediately."
 msgid "Deja un compte ?"
 msgstr "Already have an account?"
 
-#: app/templates/core/settings.html:3 app/templates/core/settings.html:6
-#: app/templates/partials/sidebar.html:58
+#: app/templates/core/documentation.html:7
+msgid "Documentation Farm Control"
+msgstr "Farm Control Documentation"
+
+#: app/templates/core/documentation.html:8
+msgid "Le guide complet de toutes les fonctionnalites de la plateforme, du demarrage a la facturation."
+msgstr "The complete guide to every feature of the platform, from getting started to billing."
+
+#: app/templates/core/documentation.html:16
+msgid "Sommaire"
+msgstr "Contents"
+
+#: app/templates/core/documentation.html:18
+#: app/templates/core/documentation.html:43
+msgid "Demarrage"
+msgstr "Getting started"
+
+#: app/templates/core/documentation.html:19
+#: app/templates/core/documentation.html:54
+msgid "Roles et permissions"
+msgstr "Roles and permissions"
+
+#: app/templates/core/documentation.html:20
+#: app/templates/core/documentation.html:83
+msgid "Fermes et lots"
+msgstr "Farms and batches"
+
+#: app/templates/core/documentation.html:21
+#: app/templates/core/documentation.html:95
+msgid "Saisie quotidienne"
+msgstr "Daily entry"
+
+#: app/templates/core/documentation.html:22
+#: app/templates/core/documentation.html:115
+msgid "Gestion du stock"
+msgstr "Stock management"
+
+#: app/templates/core/documentation.html:23
+#: app/templates/core/settings.html:102
+msgid "Programme sanitaire"
+msgstr "Health program"
+
+#: app/templates/core/documentation.html:24
+#: app/templates/core/documentation.html:137
+msgid "Ventes et creances"
+msgstr "Sales and receivables"
+
+#: app/templates/core/documentation.html:25
+#: app/templates/core/documentation.html:149
+msgid "Finances et rentabilite"
+msgstr "Finances and profitability"
+
+#: app/templates/core/documentation.html:27
+#: app/templates/core/documentation.html:170
+msgid "Rapports et export"
+msgstr "Reports and export"
+
+#: app/templates/core/documentation.html:28
+#: app/templates/core/documentation.html:180 app/templates/core/settings.html:3
+#: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:58
 msgid "Parametres"
 msgstr "Settings"
+
+#: app/templates/core/documentation.html:29
+#: app/templates/core/documentation.html:196
+msgid "Securite des donnees"
+msgstr "Data security"
+
+#: app/templates/core/documentation.html:30
+#: app/templates/core/documentation.html:206
+msgid "Mode hors-ligne"
+msgstr "Offline mode"
+
+#: app/templates/core/documentation.html:31
+#: app/templates/core/documentation.html:216
+msgid "Facturation et tarifs"
+msgstr "Billing and pricing"
+
+#: app/templates/core/documentation.html:32
+#: app/templates/core/documentation.html:226
+msgid "Langue"
+msgstr "Language"
+
+#: app/templates/core/documentation.html:46
+msgid "Creez votre compte gratuitement depuis la page d'inscription : renseignez le nom de votre exploitation, votre pays et vos identifiants. Un email de confirmation vous est envoye automatiquement - pensez a verifier vos spams si vous ne le voyez pas apparaitre."
+msgstr "Create your free account from the sign-up page: enter your farm's name, your country and your credentials. A confirmation email is sent automatically - check your spam folder if you don't see it."
+
+#: app/templates/core/documentation.html:47
+msgid "Chaque nouvelle inscription demarre avec un essai gratuit de 14 jours donnant acces a toutes les fonctionnalites, sans carte bancaire requise. A l'issue de l'essai, vous pouvez continuer avec la formule gratuite (limitee) ou passer a une formule payante depuis la page Tarifs."
+msgstr "Every new sign-up starts with a 14-day free trial giving access to every feature, with no credit card required. Once the trial ends, you can continue on the (limited) free plan or move to a paid plan from the Pricing page."
+
+#: app/templates/core/documentation.html:48
+msgid "Une fois connecte, vous arrivez sur votre tableau de bord qui resume vos fermes, vos lots actifs et vos alertes en cours. Commencez par creer votre premiere ferme, puis un premier lot pour pouvoir saisir vos donnees quotidiennes."
+msgstr "Once logged in, you land on your dashboard summarizing your farms, active batches and current alerts. Start by creating your first farm, then a first batch so you can begin your daily entries."
+
+#: app/templates/core/documentation.html:57
+msgid "Farm Control distingue trois niveaux d'acces au sein d'une meme exploitation, en plus du compte super-administrateur reserve a la gestion de la plateforme elle-meme."
+msgstr "Farm Control distinguishes three access levels within a single farm business, in addition to the super-admin account reserved for managing the platform itself."
+
+#: app/templates/core/documentation.html:60
+msgid "Role"
+msgstr "Role"
+
+#: app/templates/core/documentation.html:60
+msgid "Peut faire"
+msgstr "Can do"
+
+#: app/templates/core/documentation.html:64
+msgid "Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, creances, journal d'activite, export des donnees, courbes de reference et modele sanitaire. C'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock."
+msgstr "Full access: settings, billing, users, suppliers, sales, receivables, activity log, data export, growth reference curves and health program template. This is the only role that sees prices and can edit or delete a stock item."
+
+#: app/templates/core/documentation.html:68
+msgid "Gere le quotidien d'une ou plusieurs fermes : cree des lots, valide les rapports journaliers soumis par les travailleurs, consulte le stock et les alertes."
+msgstr "Manages the day-to-day of one or more farms: creates batches, reviews daily reports submitted by workers, and views stock and alerts."
+
+#: app/templates/core/documentation.html:72
+msgid "Effectue la saisie quotidienne (aliment, eau, mortalite, medicaments, pesees, observations) sur la ferme a laquelle il est rattache, puis soumet son rapport journalier pour validation."
+msgstr "Performs the daily entry (feed, water, mortality, medication, weighing, observations) on the farm they're assigned to, then submits their daily report for review."
+
+#: app/templates/core/documentation.html:77
+msgid "Un proprietaire cree les comptes de son equipe depuis Administration > Utilisateurs, en choisissant leur role et, pour un travailleur, la ferme a laquelle il est rattache."
+msgstr "An owner creates their team's accounts from Administration > Users, choosing their role and, for a worker, the farm they're assigned to."
+
+#: app/templates/core/documentation.html:86
+msgid "Une \"ferme\" represente un site d'elevage physique. Un \"lot\" (ou bande) represente un groupe de poussins mis en place a une meme date, suivi jusqu'a sa cloture (vente complete ou fin de cycle)."
+msgstr "A \"farm\" represents a physical rearing site. A \"batch\" (or flock) represents a group of chicks placed on the same date, tracked until it is closed (full sale or end of cycle)."
+
+#: app/templates/core/documentation.html:87
+msgid "A la creation d'un lot, renseignez l'effectif initial, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut)."
+msgstr "When creating a batch, enter the initial headcount, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. An indicative health program is automatically generated for the batch, based on your health program template (or on CEVA Sante Animale Afrique / GIZ-Nafa references by default)."
+
+#: app/templates/core/documentation.html:88
+msgid "L'effectif courant du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque vente au sujet - vous n'avez jamais besoin de le corriger manuellement."
+msgstr "The batch's current headcount (shown on its page) automatically decreases with every recorded mortality and every per-bird sale - you never need to correct it manually."
+
+#: app/templates/core/documentation.html:89
+msgid "Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres."
+msgstr "Closing a batch freezes its data and final financial summary; the default end date suggested takes into account the cycle length configured in your Settings."
+
+#: app/templates/core/documentation.html:98
+msgid "Chaque jour de suivi d'un lot regroupe sept types de saisie, chacun facultatif selon ce qui s'est reellement passe ce jour-la :"
+msgstr "Each tracking day for a batch groups seven types of entry, each optional depending on what actually happened that day:"
+
+#: app/templates/core/documentation.html:100
+msgid "Aliment (kg) - decompte automatiquement le stock d'aliment lie, converti depuis les sacs si necessaire."
+msgstr "Feed (kg) - automatically deducts the linked feed stock, converted from bags if needed."
+
+#: app/templates/core/documentation.html:101
+msgid "Eau de boisson (litres)"
+msgstr "Drinking water (liters)"
+
+#: app/templates/core/documentation.html:102
+msgid "Mortalite (nombre de sujets) - reduit immediatement l'effectif courant du lot."
+msgstr "Mortality (number of birds) - immediately reduces the batch's current headcount."
+
+#: app/templates/core/documentation.html:103
+msgid "Bois / litiere - decompte le stock correspondant."
+msgstr "Wood / bedding - deducts the corresponding stock."
+
+#: app/templates/core/documentation.html:104
+msgid "Medicaments (ml administres) - decompte le stock de medicament lie, converti depuis les litres/bouteilles si necessaire."
+msgstr "Medication (ml administered) - deducts the linked medication stock, converted from liters/bottles if needed."
+
+#: app/templates/core/documentation.html:105
+msgid "Pesees (poids moyen) - alimente la courbe de croissance et declenche une alerte si l'indice de consommation (FCR) depasse le seuil configure."
+msgstr "Weighing (average weight) - feeds the growth curve and triggers an alert if the feed conversion ratio (FCR) exceeds the configured threshold."
+
+#: app/templates/core/documentation.html:106
+msgid "Observations libres, avec photo facultative."
+msgstr "Free-text observations, with an optional photo."
+
+#: app/templates/core/documentation.html:108
+msgid "Le prix des intrants n'est jamais saisi ni visible a ce niveau : il est calcule automatiquement a partir du prix d'achat deja renseigne dans le Stock, une information reservee au proprietaire."
+msgstr "Input prices are never entered or visible at this level: they're calculated automatically from the purchase price already set in Stock, information reserved for the owner."
+
+#: app/templates/core/documentation.html:109
+msgid "Une fois la journee saisie, le travailleur soumet son rapport journalier. Si un responsable est rattache a la ferme, le rapport reste \"en attente de validation\" jusqu'a ce qu'il le valide ; sinon, il est automatiquement considere comme valide pour ne pas bloquer le suivi."
+msgstr "Once the day's entries are in, the worker submits their daily report. If a manager is assigned to the farm, the report stays \"pending review\" until they approve it; otherwise it's automatically marked as reviewed so tracking isn't blocked."
+
+#: app/templates/core/documentation.html:118
+msgid "Le stock est organise par ferme et par categorie : Aliment, Bois / litiere, Medicament. Chaque article a une unite d'achat (ex : sac, bidon, bouteille) et un prix d'achat, reserves au proprietaire."
+msgstr "Stock is organized by farm and category: Feed, Wood / bedding, Medication. Each item has a purchase unit (e.g. bag, jerrycan, bottle) and a purchase price, both reserved for the owner."
+
+#: app/templates/core/documentation.html:119
+msgid "Pour l'aliment et les medicaments, indiquez la conversion de votre unite d'achat vers l'unite de saisie quotidienne (kg par sac, ou ml par bidon/bouteille) : le stock se decompte alors automatiquement et correctement a chaque saisie, meme si vous achetez en sacs de 25 kg ou en bidons de 5 litres."
+msgstr "For feed and medication, enter the conversion from your purchase unit to the daily-entry unit (kg per bag, or ml per jerrycan/bottle): stock is then deducted automatically and correctly with every entry, even if you buy 25 kg bags or 5-liter jerrycans."
+
+#: app/templates/core/documentation.html:120
+msgid "Un seuil d'alerte (prerempli depuis vos Parametres) declenche une notification par email des que la quantite disponible passe en dessous."
+msgstr "A low-stock threshold (pre-filled from your Settings) triggers an email notification as soon as the available quantity drops below it."
+
+#: app/templates/core/documentation.html:121
+msgid "Seul le proprietaire peut modifier ou supprimer un article de stock. La suppression reste possible meme si des saisies passees y font reference : l'historique est conserve, seul le lien vers l'article est detache."
+msgstr "Only the owner can edit or delete a stock item. Deletion remains possible even if past entries reference it: the history is kept, only the link to the item is detached."
+
+#: app/templates/core/documentation.html:127
+msgid "Programme sanitaire (feuille de route)"
+msgstr "Health program (roadmap)"
+
+#: app/templates/core/documentation.html:130
+msgid "Chaque lot recoit une feuille de route sanitaire (vaccins, traitements, vitamines) planifiee jour par jour, generee depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut."
+msgstr "Every batch receives a day-by-day health roadmap (vaccines, treatments, vitamins), generated from your customizable health program template (Administration > My health template) or from default references."
+
+#: app/templates/core/documentation.html:131
+msgid "Quand une tache est realisee, cliquez sur \"Administre\" : une fenetre vous permet d'indiquer la quantite donnee (en ml) et l'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement \"Administre\"."
+msgstr "When a task is done, click \"Administered\": a window lets you enter the dose given (in ml) and the matching stock item, which will then be deducted automatically and logged in the batch's medication history - exactly as from daily entry. For a single-dose vaccine not tracked in stock, leave these fields empty and simply check \"Administered\"."
+
+#: app/templates/core/documentation.html:140
+msgid "Enregistrez chaque vente separement depuis la fiche du lot : plusieurs acheteurs, plusieurs dates et paiement partiel sont geres nativement, contrairement a une simple case \"vente totale\"."
+msgstr "Record each sale separately from the batch page: multiple buyers, multiple dates and partial payment are natively supported, unlike a simple \"total sale\" field."
+
+#: app/templates/core/documentation.html:141
+msgid "Pour chaque vente, precisez la quantite (en sujets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme \"a credit\" tant qu'elle n'est pas entierement reglee."
+msgstr "For each sale, enter the quantity (in birds or kg), the unit price and the amount already received: the remaining balance is calculated automatically and the sale shows as \"on credit\" until fully settled."
+
+#: app/templates/core/documentation.html:142
+msgid "La fiche des ventes distingue le revenu total facture (comptabilite d'engagement) du montant reellement encaisse en caisse et du reste en creance - et chaque paiement de creance enregistre vient bien augmenter le montant encaisse. La page Creances (raccourci proprietaire) recense en un coup d'oeil toutes les ventes non soldees, tous lots confondus."
+msgstr "The sales page distinguishes total invoiced revenue (accrual accounting) from the amount actually collected in cash and the remainder still owed - and every recorded receivable payment does increase the collected amount. The Receivables page (owner shortcut) lists at a glance every unsettled sale across all batches."
+
+#: app/templates/core/documentation.html:143
+msgid "Toute vente \"au sujet\" reduit automatiquement l'effectif courant du lot, au meme titre que la mortalite."
+msgstr "Every per-bird sale automatically reduces the batch's current headcount, just like mortality does."
+
+#: app/templates/core/documentation.html:152
+msgid "L'indice de consommation (FCR) est calcule automatiquement a partir de l'aliment distribue et du poids des sujets, et compare a une courbe de reference par souche."
+msgstr "Feed conversion ratio (FCR) is calculated automatically from the feed distributed and the birds' weight, and compared against a reference growth curve for the breed."
+
+#: app/templates/core/documentation.html:153
+msgid "Le rapport de rentabilite d'un lot detaille chaque charge (poussins, aliment, medicaments, bois, main d'oeuvre) et chaque revenu (ventes), avec la part deja encaissee en caisse et la part encore en creance, pour un resultat net toujours a jour."
+msgstr "A batch's profitability report breaks down every cost (chicks, feed, medication, wood, labor) and every revenue (sales), showing the part already collected in cash and the part still owed, for a net result that's always up to date."
+
+#: app/templates/core/documentation.html:154
+msgid "Ce rapport est exportable en PDF pour le partager avec votre banquier, votre veterinaire ou un associe."
+msgstr "This report can be exported as a PDF to share with your banker, your veterinarian or a partner."
+
+#: app/templates/core/documentation.html:163
+msgid "Trois types d'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et indice de consommation (FCR) degrade."
+msgstr "Three types of alert are monitored at all times: abnormally high mortality, stock dropping below the configured threshold, and a degraded feed conversion ratio (FCR)."
+
+#: app/templates/core/documentation.html:164
+msgid "Chaque seuil (taux de mortalite, seuil de stock par defaut) est ajustable dans vos Parametres. Les alertes apparaissent dans le tableau de bord et, si vous le souhaitez, sont egalement envoyees par email au proprietaire - cet envoi peut etre desactive depuis les Parametres."
+msgstr "Each threshold (mortality rate, default stock threshold) is adjustable in your Settings. Alerts appear on the dashboard and, if you wish, are also emailed to the owner - this can be turned off from Settings."
+
+#: app/templates/core/documentation.html:173
+msgid "Le rapport de lot (FCR, mortalite, finances) s'exporte en PDF depuis la fiche du lot."
+msgstr "The batch report (FCR, mortality, finances) can be exported as a PDF from the batch page."
+
+#: app/templates/core/documentation.html:174
+msgid "Le proprietaire peut exporter l'integralite des donnees de son exploitation depuis les Parametres, et consulter a tout moment le journal d'activite : qui a cree, modifie ou supprime quoi, et quand."
+msgstr "The owner can export the entirety of their farm's data from Settings, and check the activity log at any time: who created, edited or deleted what, and when."
+
+#: app/templates/core/documentation.html:183
+msgid "Accessible au proprietaire, le hub de Parametres centralise toute la configuration de l'exploitation, organisee en quatre groupes :"
+msgstr "Accessible to the owner, the Settings hub centralizes the farm's entire configuration, organized into four groups:"
+
+#: app/templates/core/documentation.html:185
+msgid "Elevage : pays, devise, langue par defaut, souche et duree de cycle par defaut, unite de vente par defaut."
+msgstr "Farming: country, currency, default language, default breed and cycle length, default sale unit."
+
+#: app/templates/core/documentation.html:186
+msgid "Alertes : seuil de mortalite, seuil FCR, delai de rappel sanitaire, activation des emails d'alerte."
+msgstr "Alerts: mortality threshold, FCR threshold, health reminder interval, alert email toggle."
+
+#: app/templates/core/documentation.html:187
+msgid "Stock et finance : seuil de stock bas par defaut, cout de main d'oeuvre journalier par defaut."
+msgstr "Stock and finance: default low-stock threshold, default daily labor cost."
+
+#: app/templates/core/documentation.html:188
+msgid "Securite : nombre de tentatives de connexion autorisees et duree de verrouillage du compte en cas d'echecs repetes."
+msgstr "Security: number of allowed login attempts and account lockout duration after repeated failures."
+
+#: app/templates/core/documentation.html:190
+msgid "Ces valeurs par defaut ne font que pre-remplir les formulaires concernes : elles restent modifiables au cas par cas a chaque saisie."
+msgstr "These defaults only pre-fill the relevant forms: they remain editable case by case at each entry."
+
+#: app/templates/core/documentation.html:199
+msgid "Farm Control est multitenant : les donnees de chaque exploitation sont strictement isolees de celles des autres clients, a deux niveaux independants - au niveau de l'application et directement au niveau de la base de donnees (Row Level Security)."
+msgstr "Farm Control is multitenant: each farm business's data is strictly isolated from other customers', at two independent levels - at the application level and directly at the database level (Row Level Security)."
+
+#: app/templates/core/documentation.html:200
+msgid "Les mots de passe sont chiffres, les connexions sont chiffrees (HTTPS) et un compte est temporairement verrouille apres plusieurs echecs de connexion consecutifs, selon le seuil defini dans vos Parametres."
+msgstr "Passwords are encrypted, connections are encrypted (HTTPS) and an account is temporarily locked after several consecutive failed logins, according to the threshold set in your Settings."
+
+#: app/templates/core/documentation.html:209
+msgid "Farm Control peut s'installer comme une application sur votre telephone (icone sur l'ecran d'accueil, sans passer par un store) directement depuis votre navigateur."
+msgstr "Farm Control can be installed as an app on your phone (an icon on your home screen, no app store needed) directly from your browser."
+
+#: app/templates/core/documentation.html:210
+msgid "En cas de coupure reseau au poulailler, vos saisies quotidiennes restent possibles : elles sont mises en attente sur votre appareil puis envoyees automatiquement des que la connexion revient, sans rien perdre."
+msgstr "If the network drops at the coop, your daily entries are still possible: they're queued on your device and sent automatically once the connection is back, without losing anything."
+
+#: app/templates/core/documentation.html:219
+msgid "Une formule gratuite (limitee en nombre de fermes et d'utilisateurs) est disponible en permanence. Les formules payantes, facturees en FCFA, retirent ces limites et sont detaillees sur la page Tarifs."
+msgstr "A free plan (limited in number of farms and users) is always available. Paid plans, billed in FCFA, remove these limits and are detailed on the Pricing page."
+
+#: app/templates/core/documentation.html:220
+msgid "Le detail de votre abonnement, son statut et son historique sont visibles dans Administration > Facturation."
+msgstr "Your subscription's details, status and history are visible under Administration > Billing."
+
+#: app/templates/core/documentation.html:229
+msgid "L'interface est disponible en francais et en anglais. Changez de langue a tout moment via le selecteur en haut de l'ecran ; votre choix est retenu sur votre profil et vous suit sur tous vos appareils."
+msgstr "The interface is available in French and English. Switch languages at any time via the selector at the top of the screen; your choice is saved to your profile and follows you across all your devices."
+
+#: app/templates/core/documentation.html:237
+msgid "Une question qui n'est pas couverte ici ?"
+msgstr "A question not covered here?"
+
+#: app/templates/core/documentation.html:238
+msgid "Contacter le support"
+msgstr "Contact support"
 
 #: app/templates/core/settings.html:16
 msgid "General"
@@ -504,9 +772,7 @@ msgid "Stock"
 msgstr "Stock"
 
 #: app/templates/core/settings.html:55
-msgid ""
-"Utilise pour pre-remplir le seuil quand vous creez un nouvel article de "
-"stock."
+msgid "Utilise pour pre-remplir le seuil quand vous creez un nouvel article de stock."
 msgstr "Used to pre-fill the threshold when you create a new stock item."
 
 #: app/templates/core/settings.html:63
@@ -514,9 +780,7 @@ msgid "Finance"
 msgstr "Finance"
 
 #: app/templates/core/settings.html:67
-msgid ""
-"Les prix de l'aliment, du bois et des medicaments se gerent directement "
-"depuis la page"
+msgid "Les prix de l'aliment, du bois et des medicaments se gerent directement depuis la page"
 msgstr "Feed, wood and medication prices are managed directly from the"
 
 #: app/templates/core/settings.html:68
@@ -534,10 +798,6 @@ msgstr "Other settings"
 #: app/templates/core/settings.html:94 app/templates/partials/sidebar.html:43
 msgid "Utilisateurs"
 msgstr "Users"
-
-#: app/templates/core/settings.html:102
-msgid "Programme sanitaire"
-msgstr "Health program"
 
 #: app/templates/core/settings.html:110
 msgid "Stock et prix"
@@ -607,7 +867,7 @@ msgstr "My account"
 msgid "Profil"
 msgstr "Profile"
 
-#: app/templates/partials/sidebar.html:75 app/templates/partials/topbar.html:43
+#: app/templates/partials/sidebar.html:78 app/templates/partials/topbar.html:43
 msgid "Deconnexion"
 msgstr "Log out"
 
@@ -646,41 +906,11 @@ msgstr "Password must contain at least one digit."
 #~ msgid "Prix par defaut de l'aliment, du bois et des medicaments"
 #~ msgstr "Default prices for feed, wood and medication"
 
-#~ msgid ""
-#~ ", pas ici : c'est la que "
-#~ "vous indiquez ce que vous avez "
-#~ "paye pour un sac, une bouteille ou"
-#~ " un morceau."
-#~ msgstr ""
-#~ " page, not here: that's where you"
-#~ " enter what you paid for a bag,"
-#~ " a bottle or a piece."
+#~ msgid ", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac, une bouteille ou un morceau."
+#~ msgstr " page, not here: that's where you enter what you paid for a bag, a bottle or a piece."
 
-#~ msgid ""
-#~ "Par exemple, si vous achetez un "
-#~ "sac d'aliment de 40 kg a 20 "
-#~ "000 FCFA, indiquez simplement 20 000 "
-#~ "FCFA comme prix de l'article et 40"
-#~ " comme poids d'un sac : le "
-#~ "systeme calcule lui-meme le prix "
-#~ "au kg (500 FCFA/kg ici) et le "
-#~ "pre-remplit automatiquement des que vous"
-#~ " choisissez cet article en saisie "
-#~ "quotidienne. Vous n'avez plus besoin de"
-#~ " recalculer ou de retaper ce prix "
-#~ "chaque jour."
-#~ msgstr ""
-#~ "For example, if you buy a 40 "
-#~ "kg bag of feed for 20,000 FCFA,"
-#~ " simply enter 20,000 FCFA as the "
-#~ "item price and 40 as the weight"
-#~ " of a bag: the system calculates "
-#~ "the price per kg itself (500 "
-#~ "FCFA/kg here) and auto-fills it as"
-#~ " soon as you pick this item "
-#~ "during daily entry. You no longer "
-#~ "need to recalculate or retype this "
-#~ "price every day."
+#~ msgid "Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) et le pre-remplit automatiquement des que vous choisissez cet article en saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper ce prix chaque jour."
+#~ msgstr "For example, if you buy a 40 kg bag of feed for 20,000 FCFA, simply enter 20,000 FCFA as the item price and 40 as the weight of a bag: the system calculates the price per kg itself (500 FCFA/kg here) and auto-fills it as soon as you pick this item during daily entry. You no longer need to recalculate or retype this price every day."
 
 #~ msgid "Gerer mes prix dans le Stock"
 #~ msgstr "Manage my prices in Stock"

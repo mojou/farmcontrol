@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Documentation') }} - Farm Control{% endblock %}
+
+{% set doc_body %}
+<div class="container py-4 py-lg-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold h2 mb-2"><i class="bi bi-book" style="color: var(--fc-primary);"></i> {{ _('Documentation Farm Control') }}</h1>
+    <p class="text-muted">{{ _('Le guide complet de toutes les fonctionnalites de la plateforme, du demarrage a la facturation.') }}</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-3 d-none d-lg-block">
+      <div class="fc-doc-toc" style="position: sticky; top: 1.5rem;">
+        <div class="card border-0" style="box-shadow: var(--fc-shadow);">
+          <div class="card-body p-3">
+            <h6 class="text-uppercase small fw-bold text-muted mb-2">{{ _('Sommaire') }}</h6>
+            <nav class="nav flex-column small">
+              <a class="nav-link px-0 py-1" href="#demarrage">1. {{ _('Demarrage') }}</a>
+              <a class="nav-link px-0 py-1" href="#roles">2. {{ _('Roles et permissions') }}</a>
+              <a class="nav-link px-0 py-1" href="#fermes-lots">3. {{ _('Fermes et lots') }}</a>
+              <a class="nav-link px-0 py-1" href="#saisie">4. {{ _('Saisie quotidienne') }}</a>
+              <a class="nav-link px-0 py-1" href="#stock">5. {{ _('Gestion du stock') }}</a>
+              <a class="nav-link px-0 py-1" href="#sanitaire">6. {{ _('Programme sanitaire') }}</a>
+              <a class="nav-link px-0 py-1" href="#ventes">7. {{ _('Ventes et creances') }}</a>
+              <a class="nav-link px-0 py-1" href="#finances">8. {{ _('Finances et rentabilite') }}</a>
+              <a class="nav-link px-0 py-1" href="#alertes">9. {{ _('Alertes automatiques') }}</a>
+              <a class="nav-link px-0 py-1" href="#rapports">10. {{ _('Rapports et export') }}</a>
+              <a class="nav-link px-0 py-1" href="#parametres">11. {{ _('Parametres') }}</a>
+              <a class="nav-link px-0 py-1" href="#securite">12. {{ _('Securite des donnees') }}</a>
+              <a class="nav-link px-0 py-1" href="#hors-ligne">13. {{ _('Mode hors-ligne') }}</a>
+              <a class="nav-link px-0 py-1" href="#facturation">14. {{ _('Facturation et tarifs') }}</a>
+              <a class="nav-link px-0 py-1" href="#langue">15. {{ _('Langue') }}</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="accordion" id="docAccordion">
+
+        <div class="accordion-item" id="demarrage">
+          <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1"><strong>1. {{ _('Demarrage') }}</strong></button></h2>
+          <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Creez votre compte gratuitement depuis la page d\'inscription : renseignez le nom de votre exploitation, votre pays et vos identifiants. Un email de confirmation vous est envoye automatiquement - pensez a verifier vos spams si vous ne le voyez pas apparaitre.') }}</p>
+              <p>{{ _('Chaque nouvelle inscription demarre avec un essai gratuit de 14 jours donnant acces a toutes les fonctionnalites, sans carte bancaire requise. A l\'issue de l\'essai, vous pouvez continuer avec la formule gratuite (limitee) ou passer a une formule payante depuis la page Tarifs.') }}</p>
+              <p>{{ _('Une fois connecte, vous arrivez sur votre tableau de bord qui resume vos fermes, vos lots actifs et vos alertes en cours. Commencez par creer votre premiere ferme, puis un premier lot pour pouvoir saisir vos donnees quotidiennes.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="roles">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2"><strong>2. {{ _('Roles et permissions') }}</strong></button></h2>
+          <div id="c2" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Farm Control distingue trois niveaux d\'acces au sein d\'une meme exploitation, en plus du compte super-administrateur reserve a la gestion de la plateforme elle-meme.') }}</p>
+              <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                  <thead><tr><th>{{ _('Role') }}</th><th>{{ _('Peut faire') }}</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="badge bg-primary">{{ _('Proprietaire') }}</span></td>
+                      <td>{{ _('Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, creances, journal d\'activite, export des donnees, courbes de reference et modele sanitaire. C\'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock.') }}</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-info text-dark">{{ _('Responsable') }}</span></td>
+                      <td>{{ _('Gere le quotidien d\'une ou plusieurs fermes : cree des lots, valide les rapports journaliers soumis par les travailleurs, consulte le stock et les alertes.') }}</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-secondary">{{ _('Travailleur') }}</span></td>
+                      <td>{{ _('Effectue la saisie quotidienne (aliment, eau, mortalite, medicaments, pesees, observations) sur la ferme a laquelle il est rattache, puis soumet son rapport journalier pour validation.') }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>{{ _('Un proprietaire cree les comptes de son equipe depuis Administration > Utilisateurs, en choisissant leur role et, pour un travailleur, la ferme a laquelle il est rattache.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="fermes-lots">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3"><strong>3. {{ _('Fermes et lots') }}</strong></button></h2>
+          <div id="c3" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Une "ferme" represente un site d\'elevage physique. Un "lot" (ou bande) represente un groupe de poussins mis en place a une meme date, suivi jusqu\'a sa cloture (vente complete ou fin de cycle).') }}</p>
+              <p>{{ _('A la creation d\'un lot, renseignez l\'effectif initial, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut).') }}</p>
+              <p>{{ _('L\'effectif courant du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque vente au sujet - vous n\'avez jamais besoin de le corriger manuellement.') }}</p>
+              <p>{{ _('Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="saisie">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4"><strong>4. {{ _('Saisie quotidienne') }}</strong></button></h2>
+          <div id="c4" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Chaque jour de suivi d\'un lot regroupe sept types de saisie, chacun facultatif selon ce qui s\'est reellement passe ce jour-la :') }}</p>
+              <ul>
+                <li>{{ _('Aliment (kg) - decompte automatiquement le stock d\'aliment lie, converti depuis les sacs si necessaire.') }}</li>
+                <li>{{ _('Eau de boisson (litres)') }}</li>
+                <li>{{ _('Mortalite (nombre de sujets) - reduit immediatement l\'effectif courant du lot.') }}</li>
+                <li>{{ _('Bois / litiere - decompte le stock correspondant.') }}</li>
+                <li>{{ _('Medicaments (ml administres) - decompte le stock de medicament lie, converti depuis les litres/bouteilles si necessaire.') }}</li>
+                <li>{{ _('Pesees (poids moyen) - alimente la courbe de croissance et declenche une alerte si l\'indice de consommation (FCR) depasse le seuil configure.') }}</li>
+                <li>{{ _('Observations libres, avec photo facultative.') }}</li>
+              </ul>
+              <p>{{ _('Le prix des intrants n\'est jamais saisi ni visible a ce niveau : il est calcule automatiquement a partir du prix d\'achat deja renseigne dans le Stock, une information reservee au proprietaire.') }}</p>
+              <p>{{ _('Une fois la journee saisie, le travailleur soumet son rapport journalier. Si un responsable est rattache a la ferme, le rapport reste "en attente de validation" jusqu\'a ce qu\'il le valide ; sinon, il est automatiquement considere comme valide pour ne pas bloquer le suivi.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="stock">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c5"><strong>5. {{ _('Gestion du stock') }}</strong></button></h2>
+          <div id="c5" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Le stock est organise par ferme et par categorie : Aliment, Bois / litiere, Medicament. Chaque article a une unite d\'achat (ex : sac, bidon, bouteille) et un prix d\'achat, reserves au proprietaire.') }}</p>
+              <p>{{ _('Pour l\'aliment et les medicaments, indiquez la conversion de votre unite d\'achat vers l\'unite de saisie quotidienne (kg par sac, ou ml par bidon/bouteille) : le stock se decompte alors automatiquement et correctement a chaque saisie, meme si vous achetez en sacs de 25 kg ou en bidons de 5 litres.') }}</p>
+              <p>{{ _('Un seuil d\'alerte (prerempli depuis vos Parametres) declenche une notification par email des que la quantite disponible passe en dessous.') }}</p>
+              <p>{{ _('Seul le proprietaire peut modifier ou supprimer un article de stock. La suppression reste possible meme si des saisies passees y font reference : l\'historique est conserve, seul le lien vers l\'article est detache.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="sanitaire">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6"><strong>6. {{ _('Programme sanitaire (feuille de route)') }}</strong></button></h2>
+          <div id="c6" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Chaque lot recoit une feuille de route sanitaire (vaccins, traitements, vitamines) planifiee jour par jour, generee depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut.') }}</p>
+              <p>{{ _('Quand une tache est realisee, cliquez sur "Administre" : une fenetre vous permet d\'indiquer la quantite donnee (en ml) et l\'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l\'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement "Administre".') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="ventes">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7"><strong>7. {{ _('Ventes et creances') }}</strong></button></h2>
+          <div id="c7" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Enregistrez chaque vente separement depuis la fiche du lot : plusieurs acheteurs, plusieurs dates et paiement partiel sont geres nativement, contrairement a une simple case "vente totale".') }}</p>
+              <p>{{ _('Pour chaque vente, precisez la quantite (en sujets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme "a credit" tant qu\'elle n\'est pas entierement reglee.') }}</p>
+              <p>{{ _('La fiche des ventes distingue le revenu total facture (comptabilite d\'engagement) du montant reellement encaisse en caisse et du reste en creance - et chaque paiement de creance enregistre vient bien augmenter le montant encaisse. La page Creances (raccourci proprietaire) recense en un coup d\'oeil toutes les ventes non soldees, tous lots confondus.') }}</p>
+              <p>{{ _('Toute vente "au sujet" reduit automatiquement l\'effectif courant du lot, au meme titre que la mortalite.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="finances">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8"><strong>8. {{ _('Finances et rentabilite') }}</strong></button></h2>
+          <div id="c8" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('L\'indice de consommation (FCR) est calcule automatiquement a partir de l\'aliment distribue et du poids des sujets, et compare a une courbe de reference par souche.') }}</p>
+              <p>{{ _('Le rapport de rentabilite d\'un lot detaille chaque charge (poussins, aliment, medicaments, bois, main d\'oeuvre) et chaque revenu (ventes), avec la part deja encaissee en caisse et la part encore en creance, pour un resultat net toujours a jour.') }}</p>
+              <p>{{ _('Ce rapport est exportable en PDF pour le partager avec votre banquier, votre veterinaire ou un associe.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="alertes">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c9"><strong>9. {{ _('Alertes automatiques') }}</strong></button></h2>
+          <div id="c9" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Trois types d\'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et indice de consommation (FCR) degrade.') }}</p>
+              <p>{{ _('Chaque seuil (taux de mortalite, seuil de stock par defaut) est ajustable dans vos Parametres. Les alertes apparaissent dans le tableau de bord et, si vous le souhaitez, sont egalement envoyees par email au proprietaire - cet envoi peut etre desactive depuis les Parametres.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="rapports">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c10"><strong>10. {{ _('Rapports et export') }}</strong></button></h2>
+          <div id="c10" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Le rapport de lot (FCR, mortalite, finances) s\'exporte en PDF depuis la fiche du lot.') }}</p>
+              <p>{{ _('Le proprietaire peut exporter l\'integralite des donnees de son exploitation depuis les Parametres, et consulter a tout moment le journal d\'activite : qui a cree, modifie ou supprime quoi, et quand.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="parametres">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c11"><strong>11. {{ _('Parametres') }}</strong></button></h2>
+          <div id="c11" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Accessible au proprietaire, le hub de Parametres centralise toute la configuration de l\'exploitation, organisee en quatre groupes :') }}</p>
+              <ul>
+                <li>{{ _('Elevage : pays, devise, langue par defaut, souche et duree de cycle par defaut, unite de vente par defaut.') }}</li>
+                <li>{{ _('Alertes : seuil de mortalite, seuil FCR, delai de rappel sanitaire, activation des emails d\'alerte.') }}</li>
+                <li>{{ _('Stock et finance : seuil de stock bas par defaut, cout de main d\'oeuvre journalier par defaut.') }}</li>
+                <li>{{ _('Securite : nombre de tentatives de connexion autorisees et duree de verrouillage du compte en cas d\'echecs repetes.') }}</li>
+              </ul>
+              <p>{{ _('Ces valeurs par defaut ne font que pre-remplir les formulaires concernes : elles restent modifiables au cas par cas a chaque saisie.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="securite">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c12"><strong>12. {{ _('Securite des donnees') }}</strong></button></h2>
+          <div id="c12" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Farm Control est multitenant : les donnees de chaque exploitation sont strictement isolees de celles des autres clients, a deux niveaux independants - au niveau de l\'application et directement au niveau de la base de donnees (Row Level Security).') }}</p>
+              <p>{{ _('Les mots de passe sont chiffres, les connexions sont chiffrees (HTTPS) et un compte est temporairement verrouille apres plusieurs echecs de connexion consecutifs, selon le seuil defini dans vos Parametres.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="hors-ligne">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c13"><strong>13. {{ _('Mode hors-ligne') }}</strong></button></h2>
+          <div id="c13" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Farm Control peut s\'installer comme une application sur votre telephone (icone sur l\'ecran d\'accueil, sans passer par un store) directement depuis votre navigateur.') }}</p>
+              <p>{{ _('En cas de coupure reseau au poulailler, vos saisies quotidiennes restent possibles : elles sont mises en attente sur votre appareil puis envoyees automatiquement des que la connexion revient, sans rien perdre.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="facturation">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c14"><strong>14. {{ _('Facturation et tarifs') }}</strong></button></h2>
+          <div id="c14" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('Une formule gratuite (limitee en nombre de fermes et d\'utilisateurs) est disponible en permanence. Les formules payantes, facturees en FCFA, retirent ces limites et sont detaillees sur la page Tarifs.') }}</p>
+              <p>{{ _('Le detail de votre abonnement, son statut et son historique sont visibles dans Administration > Facturation.') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" id="langue">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c15"><strong>15. {{ _('Langue') }}</strong></button></h2>
+          <div id="c15" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
+            <div class="accordion-body">
+              <p>{{ _('L\'interface est disponible en francais et en anglais. Changez de langue a tout moment via le selecteur en haut de l\'ecran ; votre choix est retenu sur votre profil et vous suit sur tous vos appareils.') }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-5">
+        <p class="text-muted small mb-2">{{ _('Une question qui n\'est pas couverte ici ?') }}</p>
+        <a href="{{ url_for('messaging.inbox') if current_user.is_authenticated else url_for('auth.login') }}" class="btn btn-outline-primary btn-sm">{{ _('Contacter le support') }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endset %}
+
+{% block content %}{{ doc_body }}{% endblock %}
+
+{% block guest_content %}
+<nav class="navbar navbar-expand navbar-light border-bottom bg-white">
+  <div class="container">
+    <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">{{ _('Se connecter') }}</a>
+      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">{{ _('Creer mon compte') }}</a>
+    </div>
+  </div>
+</nav>
+{{ doc_body }}
+{% endblock %}

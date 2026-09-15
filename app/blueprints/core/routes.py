@@ -58,6 +58,13 @@ def set_language(code):
     return redirect(request.referrer or url_for("core.index"))
 
 
+@core_bp.route("/documentation")
+def documentation():
+    """Documentation complete de l'application, ouverte a tous (avant
+    connexion pour se decider, ou apres pour s'y referer)."""
+    return render_template("core/documentation.html")
+
+
 @core_bp.route("/")
 def index():
     if current_user.is_authenticated:
