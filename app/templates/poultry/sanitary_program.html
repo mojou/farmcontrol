@@ -43,11 +43,13 @@
         <strong>{{ item.product_name }}</strong>
         <p class="text-muted small mb-0 mt-1">{{ item.notes }}</p>
       </div>
-      <form method="post" action="{{ url_for('poultry.sanitary_program_mark_done', item_id=item.id) }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Administre</button>
-      </form>
+      <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#doneModalPending{{ item.id }}">
+        <i class="bi bi-check-lg"></i> Administre
+      </button>
     </div>
+    {% with modal_id="doneModalPending" ~ item.id %}
+      {% include "poultry/_sanitary_done_modal.html" %}
+    {% endwith %}
     {% endfor %}
   </div>
 </div>
@@ -75,10 +77,12 @@
               <td>{% if item.is_done %}<span class="badge bg-success">Realise</span>{% else %}<span class="badge bg-secondary">Planifie</span>{% endif %}</td>
               <td>
                 {% if not item.is_done %}
-                <form method="post" action="{{ url_for('poultry.sanitary_program_mark_done', item_id=item.id) }}">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                  <button class="btn btn-sm btn-outline-success">Marquer realise</button>
-                </form>
+                <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#doneModalTable{{ item.id }}">
+                  Marquer realise
+                </button>
+                {% with modal_id="doneModalTable" ~ item.id %}
+                  {% include "poultry/_sanitary_done_modal.html" %}
+                {% endwith %}
                 {% endif %}
               </td>
             </tr>

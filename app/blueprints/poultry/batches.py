@@ -2,6 +2,7 @@ from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app.blueprints.poultry import poultry_bp
+from app.blueprints.poultry.daily import _apply_stock_consumption, _stock_choices, _stock_entry_price
 from app.blueprints.poultry.forms import (
     BatchCloseForm,
     BatchFinanceForm,
@@ -16,12 +17,15 @@ from app.models.poultry import (
     BATCH_STATUS_ACTIVE,
     BATCH_STATUS_CLOSED,
     Batch,
+    BatchDay,
     Farm,
     GrowthReference,
     GrowthReferencePoint,
+    MedicationRecord,
     SanitaryProgramItem,
     Supplier,
 )
+from app.utils.alerts import check_stock_alert
 from app.utils.audit import log_action
 from app.utils.plans import get_current_plan
 from app.utils.sanitary import (
@@ -252,20 +256,71 @@ def sanitary_program(batch_id):
         pending_items=pending_items,
         water_today=estimate_daily_water_liters(batch, today_day_number),
         feed_today=estimate_daily_feed_kg(batch, today_day_number),
+        medication_stock_choices=_stock_choices(batch.farm_id, "medication"),
     )
 
 
 @poultry_bp.route("/programme-sanitaire/<int:item_id>/valider", methods=["POST"])
 @login_required
 def sanitary_program_mark_done(item_id):
+    """Marque un element de la feuille de route comme realise. Si une
+    quantite et un article de stock sont fournis, cree aussi une entree
+    Medicament sur le jour de suivi le plus recent du lot et decompte le
+    stock - sans cela, cocher "Administre" depuis la feuille de route ne
+    laissait aucune trace et ne faisait jamais bouger le stock (paragraphe
+    tracabilite/gestion du stock), contrairement a la case "Medicaments"
+    de la saisie quotidienne."""
     from datetime import datetime, timezone
+    from decimal import Decimal, InvalidOperation
 
     item = SanitaryProgramItem.query.get_or_404(item_id)
     if not ensure_farm_access(item.batch.farm):
         abort(403)
+
+    raw_quantity_ml = request.form.get("quantity_ml", type=str)
+    stock_item_id = request.form.get("stock_item_id", type=int)
+    try:
+        quantity_ml = Decimal(raw_quantity_ml) if raw_quantity_ml else None
+    except InvalidOperation:
+        quantity_ml = None
+
+    if quantity_ml and quantity_ml > 0:
+        batch_day = (
+            BatchDay.query.filter_by(batch_id=item.batch_id)
+            .order_by(BatchDay.day_number.desc())
+            .first()
+        )
+        if batch_day is None:
+            flash(
+                "Impossible d'enregistrer la quantite : creez d'abord un jour de suivi pour ce lot "
+                "(Saisie quotidienne).",
+                "danger",
+            )
+            return redirect(url_for("poultry.sanitary_program", batch_id=item.batch_id))
+
+        record = MedicationRecord(
+            tenant_id=current_user.tenant_id,
+            batch_id=item.batch_id,
+            batch_day_id=batch_day.id,
+            stock_item_id=stock_item_id or None,
+            medication_name=item.product_name,
+            quantity=quantity_ml,
+            unit_price=_stock_entry_price(stock_item_id, price_is_ml=True),
+            notes=f"Administre depuis la feuille de route (jour {item.day_number}).",
+            created_by=current_user.id,
+        )
+        db.session.add(record)
+        stock_item = _apply_stock_consumption(stock_item_id, quantity_ml, quantity_is_ml=True)
+        recompute_batch_finance(item.batch)
+        db.session.flush()
+        if stock_item:
+            check_stock_alert(stock_item)
+        log_action("create", "poultry_medication_records", None, {"medication_name": item.product_name, "via": "feuille_de_route"})
+
     item.is_done = True
     item.done_at = datetime.now(timezone.utc)
     item.done_by = current_user.id
+    log_action("update", "poultry_sanitary_program_items", item.id, {"is_done": True})
     db.session.commit()
     flash("Element marque comme realise.", "success")
     return redirect(url_for("poultry.sanitary_program", batch_id=item.batch_id))
