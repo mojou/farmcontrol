@@ -63,7 +63,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       initSanitaryReminders({
         checkUrl: "{{ url_for('poultry.sanitary_reminder_json') }}",
-        intervalMinutes: 10,
+        intervalMinutes: {{ (current_user.tenant.sanitary_reminder_interval_minutes if current_user.tenant else 10)|int }},
       });
     });
   </script>

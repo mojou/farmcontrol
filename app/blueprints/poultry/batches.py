@@ -90,6 +90,8 @@ def batch_new():
     form.supplier_id.choices = [(0, "Aucun")] + [
         (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
     ]
+    if request.method == "GET" and current_user.tenant and current_user.tenant.default_breed:
+        form.breed.data = current_user.tenant.default_breed
 
     if form.validate_on_submit():
         existing = Batch.query.filter_by(farm_id=form.farm_id.data, code=form.code.data).first()
@@ -138,6 +140,10 @@ def batch_detail(batch_id):
 def batch_close(batch_id):
     batch = _get_batch_or_403(batch_id)
     form = BatchCloseForm()
+    if request.method == "GET" and current_user.tenant and current_user.tenant.default_cycle_days:
+        from datetime import timedelta
+
+        form.end_date.data = batch.start_date + timedelta(days=current_user.tenant.default_cycle_days)
     if form.validate_on_submit():
         batch.status = BATCH_STATUS_CLOSED
         batch.end_date = form.end_date.data
@@ -155,6 +161,14 @@ def batch_finance(batch_id):
     batch = _get_batch_or_403(batch_id)
     finance = batch.finance
     form = BatchFinanceForm(obj=finance)
+    # Pre-remplit avec les valeurs par defaut du tenant (/parametres) tant
+    # que ce formulaire n'a jamais ete rempli pour ce lot (sale_quantity
+    # encore vide) - evite d'ecraser une valeur deja enregistree volontairement.
+    if request.method == "GET" and finance is not None and finance.sale_quantity is None and current_user.tenant:
+        if current_user.tenant.default_labor_cost_per_day is not None:
+            form.labor_cost.data = current_user.tenant.default_labor_cost_per_day
+        if current_user.tenant.default_sale_unit:
+            form.sale_unit.data = current_user.tenant.default_sale_unit
 
     if form.validate_on_submit():
         if finance is None:

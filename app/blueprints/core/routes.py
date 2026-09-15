@@ -195,6 +195,17 @@ def settings():
         tenant.country = form.country.data
         tenant.default_language = form.default_language.data
         tenant.currency_label = form.currency_label.data.strip()
+        tenant.default_breed = form.default_breed.data or None
+        tenant.default_cycle_days = form.default_cycle_days.data
+        tenant.fcr_alert_threshold = form.fcr_alert_threshold.data
+        tenant.mortality_alert_threshold_percent = form.mortality_alert_threshold_percent.data
+        tenant.sanitary_reminder_interval_minutes = form.sanitary_reminder_interval_minutes.data
+        tenant.email_alerts_enabled = form.email_alerts_enabled.data
+        tenant.default_stock_low_threshold = form.default_stock_low_threshold.data
+        tenant.default_labor_cost_per_day = form.default_labor_cost_per_day.data
+        tenant.default_sale_unit = form.default_sale_unit.data
+        tenant.max_login_attempts = form.max_login_attempts.data
+        tenant.login_lockout_minutes = form.login_lockout_minutes.data
         log_action("update", "tenants", tenant.id, {"action": "settings_update"})
         db.session.commit()
         flash(_("Parametres enregistres."), "success")

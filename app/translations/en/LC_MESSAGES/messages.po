@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 15:22+0100\n"
+"POT-Creation-Date: 2026-09-15 15:39+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -32,6 +32,7 @@ msgid "Adresse email"
 msgstr "Email address"
 
 #: app/blueprints/auth/forms.py:14 app/blueprints/auth/forms.py:24
+#: app/templates/core/settings.html:134
 msgid "Mot de passe"
 msgstr "Password"
 
@@ -161,27 +162,79 @@ msgstr "Current password is incorrect."
 msgid "Mot de passe mis a jour avec succes."
 msgstr "Password updated successfully."
 
-#: app/blueprints/core/forms.py:105
+#: app/blueprints/core/forms.py:106
 msgid "Nom de l'exploitation"
 msgstr "Farm name"
 
-#: app/blueprints/core/forms.py:106
+#: app/blueprints/core/forms.py:107
 msgid "Pays"
 msgstr "Country"
 
-#: app/blueprints/core/forms.py:108
+#: app/blueprints/core/forms.py:109
 msgid "Langue par defaut pour les nouveaux utilisateurs"
 msgstr "Default language for new users"
 
-#: app/blueprints/core/forms.py:113
+#: app/blueprints/core/forms.py:114
 msgid "Devise affichee"
 msgstr "Displayed currency"
 
-#: app/blueprints/core/forms.py:118
+#: app/blueprints/core/forms.py:122
+msgid "Souche par defaut pour les nouveaux lots"
+msgstr "Default breed for new batches"
+
+#: app/blueprints/core/forms.py:127
+msgid "Duree de cycle standard (jours)"
+msgstr "Standard cycle length (days)"
+
+#: app/blueprints/core/forms.py:132
+msgid "Seuil d'alerte FCR (indice de consommation)"
+msgstr "FCR alert threshold (feed conversion ratio)"
+
+#: app/blueprints/core/forms.py:140
+msgid "Seuil de mortalite quotidienne qui declenche une alerte (%)"
+msgstr "Daily mortality rate that triggers an alert (%)"
+
+#: app/blueprints/core/forms.py:146
+msgid "Frequence du rappel sanitaire (minutes)"
+msgstr "Health program reminder frequency (minutes)"
+
+#: app/blueprints/core/forms.py:151
+msgid "Activer les alertes par email pour toute l'exploitation"
+msgstr "Enable email alerts for the whole farm"
+
+#: app/blueprints/core/forms.py:156
+msgid "Seuil d'alerte stock faible suggere par defaut"
+msgstr "Default suggested low-stock alert threshold"
+
+#: app/blueprints/core/forms.py:164
+msgid "Cout main d'oeuvre par defaut / jour"
+msgstr "Default labor cost / day"
+
+#: app/blueprints/core/forms.py:170
+msgid "Mode de vente par defaut"
+msgstr "Default sale mode"
+
+#: app/blueprints/core/forms.py:171
+msgid "Au sujet (par poulet)"
+msgstr "Per subject (per chicken)"
+
+#: app/blueprints/core/forms.py:171
+msgid "Au kilogramme"
+msgstr "Per kilogram"
+
+#: app/blueprints/core/forms.py:177
+msgid "Nombre d'essais avant verrouillage du compte"
+msgstr "Number of attempts before account lockout"
+
+#: app/blueprints/core/forms.py:182
+msgid "Duree de verrouillage apres echecs (minutes)"
+msgstr "Lockout duration after failures (minutes)"
+
+#: app/blueprints/core/forms.py:187
 msgid "Enregistrer"
 msgstr "Save"
 
-#: app/blueprints/core/routes.py:200
+#: app/blueprints/core/routes.py:211
 msgid "Parametres enregistres."
 msgstr "Settings saved."
 
@@ -420,52 +473,83 @@ msgstr "Already have an account?"
 msgid "Parametres"
 msgstr "Settings"
 
-#: app/templates/core/settings.html:13
-msgid "Exploitation"
-msgstr "Farm"
+#: app/templates/core/settings.html:16
+msgid "General"
+msgstr "General"
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:19
 msgid "La devise se pre-remplit selon le pays choisi, vous pouvez la modifier."
 msgstr "The currency is pre-filled based on the chosen country, you can change it."
 
-#: app/templates/core/settings.html:29
-msgid "Prix par defaut de l'aliment, du bois et des medicaments"
-msgstr "Default prices for feed, wood and medication"
+#: app/templates/core/settings.html:29 app/templates/partials/sidebar.html:13
+msgid "Elevage"
+msgstr "Farming"
 
-#: app/templates/core/settings.html:31
-msgid "Ces prix se gerent directement depuis la page"
-msgstr "These prices are managed directly from the"
+#: app/templates/core/settings.html:32
+msgid "Utilise pour pre-remplir la date de fin prevue quand vous cloturez un lot."
+msgstr "Used to pre-fill the expected end date when you close a batch."
 
-#: app/templates/core/settings.html:31 app/templates/partials/sidebar.html:21
+#: app/templates/core/settings.html:34
+msgid "Laissez vide pour ne pas etre alerte sur le FCR."
+msgstr "Leave empty to not be alerted on FCR."
+
+#: app/templates/core/settings.html:42 app/templates/partials/sidebar.html:32
+#: app/templates/partials/topbar.html:10
+msgid "Alertes"
+msgstr "Alerts"
+
+#: app/templates/core/settings.html:53 app/templates/core/settings.html:68
+#: app/templates/partials/sidebar.html:21
 msgid "Stock"
 msgstr "Stock"
 
-#: app/templates/core/settings.html:31
+#: app/templates/core/settings.html:55
 msgid ""
-", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
-" une bouteille ou un morceau."
-msgstr ""
-" page, not here: that's where you enter what you paid for a bag, a bottle"
-" or a piece."
+"Utilise pour pre-remplir le seuil quand vous creez un nouvel article de "
+"stock."
+msgstr "Used to pre-fill the threshold when you create a new stock item."
 
-#: app/templates/core/settings.html:34
+#: app/templates/core/settings.html:63
+msgid "Finance"
+msgstr "Finance"
+
+#: app/templates/core/settings.html:67
 msgid ""
-"Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
-"indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
-" d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) "
-"et le pre-remplit automatiquement des que vous choisissez cet article en "
-"saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper "
-"ce prix chaque jour."
-msgstr ""
-"For example, if you buy a 40 kg bag of feed for 20,000 FCFA, simply enter"
-" 20,000 FCFA as the item price and 40 as the weight of a bag: the system "
-"calculates the price per kg itself (500 FCFA/kg here) and auto-fills it "
-"as soon as you pick this item during daily entry. You no longer need to "
-"recalculate or retype this price every day."
+"Les prix de l'aliment, du bois et des medicaments se gerent directement "
+"depuis la page"
+msgstr "Feed, wood and medication prices are managed directly from the"
 
-#: app/templates/core/settings.html:37
-msgid "Gerer mes prix dans le Stock"
-msgstr "Manage my prices in Stock"
+#: app/templates/core/settings.html:68
+msgid ", pas ici."
+msgstr ", not here."
+
+#: app/templates/core/settings.html:77
+msgid "Securite"
+msgstr "Security"
+
+#: app/templates/core/settings.html:88
+msgid "Autres reglages"
+msgstr "Other settings"
+
+#: app/templates/core/settings.html:94 app/templates/partials/sidebar.html:43
+msgid "Utilisateurs"
+msgstr "Users"
+
+#: app/templates/core/settings.html:102
+msgid "Programme sanitaire"
+msgstr "Health program"
+
+#: app/templates/core/settings.html:110
+msgid "Stock et prix"
+msgstr "Stock and prices"
+
+#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:52
+msgid "Facturation"
+msgstr "Billing"
+
+#: app/templates/core/settings.html:126 app/templates/partials/sidebar.html:55
+msgid "Journal d'activite"
+msgstr "Activity log"
 
 #: app/templates/partials/sidebar.html:4
 msgid "Gestion d'elevage"
@@ -474,10 +558,6 @@ msgstr "Farm management"
 #: app/templates/partials/sidebar.html:9
 msgid "Tableau de bord"
 msgstr "Dashboard"
-
-#: app/templates/partials/sidebar.html:13
-msgid "Elevage"
-msgstr "Farming"
 
 #: app/templates/partials/sidebar.html:15
 msgid "Fermes"
@@ -495,10 +575,6 @@ msgstr "Suppliers"
 msgid "Creances"
 msgstr "Receivables"
 
-#: app/templates/partials/sidebar.html:32 app/templates/partials/topbar.html:10
-msgid "Alertes"
-msgstr "Alerts"
-
 #: app/templates/partials/sidebar.html:36
 msgid "Messages"
 msgstr "Messages"
@@ -507,10 +583,6 @@ msgstr "Messages"
 msgid "Administration"
 msgstr "Administration"
 
-#: app/templates/partials/sidebar.html:43
-msgid "Utilisateurs"
-msgstr "Users"
-
 #: app/templates/partials/sidebar.html:46
 msgid "Courbes de reference"
 msgstr "Growth reference curves"
@@ -518,14 +590,6 @@ msgstr "Growth reference curves"
 #: app/templates/partials/sidebar.html:49
 msgid "Mon modele sanitaire"
 msgstr "My health program template"
-
-#: app/templates/partials/sidebar.html:52
-msgid "Facturation"
-msgstr "Billing"
-
-#: app/templates/partials/sidebar.html:55
-msgid "Journal d'activite"
-msgstr "Activity log"
 
 #: app/templates/partials/sidebar.html:64
 msgid "Plateforme"
@@ -575,4 +639,49 @@ msgstr "Password must contain at least one uppercase letter."
 #: app/utils/security.py:44
 msgid "Le mot de passe doit contenir au moins un chiffre."
 msgstr "Password must contain at least one digit."
+
+#~ msgid "Exploitation"
+#~ msgstr "Farm"
+
+#~ msgid "Prix par defaut de l'aliment, du bois et des medicaments"
+#~ msgstr "Default prices for feed, wood and medication"
+
+#~ msgid ""
+#~ ", pas ici : c'est la que "
+#~ "vous indiquez ce que vous avez "
+#~ "paye pour un sac, une bouteille ou"
+#~ " un morceau."
+#~ msgstr ""
+#~ " page, not here: that's where you"
+#~ " enter what you paid for a bag,"
+#~ " a bottle or a piece."
+
+#~ msgid ""
+#~ "Par exemple, si vous achetez un "
+#~ "sac d'aliment de 40 kg a 20 "
+#~ "000 FCFA, indiquez simplement 20 000 "
+#~ "FCFA comme prix de l'article et 40"
+#~ " comme poids d'un sac : le "
+#~ "systeme calcule lui-meme le prix "
+#~ "au kg (500 FCFA/kg ici) et le "
+#~ "pre-remplit automatiquement des que vous"
+#~ " choisissez cet article en saisie "
+#~ "quotidienne. Vous n'avez plus besoin de"
+#~ " recalculer ou de retaper ce prix "
+#~ "chaque jour."
+#~ msgstr ""
+#~ "For example, if you buy a 40 "
+#~ "kg bag of feed for 20,000 FCFA,"
+#~ " simply enter 20,000 FCFA as the "
+#~ "item price and 40 as the weight"
+#~ " of a bag: the system calculates "
+#~ "the price per kg itself (500 "
+#~ "FCFA/kg here) and auto-fills it as"
+#~ " soon as you pick this item "
+#~ "during daily entry. You no longer "
+#~ "need to recalculate or retype this "
+#~ "price every day."
+
+#~ msgid "Gerer mes prix dans le Stock"
+#~ msgstr "Manage my prices in Stock"
 

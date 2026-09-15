@@ -50,6 +50,28 @@ class Tenant(TimestampMixin, db.Model):
     default_language = db.Column(db.String(5), nullable=False, default="fr")
     currency_label = db.Column(db.String(10), nullable=False, default="FCFA")
 
+    # -- Elevage : valeurs par defaut suggerees a la creation d'un lot -----
+    default_breed = db.Column(db.String(100), nullable=True)
+    default_cycle_days = db.Column(db.Integer, nullable=True)
+    fcr_alert_threshold = db.Column(db.Numeric(4, 2), nullable=True)
+
+    # -- Alertes -------------------------------------------------------
+    mortality_alert_threshold_percent = db.Column(db.Numeric(5, 2), nullable=False, default=3)
+    sanitary_reminder_interval_minutes = db.Column(db.Integer, nullable=False, default=10)
+    email_alerts_enabled = db.Column(db.Boolean, nullable=False, default=True)
+
+    # -- Stock -----------------------------------------------------------
+    default_stock_low_threshold = db.Column(db.Numeric(10, 2), nullable=True)
+
+    # -- Finance -----------------------------------------------------------
+    default_labor_cost_per_day = db.Column(db.Numeric(10, 2), nullable=True)
+    default_sale_unit = db.Column(db.String(10), nullable=False, default="unit")
+
+    # -- Securite (remplace les valeurs par defaut globales de app.config
+    # pour ce tenant - voir auth.login) --------------------------------
+    max_login_attempts = db.Column(db.Integer, nullable=False, default=5)
+    login_lockout_minutes = db.Column(db.Integer, nullable=False, default=15)
+
     users = db.relationship("User", back_populates="tenant", cascade="all, delete-orphan")
     farms = db.relationship("Farm", back_populates="tenant", cascade="all, delete-orphan")
     subscription = db.relationship(
@@ -62,6 +84,12 @@ class Tenant(TimestampMixin, db.Model):
         "SanitaryProgramTemplateItem", cascade="all, delete-orphan"
     )
     suppliers = db.relationship("Supplier", cascade="all, delete-orphan")
+    # Une alerte n'est pas toujours rattachee a une ferme/un lot (farm_id et
+    # batch_id sont nullable) : sans ce lien direct depuis Tenant, ces
+    # alertes "orphelines" n'etaient couvertes par aucune cascade et
+    # bloquaient la suppression du tenant (meme bug deja rencontre pour
+    # SanitaryProgramTemplateItem et Supplier ci-dessus).
+    alerts = db.relationship("Alert", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Tenant {self.slug}>"

@@ -9,7 +9,7 @@ Regle d'envoi (3.2) :
 from datetime import datetime, timezone
 
 from app.extensions import db
-from app.models.core import ROLE_OWNER, User
+from app.models.core import ROLE_OWNER, Tenant, User
 from app.models.poultry import (
     ALERT_PRIORITY_IMPORTANT,
     ALERT_PRIORITY_NORMAL,
@@ -19,9 +19,10 @@ from app.models.poultry import (
 from app.utils.emailing import send_alert_email
 from app.utils.tenant import get_current_tenant_id, tenant_bypass
 
-# Seuil de mortalite journaliere (% de l'effectif courant) au-dela duquel une
-# alerte urgente est levee. Reste simple et documente pour la V1.
-MORTALITY_ALERT_THRESHOLD_PERCENT = 3
+# Valeurs de repli si le tenant n'a pas encore de reglages (ex : cree avant
+# l'ajout de /parametres) - les vraies valeurs viennent de Tenant, voir
+# _get_tenant() ci-dessous.
+DEFAULT_MORTALITY_ALERT_THRESHOLD_PERCENT = 3
 
 
 def _owners_for_tenant(tenant_id):
@@ -30,6 +31,13 @@ def _owners_for_tenant(tenant_id):
             User.query.filter_by(tenant_id=tenant_id, role=ROLE_OWNER, is_active=True)
             .all()
         )
+
+
+def _get_tenant(tenant_id):
+    if tenant_id is None:
+        return None
+    with tenant_bypass():
+        return db.session.get(Tenant, tenant_id)
 
 
 def create_alert(title, message, alert_type, priority=ALERT_PRIORITY_NORMAL, farm=None, batch=None):
@@ -47,7 +55,8 @@ def create_alert(title, message, alert_type, priority=ALERT_PRIORITY_NORMAL, far
     db.session.add(alert)
     db.session.flush()
 
-    if alert.requires_email:
+    tenant = _get_tenant(tenant_id)
+    if alert.requires_email and (tenant is None or tenant.email_alerts_enabled):
         recipients = [
             owner.email
             for owner in _owners_for_tenant(tenant_id)
@@ -84,14 +93,22 @@ def check_stock_alert(stock_item):
 
 
 def check_mortality_alert(batch, batch_day):
-    """Cree une alerte si la mortalite du jour depasse le seuil critique."""
+    """Cree une alerte si la mortalite du jour depasse le seuil critique
+    (configurable par tenant, voir /parametres)."""
     current_count = batch.current_count or 1
     daily_deaths = batch_day.mortality_count
     if daily_deaths <= 0:
         return None
 
+    tenant = _get_tenant(get_current_tenant_id())
+    threshold = (
+        float(tenant.mortality_alert_threshold_percent)
+        if tenant and tenant.mortality_alert_threshold_percent is not None
+        else DEFAULT_MORTALITY_ALERT_THRESHOLD_PERCENT
+    )
+
     ratio_percent = (daily_deaths / max(current_count, 1)) * 100
-    if ratio_percent < MORTALITY_ALERT_THRESHOLD_PERCENT:
+    if ratio_percent < threshold:
         return None
 
     return create_alert(
@@ -99,10 +116,47 @@ def check_mortality_alert(batch, batch_day):
         message=(
             f"{daily_deaths} sujets morts le jour {batch_day.day_number} "
             f"({ratio_percent:.1f} % de l'effectif courant), au-dela du seuil "
-            f"de {MORTALITY_ALERT_THRESHOLD_PERCENT} %."
+            f"de {threshold} %."
         ),
         alert_type="mortality",
         priority=ALERT_PRIORITY_URGENT,
+        batch=batch,
+    )
+
+
+def check_fcr_alert(batch):
+    """Cree une alerte si l'indice de consommation (FCR) du lot depasse le
+    seuil defini par le proprietaire (/parametres). Desactive par defaut
+    (aucun seuil renseigne) : le FCR normal varie beaucoup selon l'age du
+    lot, un seuil errone genererait trop de fausses alertes. Au plus une
+    alerte par jour et par lot, pour ne pas spammer a chaque saisie."""
+    tenant = _get_tenant(get_current_tenant_id())
+    if not tenant or not tenant.fcr_alert_threshold:
+        return None
+
+    from app.utils.zootechnie import compute_fcr
+
+    fcr = compute_fcr(batch)
+    if fcr is None or fcr < float(tenant.fcr_alert_threshold):
+        return None
+
+    today = datetime.now(timezone.utc).date()
+    already_alerted = (
+        Alert.query.filter_by(batch_id=batch.id, type="fcr")
+        .filter(Alert.created_at >= datetime(today.year, today.month, today.day, tzinfo=timezone.utc))
+        .first()
+    )
+    if already_alerted:
+        return None
+
+    return create_alert(
+        title=f"FCR eleve - Lot {batch.code}",
+        message=(
+            f"L'indice de consommation (FCR) du lot {batch.code} est de {fcr}, "
+            f"au-dela du seuil de {tenant.fcr_alert_threshold} que vous avez defini."
+        ),
+        alert_type="fcr",
+        priority=ALERT_PRIORITY_IMPORTANT,
         batch=batch,
     )
 

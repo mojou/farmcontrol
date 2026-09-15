@@ -6,38 +6,134 @@
   <h1 class="fc-page-title">{{ _('Parametres') }}</h1>
 </div>
 
-<div class="row g-3">
-  <div class="col-lg-5">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title mb-3">{{ _('Exploitation') }}</h5>
-        <form method="post" novalidate>
-          {{ form.hidden_tag() }}
+<form method="post" novalidate>
+  {{ form.hidden_tag() }}
+
+  <div class="row g-3 mb-3">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-building"></i> {{ _('General') }}</h6>
           {{ fm.render_field(form.name) }}
           {{ fm.render_field(form.country, field_id="settings-country") }}
           <p class="text-muted small mb-2">{{ _('La devise se pre-remplit selon le pays choisi, vous pouvez la modifier.') }}</p>
           {{ fm.render_field(form.currency_label, field_id="settings-currency") }}
           {{ fm.render_field(form.default_language) }}
-          <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
-        </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-egg-fried"></i> {{ _('Elevage') }}</h6>
+          {{ fm.render_field(form.default_breed) }}
+          {{ fm.render_field(form.default_cycle_days) }}
+          <p class="text-muted small mb-2">{{ _("Utilise pour pre-remplir la date de fin prevue quand vous cloturez un lot.") }}</p>
+          {{ fm.render_field(form.fcr_alert_threshold) }}
+          <p class="text-muted small mb-0">{{ _("Laissez vide pour ne pas etre alerte sur le FCR.") }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-bell"></i> {{ _('Alertes') }}</h6>
+          {{ fm.render_field(form.mortality_alert_threshold_percent) }}
+          {{ fm.render_field(form.sanitary_reminder_interval_minutes) }}
+          {{ fm.render_field(form.email_alerts_enabled) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-box-seam"></i> {{ _('Stock') }}</h6>
+          {{ fm.render_field(form.default_stock_low_threshold) }}
+          <p class="text-muted small mb-0">{{ _('Utilise pour pre-remplir le seuil quand vous creez un nouvel article de stock.') }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-cash-coin"></i> {{ _('Finance') }}</h6>
+          {{ fm.render_field(form.default_labor_cost_per_day) }}
+          {{ fm.render_field(form.default_sale_unit) }}
+          <p class="text-muted small mb-0">
+            {{ _('Les prix de l\'aliment, du bois et des medicaments se gerent directement depuis la page') }}
+            <a href="{{ url_for('poultry.stock_list') }}">{{ _('Stock') }}</a>{{ _(', pas ici.') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-shield-lock"></i> {{ _('Securite') }}</h6>
+          {{ fm.render_field(form.max_login_attempts) }}
+          {{ fm.render_field(form.login_lockout_minutes) }}
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-6">
-    <div class="card">
-      <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-cash-coin"></i> {{ _("Prix par defaut de l'aliment, du bois et des medicaments") }}</h6>
-        <p class="text-muted small">
-          {{ _('Ces prix se gerent directement depuis la page') }} <a href="{{ url_for('poultry.stock_list') }}">{{ _('Stock') }}</a>{{ _(", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac, une bouteille ou un morceau.") }}
-        </p>
-        <p class="text-muted small mb-0">
-          {{ _("Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) et le pre-remplit automatiquement des que vous choisissez cet article en saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper ce prix chaque jour.") }}
-        </p>
-        <a href="{{ url_for('poultry.stock_list') }}" class="btn btn-outline-secondary btn-sm mt-3">
-          <i class="bi bi-box-seam"></i> {{ _('Gerer mes prix dans le Stock') }}
-        </a>
+
+  <button type="submit" class="btn btn-primary mb-4">{{ form.submit.label.text }}</button>
+</form>
+
+<h6 class="text-muted small text-uppercase mb-3">{{ _('Autres reglages') }}</h6>
+<div class="row g-3">
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('core.users_list') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-people fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _('Utilisateurs') }}
       </div>
-    </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('poultry.sanitary_template') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-clipboard2-pulse fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _('Programme sanitaire') }}
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('poultry.stock_list') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-box-seam fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _('Stock et prix') }}
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('billing.billing_home') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-credit-card fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _('Facturation') }}
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('core.audit_log_list') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-journal-text fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _("Journal d'activite") }}
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="{{ url_for('auth.change_password') }}" class="card h-100 text-decoration-none text-dark">
+      <div class="card-body text-center">
+        <i class="bi bi-key fs-3 d-block mb-2" style="color: var(--fc-primary);"></i>
+        {{ _('Mot de passe') }}
+      </div>
+    </a>
   </div>
 </div>
 {% endblock %}

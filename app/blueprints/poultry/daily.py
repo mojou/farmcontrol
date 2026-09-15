@@ -36,7 +36,7 @@ from app.models.poultry import (
     WeightRecord,
     WoodRecord,
 )
-from app.utils.alerts import check_mortality_alert, check_stock_alert, check_urgent_observation_alert
+from app.utils.alerts import check_fcr_alert, check_mortality_alert, check_stock_alert, check_urgent_observation_alert
 from app.utils.audit import log_action
 from app.utils.sanitary import get_pending_items
 from app.utils.uploads import save_observation_photo
@@ -396,6 +396,8 @@ def weight_record_new(day_id):
         )
         db.session.add(record)
         recompute_batch_finance(day.batch)
+        db.session.flush()
+        check_fcr_alert(day.batch)
         db.session.commit()
         flash("Pesee enregistree.", "success")
     else:

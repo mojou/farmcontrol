@@ -67,9 +67,9 @@ def login():
                 return render_template("auth/login.html", form=form)
 
             if not user.check_password(form.password.data):
-                user.register_failed_login(
-                    current_app.config["MAX_LOGIN_ATTEMPTS"], current_app.config["LOGIN_LOCKOUT_MINUTES"]
-                )
+                max_attempts = user.tenant.max_login_attempts if user.tenant else current_app.config["MAX_LOGIN_ATTEMPTS"]
+                lockout_minutes = user.tenant.login_lockout_minutes if user.tenant else current_app.config["LOGIN_LOCKOUT_MINUTES"]
+                user.register_failed_login(max_attempts, lockout_minutes)
                 db.session.commit()
                 flash(_("Identifiants incorrects."), "danger")
                 return render_template("auth/login.html", form=form)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 15:22+0100\n"
+"POT-Creation-Date: 2026-09-15 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,7 @@ msgid "Adresse email"
 msgstr ""
 
 #: app/blueprints/auth/forms.py:14 app/blueprints/auth/forms.py:24
+#: app/templates/core/settings.html:134
 msgid "Mot de passe"
 msgstr ""
 
@@ -162,27 +163,79 @@ msgstr ""
 msgid "Mot de passe mis a jour avec succes."
 msgstr ""
 
-#: app/blueprints/core/forms.py:105
+#: app/blueprints/core/forms.py:106
 msgid "Nom de l'exploitation"
 msgstr ""
 
-#: app/blueprints/core/forms.py:106
+#: app/blueprints/core/forms.py:107
 msgid "Pays"
 msgstr ""
 
-#: app/blueprints/core/forms.py:108
+#: app/blueprints/core/forms.py:109
 msgid "Langue par defaut pour les nouveaux utilisateurs"
 msgstr ""
 
-#: app/blueprints/core/forms.py:113
+#: app/blueprints/core/forms.py:114
 msgid "Devise affichee"
 msgstr ""
 
-#: app/blueprints/core/forms.py:118
+#: app/blueprints/core/forms.py:122
+msgid "Souche par defaut pour les nouveaux lots"
+msgstr ""
+
+#: app/blueprints/core/forms.py:127
+msgid "Duree de cycle standard (jours)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:132
+msgid "Seuil d'alerte FCR (indice de consommation)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:140
+msgid "Seuil de mortalite quotidienne qui declenche une alerte (%)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:146
+msgid "Frequence du rappel sanitaire (minutes)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:151
+msgid "Activer les alertes par email pour toute l'exploitation"
+msgstr ""
+
+#: app/blueprints/core/forms.py:156
+msgid "Seuil d'alerte stock faible suggere par defaut"
+msgstr ""
+
+#: app/blueprints/core/forms.py:164
+msgid "Cout main d'oeuvre par defaut / jour"
+msgstr ""
+
+#: app/blueprints/core/forms.py:170
+msgid "Mode de vente par defaut"
+msgstr ""
+
+#: app/blueprints/core/forms.py:171
+msgid "Au sujet (par poulet)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:171
+msgid "Au kilogramme"
+msgstr ""
+
+#: app/blueprints/core/forms.py:177
+msgid "Nombre d'essais avant verrouillage du compte"
+msgstr ""
+
+#: app/blueprints/core/forms.py:182
+msgid "Duree de verrouillage apres echecs (minutes)"
+msgstr ""
+
+#: app/blueprints/core/forms.py:187
 msgid "Enregistrer"
 msgstr ""
 
-#: app/blueprints/core/routes.py:200
+#: app/blueprints/core/routes.py:211
 msgid "Parametres enregistres."
 msgstr ""
 
@@ -402,44 +455,82 @@ msgstr ""
 msgid "Parametres"
 msgstr ""
 
-#: app/templates/core/settings.html:13
-msgid "Exploitation"
+#: app/templates/core/settings.html:16
+msgid "General"
 msgstr ""
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:19
 msgid "La devise se pre-remplit selon le pays choisi, vous pouvez la modifier."
 msgstr ""
 
-#: app/templates/core/settings.html:29
-msgid "Prix par defaut de l'aliment, du bois et des medicaments"
+#: app/templates/core/settings.html:29 app/templates/partials/sidebar.html:13
+msgid "Elevage"
 msgstr ""
 
-#: app/templates/core/settings.html:31
-msgid "Ces prix se gerent directement depuis la page"
-msgstr ""
-
-#: app/templates/core/settings.html:31 app/templates/partials/sidebar.html:21
-msgid "Stock"
-msgstr ""
-
-#: app/templates/core/settings.html:31
-msgid ""
-", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
-" une bouteille ou un morceau."
+#: app/templates/core/settings.html:32
+msgid "Utilise pour pre-remplir la date de fin prevue quand vous cloturez un lot."
 msgstr ""
 
 #: app/templates/core/settings.html:34
-msgid ""
-"Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
-"indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
-" d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) "
-"et le pre-remplit automatiquement des que vous choisissez cet article en "
-"saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper "
-"ce prix chaque jour."
+msgid "Laissez vide pour ne pas etre alerte sur le FCR."
 msgstr ""
 
-#: app/templates/core/settings.html:37
-msgid "Gerer mes prix dans le Stock"
+#: app/templates/core/settings.html:42 app/templates/partials/sidebar.html:32
+#: app/templates/partials/topbar.html:10
+msgid "Alertes"
+msgstr ""
+
+#: app/templates/core/settings.html:53 app/templates/core/settings.html:68
+#: app/templates/partials/sidebar.html:21
+msgid "Stock"
+msgstr ""
+
+#: app/templates/core/settings.html:55
+msgid ""
+"Utilise pour pre-remplir le seuil quand vous creez un nouvel article de "
+"stock."
+msgstr ""
+
+#: app/templates/core/settings.html:63
+msgid "Finance"
+msgstr ""
+
+#: app/templates/core/settings.html:67
+msgid ""
+"Les prix de l'aliment, du bois et des medicaments se gerent directement "
+"depuis la page"
+msgstr ""
+
+#: app/templates/core/settings.html:68
+msgid ", pas ici."
+msgstr ""
+
+#: app/templates/core/settings.html:77
+msgid "Securite"
+msgstr ""
+
+#: app/templates/core/settings.html:88
+msgid "Autres reglages"
+msgstr ""
+
+#: app/templates/core/settings.html:94 app/templates/partials/sidebar.html:43
+msgid "Utilisateurs"
+msgstr ""
+
+#: app/templates/core/settings.html:102
+msgid "Programme sanitaire"
+msgstr ""
+
+#: app/templates/core/settings.html:110
+msgid "Stock et prix"
+msgstr ""
+
+#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:52
+msgid "Facturation"
+msgstr ""
+
+#: app/templates/core/settings.html:126 app/templates/partials/sidebar.html:55
+msgid "Journal d'activite"
 msgstr ""
 
 #: app/templates/partials/sidebar.html:4
@@ -448,10 +539,6 @@ msgstr ""
 
 #: app/templates/partials/sidebar.html:9
 msgid "Tableau de bord"
-msgstr ""
-
-#: app/templates/partials/sidebar.html:13
-msgid "Elevage"
 msgstr ""
 
 #: app/templates/partials/sidebar.html:15
@@ -470,10 +557,6 @@ msgstr ""
 msgid "Creances"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:32 app/templates/partials/topbar.html:10
-msgid "Alertes"
-msgstr ""
-
 #: app/templates/partials/sidebar.html:36
 msgid "Messages"
 msgstr ""
@@ -482,24 +565,12 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:43
-msgid "Utilisateurs"
-msgstr ""
-
 #: app/templates/partials/sidebar.html:46
 msgid "Courbes de reference"
 msgstr ""
 
 #: app/templates/partials/sidebar.html:49
 msgid "Mon modele sanitaire"
-msgstr ""
-
-#: app/templates/partials/sidebar.html:52
-msgid "Facturation"
-msgstr ""
-
-#: app/templates/partials/sidebar.html:55
-msgid "Journal d'activite"
 msgstr ""
 
 #: app/templates/partials/sidebar.html:64

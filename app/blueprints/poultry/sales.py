@@ -22,6 +22,8 @@ from app.utils.zootechnie import recompute_batch_finance
 def sales_list(batch_id):
     batch = _get_batch_or_403(batch_id)
     form = SaleForm(sale_date=date.today())
+    if request.method == "GET" and current_user.tenant and current_user.tenant.default_sale_unit:
+        form.unit.data = current_user.tenant.default_sale_unit
 
     if form.validate_on_submit():
         total_amount = form.quantity.data * form.unit_price.data

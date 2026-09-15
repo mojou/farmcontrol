@@ -1,8 +1,8 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from wtforms import BooleanField, PasswordField, SelectField, StringField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms import BooleanField, DecimalField, IntegerField, PasswordField, SelectField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email, Length, NumberRange, Optional
 
 from app.models.core import ROLE_LABELS, ROLE_MANAGER, ROLE_WORKER
 
@@ -102,6 +102,7 @@ COUNTRY_CHOICES = [(name, name) for name in sorted(COUNTRY_CURRENCY)] + [("Autre
 
 
 class SettingsForm(FlaskForm):
+    # -- General ---------------------------------------------------------
     name = StringField(_l("Nom de l'exploitation"), validators=[DataRequired(), Length(max=150)])
     country = SelectField(_l("Pays"), choices=COUNTRY_CHOICES, validators=[Optional()])
     default_language = SelectField(
@@ -115,6 +116,74 @@ class SettingsForm(FlaskForm):
         default="FCFA",
         render_kw={"placeholder": "Ex : FCFA"},
     )
+
+    # -- Elevage ---------------------------------------------------------
+    default_breed = StringField(
+        _l("Souche par defaut pour les nouveaux lots"),
+        validators=[Optional(), Length(max=100)],
+        render_kw={"placeholder": "Ex : Ross 308"},
+    )
+    default_cycle_days = IntegerField(
+        _l("Duree de cycle standard (jours)"),
+        validators=[Optional(), NumberRange(min=1, max=365)],
+        render_kw={"placeholder": "Ex : 42"},
+    )
+    fcr_alert_threshold = DecimalField(
+        _l("Seuil d'alerte FCR (indice de consommation)"),
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 2.0"},
+    )
+
+    # -- Alertes ---------------------------------------------------------
+    mortality_alert_threshold_percent = DecimalField(
+        _l("Seuil de mortalite quotidienne qui declenche une alerte (%)"),
+        validators=[DataRequired(), NumberRange(min=0, max=100)],
+        places=2,
+        default=3,
+    )
+    sanitary_reminder_interval_minutes = IntegerField(
+        _l("Frequence du rappel sanitaire (minutes)"),
+        validators=[DataRequired(), NumberRange(min=1, max=1440)],
+        default=10,
+    )
+    email_alerts_enabled = BooleanField(
+        _l("Activer les alertes par email pour toute l'exploitation"), default=True
+    )
+
+    # -- Stock -----------------------------------------------------------
+    default_stock_low_threshold = DecimalField(
+        _l("Seuil d'alerte stock faible suggere par defaut"),
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 2"},
+    )
+
+    # -- Finance ---------------------------------------------------------
+    default_labor_cost_per_day = DecimalField(
+        _l("Cout main d'oeuvre par defaut / jour"),
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        render_kw={"placeholder": "Ex : 2000"},
+    )
+    default_sale_unit = SelectField(
+        _l("Mode de vente par defaut"),
+        choices=[("unit", _l("Au sujet (par poulet)")), ("kg", _l("Au kilogramme"))],
+        default="unit",
+    )
+
+    # -- Securite ---------------------------------------------------------
+    max_login_attempts = IntegerField(
+        _l("Nombre d'essais avant verrouillage du compte"),
+        validators=[DataRequired(), NumberRange(min=1, max=20)],
+        default=5,
+    )
+    login_lockout_minutes = IntegerField(
+        _l("Duree de verrouillage apres echecs (minutes)"),
+        validators=[DataRequired(), NumberRange(min=1, max=1440)],
+        default=15,
+    )
+
     submit = SubmitField(_l("Enregistrer"))
 
 
