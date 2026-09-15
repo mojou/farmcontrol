@@ -13,6 +13,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle table-sm">
       <thead>
         <tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Element concerne</th></tr>
@@ -41,6 +42,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'core.audit_log_list') }}
   </div>
 </div>

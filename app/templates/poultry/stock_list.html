@@ -11,6 +11,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle">
       <thead><tr><th>Ferme</th><th>Categorie</th><th>Article</th><th>Quantite</th><th>Seuil</th><th>Statut</th><th></th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
       <tbody>
@@ -51,6 +52,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'poultry.stock_list') }}
   </div>
 </div>

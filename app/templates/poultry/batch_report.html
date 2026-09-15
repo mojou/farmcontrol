@@ -69,6 +69,7 @@
   <div class="card-body">
     <h6 class="text-muted small text-uppercase mb-3">Detail financier</h6>
     {% if batch.finance %}
+    <div class="table-responsive">
     <table class="table table-sm">
       <tr><td>Cout poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
       <tr><td>Cout aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
@@ -82,6 +83,7 @@
       </tr>
       <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
     </table>
+    </div>
     {% else %}
     <p class="text-muted mb-0">Aucune donnee financiere pour ce lot.</p>
     {% endif %}

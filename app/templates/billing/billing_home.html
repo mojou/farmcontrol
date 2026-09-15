@@ -42,6 +42,7 @@
   <div class="card-body">
     <h6 class="text-muted small text-uppercase mb-3">Historique des paiements</h6>
     {% if transactions %}
+    <div class="table-responsive">
     <table class="table table-sm">
       <thead><tr><th>Date</th><th>Plan</th><th>Montant</th><th>Methode</th><th>Statut</th></tr></thead>
       <tbody>
@@ -60,6 +61,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {% else %}
     <p class="text-muted mb-0">Aucun paiement pour le moment.</p>
     {% endif %}

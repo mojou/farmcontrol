@@ -15,6 +15,7 @@
       <div class="card-body">
         <h6 class="text-muted small text-uppercase mb-3">Charges calculees automatiquement</h6>
         {% if batch.finance %}
+        <div class="table-responsive">
         <table class="table table-sm mb-0">
           <tr><td>Cout poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
           <tr><td>Cout aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
@@ -26,6 +27,7 @@
           <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
           <tr class="fw-bold"><td>Cout de revient / kg</td><td class="text-end">{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
         </table>
+        </div>
         {% else %}
         <p class="text-muted mb-0">Les charges seront calculees des l'enregistrement d'un premier cout.</p>
         {% endif %}

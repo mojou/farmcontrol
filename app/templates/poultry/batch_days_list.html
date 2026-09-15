@@ -17,6 +17,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle">
       <thead>
         <tr><th>Jour</th><th>Date</th><th>Aliment (kg)</th><th>Morts</th><th>Statut rapport</th><th></th></tr>
@@ -42,6 +43,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'poultry.batch_days_list', batch_id=batch.id) }}
   </div>
 </div>

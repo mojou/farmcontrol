@@ -12,6 +12,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle mb-0">
       <thead><tr><th>De</th><th>Sujet</th><th>Date</th><th></th></tr></thead>
       <tbody>
@@ -30,6 +31,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'messaging.inbox') }}
   </div>
 </div>

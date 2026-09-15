@@ -9,6 +9,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle">
       <thead>
         <tr><th>Nom</th><th>Email</th><th>Role</th><th>Ferme assignee</th><th>Statut</th><th></th></tr>
@@ -35,6 +36,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'core.users_list') }}
   </div>
 </div>

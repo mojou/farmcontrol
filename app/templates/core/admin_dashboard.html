@@ -9,6 +9,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle">
       <thead>
         <tr>
@@ -76,6 +77,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'core.admin_dashboard') }}
   </div>
 </div>

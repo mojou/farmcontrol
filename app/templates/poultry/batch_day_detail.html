@@ -119,6 +119,7 @@
         </div>
         <div class="modal-body">
           {% if day.feed_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Type</th><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix/kg</th>{% endif %}</tr></thead>
             <tbody>
@@ -127,6 +128,7 @@
               {% endfor %}
             </tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Indiquez le type d'aliment donne (ex : Demarrage, Croissance) et la quantite en kilogrammes.</p>
           {{ fm.render_field(feed_form.feed_type) }}
@@ -155,10 +157,12 @@
         </div>
         <div class="modal-body">
           {% if day.water_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Quantite</th></tr></thead>
             <tbody>{% for r in day.water_records %}<tr><td>{{ r.quantity_liters }} L</td></tr>{% endfor %}</tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Combien de litres d'eau de boisson avez-vous donne au total aujourd'hui ?</p>
           {{ fm.render_field(water_form.quantity_liters) }}
@@ -184,10 +188,12 @@
         </div>
         <div class="modal-body">
           {% if day.mortality_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Nombre</th><th>Cause</th></tr></thead>
             <tbody>{% for r in day.mortality_records %}<tr><td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td></tr>{% endfor %}</tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Combien de poulets sont morts aujourd'hui ? Mettez 0 si aucun.</p>
           {{ fm.render_field(mortality_form.quantity_dead) }}
@@ -214,10 +220,12 @@
         </div>
         <div class="modal-body">
           {% if day.wood_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix</th>{% endif %}</tr></thead>
             <tbody>{% for r in day.wood_records %}<tr><td>{{ r.quantity }}</td>{% if current_user.has_role('owner') %}<td>{{ r.unit_price|currency }}</td>{% endif %}</tr>{% endfor %}</tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Quantite de bois / copeaux / litiere ajoutee aujourd'hui.</p>
           {{ fm.render_field(wood_form.quantity) }}
@@ -244,10 +252,12 @@
         </div>
         <div class="modal-body">
           {% if day.medication_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Produit</th><th>Quantite (ml)</th></tr></thead>
             <tbody>{% for r in day.medication_records %}<tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }} ml</td></tr>{% endfor %}</tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Astuce : consultez la <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">feuille de route</a> pour savoir quoi administrer aujourd'hui.</p>
           {{ fm.render_field(medication_form.medication_name) }}
@@ -316,10 +326,12 @@
         </div>
         <div class="modal-body">
           {% if day.weight_records %}
+          <div class="table-responsive">
           <table class="table table-sm mb-3">
             <thead><tr><th>Poids moyen</th><th>Sujets peses</th></tr></thead>
             <tbody>{% for r in day.weight_records %}<tr><td>{{ r.average_weight }} g</td><td>{{ r.sample_size }}</td></tr>{% endfor %}</tbody>
           </table>
+          </div>
           {% endif %}
           <p class="text-muted small">Pesez quelques poussins au hasard et indiquez leur poids moyen en grammes.</p>
           {{ fm.render_field(weight_form.average_weight) }}

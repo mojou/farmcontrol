@@ -16,6 +16,7 @@
 
 <div class="card">
   <div class="card-body">
+    <div class="table-responsive">
     <table class="table align-middle">
       <thead><tr><th>Ferme</th><th>Lot</th><th>Souche</th><th>Debut</th><th>Effectif courant</th><th></th></tr></thead>
       <tbody>
@@ -36,6 +37,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {{ pg.render_pagination(pagination, 'poultry.batches_list', status=status) }}
   </div>
 </div>

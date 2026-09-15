@@ -30,6 +30,7 @@
   <div class="card-body">
     <h6 class="text-muted small text-uppercase mb-3">Rapports en attente de validation</h6>
     {% if pending_reports %}
+    <div class="table-responsive">
     <table class="table table-sm align-middle">
       <thead><tr><th>Lot</th><th>Jour</th><th>Soumis le</th><th></th></tr></thead>
       <tbody>
@@ -43,6 +44,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
     {% else %}
     <p class="text-muted mb-0">Aucun rapport en attente.</p>
     {% endif %}
@@ -52,6 +54,7 @@
 <div class="card">
   <div class="card-body">
     <h6 class="text-muted small text-uppercase mb-3">Lots actifs</h6>
+    <div class="table-responsive">
     <table class="table table-sm align-middle">
       <thead><tr><th>Ferme</th><th>Lot</th><th>Effectif courant</th><th></th></tr></thead>
       <tbody>
@@ -65,6 +68,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
   </div>
 </div>
 {% endblock %}
