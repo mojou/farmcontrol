@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 15:04+0100\n"
+"POT-Creation-Date: 2026-09-15 15:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,23 +162,23 @@ msgstr ""
 msgid "Mot de passe mis a jour avec succes."
 msgstr ""
 
-#: app/blueprints/core/forms.py:61
+#: app/blueprints/core/forms.py:105
 msgid "Nom de l'exploitation"
 msgstr ""
 
-#: app/blueprints/core/forms.py:62
+#: app/blueprints/core/forms.py:106
 msgid "Pays"
 msgstr ""
 
-#: app/blueprints/core/forms.py:64
+#: app/blueprints/core/forms.py:108
 msgid "Langue par defaut pour les nouveaux utilisateurs"
 msgstr ""
 
-#: app/blueprints/core/forms.py:69
+#: app/blueprints/core/forms.py:113
 msgid "Devise affichee"
 msgstr ""
 
-#: app/blueprints/core/forms.py:74
+#: app/blueprints/core/forms.py:118
 msgid "Enregistrer"
 msgstr ""
 
@@ -402,29 +402,33 @@ msgstr ""
 msgid "Parametres"
 msgstr ""
 
-#: app/templates/core/settings.html:11
+#: app/templates/core/settings.html:13
 msgid "Exploitation"
 msgstr ""
 
-#: app/templates/core/settings.html:16
+#: app/templates/core/settings.html:18
+msgid "La devise se pre-remplit selon le pays choisi, vous pouvez la modifier."
+msgstr ""
+
+#: app/templates/core/settings.html:29
 msgid "Prix par defaut de l'aliment, du bois et des medicaments"
 msgstr ""
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:31
 msgid "Ces prix se gerent directement depuis la page"
 msgstr ""
 
-#: app/templates/core/settings.html:18 app/templates/partials/sidebar.html:21
+#: app/templates/core/settings.html:31 app/templates/partials/sidebar.html:21
 msgid "Stock"
 msgstr ""
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:31
 msgid ""
 ", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
 " une bouteille ou un morceau."
 msgstr ""
 
-#: app/templates/core/settings.html:21
+#: app/templates/core/settings.html:34
 msgid ""
 "Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
 "indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
@@ -434,7 +438,7 @@ msgid ""
 "ce prix chaque jour."
 msgstr ""
 
-#: app/templates/core/settings.html:24
+#: app/templates/core/settings.html:37
 msgid "Gerer mes prix dans le Stock"
 msgstr ""
 

@@ -120,10 +120,10 @@
         <div class="modal-body">
           {% if day.feed_records %}
           <table class="table table-sm mb-3">
-            <thead><tr><th>Type</th><th>Quantite</th><th>Prix/kg</th></tr></thead>
+            <thead><tr><th>Type</th><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix/kg</th>{% endif %}</tr></thead>
             <tbody>
               {% for r in day.feed_records %}
-              <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }} kg</td><td>{{ r.unit_price|currency }}</td></tr>
+              <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }} kg</td>{% if current_user.has_role('owner') %}<td>{{ r.unit_price|currency }}</td>{% endif %}</tr>
               {% endfor %}
             </tbody>
           </table>
@@ -131,9 +131,8 @@
           <p class="text-muted small">Indiquez le type d'aliment donne (ex : Demarrage, Croissance) et la quantite en kilogrammes.</p>
           {{ fm.render_field(feed_form.feed_type) }}
           {{ fm.render_field(feed_form.quantity_kg) }}
-          {{ fm.render_field(feed_form.unit_price, field_id="feed-unit-price") }}
-          <p class="text-muted small mb-1">Si cet aliment vient de votre stock enregistre, selectionnez-le ici pour que la quantite soit deduite automatiquement et le prix pre-rempli (facultatif) :</p>
-          {{ fm.render_field(feed_form.stock_item_id, field_id="feed-stock-item") }}
+          <p class="text-muted small mb-1">Si cet aliment vient de votre stock enregistre, selectionnez-le ici pour que la quantite soit deduite automatiquement (le prix est deja defini dans le Stock, facultatif) :</p>
+          {{ fm.render_field(feed_form.stock_item_id) }}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -216,14 +215,13 @@
         <div class="modal-body">
           {% if day.wood_records %}
           <table class="table table-sm mb-3">
-            <thead><tr><th>Quantite</th><th>Prix</th></tr></thead>
-            <tbody>{% for r in day.wood_records %}<tr><td>{{ r.quantity }}</td><td>{{ r.unit_price|currency }}</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix</th>{% endif %}</tr></thead>
+            <tbody>{% for r in day.wood_records %}<tr><td>{{ r.quantity }}</td>{% if current_user.has_role('owner') %}<td>{{ r.unit_price|currency }}</td>{% endif %}</tr>{% endfor %}</tbody>
           </table>
           {% endif %}
           <p class="text-muted small">Quantite de bois / copeaux / litiere ajoutee aujourd'hui.</p>
           {{ fm.render_field(wood_form.quantity) }}
-          {{ fm.render_field(wood_form.unit_price, field_id="wood-unit-price") }}
-          {{ fm.render_field(wood_form.stock_item_id, field_id="wood-stock-item") }}
+          {{ fm.render_field(wood_form.stock_item_id) }}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -254,9 +252,8 @@
           <p class="text-muted small">Astuce : consultez la <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">feuille de route</a> pour savoir quoi administrer aujourd'hui.</p>
           {{ fm.render_field(medication_form.medication_name) }}
           {{ fm.render_field(medication_form.quantity) }}
-          {{ fm.render_field(medication_form.unit_price, field_id="medication-unit-price") }}
           {{ fm.render_field(medication_form.notes) }}
-          {{ fm.render_field(medication_form.stock_item_id, field_id="medication-stock-item") }}
+          {{ fm.render_field(medication_form.stock_item_id) }}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -342,29 +339,6 @@
 
 {% block scripts %}
 <script>
-  // Pre-remplit le prix (prix/kg, prix/ml ou prix a l'unite) des qu'un
-  // article de stock est choisi, a partir du prix d'achat deja renseigne
-  // sur cet article (voir /elevage/stock) : evite de recalculer et
-  // resaisir un prix au kg a la main a chaque saisie quotidienne.
-  document.addEventListener("DOMContentLoaded", function () {
-    var priceMaps = {
-      "feed-stock-item": [{{ feed_stock_prices|tojson }}, "feed-unit-price"],
-      "wood-stock-item": [{{ wood_stock_prices|tojson }}, "wood-unit-price"],
-      "medication-stock-item": [{{ medication_stock_prices|tojson }}, "medication-unit-price"],
-    };
-    Object.keys(priceMaps).forEach(function (selectId) {
-      var select = document.getElementById(selectId);
-      var prices = priceMaps[selectId][0];
-      var priceFieldId = priceMaps[selectId][1];
-      if (!select) return;
-      select.addEventListener("change", function () {
-        var price = prices[select.value];
-        var priceField = document.getElementById(priceFieldId);
-        if (priceField && price !== undefined) priceField.value = price;
-      });
-    });
-  });
-
   document.addEventListener("DOMContentLoaded", function () {
     if (!window.FarmControlOffline) return;
     var forms = {

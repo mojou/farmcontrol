@@ -8,7 +8,7 @@ from werkzeug.exceptions import NotFound
 from flask import send_from_directory
 
 from app.blueprints.core import core_bp
-from app.blueprints.core.forms import ProfileForm, SettingsForm, TenantForm, UserForm
+from app.blueprints.core.forms import COUNTRY_CURRENCY, ProfileForm, SettingsForm, TenantForm, UserForm
 from app.decorators import owner_required, super_admin_required
 from app.extensions import db
 from app.models import utcnow
@@ -200,7 +200,7 @@ def settings():
         flash(_("Parametres enregistres."), "success")
         return redirect(url_for("core.settings"))
 
-    return render_template("core/settings.html", form=form)
+    return render_template("core/settings.html", form=form, country_currency=COUNTRY_CURRENCY)
 
 
 # --------------------------------------------------------------------------

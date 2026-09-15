@@ -8,7 +8,20 @@
 
 <div class="row g-3">
   <div class="col-lg-5">
-    {{ fm.form_card(form, _('Exploitation')) }}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mb-3">{{ _('Exploitation') }}</h5>
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+          {{ fm.render_field(form.name) }}
+          {{ fm.render_field(form.country, field_id="settings-country") }}
+          <p class="text-muted small mb-2">{{ _('La devise se pre-remplit selon le pays choisi, vous pouvez la modifier.') }}</p>
+          {{ fm.render_field(form.currency_label, field_id="settings-currency") }}
+          {{ fm.render_field(form.default_language) }}
+          <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+        </form>
+      </div>
+    </div>
   </div>
   <div class="col-lg-6">
     <div class="card">
@@ -27,4 +40,21 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Pre-remplit la devise des que le pays est choisi (paragraphe "tous les
+  // pays d'Afrique") - reste modifiable manuellement ensuite.
+  document.addEventListener("DOMContentLoaded", function () {
+    var countryCurrency = {{ country_currency|tojson }};
+    var countryField = document.getElementById("settings-country");
+    var currencyField = document.getElementById("settings-currency");
+    if (!countryField || !currencyField) return;
+    countryField.addEventListener("change", function () {
+      var currency = countryCurrency[countryField.value];
+      if (currency) currencyField.value = currency;
+    });
+  });
+</script>
 {% endblock %}

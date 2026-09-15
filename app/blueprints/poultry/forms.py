@@ -101,13 +101,10 @@ class FeedRecordForm(FlaskForm):
         places=2,
         render_kw={"placeholder": "Ex : 25"},
     )
-    unit_price = DecimalField(
-        "Prix par kg (FCFA)",
-        validators=[DataRequired(), NumberRange(min=0)],
-        places=2,
-        render_kw={"placeholder": "Ex : 450"},
+    stock_item_id = SelectField(
+        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        coerce=int, validators=[Optional()],
     )
-    stock_item_id = SelectField("Prelever depuis un stock enregistre (facultatif)", coerce=int, validators=[Optional()])
     submit = SubmitField("Enregistrer")
 
 
@@ -142,13 +139,10 @@ class WoodRecordForm(FlaskForm):
         places=2,
         render_kw={"placeholder": "Ex : 10"},
     )
-    unit_price = DecimalField(
-        "Prix unitaire (FCFA)",
-        validators=[DataRequired(), NumberRange(min=0)],
-        places=2,
-        render_kw={"placeholder": "Ex : 50"},
+    stock_item_id = SelectField(
+        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        coerce=int, validators=[Optional()],
     )
-    stock_item_id = SelectField("Prelever depuis un stock enregistre (facultatif)", coerce=int, validators=[Optional()])
     submit = SubmitField("Enregistrer")
 
 
@@ -164,18 +158,15 @@ class MedicationRecordForm(FlaskForm):
         places=2,
         render_kw={"placeholder": "Ex : 50 (pour 50 ml, verse dans l'eau de boisson)"},
     )
-    unit_price = DecimalField(
-        "Prix (FCFA)",
-        validators=[DataRequired(), NumberRange(min=0)],
-        places=2,
-        render_kw={"placeholder": "Ex : 3000"},
-    )
     notes = TextAreaField(
         "Comment l'avez-vous administre ? (facultatif)",
         validators=[Optional()],
         render_kw={"placeholder": "Ex : dans l'eau de boisson, en injection..."},
     )
-    stock_item_id = SelectField("Prelever depuis un stock enregistre (facultatif)", coerce=int, validators=[Optional()])
+    stock_item_id = SelectField(
+        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        coerce=int, validators=[Optional()],
+    )
     submit = SubmitField("Enregistrer")
 
 

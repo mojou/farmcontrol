@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 15:04+0100\n"
+"POT-Creation-Date: 2026-09-15 15:22+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -161,23 +161,23 @@ msgstr "Current password is incorrect."
 msgid "Mot de passe mis a jour avec succes."
 msgstr "Password updated successfully."
 
-#: app/blueprints/core/forms.py:61
+#: app/blueprints/core/forms.py:105
 msgid "Nom de l'exploitation"
 msgstr "Farm name"
 
-#: app/blueprints/core/forms.py:62
+#: app/blueprints/core/forms.py:106
 msgid "Pays"
 msgstr "Country"
 
-#: app/blueprints/core/forms.py:64
+#: app/blueprints/core/forms.py:108
 msgid "Langue par defaut pour les nouveaux utilisateurs"
 msgstr "Default language for new users"
 
-#: app/blueprints/core/forms.py:69
+#: app/blueprints/core/forms.py:113
 msgid "Devise affichee"
 msgstr "Displayed currency"
 
-#: app/blueprints/core/forms.py:74
+#: app/blueprints/core/forms.py:118
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -420,31 +420,35 @@ msgstr "Already have an account?"
 msgid "Parametres"
 msgstr "Settings"
 
-#: app/templates/core/settings.html:11
+#: app/templates/core/settings.html:13
 msgid "Exploitation"
 msgstr "Farm"
 
-#: app/templates/core/settings.html:16
+#: app/templates/core/settings.html:18
+msgid "La devise se pre-remplit selon le pays choisi, vous pouvez la modifier."
+msgstr "The currency is pre-filled based on the chosen country, you can change it."
+
+#: app/templates/core/settings.html:29
 msgid "Prix par defaut de l'aliment, du bois et des medicaments"
 msgstr "Default prices for feed, wood and medication"
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:31
 msgid "Ces prix se gerent directement depuis la page"
 msgstr "These prices are managed directly from the"
 
-#: app/templates/core/settings.html:18 app/templates/partials/sidebar.html:21
+#: app/templates/core/settings.html:31 app/templates/partials/sidebar.html:21
 msgid "Stock"
 msgstr "Stock"
 
-#: app/templates/core/settings.html:18
+#: app/templates/core/settings.html:31
 msgid ""
 ", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
 " une bouteille ou un morceau."
 msgstr ""
-" page, not here: that's where you enter what you paid for a bag, a "
-"bottle or a piece."
+" page, not here: that's where you enter what you paid for a bag, a bottle"
+" or a piece."
 
-#: app/templates/core/settings.html:21
+#: app/templates/core/settings.html:34
 msgid ""
 "Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
 "indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
@@ -453,13 +457,13 @@ msgid ""
 "saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper "
 "ce prix chaque jour."
 msgstr ""
-"For example, if you buy a 40 kg bag of feed for 20,000 FCFA, simply "
-"enter 20,000 FCFA as the item price and 40 as the weight of a bag: the "
-"system calculates the price per kg itself (500 FCFA/kg here) and "
-"auto-fills it as soon as you pick this item during daily entry. You no "
-"longer need to recalculate or retype this price every day."
+"For example, if you buy a 40 kg bag of feed for 20,000 FCFA, simply enter"
+" 20,000 FCFA as the item price and 40 as the weight of a bag: the system "
+"calculates the price per kg itself (500 FCFA/kg here) and auto-fills it "
+"as soon as you pick this item during daily entry. You no longer need to "
+"recalculate or retype this price every day."
 
-#: app/templates/core/settings.html:24
+#: app/templates/core/settings.html:37
 msgid "Gerer mes prix dans le Stock"
 msgstr "Manage my prices in Stock"
 

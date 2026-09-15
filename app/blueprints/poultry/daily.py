@@ -70,26 +70,26 @@ def _stock_choices(farm_id, category):
     return choices
 
 
-def _stock_price_map(farm_id, category):
-    """Prix par unite de saisie (kg pour l'aliment, ml pour les
-    medicaments, unite de stock telle quelle pour le bois/litiere) pour
-    chaque article de stock, calcule a partir du prix d'achat et de la
-    conversion deja renseignes sur l'article (StockItem.unit_price /
-    kg_per_unit / ml_per_unit - voir /elevage/stock). Permet de pre-remplir
-    automatiquement le prix en saisie quotidienne : l'eleveur n'a plus a
-    recalculer un prix au kg a la main a chaque fois (ex : sac de 40 kg
-    achete 20000 FCFA -> 500 FCFA/kg pre-rempli)."""
-    items = StockItem.query.filter_by(farm_id=farm_id, category=category, is_active=True).all()
-    prices = {}
-    for i in items:
-        unit_price = float(i.unit_price or 0)
-        if i.kg_per_unit:
-            prices[i.id] = round(unit_price / float(i.kg_per_unit), 2) if i.kg_per_unit else unit_price
-        elif i.ml_per_unit:
-            prices[i.id] = round(unit_price / float(i.ml_per_unit), 2) if i.ml_per_unit else unit_price
-        else:
-            prices[i.id] = unit_price
-    return prices
+def _stock_entry_price(stock_item_id, price_is_kg=False, price_is_ml=False):
+    """Prix par unite de saisie (kg/ml/unite de stock) pour un seul article,
+    calcule cote serveur a partir du prix d'achat deja renseigne dans le
+    Stock (StockItem.unit_price + conversion) - jamais saisi ni modifiable
+    depuis la saisie quotidienne : c'est une information reservee au
+    proprietaire, definie une seule fois dans /elevage/stock (paragraphe
+    parametres). Sans article de stock lie ("saisie libre"), le prix est
+    inconnu et reste a 0 - le cout de cette entree n'est simplement pas
+    suivi, ce qui reste coherent (ex : un vaccin a dose unique)."""
+    if not stock_item_id:
+        return Decimal(0)
+    stock_item = db.session.get(StockItem, stock_item_id)
+    if stock_item is None:
+        return Decimal(0)
+    unit_price = Decimal(stock_item.unit_price or 0)
+    if price_is_kg and stock_item.kg_per_unit:
+        return round(unit_price / Decimal(stock_item.kg_per_unit), 2)
+    if price_is_ml and stock_item.ml_per_unit:
+        return round(unit_price / Decimal(stock_item.ml_per_unit), 2)
+    return unit_price
 
 
 def _farm_has_manager(farm):
@@ -197,9 +197,6 @@ def batch_day_detail(day_id):
         total_feed_kg=day.feed_kg,
         total_water_liters=sum((r.quantity_liters or 0) for r in day.water_records),
         total_mortality=day.mortality_count,
-        feed_stock_prices=_stock_price_map(day.batch.farm_id, "feed"),
-        wood_stock_prices=_stock_price_map(day.batch.farm_id, "wood"),
-        medication_stock_prices=_stock_price_map(day.batch.farm_id, "medication"),
     )
 
 
@@ -223,7 +220,7 @@ def feed_record_new(day_id):
             stock_item_id=form.stock_item_id.data or None,
             feed_type=form.feed_type.data,
             quantity_kg=form.quantity_kg.data,
-            unit_price=form.unit_price.data,
+            unit_price=_stock_entry_price(form.stock_item_id.data, price_is_kg=True),
             created_by=current_user.id,
         )
         db.session.add(record)
@@ -300,7 +297,7 @@ def wood_record_new(day_id):
             batch_day_id=day.id,
             stock_item_id=form.stock_item_id.data or None,
             quantity=form.quantity.data,
-            unit_price=form.unit_price.data,
+            unit_price=_stock_entry_price(form.stock_item_id.data),
             created_by=current_user.id,
         )
         db.session.add(record)
@@ -331,7 +328,7 @@ def medication_record_new(day_id):
             stock_item_id=form.stock_item_id.data or None,
             medication_name=form.medication_name.data,
             quantity=form.quantity.data,
-            unit_price=form.unit_price.data,
+            unit_price=_stock_entry_price(form.stock_item_id.data, price_is_ml=True),
             notes=form.notes.data,
             created_by=current_user.id,
         )
