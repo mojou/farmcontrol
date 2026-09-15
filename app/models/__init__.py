@@ -94,5 +94,7 @@ from app.models.poultry import (  # noqa: E402,F401
     DailyReport,
     GrowthReference,
     GrowthReferencePoint,
+    Supplier,
+    Sale,
 )
 from app.models.billing import Plan, Subscription, PaymentTransaction  # noqa: E402,F401

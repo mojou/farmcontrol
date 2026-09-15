@@ -24,9 +24,64 @@ class BatchForm(FlaskForm):
     breed = StringField("Souche", validators=[Optional()])
     initial_count = IntegerField("Effectif initial", validators=[DataRequired(), NumberRange(min=1)])
     chick_unit_price = DecimalField("Prix unitaire poussin", validators=[DataRequired(), NumberRange(min=0)], places=2)
+    supplier_id = SelectField("Fournisseur des poussins (facultatif)", coerce=int, validators=[Optional()])
     start_date = DateField("Date de mise en place", validators=[DataRequired()])
     growth_reference_id = SelectField("Courbe de reference (souche)", coerce=int, validators=[Optional()])
     submit = SubmitField("Enregistrer")
+
+
+class SupplierForm(FlaskForm):
+    name = StringField(
+        "Nom du fournisseur",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Ex : Couvoir Nord, Ferme Avicole du Littoral..."},
+    )
+    category = SelectField(
+        "Fournit principalement",
+        choices=[
+            ("chick", "Poussins"),
+            ("feed", "Aliment"),
+            ("medication", "Medicaments"),
+            ("other", "Autre"),
+        ],
+    )
+    phone = StringField("Telephone (facultatif)", validators=[Optional()], render_kw={"placeholder": "Ex : 6XX XXX XXX"})
+    notes = TextAreaField("Notes (facultatif)", validators=[Optional()], render_kw={"placeholder": "Fiabilite, delais, qualite..."})
+    submit = SubmitField("Enregistrer")
+
+
+class SaleForm(FlaskForm):
+    sale_date = DateField("Date de la vente", validators=[DataRequired()])
+    buyer_name = StringField(
+        "Nom de l'acheteur", validators=[DataRequired()], render_kw={"placeholder": "Ex : Mme Njoya"}
+    )
+    buyer_phone = StringField("Telephone de l'acheteur (facultatif)", validators=[Optional()])
+    quantity = DecimalField(
+        "Quantite vendue", validators=[DataRequired(), NumberRange(min=0.01)], places=2,
+        render_kw={"placeholder": "Ex : 50"},
+    )
+    unit = SelectField("Unite", choices=[("unit", "Sujets (poulets)"), ("kg", "Kilogrammes")], default="unit")
+    unit_price = DecimalField(
+        "Prix unitaire (FCFA)", validators=[DataRequired(), NumberRange(min=0)], places=2,
+        render_kw={"placeholder": "Ex : 3500"},
+    )
+    amount_paid = DecimalField(
+        "Montant deja recu (FCFA)",
+        validators=[Optional(), NumberRange(min=0)],
+        places=2,
+        default=0,
+        render_kw={"placeholder": "Ex : 0 si tout est a credit, ou le montant total si tout est paye"},
+    )
+    notes = TextAreaField("Notes (facultatif)", validators=[Optional()])
+    submit = SubmitField("Enregistrer la vente")
+
+
+class SalePaymentForm(FlaskForm):
+    amount = DecimalField(
+        "Montant recu", validators=[DataRequired(), NumberRange(min=0.01)], places=2,
+        render_kw={"placeholder": "Ex : 20000"},
+    )
+    submit = SubmitField("Enregistrer le paiement")
 
 
 class BatchCloseForm(FlaskForm):

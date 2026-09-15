@@ -20,7 +20,9 @@ from app.models.poultry import (
     FeedRecord,
     MortalityRecord,
     REPORT_STATUS_REVIEWED,
+    Sale,
     StockItem,
+    Supplier,
     WaterRecord,
     WeightRecord,
 )
@@ -100,6 +102,13 @@ def seed_demo():
             db.session.add_all([farm1, farm2])
             db.session.flush()
 
+            supplier_chicks = Supplier(
+                tenant_id=tenant.id, name="Couvoir Regional", category=Supplier.CATEGORY_CHICK,
+                phone="677000000", notes="Livraison fiable, poussins vaccines a la naissance.",
+            )
+            db.session.add(supplier_chicks)
+            db.session.flush()
+
             batch = Batch(
                 tenant_id=tenant.id,
                 farm_id=farm1.id,
@@ -107,6 +116,7 @@ def seed_demo():
                 breed="Ross 308",
                 initial_count=1000,
                 chick_unit_price=Decimal("300"),
+                supplier_id=supplier_chicks.id,
                 start_date=date.today() - timedelta(days=14),
                 created_by=owner.id,
             )
@@ -177,6 +187,25 @@ def seed_demo():
                     status=REPORT_STATUS_REVIEWED,
                 )
                 db.session.add(report)
+
+            sale_paid = Sale(
+                tenant_id=tenant.id, batch_id=batch.id,
+                sale_date=date.today() - timedelta(days=2),
+                buyer_name="Mme Njoya (restauratrice)", buyer_phone="699111222",
+                quantity=Decimal("50"), unit=Sale.UNIT_SUBJECT, unit_price=Decimal("3500"),
+                total_amount=Decimal("175000"), amount_paid=Decimal("175000"),
+                created_by=owner.id,
+            )
+            sale_credit = Sale(
+                tenant_id=tenant.id, batch_id=batch.id,
+                sale_date=date.today() - timedelta(days=1),
+                buyer_name="M. Talla (revendeur)", buyer_phone="655333444",
+                quantity=Decimal("30"), unit=Sale.UNIT_SUBJECT, unit_price=Decimal("3500"),
+                total_amount=Decimal("105000"), amount_paid=Decimal("50000"),
+                notes="Reste a payer sous 1 semaine", created_by=owner.id,
+            )
+            db.session.add_all([sale_paid, sale_credit])
+            db.session.flush()
 
             recompute_batch_finance(batch)
 

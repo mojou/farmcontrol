@@ -20,6 +20,14 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.stock_list' }}" href="{{ url_for('poultry.stock_list') }}">
       <i class="bi bi-box-seam"></i> Stock
     </a>
+    {% if current_user.has_role('owner') %}
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.suppliers_list' }}" href="{{ url_for('poultry.suppliers_list') }}">
+      <i class="bi bi-truck"></i> Fournisseurs
+    </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.credits_list' }}" href="{{ url_for('poultry.credits_list') }}">
+      <i class="bi bi-cash-coin"></i> Creances
+    </a>
+    {% endif %}
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.alerts_list' }}" href="{{ url_for('core.alerts_list') }}">
       <i class="bi bi-bell"></i> Alertes
       {% if unread_alerts_count %}<span class="badge bg-danger ms-1">{{ unread_alerts_count }}</span>{% endif %}

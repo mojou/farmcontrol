@@ -72,6 +72,30 @@ class Farm(TimestampMixin, TenantMixin, db.Model):
         return f"<Farm {self.name}>"
 
 
+class Supplier(TimestampMixin, TenantMixin, db.Model):
+    """Fournisseur (poussins, aliment, medicaments...) - permet de suivre
+    dans le temps la fiabilite d'un fournisseur (prix, retards, qualite)
+    plutot que de perdre cette information a chaque achat."""
+
+    __tablename__ = "poultry_suppliers"
+
+    CATEGORY_CHICK = "chick"
+    CATEGORY_FEED = "feed"
+    CATEGORY_MEDICATION = "medication"
+    CATEGORY_OTHER = "other"
+    CATEGORIES = [CATEGORY_CHICK, CATEGORY_FEED, CATEGORY_MEDICATION, CATEGORY_OTHER]
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    category = db.Column(db.String(20), nullable=False, default=CATEGORY_OTHER)
+    phone = db.Column(db.String(30), nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+    def __repr__(self):
+        return f"<Supplier {self.name}>"
+
+
 class Batch(TimestampMixin, TenantMixin, db.Model):
     __tablename__ = "poultry_batches"
 
@@ -82,6 +106,9 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     breed = db.Column(db.String(100), nullable=True)  # souche
     initial_count = db.Column(db.Integer, nullable=False)
     chick_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
+    supplier_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_suppliers.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=True)
     status = db.Column(db.String(20), nullable=False, default=BATCH_STATUS_ACTIVE)
@@ -93,6 +120,8 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
 
     farm = db.relationship("Farm", back_populates="batches")
     growth_reference = db.relationship("GrowthReference")
+    supplier = db.relationship("Supplier")
+    sales = db.relationship("Sale", back_populates="batch", cascade="all, delete-orphan")
     days = db.relationship(
         "BatchDay", back_populates="batch", cascade="all, delete-orphan",
         order_by="BatchDay.day_number",
@@ -338,6 +367,46 @@ class WeightRecord(TimestampMixin, TenantMixin, db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     batch_day = db.relationship("BatchDay", back_populates="weight_records")
+
+
+class Sale(TimestampMixin, TenantMixin, db.Model):
+    """Une vente de volailles a un acheteur, a une date donnee.
+
+    Remplace/complete l'ancien champ unique de BatchFinance (sale_quantity/
+    sale_unit_price) : un eleveur vend generalement son lot progressivement,
+    a plusieurs acheteurs, parfois a credit (paiement partiel). Chaque vente
+    garde son propre solde du (balance_due) pour le suivi des creances.
+    """
+
+    __tablename__ = "poultry_sales"
+
+    UNIT_KG = "kg"
+    UNIT_SUBJECT = "unit"
+    UNITS = [UNIT_KG, UNIT_SUBJECT]
+
+    id = db.Column(db.Integer, primary_key=True)
+    batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)
+
+    sale_date = db.Column(db.Date, nullable=False)
+    buyer_name = db.Column(db.String(150), nullable=False)
+    buyer_phone = db.Column(db.String(30), nullable=True)
+    quantity = db.Column(db.Numeric(10, 2), nullable=False)
+    unit = db.Column(db.String(10), nullable=False, default=UNIT_SUBJECT)
+    unit_price = db.Column(db.Numeric(10, 2), nullable=False)
+    total_amount = db.Column(db.Numeric(12, 2), nullable=False)
+    amount_paid = db.Column(db.Numeric(12, 2), nullable=False, default=0)
+    notes = db.Column(db.Text, nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    batch = db.relationship("Batch", back_populates="sales")
+
+    @property
+    def balance_due(self):
+        return (self.total_amount or 0) - (self.amount_paid or 0)
+
+    @property
+    def is_paid(self) -> bool:
+        return self.balance_due <= 0
 
 
 class BatchFinance(TimestampMixin, TenantMixin, db.Model):

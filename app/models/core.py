@@ -48,6 +48,7 @@ class Tenant(TimestampMixin, db.Model):
     sanitary_program_templates = db.relationship(
         "SanitaryProgramTemplateItem", cascade="all, delete-orphan"
     )
+    suppliers = db.relationship("Supplier", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Tenant {self.slug}>"

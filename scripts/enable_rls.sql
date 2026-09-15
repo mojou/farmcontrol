@@ -44,7 +44,9 @@ DECLARE
         'billing_subscriptions',
         'billing_payment_transactions',
         'messages',
-        'poultry_sanitary_program_template_items'
+        'poultry_sanitary_program_template_items',
+        'poultry_suppliers',
+        'poultry_sales'
     ];
 BEGIN
     FOREACH t IN ARRAY tenant_scoped_tables LOOP

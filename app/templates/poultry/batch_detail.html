@@ -10,6 +10,7 @@
     <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Saisie quotidienne</a>
     <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Rapport complet</a>
     {% if current_user.has_role('owner') %}
+    <a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cash-coin"></i> Ventes</a>
     <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Rentabilite</a>
     {% if batch.is_active %}
     <a href="{{ url_for('poultry.batch_close', batch_id=batch.id) }}" class="btn btn-outline-danger btn-sm">Cloturer</a>

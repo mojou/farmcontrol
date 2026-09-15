@@ -107,7 +107,13 @@ def recompute_batch_finance(batch):
     )
     finance.total_wood_cost = sum((r.total_cost for day in batch.days for r in day.wood_records), Decimal(0))
 
-    if finance.sale_quantity and finance.sale_unit_price:
+    if batch.sales:
+        # Ventes detaillees (paragraphe ventes/creances) : source de verite
+        # des qu'au moins une vente est enregistree pour ce lot.
+        finance.sale_revenue = sum((Decimal(s.total_amount or 0) for s in batch.sales), Decimal(0))
+    elif finance.sale_quantity and finance.sale_unit_price:
+        # Ancienne saisie manuelle en un seul bloc, conservee pour les lots
+        # qui n'utilisent pas le suivi de ventes detaille.
         finance.sale_revenue = Decimal(finance.sale_quantity) * Decimal(finance.sale_unit_price)
 
     finance.net_result = Decimal(finance.sale_revenue or 0) - finance.total_charges

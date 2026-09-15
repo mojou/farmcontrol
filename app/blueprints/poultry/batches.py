@@ -20,6 +20,7 @@ from app.models.poultry import (
     GrowthReference,
     GrowthReferencePoint,
     SanitaryProgramItem,
+    Supplier,
 )
 from app.utils.audit import log_action
 from app.utils.plans import get_current_plan
@@ -86,6 +87,9 @@ def batch_new():
     form.growth_reference_id.choices = [(0, "Aucune")] + [
         (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
     ]
+    form.supplier_id.choices = [(0, "Aucun")] + [
+        (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
+    ]
 
     if form.validate_on_submit():
         existing = Batch.query.filter_by(farm_id=form.farm_id.data, code=form.code.data).first()
@@ -100,6 +104,7 @@ def batch_new():
             breed=form.breed.data,
             initial_count=form.initial_count.data,
             chick_unit_price=form.chick_unit_price.data,
+            supplier_id=form.supplier_id.data or None,
             start_date=form.start_date.data,
             growth_reference_id=form.growth_reference_id.data or None,
             created_by=current_user.id,
