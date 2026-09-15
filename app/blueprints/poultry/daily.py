@@ -17,7 +17,7 @@ from app.blueprints.poultry.forms import (
     WeightRecordForm,
     WoodRecordForm,
 )
-from app.decorators import ensure_farm_access
+from app.decorators import ensure_farm_access, owner_required
 from app.extensions import db
 from app.models.core import User
 from app.models.poultry import (
@@ -39,7 +39,7 @@ from app.models.poultry import (
 from app.utils.alerts import check_fcr_alert, check_mortality_alert, check_stock_alert, check_urgent_observation_alert
 from app.utils.audit import log_action
 from app.utils.sanitary import get_pending_items
-from app.utils.uploads import save_observation_photo
+from app.utils.uploads import delete_photo, save_observation_photo
 from app.utils.zootechnie import recompute_batch_finance
 
 
@@ -123,6 +123,23 @@ def _apply_stock_consumption(stock_item_id, quantity, quantity_is_kg=False, quan
     elif quantity_is_ml and stock_item.ml_per_unit:
         quantity = Decimal(quantity) / Decimal(stock_item.ml_per_unit)
     stock_item.quantity_on_hand = max((stock_item.quantity_on_hand or 0) - quantity, 0)
+    return stock_item
+
+
+def _reverse_stock_consumption(stock_item_id, quantity, quantity_is_kg=False, quantity_is_ml=False):
+    """Annule une consommation de stock (en cas de suppression d'une saisie
+    erronee) - symetrique de `_apply_stock_consumption`, meme conversion
+    d'unite mais en sens inverse (on rajoute plutot que l'on retire)."""
+    if not stock_item_id:
+        return None
+    stock_item = db.session.get(StockItem, stock_item_id)
+    if stock_item is None:
+        return None
+    if quantity_is_kg and stock_item.kg_per_unit:
+        quantity = Decimal(quantity) / Decimal(stock_item.kg_per_unit)
+    elif quantity_is_ml and stock_item.ml_per_unit:
+        quantity = Decimal(quantity) / Decimal(stock_item.ml_per_unit)
+    stock_item.quantity_on_hand = (stock_item.quantity_on_hand or 0) + quantity
     return stock_item
 
 
@@ -237,6 +254,24 @@ def feed_record_new(day_id):
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
+@poultry_bp.route("/aliment/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def feed_record_delete(record_id):
+    record = FeedRecord.query.get_or_404(record_id)
+    batch = record.batch_day.batch
+    if not ensure_farm_access(batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    _reverse_stock_consumption(record.stock_item_id, record.quantity_kg, quantity_is_kg=True)
+    log_action("delete", "poultry_feed_records", record.id, {"quantity_kg": str(record.quantity_kg)})
+    db.session.delete(record)
+    db.session.flush()
+    recompute_batch_finance(batch)
+    db.session.commit()
+    flash("Saisie d'aliment supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
+
+
 @poultry_bp.route("/jours/<int:day_id>/eau", methods=["POST"])
 @login_required
 def water_record_new(day_id):
@@ -258,6 +293,20 @@ def water_record_new(day_id):
     else:
         flash("Erreur dans le formulaire eau.", "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/eau/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def water_record_delete(record_id):
+    record = WaterRecord.query.get_or_404(record_id)
+    if not ensure_farm_access(record.batch_day.batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    log_action("delete", "poultry_water_records", record.id, {"quantity_liters": str(record.quantity_liters)})
+    db.session.delete(record)
+    db.session.commit()
+    flash("Saisie d'eau supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
 @poultry_bp.route("/jours/<int:day_id>/mortalite", methods=["POST"])
@@ -283,6 +332,20 @@ def mortality_record_new(day_id):
     else:
         flash("Erreur dans le formulaire mortalite.", "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/mortalite/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def mortality_record_delete(record_id):
+    record = MortalityRecord.query.get_or_404(record_id)
+    if not ensure_farm_access(record.batch_day.batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    log_action("delete", "poultry_mortality_records", record.id, {"quantity_dead": record.quantity_dead})
+    db.session.delete(record)
+    db.session.commit()
+    flash("Saisie de mortalite supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
 @poultry_bp.route("/jours/<int:day_id>/bois", methods=["POST"])
@@ -316,6 +379,24 @@ def wood_record_new(day_id):
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
+@poultry_bp.route("/bois/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def wood_record_delete(record_id):
+    record = WoodRecord.query.get_or_404(record_id)
+    batch = record.batch_day.batch
+    if not ensure_farm_access(batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    _reverse_stock_consumption(record.stock_item_id, record.quantity)
+    log_action("delete", "poultry_wood_records", record.id, {"quantity": str(record.quantity)})
+    db.session.delete(record)
+    db.session.flush()
+    recompute_batch_finance(batch)
+    db.session.commit()
+    flash("Saisie de bois/litiere supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
+
+
 @poultry_bp.route("/jours/<int:day_id>/medicaments", methods=["POST"])
 @login_required
 def medication_record_new(day_id):
@@ -347,6 +428,24 @@ def medication_record_new(day_id):
     else:
         flash("Erreur dans le formulaire medicaments.", "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/medicaments/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def medication_record_delete(record_id):
+    record = MedicationRecord.query.get_or_404(record_id)
+    batch = record.batch_day.batch
+    if not ensure_farm_access(batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    _reverse_stock_consumption(record.stock_item_id, record.quantity, quantity_is_ml=True)
+    log_action("delete", "poultry_medication_records", record.id, {"medication_name": record.medication_name})
+    db.session.delete(record)
+    db.session.flush()
+    recompute_batch_finance(batch)
+    db.session.commit()
+    flash("Saisie de medicament supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
 @poultry_bp.route("/jours/<int:day_id>/observations", methods=["POST"])
@@ -383,6 +482,22 @@ def observation_new(day_id):
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
+@poultry_bp.route("/observations/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def observation_delete(record_id):
+    record = Observation.query.get_or_404(record_id)
+    if not ensure_farm_access(record.batch_day.batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    if record.photo_path:
+        delete_photo(record.photo_path)
+    log_action("delete", "poultry_observations", record.id, {"severity": record.severity})
+    db.session.delete(record)
+    db.session.commit()
+    flash("Observation supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
+
+
 @poultry_bp.route("/jours/<int:day_id>/pesees", methods=["POST"])
 @login_required
 def weight_record_new(day_id):
@@ -409,6 +524,23 @@ def weight_record_new(day_id):
     else:
         flash("Erreur dans le formulaire pesee.", "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/pesees/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def weight_record_delete(record_id):
+    record = WeightRecord.query.get_or_404(record_id)
+    batch = record.batch_day.batch
+    if not ensure_farm_access(batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    log_action("delete", "poultry_weight_records", record.id, {"average_weight": str(record.average_weight)})
+    db.session.delete(record)
+    db.session.flush()
+    recompute_batch_finance(batch)
+    db.session.commit()
+    flash("Pesee supprimee.", "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
 # --------------------------------------------------------------------------

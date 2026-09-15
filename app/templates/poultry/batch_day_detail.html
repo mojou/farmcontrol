@@ -121,10 +121,21 @@
           {% if day.feed_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Type</th><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix/kg</th>{% endif %}</tr></thead>
+            <thead><tr><th>Type</th><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix/kg</th><th></th>{% endif %}</tr></thead>
             <tbody>
               {% for r in day.feed_records %}
-              <tr><td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }} kg</td>{% if current_user.has_role('owner') %}<td>{{ r.unit_price|currency }}</td>{% endif %}</tr>
+              <tr>
+                <td>{{ r.feed_type }}</td><td>{{ r.quantity_kg }} kg</td>
+                {% if current_user.has_role('owner') %}
+                <td>{{ r.unit_price|currency }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('poultry.feed_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -159,8 +170,22 @@
           {% if day.water_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Quantite</th></tr></thead>
-            <tbody>{% for r in day.water_records %}<tr><td>{{ r.quantity_liters }} L</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Quantite</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.water_records %}
+              <tr>
+                <td>{{ r.quantity_liters }} L</td>
+                {% if current_user.has_role('owner') %}
+                <td>
+                  <form method="post" action="{{ url_for('poultry.water_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
           </div>
           {% endif %}
@@ -190,8 +215,22 @@
           {% if day.mortality_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Nombre</th><th>Cause</th></tr></thead>
-            <tbody>{% for r in day.mortality_records %}<tr><td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Nombre</th><th>Cause</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.mortality_records %}
+              <tr>
+                <td>{{ r.quantity_dead }}</td><td>{{ r.cause or "-" }}</td>
+                {% if current_user.has_role('owner') %}
+                <td>
+                  <form method="post" action="{{ url_for('poultry.mortality_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
           </div>
           {% endif %}
@@ -222,8 +261,23 @@
           {% if day.wood_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix</th>{% endif %}</tr></thead>
-            <tbody>{% for r in day.wood_records %}<tr><td>{{ r.quantity }}</td>{% if current_user.has_role('owner') %}<td>{{ r.unit_price|currency }}</td>{% endif %}</tr>{% endfor %}</tbody>
+            <thead><tr><th>Quantite</th>{% if current_user.has_role('owner') %}<th>Prix</th><th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.wood_records %}
+              <tr>
+                <td>{{ r.quantity }}</td>
+                {% if current_user.has_role('owner') %}
+                <td>{{ r.unit_price|currency }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('poultry.wood_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
           </div>
           {% endif %}
@@ -254,8 +308,22 @@
           {% if day.medication_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Produit</th><th>Quantite (ml)</th></tr></thead>
-            <tbody>{% for r in day.medication_records %}<tr><td>{{ r.medication_name }}</td><td>{{ r.quantity }} ml</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Produit</th><th>Quantite (ml)</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.medication_records %}
+              <tr>
+                <td>{{ r.medication_name }}</td><td>{{ r.quantity }} ml</td>
+                {% if current_user.has_role('owner') %}
+                <td>
+                  <form method="post" action="{{ url_for('poultry.medication_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
           </div>
           {% endif %}
@@ -294,6 +362,12 @@
                 <div class="card-body p-2">
                   <span class="badge {{ 'bg-danger' if r.severity == 'urgent' else 'bg-secondary' }}">{{ r.severity }}</span>
                   <p class="small mb-0">{{ r.description }}</p>
+                  {% if current_user.has_role('owner') %}
+                  <form method="post" action="{{ url_for('poultry.observation_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette observation ?');" class="mt-1">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -328,8 +402,22 @@
           {% if day.weight_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>Poids moyen</th><th>Sujets peses</th></tr></thead>
-            <tbody>{% for r in day.weight_records %}<tr><td>{{ r.average_weight }} g</td><td>{{ r.sample_size }}</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>Poids moyen</th><th>Poulets peses</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.weight_records %}
+              <tr>
+                <td>{{ r.average_weight }} g</td><td>{{ r.sample_size }}</td>
+                {% if current_user.has_role('owner') %}
+                <td>
+                  <form method="post" action="{{ url_for('poultry.weight_record_delete', record_id=r.id) }}" onsubmit="return confirm('Supprimer cette saisie ?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
           </div>
           {% endif %}
