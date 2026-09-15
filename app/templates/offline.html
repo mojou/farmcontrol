@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hors ligne - Farm Control</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f5f0; color: #22291f; margin: 0; }
+    .wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: #fff; border-radius: 12px; padding: 32px; max-width: 420px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 1.25rem; color: #2f5233; margin: 0 0 12px; }
+    p { color: #667066; font-size: 0.95rem; line-height: 1.5; }
+    button { margin-top: 16px; background: #2f5233; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="icon">📡</div>
+      <h1>Pas de connexion internet</h1>
+      <p>Cette page necessite une connexion pour se charger la premiere fois. Si vous etiez en train de remplir un formulaire de saisie quotidienne, vos donnees ont ete gardees localement et s'enverront automatiquement des que la connexion reviendra.</p>
+      <button onclick="window.location.reload()">Reessayer</button>
+    </div>
+  </div>
+</body>
+</html>

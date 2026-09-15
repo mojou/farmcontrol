@@ -111,7 +111,7 @@
 <div class="modal fade" id="feedModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.feed_record_new', day_id=day.id) }}" enctype="multipart/form-data">
+      <form id="fc-form-feed" method="post" action="{{ url_for('poultry.feed_record_new', day_id=day.id) }}" enctype="multipart/form-data">
         {{ feed_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-basket2-fill"></i> Aliment donne aujourd'hui</h5>
@@ -148,7 +148,7 @@
 <div class="modal fade" id="waterModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.water_record_new', day_id=day.id) }}">
+      <form id="fc-form-water" method="post" action="{{ url_for('poultry.water_record_new', day_id=day.id) }}">
         {{ water_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-droplet-fill"></i> Eau donnee aujourd'hui</h5>
@@ -177,7 +177,7 @@
 <div class="modal fade" id="mortalityModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.mortality_record_new', day_id=day.id) }}">
+      <form id="fc-form-mortality" method="post" action="{{ url_for('poultry.mortality_record_new', day_id=day.id) }}">
         {{ mortality_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill"></i> Mortalite du jour</h5>
@@ -207,7 +207,7 @@
 <div class="modal fade" id="woodModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.wood_record_new', day_id=day.id) }}">
+      <form id="fc-form-wood" method="post" action="{{ url_for('poultry.wood_record_new', day_id=day.id) }}">
         {{ wood_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-layers-fill"></i> Bois / litiere</h5>
@@ -238,7 +238,7 @@
 <div class="modal fade" id="medicationModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.medication_record_new', day_id=day.id) }}">
+      <form id="fc-form-medication" method="post" action="{{ url_for('poultry.medication_record_new', day_id=day.id) }}">
         {{ medication_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-capsule"></i> Medicament / vaccin administre</h5>
@@ -271,7 +271,7 @@
 <div class="modal fade" id="observationModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.observation_new', day_id=day.id) }}" enctype="multipart/form-data">
+      <form id="fc-form-observation" method="post" action="{{ url_for('poultry.observation_new', day_id=day.id) }}" enctype="multipart/form-data">
         {{ observation_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-eye-fill"></i> Signaler une observation</h5>
@@ -311,7 +311,7 @@
 <div class="modal fade" id="weightModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="post" action="{{ url_for('poultry.weight_record_new', day_id=day.id) }}">
+      <form id="fc-form-weight" method="post" action="{{ url_for('poultry.weight_record_new', day_id=day.id) }}">
         {{ weight_form.hidden_tag() }}
         <div class="modal-header">
           <h5 class="modal-title"><i class="bi bi-speedometer2"></i> Pesee</h5>
@@ -338,4 +338,25 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!window.FarmControlOffline) return;
+    var forms = {
+      "fc-form-feed": "Aliment",
+      "fc-form-water": "Eau",
+      "fc-form-mortality": "Mortalite",
+      "fc-form-wood": "Bois / litiere",
+      "fc-form-medication": "Medicament",
+      "fc-form-observation": "Observation",
+      "fc-form-weight": "Pesee",
+    };
+    Object.keys(forms).forEach(function (id) {
+      var form = document.getElementById(id);
+      if (form) window.FarmControlOffline.attachOfflineForm(form, forms[id]);
+    });
+  });
+</script>
 {% endblock %}

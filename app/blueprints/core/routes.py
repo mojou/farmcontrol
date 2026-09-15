@@ -23,6 +23,24 @@ from app.utils.uploads import delete_photo, save_avatar_photo
 from app.utils.zootechnie import compute_fcr
 
 
+@core_bp.route("/hors-ligne")
+def offline():
+    """Page de repli servie par le service worker (voir /sw.js) quand la
+    navigation echoue faute de reseau."""
+    return render_template("offline.html")
+
+
+@core_bp.route("/sw.js")
+def service_worker():
+    """Service worker servi hors du prefixe /static pour obtenir la portee
+    racine ('/') plutot que '/static/' (necessaire pour intercepter la
+    navigation de toute l'application, pas seulement les fichiers statiques)."""
+    response = current_app.send_static_file("sw.js")
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["Service-Worker-Allowed"] = "/"
+    return response
+
+
 @core_bp.route("/langue/<code>")
 def set_language(code):
     """Change la langue de l'interface (francais/anglais) - voir
