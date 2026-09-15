@@ -2,8 +2,19 @@
 
 Tarifs volontairement accessibles pour le marche camerounais / CEMAC (FCFA).
 """
+from datetime import timedelta
+
 from app.extensions import db
-from app.models.billing import Plan
+from app.models import utcnow
+from app.models.billing import SUBSCRIPTION_STATUS_TRIALING, Plan, Subscription
+
+# A l'inscription libre, chaque nouvelle exploitation beneficie d'un essai
+# gratuit du plan Pro pendant TRIAL_DAYS jours (pour decouvrir toutes les
+# fonctionnalites) avant de retomber automatiquement sur le plan gratuit
+# Decouverte si aucun paiement n'est effectue (voir get_current_plan : des
+# que current_period_end est depasse, is_valid devient faux).
+TRIAL_PLAN_CODE = "pro"
+TRIAL_DAYS = 14
 
 DEFAULT_PLANS = [
     {
@@ -67,3 +78,22 @@ def get_current_plan(tenant):
     if tenant and tenant.subscription and tenant.subscription.is_valid:
         return tenant.subscription.plan
     return get_free_plan()
+
+
+def start_trial_subscription(tenant):
+    """Demarre l'essai gratuit du plan Pro pour un tenant qui vient de
+    s'inscrire (inscription libre). Ne fait rien pour les tenants crees par
+    le super administrateur (voir core.tenant_new, qui gere son propre choix
+    de plan explicite)."""
+    ensure_plans_seeded()
+    trial_plan = Plan.query.filter_by(code=TRIAL_PLAN_CODE).first() or get_free_plan()
+    subscription = Subscription(
+        tenant_id=tenant.id,
+        plan_id=trial_plan.id,
+        status=SUBSCRIPTION_STATUS_TRIALING,
+        current_period_start=utcnow(),
+        current_period_end=utcnow() + timedelta(days=TRIAL_DAYS),
+    )
+    db.session.add(subscription)
+    tenant.plan = trial_plan.code
+    return subscription

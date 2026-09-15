@@ -13,7 +13,7 @@ from app.models.billing import SUBSCRIPTION_STATUS_ACTIVE, SUBSCRIPTION_STATUS_T
 from app.models.core import ROLE_OWNER, Tenant, User
 from app.models.poultry import Alert, Batch, Farm
 from app.utils.audit import log_action
-from app.utils.plans import ensure_plans_seeded, get_current_plan
+from app.utils.plans import ensure_plans_seeded, get_current_plan, get_free_plan
 from app.utils.security import validate_password_policy
 from app.utils.tenant import tenant_bypass
 from app.utils.uploads import delete_photo, save_avatar_photo
@@ -244,9 +244,11 @@ def user_toggle(user_id):
 @super_admin_required
 def admin_dashboard():
     page = request.args.get("page", 1, type=int)
+    ensure_plans_seeded()
     with tenant_bypass():
         pagination = Tenant.query.order_by(Tenant.created_at.desc()).paginate(page=page, per_page=10)
-    return render_template("core/admin_dashboard.html", pagination=pagination)
+        plans = Plan.query.filter_by(is_active=True).order_by(Plan.sort_order).all()
+    return render_template("core/admin_dashboard.html", pagination=pagination, plans=plans)
 
 
 @core_bp.route("/admin/tenants/new", methods=["GET", "POST"])
@@ -322,6 +324,66 @@ def tenant_toggle(tenant_id):
         log_action("update", "tenants", tenant.id, {"is_active": tenant.is_active})
         db.session.commit()
     flash("Statut du client mis a jour.", "success")
+    return redirect(url_for("core.admin_dashboard"))
+
+
+@core_bp.route("/admin/tenants/<int:tenant_id>/offrir", methods=["POST"])
+@super_admin_required
+def tenant_grant_plan(tenant_id):
+    """Offre gratuitement un plan payant a un client (sans passer par
+    CinetPay) : utile pour un partenariat, un geste commercial ou un test
+    prolonge. Reste actif indefiniment jusqu'a ce qu'un administrateur le
+    retire (voir tenant_revoke_plan) - contrairement a un essai ou un
+    paiement, qui ont une date d'expiration."""
+    plan_code = request.form.get("plan_code")
+    with tenant_bypass():
+        tenant = Tenant.query.get_or_404(tenant_id)
+        plan = Plan.query.filter_by(code=plan_code, is_active=True).first()
+        if plan is None:
+            flash("Formule invalide.", "danger")
+            return redirect(url_for("core.admin_dashboard"))
+
+        subscription = tenant.subscription
+        if subscription is None:
+            subscription = Subscription(tenant_id=tenant.id, plan_id=plan.id)
+            db.session.add(subscription)
+
+        subscription.plan_id = plan.id
+        subscription.status = SUBSCRIPTION_STATUS_ACTIVE
+        subscription.current_period_start = utcnow()
+        subscription.current_period_end = None
+        subscription.granted_by_admin = True
+        tenant.plan = plan.code
+
+        log_action("update", "billing_subscriptions", subscription.id, {"admin_grant": plan.code})
+        db.session.commit()
+
+    flash(f"Le plan {plan.name} a ete offert gratuitement a {tenant.name}.", "success")
+    return redirect(url_for("core.admin_dashboard"))
+
+
+@core_bp.route("/admin/tenants/<int:tenant_id>/retirer-offre", methods=["POST"])
+@super_admin_required
+def tenant_revoke_plan(tenant_id):
+    """Retire un plan offert gratuitement et fait retomber le client sur
+    le plan gratuit Decouverte (ne touche pas a un abonnement reellement
+    paye : a n'utiliser que sur un plan marque comme offert)."""
+    with tenant_bypass():
+        tenant = Tenant.query.get_or_404(tenant_id)
+        free_plan = get_free_plan()
+        subscription = tenant.subscription
+        if subscription is not None:
+            subscription.plan_id = free_plan.id
+            subscription.status = SUBSCRIPTION_STATUS_ACTIVE
+            subscription.current_period_start = utcnow()
+            subscription.current_period_end = None
+            subscription.granted_by_admin = False
+        tenant.plan = free_plan.code
+
+        log_action("update", "billing_subscriptions", tenant.id, {"admin_grant_revoked": True})
+        db.session.commit()
+
+    flash(f"L'offre gratuite a ete retiree pour {tenant.name} (retour au plan {free_plan.name}).", "success")
     return redirect(url_for("core.admin_dashboard"))
 
 

@@ -12,20 +12,56 @@
     <table class="table align-middle">
       <thead>
         <tr>
-          <th>Nom</th><th>Identifiant</th><th>Formule</th><th>Demo</th><th>Statut</th><th>Cree le</th><th></th>
+          <th>Nom</th><th>Identifiant</th><th>Formule actuelle</th><th>Demo</th><th>Statut</th><th>Cree le</th><th>Offre gratuite (super admin)</th><th></th>
         </tr>
       </thead>
       <tbody>
         {% for tenant in pagination.items %}
+        {% set sub = tenant.subscription %}
         <tr>
           <td>{{ tenant.name }}</td>
           <td><code>{{ tenant.slug }}</code></td>
-          <td>{{ tenant.plan }}</td>
+          <td>
+            {% if sub and sub.plan %}
+              {{ sub.plan.name }}
+              {% if sub.status == 'trialing' and sub.current_period_end %}
+                <br><span class="badge bg-info text-dark">Essai jusqu'au {{ sub.current_period_end.strftime('%d/%m/%Y') }}</span>
+              {% elif sub.granted_by_admin %}
+                <br><span class="badge bg-warning text-dark">Offert par l'administrateur</span>
+              {% elif not sub.is_valid %}
+                <br><span class="badge bg-secondary">Expire</span>
+              {% endif %}
+            {% else %}
+              <span class="text-muted">Decouverte (gratuit)</span>
+            {% endif %}
+          </td>
           <td>{% if tenant.is_demo %}<span class="badge bg-secondary">Demo</span>{% endif %}</td>
           <td>
             {% if tenant.is_active %}<span class="badge bg-success">Actif</span>{% else %}<span class="badge bg-danger">Desactive</span>{% endif %}
           </td>
           <td>{{ tenant.created_at.strftime('%d/%m/%Y') }}</td>
+          <td>
+            {% if sub and sub.granted_by_admin %}
+            <form method="post" action="{{ url_for('core.tenant_revoke_plan', tenant_id=tenant.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Retirer le plan offert et revenir au plan gratuit pour {{ tenant.name }} ?');">
+                <i class="bi bi-x-circle"></i> Retirer l'offre
+              </button>
+            </form>
+            {% else %}
+            <form method="post" action="{{ url_for('core.tenant_grant_plan', tenant_id=tenant.id) }}" class="d-flex gap-1">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <select name="plan_code" class="form-select form-select-sm" style="width:auto">
+                {% for plan in plans %}
+                  {% if plan.price_xaf > 0 %}
+                  <option value="{{ plan.code }}">{{ plan.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+              <button class="btn btn-sm btn-outline-success"><i class="bi bi-gift"></i> Offrir gratuitement</button>
+            </form>
+            {% endif %}
+          </td>
           <td>
             <form method="post" action="{{ url_for('core.tenant_toggle', tenant_id=tenant.id) }}">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -36,7 +72,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="7" class="text-muted text-center py-4">Aucun client pour le moment.</td></tr>
+        <tr><td colspan="8" class="text-muted text-center py-4">Aucun client pour le moment.</td></tr>
         {% endfor %}
       </tbody>
     </table>

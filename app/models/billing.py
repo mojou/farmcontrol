@@ -61,6 +61,10 @@ class Subscription(TimestampMixin, TenantMixin, db.Model):
     status = db.Column(db.String(20), nullable=False, default=SUBSCRIPTION_STATUS_TRIALING)
     current_period_start = db.Column(db.DateTime(timezone=True), nullable=True)
     current_period_end = db.Column(db.DateTime(timezone=True), nullable=True)  # None = jamais expire (plan gratuit)
+    # Vrai si ce plan a ete offert gratuitement par le super administrateur
+    # (plutot que paye par le client) : permet de l'afficher clairement et
+    # de le retirer d'un clic, independamment du parcours de paiement normal.
+    granted_by_admin = db.Column(db.Boolean, nullable=False, default=False)
 
     plan = db.relationship("Plan")
 

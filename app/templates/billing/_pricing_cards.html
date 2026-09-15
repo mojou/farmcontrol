@@ -30,7 +30,7 @@
             {{ plan.max_active_batches if plan.max_active_batches else "Lots actifs illimites" }}{% if plan.max_active_batches %} lot(s) actif(s) maximum{% endif %}</li>
           <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>
             {{ plan.max_users if plan.max_users else "Utilisateurs illimites" }}{% if plan.max_users %} utilisateur(s) maximum{% endif %}</li>
-          <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>FCR, rentabilite, alertes email, export PDF</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>Indice de consommation (FCR), rentabilite, alertes email, export PDF</li>
         </ul>
 
         {% if not current_user.is_authenticated %}

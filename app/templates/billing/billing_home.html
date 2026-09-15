@@ -13,12 +13,17 @@
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <div>
         <span class="h4 fw-bold">{{ subscription.plan.name }}</span>
-        {% if subscription.status == 'active' %}<span class="badge bg-success ms-2">Actif</span>
-        {% elif subscription.status == 'trialing' %}<span class="badge bg-secondary ms-2">Gratuit</span>
+        {% if subscription.granted_by_admin %}<span class="badge bg-warning text-dark ms-2">Offert gratuitement</span>
+        {% elif subscription.status == 'trialing' %}<span class="badge bg-info text-dark ms-2">Essai gratuit</span>
+        {% elif subscription.status == 'active' %}<span class="badge bg-success ms-2">Actif</span>
         {% else %}<span class="badge bg-danger ms-2">{{ subscription.status }}</span>{% endif %}
       </div>
       <div class="text-muted small">
-        {% if subscription.current_period_end %}
+        {% if subscription.granted_by_admin %}
+        Offert par l'equipe Farm Control, sans date d'expiration
+        {% elif subscription.status == 'trialing' and subscription.current_period_end %}
+        Essai gratuit jusqu'au {{ subscription.current_period_end.strftime('%d/%m/%Y') }}, puis retour automatique au plan Decouverte si vous ne souscrivez pas
+        {% elif subscription.current_period_end %}
         Renouvellement / expiration le {{ subscription.current_period_end.strftime('%d/%m/%Y') }}
         {% else %}
         Plan gratuit, sans expiration
