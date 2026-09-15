@@ -48,9 +48,6 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.growth_reference') }}" href="{{ url_for('poultry.growth_references') }}">
       <i class="bi bi-graph-up"></i> {{ _('Poids normal attendu') }}
     </a>
-    <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.sanitary_template') }}" href="{{ url_for('poultry.sanitary_template') }}">
-      <i class="bi bi-clipboard2-pulse"></i> {{ _('Mon modele sanitaire') }}
-    </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('billing.') }}" href="{{ url_for('billing.billing_home') }}">
       <i class="bi bi-credit-card"></i> {{ _('Facturation') }}
     </a>

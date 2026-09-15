@@ -61,7 +61,7 @@
                   <tbody>
                     <tr>
                       <td><span class="badge bg-primary">{{ _('Proprietaire') }}</span></td>
-                      <td>{{ _('Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu\'on vous doit, journal d\'activite, export des donnees, poids normal attendu et modele sanitaire. C\'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock.') }}</td>
+                      <td>{{ _('Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu\'on vous doit, journal d\'activite, export des donnees et poids normal attendu. C\'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock.') }}</td>
                     </tr>
                     <tr>
                       <td><span class="badge bg-info text-dark">{{ _('Responsable') }}</span></td>
@@ -84,7 +84,7 @@
           <div id="c3" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
               <p>{{ _('Une "ferme" represente un site d\'elevage physique. Un "lot" (ou bande) represente un groupe de poussins mis en place a une meme date, suivi jusqu\'a sa cloture (vente complete ou fin de cycle).') }}</p>
-              <p>{{ _('A la creation d\'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut).') }}</p>
+              <p>{{ _('A la creation d\'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Le calendrier des soins du lot demarre vide : vous y ajoutez vous-meme chaque vaccin ou traitement prevu.') }}</p>
               <p>{{ _('Le nombre de poulets du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque poulet vendu - vous n\'avez jamais besoin de le corriger manuellement.') }}</p>
               <p>{{ _('Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres.') }}</p>
             </div>
@@ -127,7 +127,7 @@
           <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6"><strong>6. {{ _('Programme sanitaire (calendrier des soins)') }}</strong></button></h2>
           <div id="c6" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
-              <p>{{ _('Chaque lot recoit un calendrier des soins (vaccins, traitements, vitamines) planifie jour par jour, genere depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut.') }}</p>
+              <p>{{ _('Le calendrier des soins d\'un lot demarre vide : ajoutez vous-meme chaque vaccin, traitement ou vitamine prevu (jour, produit, notes) depuis la page du lot, au fur et a mesure de vos besoins.') }}</p>
               <p>{{ _('Quand une tache est realisee, cliquez sur "Administre" : une fenetre vous permet d\'indiquer la quantite donnee (en ml) et l\'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l\'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement "Administre".') }}</p>
             </div>
           </div>

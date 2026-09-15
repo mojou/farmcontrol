@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-16 01:58+0100\n"
+"POT-Creation-Date: 2026-09-16 00:20+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -32,7 +32,7 @@ msgid "Adresse email"
 msgstr "Email address"
 
 #: app/blueprints/auth/forms.py:14 app/blueprints/auth/forms.py:24
-#: app/templates/core/settings.html:134
+#: app/templates/core/settings.html:126
 msgid "Mot de passe"
 msgstr "Password"
 
@@ -265,7 +265,7 @@ msgid "Tarifs"
 msgstr "Pricing"
 
 #: app/templates/core/documentation.html:2 app/templates/home.html:12
-#: app/templates/home.html:40 app/templates/partials/sidebar.html:78
+#: app/templates/home.html:40 app/templates/partials/sidebar.html:75
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -468,7 +468,6 @@ msgid "Gestion du stock"
 msgstr "Stock management"
 
 #: app/templates/core/documentation.html:23
-#: app/templates/core/settings.html:102
 msgid "Programme sanitaire"
 msgstr "Health program"
 
@@ -489,7 +488,7 @@ msgstr "Reports and export"
 
 #: app/templates/core/documentation.html:28
 #: app/templates/core/documentation.html:180 app/templates/core/settings.html:3
-#: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:61
+#: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:58
 msgid "Parametres"
 msgstr "Settings"
 
@@ -538,8 +537,8 @@ msgid "Peut faire"
 msgstr "Can do"
 
 #: app/templates/core/documentation.html:64
-msgid "Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu'on vous doit, journal d'activite, export des donnees, poids normal attendu et modele sanitaire. C'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock."
-msgstr "Full access: settings, billing, users, suppliers, sales, money owed to you, activity log, data export, expected normal weight and health program template. This is the only role that sees prices and can edit or delete a stock item."
+msgid "Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu'on vous doit, journal d'activite, export des donnees et poids normal attendu. C'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock."
+msgstr "Full access: settings, billing, users, suppliers, sales, money owed to you, activity log, data export and expected normal weight. This is the only role that sees prices and can edit or delete a stock item."
 
 #: app/templates/core/documentation.html:68
 msgid "Gere le quotidien d'une ou plusieurs fermes : cree des lots, valide les rapports journaliers soumis par les travailleurs, consulte le stock et les alertes."
@@ -558,8 +557,8 @@ msgid "Une \"ferme\" represente un site d'elevage physique. Un \"lot\" (ou bande
 msgstr "A \"farm\" represents a physical rearing site. A \"batch\" (or flock) represents a group of chicks placed on the same date, tracked until it is closed (full sale or end of cycle)."
 
 #: app/templates/core/documentation.html:87
-msgid "A la creation d'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut)."
-msgstr "When creating a batch, enter the number of chickens at the start, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. An indicative health program is automatically generated for the batch, based on your health program template (or on CEVA Sante Animale Afrique / GIZ-Nafa references by default)."
+msgid "A la creation d'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Le calendrier des soins du lot demarre vide : vous y ajoutez vous-meme chaque vaccin ou traitement prevu."
+msgstr "When creating a batch, enter the number of chickens at the start, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. The batch's care calendar starts empty: you add each planned vaccine or treatment yourself."
 
 #: app/templates/core/documentation.html:88
 msgid "Le nombre de poulets du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque poulet vendu - vous n'avez jamais besoin de le corriger manuellement."
@@ -630,8 +629,8 @@ msgid "Programme sanitaire (calendrier des soins)"
 msgstr "Health program (care calendar)"
 
 #: app/templates/core/documentation.html:130
-msgid "Chaque lot recoit un calendrier des soins (vaccins, traitements, vitamines) planifie jour par jour, genere depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut."
-msgstr "Every batch receives a day-by-day care calendar (vaccines, treatments, vitamins), generated from your customizable health program template (Administration > My health template) or from default references."
+msgid "Le calendrier des soins d'un lot demarre vide : ajoutez vous-meme chaque vaccin, traitement ou vitamine prevu (jour, produit, notes) depuis la page du lot, au fur et a mesure de vos besoins."
+msgstr "A batch's care calendar starts empty: add each planned vaccine, treatment or vitamin (day, product, notes) yourself from the batch page, as your needs come up."
 
 #: app/templates/core/documentation.html:131
 msgid "Quand une tache est realisee, cliquez sur \"Administre\" : une fenetre vous permet d'indiquer la quantite donnee (en ml) et l'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement \"Administre\"."
@@ -799,15 +798,15 @@ msgstr "Other settings"
 msgid "Utilisateurs"
 msgstr "Users"
 
-#: app/templates/core/settings.html:110
+#: app/templates/core/settings.html:102
 msgid "Stock et prix"
 msgstr "Stock and prices"
 
-#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:55
+#: app/templates/core/settings.html:110 app/templates/partials/sidebar.html:52
 msgid "Facturation"
 msgstr "Billing"
 
-#: app/templates/core/settings.html:126 app/templates/partials/sidebar.html:58
+#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:55
 msgid "Journal d'activite"
 msgstr "Activity log"
 
@@ -851,27 +850,23 @@ msgstr "Administration"
 msgid "Poids normal attendu"
 msgstr "Expected normal weight"
 
-#: app/templates/partials/sidebar.html:52
-msgid "Mon modele sanitaire"
-msgstr "My health program template"
-
-#: app/templates/partials/sidebar.html:67
+#: app/templates/partials/sidebar.html:64
 msgid "Plateforme"
 msgstr "Platform"
 
-#: app/templates/partials/sidebar.html:69
+#: app/templates/partials/sidebar.html:66
 msgid "Clients (tenants)"
 msgstr "Customers (tenants)"
 
-#: app/templates/partials/sidebar.html:73
+#: app/templates/partials/sidebar.html:70
 msgid "Mon compte"
 msgstr "My account"
 
-#: app/templates/partials/sidebar.html:75
+#: app/templates/partials/sidebar.html:72
 msgid "Profil"
 msgstr "Profile"
 
-#: app/templates/partials/sidebar.html:81 app/templates/partials/topbar.html:43
+#: app/templates/partials/sidebar.html:78 app/templates/partials/topbar.html:43
 msgid "Deconnexion"
 msgstr "Log out"
 
@@ -939,4 +934,10 @@ msgstr "Password must contain at least one digit."
 
 #~ msgid "Courbes de reference"
 #~ msgstr "Growth reference curves"
+
+#~ msgid "Chaque lot recoit un calendrier des soins (vaccins, traitements, vitamines) planifie jour par jour, genere depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut."
+#~ msgstr "Every batch receives a day-by-day care calendar (vaccines, treatments, vitamins), generated from your customizable health program template (Administration > My health template) or from default references."
+
+#~ msgid "Mon modele sanitaire"
+#~ msgstr "My health program template"
 

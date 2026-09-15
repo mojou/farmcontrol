@@ -33,7 +33,6 @@ from app.utils.sanitary import (
     estimate_daily_feed_kg,
     estimate_daily_water_liters,
     get_pending_items,
-    seed_batch_program_from_template,
 )
 from app.utils.zootechnie import (
     compute_fcr,
@@ -118,12 +117,11 @@ def batch_new():
         db.session.add(batch)
         db.session.flush()
         recompute_batch_finance(batch)
-        seed_batch_program_from_template(batch)
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
         flash(
-            f"Lot {batch.code} cree avec succes. Son calendrier des soins "
-            "(vaccins, traitements, alimentation) a ete genere automatiquement.",
+            f"Lot {batch.code} cree avec succes. Ajoutez vous-meme les vaccins et "
+            "traitements prevus dans son calendrier des soins.",
             "success",
         )
         return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
