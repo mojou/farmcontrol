@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Nouvel article de stock - Farm Control{% endblock %}
+{% block title %}{{ "Modifier l'article de stock" if item else "Nouvel article de stock" }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Nouvel article de stock</h1>
+  <h1 class="fc-page-title">{{ "Modifier " ~ item.name if item else "Nouvel article de stock" }}</h1>
+  {% if item %}
+  <form method="post" action="{{ url_for('poultry.stock_item_delete', item_id=item.id) }}"
+        onsubmit="return confirm('Supprimer definitivement l\'article {{ item.name|e }} ? Cette action est irreversible.');">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Supprimer cet article</button>
+  </form>
+  {% endif %}
 </div>
 <div class="alert alert-light border">
   <i class="bi bi-info-circle"></i> Utilisez l'unite qui correspond a la maniere dont vous achetez le

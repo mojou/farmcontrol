@@ -12,7 +12,7 @@
 <div class="card">
   <div class="card-body">
     <table class="table align-middle">
-      <thead><tr><th>Ferme</th><th>Categorie</th><th>Article</th><th>Quantite</th><th>Seuil</th><th>Statut</th><th></th></tr></thead>
+      <thead><tr><th>Ferme</th><th>Categorie</th><th>Article</th><th>Quantite</th><th>Seuil</th><th>Statut</th><th></th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
       <tbody>
         {% for item in pagination.items %}
         <tr class="{{ 'table-danger' if item.is_low }}">
@@ -33,9 +33,21 @@
               <button class="btn btn-sm btn-outline-primary">Reapprovisionner</button>
             </form>
           </td>
+          {% if current_user.has_role('owner') %}
+          <td class="d-flex gap-1">
+            <a href="{{ url_for('poultry.stock_item_edit', item_id=item.id) }}" class="btn btn-sm btn-outline-secondary" title="Modifier">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <form method="post" action="{{ url_for('poultry.stock_item_delete', item_id=item.id) }}"
+                  onsubmit="return confirm('Supprimer definitivement l\'article {{ item.name|e }} ? Cette action est irreversible.');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+          {% endif %}
         </tr>
         {% else %}
-        <tr><td colspan="7" class="text-muted text-center py-4">Aucun article de stock.</td></tr>
+        <tr><td colspan="8" class="text-muted text-center py-4">Aucun article de stock.</td></tr>
         {% endfor %}
       </tbody>
     </table>

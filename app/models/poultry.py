@@ -216,7 +216,9 @@ class FeedRecord(TimestampMixin, TenantMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)
     batch_day_id = db.Column(db.Integer, db.ForeignKey("poultry_batch_days.id"), nullable=False, index=True)
-    stock_item_id = db.Column(db.Integer, db.ForeignKey("poultry_stock_items.id"), nullable=True, index=True)
+    stock_item_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_stock_items.id", ondelete="SET NULL"), nullable=True, index=True
+    )
 
     feed_type = db.Column(db.String(100), nullable=False)
     quantity_kg = db.Column(db.Numeric(10, 2), nullable=False)
@@ -265,7 +267,9 @@ class WoodRecord(TimestampMixin, TenantMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)
     batch_day_id = db.Column(db.Integer, db.ForeignKey("poultry_batch_days.id"), nullable=False, index=True)
-    stock_item_id = db.Column(db.Integer, db.ForeignKey("poultry_stock_items.id"), nullable=True, index=True)
+    stock_item_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_stock_items.id", ondelete="SET NULL"), nullable=True, index=True
+    )
 
     quantity = db.Column(db.Numeric(10, 2), nullable=False)
     unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
@@ -285,7 +289,9 @@ class MedicationRecord(TimestampMixin, TenantMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)
     batch_day_id = db.Column(db.Integer, db.ForeignKey("poultry_batch_days.id"), nullable=False, index=True)
-    stock_item_id = db.Column(db.Integer, db.ForeignKey("poultry_stock_items.id"), nullable=True, index=True)
+    stock_item_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_stock_items.id", ondelete="SET NULL"), nullable=True, index=True
+    )
 
     medication_name = db.Column(db.String(150), nullable=False)
     quantity = db.Column(db.Numeric(10, 2), nullable=False)
