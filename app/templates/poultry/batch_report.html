@@ -6,9 +6,14 @@
     <h1 class="fc-page-title">Rapport du lot {{ batch.code }}</h1>
     <p class="text-muted mb-0">{{ batch.farm.name }} - {{ batch.start_date.strftime('%d/%m/%Y') }} {% if batch.end_date %}au {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}</p>
   </div>
-  <a href="{{ url_for('poultry.batch_report_pdf', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-    <i class="bi bi-file-earmark-pdf"></i> Exporter en PDF
-  </a>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('poultry.batch_report_csv', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-file-earmark-spreadsheet"></i> Exporter en Excel/CSV
+    </a>
+    <a href="{{ url_for('poultry.batch_report_pdf', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+      <i class="bi bi-file-earmark-pdf"></i> Exporter en PDF
+    </a>
+  </div>
 </div>
 
 <div class="row g-3 mb-4">

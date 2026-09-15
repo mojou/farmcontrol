@@ -1,4 +1,6 @@
-from flask import abort, current_app, flash, redirect, render_template, request, url_for
+import json
+
+from flask import Response, abort, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from werkzeug.utils import safe_join
 from werkzeug.exceptions import NotFound
@@ -10,9 +12,10 @@ from app.decorators import owner_required, super_admin_required
 from app.extensions import db
 from app.models import utcnow
 from app.models.billing import SUBSCRIPTION_STATUS_ACTIVE, SUBSCRIPTION_STATUS_TRIALING, Plan, Subscription
-from app.models.core import ROLE_OWNER, Tenant, User
+from app.models.core import ROLE_OWNER, AuditLog, Tenant, User
 from app.models.poultry import Alert, Batch, Farm
-from app.utils.audit import log_action
+from app.utils.audit import ACTION_LABELS, TABLE_LABELS, log_action
+from app.utils.data_export import build_tenant_export
 from app.utils.plans import ensure_plans_seeded, get_current_plan, get_free_plan
 from app.utils.security import validate_password_policy
 from app.utils.tenant import tenant_bypass
@@ -385,6 +388,46 @@ def tenant_revoke_plan(tenant_id):
 
     flash(f"L'offre gratuite a ete retiree pour {tenant.name} (retour au plan {free_plan.name}).", "success")
     return redirect(url_for("core.admin_dashboard"))
+
+
+# --------------------------------------------------------------------------
+# Journal d'activite et export des donnees (tracabilite et confiance)
+# --------------------------------------------------------------------------
+
+@core_bp.route("/journal")
+@owner_required
+def audit_log_list():
+    """Consultation du journal d'audit (paragraphe 7.3) : chaque creation,
+    modification ou suppression sur les donnees du tenant est deja
+    enregistree en base (voir app.utils.audit.log_action), mais restait
+    jusqu'ici invisible pour le proprietaire. Filtre automatiquement sur
+    le tenant courant (TenantMixin)."""
+    page = request.args.get("page", 1, type=int)
+    pagination = AuditLog.query.order_by(AuditLog.created_at.desc()).paginate(page=page, per_page=20)
+    return render_template(
+        "core/audit_log.html",
+        pagination=pagination,
+        table_labels=TABLE_LABELS,
+        action_labels=ACTION_LABELS,
+    )
+
+
+@core_bp.route("/export-donnees")
+@owner_required
+def export_data():
+    """Export complet des donnees du tenant au format JSON (sauvegarde
+    personnelle / portabilite / confiance). Volontairement simple : un
+    fichier telechargeable, pas d'automatisation planifiee."""
+    tenant = current_user.tenant
+    payload = build_tenant_export(tenant)
+
+    response = Response(
+        json.dumps(payload, indent=2, ensure_ascii=False, default=str),
+        mimetype="application/json",
+    )
+    filename = f"farmcontrol-export-{tenant.slug}-{utcnow().strftime('%Y%m%d')}.json"
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    return response
 
 
 # --------------------------------------------------------------------------

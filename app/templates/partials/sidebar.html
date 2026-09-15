@@ -43,6 +43,9 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('billing.') }}" href="{{ url_for('billing.billing_home') }}">
       <i class="bi bi-credit-card"></i> Facturation
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.audit_log_list' }}" href="{{ url_for('core.audit_log_list') }}">
+      <i class="bi bi-journal-text"></i> Journal d'activite
+    </a>
     {% endif %}
     {% endif %}
 
