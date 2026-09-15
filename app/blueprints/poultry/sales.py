@@ -30,7 +30,11 @@ def sales_list(batch_id):
         amount_paid = form.amount_paid.data or 0
         if amount_paid > total_amount:
             flash("Le montant recu ne peut pas depasser le montant total de la vente.", "danger")
-            return render_template("poultry/sales_list.html", batch=batch, form=form, sales=batch.sales)
+            return render_template(
+                "poultry/sales_list.html", batch=batch, form=form, sales=batch.sales,
+                cash_collected=sum((s.amount_paid or 0) for s in batch.sales),
+                cash_outstanding=sum((s.balance_due or 0) for s in batch.sales),
+            )
 
         sale = Sale(
             tenant_id=current_user.tenant_id,
@@ -56,7 +60,11 @@ def sales_list(batch_id):
 
     sales = sorted(batch.sales, key=lambda s: s.sale_date, reverse=True)
     payment_form = SalePaymentForm()
-    return render_template("poultry/sales_list.html", batch=batch, form=form, sales=sales, payment_form=payment_form)
+    return render_template(
+        "poultry/sales_list.html", batch=batch, form=form, sales=sales, payment_form=payment_form,
+        cash_collected=sum((s.amount_paid or 0) for s in sales),
+        cash_outstanding=sum((s.balance_due or 0) for s in sales),
+    )
 
 
 def _get_sale_or_403(sale_id):

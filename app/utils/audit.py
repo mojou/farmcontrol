@@ -27,6 +27,8 @@ TABLE_LABELS = {
     "poultry_batch_finance": "Rentabilite",
     "billing_subscriptions": "Abonnement",
     "messages": "Message",
+    "poultry_sales": "Vente",
+    "poultry_suppliers": "Fournisseur",
 }
 
 ACTION_LABELS = {"create": "Creation", "update": "Modification", "delete": "Suppression"}

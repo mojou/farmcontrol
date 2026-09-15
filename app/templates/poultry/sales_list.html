@@ -10,6 +10,33 @@
   <a href="{{ url_for('poultry.credits_list') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-exclamation-circle"></i> Voir toutes les creances</a>
 </div>
 
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value text-success">{{ cash_collected|currency }}</div>
+      <div class="fc-kpi-label">Encaisse (dans la caisse)</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value {{ 'text-danger' if cash_outstanding > 0 }}">{{ cash_outstanding|currency }}</div>
+      <div class="fc-kpi-label">Reste en creance</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.total_sold_subjects }}</div>
+      <div class="fc-kpi-label">Sujets vendus (deduits de l'effectif)</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.current_count }}</div>
+      <div class="fc-kpi-label">Effectif restant</div>
+    </div></div>
+  </div>
+</div>
+
 <div class="row g-4">
   <div class="col-lg-4">
     {{ fm.form_card(form, "Nouvelle vente") }}

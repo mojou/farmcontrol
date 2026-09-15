@@ -78,9 +78,13 @@
       <tr><td>Cout main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
       <tr class="fw-bold"><td>Total des charges</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
       <tr>
-        <td>Revenu de vente {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">(detail des ventes)</a>{% endif %}</td>
+        <td>Revenu de vente (facture) {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">(detail des ventes)</a>{% endif %}</td>
         <td class="text-end">{{ batch.finance.sale_revenue|currency }}</td>
       </tr>
+      <tr class="text-success"><td>dont encaisse en caisse</td><td class="text-end">{{ cash_collected|currency }}</td></tr>
+      {% if cash_outstanding > 0 %}
+      <tr class="text-danger"><td>dont encore en creance (non paye)</td><td class="text-end">{{ cash_outstanding|currency }}</td></tr>
+      {% endif %}
       <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
     </table>
     </div>

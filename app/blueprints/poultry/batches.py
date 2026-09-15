@@ -192,6 +192,14 @@ def batch_finance(batch_id):
 def batch_report(batch_id):
     batch = _get_batch_or_403(batch_id)
     fcr = compute_fcr(batch)
+    # "Revenu de vente" (batch.finance.sale_revenue) est le chiffre d'affaires
+    # facture (comptabilite d'engagement) : compte une vente des sa creation,
+    # meme si elle est encore a credit. On calcule ici, en plus, ce qui est
+    # reellement rentre en caisse (encaissements) et ce qui reste du, pour
+    # que le paiement d'une creance se voie concretement (paragraphe
+    # tracabilite des ventes).
+    cash_collected = sum((s.amount_paid or 0) for s in batch.sales)
+    cash_outstanding = sum((s.balance_due or 0) for s in batch.sales)
     return render_template(
         "poultry/batch_report.html",
         batch=batch,
@@ -199,6 +207,8 @@ def batch_report(batch_id):
         mortality_data=mortality_series(batch),
         feed_data=feed_series(batch),
         growth_data=growth_curve_comparison(batch),
+        cash_collected=cash_collected,
+        cash_outstanding=cash_outstanding,
     )
 
 

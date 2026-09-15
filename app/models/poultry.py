@@ -152,8 +152,18 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
         return sum(r.quantity_dead for day in self.days for r in day.mortality_records)
 
     @property
+    def total_sold_subjects(self) -> int:
+        """Nombre de sujets vendus (paragraphe ventes/effectif). Seules les
+        ventes "au sujet" (Sale.unit == UNIT_SUBJECT) sont comptees : une
+        vente "au kg" ne precise pas combien d'animaux ont ete preleves du
+        cheptel, donc ne peut pas etre convertie en effectif sans supposer
+        un poids moyen - on ne devine pas, on ne decompte que ce qui est
+        sans ambiguite."""
+        return int(sum(s.quantity for s in self.sales if s.unit == Sale.UNIT_SUBJECT))
+
+    @property
     def current_count(self) -> int:
-        return max(self.initial_count - self.total_mortality, 0)
+        return max(self.initial_count - self.total_mortality - self.total_sold_subjects, 0)
 
     @property
     def total_feed_kg(self):

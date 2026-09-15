@@ -251,6 +251,8 @@ def water_record_new(day_id):
             created_by=current_user.id,
         )
         db.session.add(record)
+        db.session.flush()
+        log_action("create", "poultry_water_records", None, {"quantity_liters": str(form.quantity_liters.data)})
         db.session.commit()
         flash("Consommation d'eau enregistree.", "success")
     else:
@@ -306,6 +308,7 @@ def wood_record_new(day_id):
         db.session.flush()
         if stock_item:
             check_stock_alert(stock_item)
+        log_action("create", "poultry_wood_records", None, {"quantity": str(form.quantity.data)})
         db.session.commit()
         flash("Consommation de bois/litiere enregistree.", "success")
     else:
@@ -338,6 +341,7 @@ def medication_record_new(day_id):
         db.session.flush()
         if stock_item:
             check_stock_alert(stock_item)
+        log_action("create", "poultry_medication_records", None, {"medication_name": form.medication_name.data})
         db.session.commit()
         flash("Traitement medical enregistre.", "success")
     else:
@@ -371,6 +375,7 @@ def observation_new(day_id):
         db.session.add(record)
         db.session.flush()
         check_urgent_observation_alert(record, day.batch)
+        log_action("create", "poultry_observations", record.id, {"severity": record.severity})
         db.session.commit()
         flash("Observation enregistree.", "success")
     else:
@@ -398,6 +403,7 @@ def weight_record_new(day_id):
         recompute_batch_finance(day.batch)
         db.session.flush()
         check_fcr_alert(day.batch)
+        log_action("create", "poultry_weight_records", record.id, {"average_weight": str(form.average_weight.data)})
         db.session.commit()
         flash("Pesee enregistree.", "success")
     else:
