@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 14:07+0100\n"
+"POT-Creation-Date: 2026-09-15 15:04+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -112,8 +112,8 @@ msgid ""
 "%(days)s jours d'essai gratuit du plan Pro (toutes les fonctionnalites "
 "debloquees)."
 msgstr ""
-"Welcome to Farm Control, %(name)s. Your workspace is ready, with "
-"%(days)s days of free trial of the Pro plan (all features unlocked)."
+"Welcome to Farm Control, %(name)s. Your workspace is ready, with %(days)s"
+" days of free trial of the Pro plan (all features unlocked)."
 
 #: app/blueprints/auth/routes.py:168
 msgid "Ce lien de confirmation est invalide ou a expire."
@@ -143,8 +143,7 @@ msgstr "You have been logged out."
 msgid ""
 "Si un compte existe avec cet email, un lien de reinitialisation a ete "
 "envoye."
-msgstr ""
-"If an account exists with this email, a reset link has been sent."
+msgstr "If an account exists with this email, a reset link has been sent."
 
 #: app/blueprints/auth/routes.py:263
 msgid "Ce lien de reinitialisation est invalide ou a expire."
@@ -162,6 +161,30 @@ msgstr "Current password is incorrect."
 msgid "Mot de passe mis a jour avec succes."
 msgstr "Password updated successfully."
 
+#: app/blueprints/core/forms.py:61
+msgid "Nom de l'exploitation"
+msgstr "Farm name"
+
+#: app/blueprints/core/forms.py:62
+msgid "Pays"
+msgstr "Country"
+
+#: app/blueprints/core/forms.py:64
+msgid "Langue par defaut pour les nouveaux utilisateurs"
+msgstr "Default language for new users"
+
+#: app/blueprints/core/forms.py:69
+msgid "Devise affichee"
+msgstr "Displayed currency"
+
+#: app/blueprints/core/forms.py:74
+msgid "Enregistrer"
+msgstr "Save"
+
+#: app/blueprints/core/routes.py:200
+msgid "Parametres enregistres."
+msgstr "Settings saved."
+
 #: app/models/core.py:27
 msgid "Super administrateur"
 msgstr "Super administrator"
@@ -178,7 +201,7 @@ msgstr "Manager"
 msgid "Travailleur"
 msgstr "Worker"
 
-#: app/templates/base.html:26
+#: app/templates/base.html:33
 msgid ""
 "Votre adresse email n'est pas encore confirmee. Verifiez votre boite de "
 "reception (et vos spams)."
@@ -186,7 +209,7 @@ msgstr ""
 "Your email address is not confirmed yet. Check your inbox (and spam "
 "folder)."
 
-#: app/templates/base.html:29
+#: app/templates/base.html:36
 msgid "Renvoyer l'email de confirmation"
 msgstr "Resend confirmation email"
 
@@ -216,8 +239,8 @@ msgid ""
 "alertes automatiques pour les elevages de poulets de chair. Multitenant, "
 "securise, accessible partout."
 msgstr ""
-"Daily tracking, feed conversion ratio (FCR), profitability per batch "
-"and automatic alerts for broiler farms. Multitenant, secure, accessible "
+"Daily tracking, feed conversion ratio (FCR), profitability per batch and "
+"automatic alerts for broiler farms. Multitenant, secure, accessible "
 "everywhere."
 
 #: app/templates/home.html:37
@@ -321,16 +344,16 @@ msgid ""
 "Proprietaire, responsable, travailleur : chacun saisit ou valide au bon "
 "niveau, avec un workflow de rapport journalier."
 msgstr ""
-"Owner, manager, worker: everyone enters or validates at the right "
-"level, with a daily report workflow."
+"Owner, manager, worker: everyone enters or validates at the right level, "
+"with a daily report workflow."
 
 #: app/templates/home.html:143
 msgid ""
 "Isolation stricte entre clients a deux niveaux, y compris au niveau de la"
 " base de donnees (Row Level Security)."
 msgstr ""
-"Strict two-layer isolation between customers, including at the "
-"database level (Row Level Security)."
+"Strict two-layer isolation between customers, including at the database "
+"level (Row Level Security)."
 
 #: app/templates/home.html:151
 msgid "Rapports exportables"
@@ -369,8 +392,8 @@ msgid ""
 "Renseignez votre adresse email : un lien de reinitialisation vous sera "
 "envoye s'il existe un compte associe."
 msgstr ""
-"Enter your email address: a reset link will be sent to you if an "
-"account exists."
+"Enter your email address: a reset link will be sent to you if an account "
+"exists."
 
 #: app/templates/auth/forgot_password.html:16
 msgid "Retour a la connexion"
@@ -392,6 +415,54 @@ msgstr "Your Farm Control workspace is created immediately."
 msgid "Deja un compte ?"
 msgstr "Already have an account?"
 
+#: app/templates/core/settings.html:3 app/templates/core/settings.html:6
+#: app/templates/partials/sidebar.html:58
+msgid "Parametres"
+msgstr "Settings"
+
+#: app/templates/core/settings.html:11
+msgid "Exploitation"
+msgstr "Farm"
+
+#: app/templates/core/settings.html:16
+msgid "Prix par defaut de l'aliment, du bois et des medicaments"
+msgstr "Default prices for feed, wood and medication"
+
+#: app/templates/core/settings.html:18
+msgid "Ces prix se gerent directement depuis la page"
+msgstr "These prices are managed directly from the"
+
+#: app/templates/core/settings.html:18 app/templates/partials/sidebar.html:21
+msgid "Stock"
+msgstr "Stock"
+
+#: app/templates/core/settings.html:18
+msgid ""
+", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
+" une bouteille ou un morceau."
+msgstr ""
+" page, not here: that's where you enter what you paid for a bag, a "
+"bottle or a piece."
+
+#: app/templates/core/settings.html:21
+msgid ""
+"Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
+"indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
+" d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) "
+"et le pre-remplit automatiquement des que vous choisissez cet article en "
+"saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper "
+"ce prix chaque jour."
+msgstr ""
+"For example, if you buy a 40 kg bag of feed for 20,000 FCFA, simply "
+"enter 20,000 FCFA as the item price and 40 as the weight of a bag: the "
+"system calculates the price per kg itself (500 FCFA/kg here) and "
+"auto-fills it as soon as you pick this item during daily entry. You no "
+"longer need to recalculate or retype this price every day."
+
+#: app/templates/core/settings.html:24
+msgid "Gerer mes prix dans le Stock"
+msgstr "Manage my prices in Stock"
+
 #: app/templates/partials/sidebar.html:4
 msgid "Gestion d'elevage"
 msgstr "Farm management"
@@ -411,10 +482,6 @@ msgstr "Farms"
 #: app/templates/partials/sidebar.html:18
 msgid "Lots"
 msgstr "Batches"
-
-#: app/templates/partials/sidebar.html:21
-msgid "Stock"
-msgstr "Stock"
 
 #: app/templates/partials/sidebar.html:25
 msgid "Fournisseurs"
@@ -456,23 +523,23 @@ msgstr "Billing"
 msgid "Journal d'activite"
 msgstr "Activity log"
 
-#: app/templates/partials/sidebar.html:61
+#: app/templates/partials/sidebar.html:64
 msgid "Plateforme"
 msgstr "Platform"
 
-#: app/templates/partials/sidebar.html:63
+#: app/templates/partials/sidebar.html:66
 msgid "Clients (tenants)"
 msgstr "Customers (tenants)"
 
-#: app/templates/partials/sidebar.html:67
+#: app/templates/partials/sidebar.html:70
 msgid "Mon compte"
 msgstr "My account"
 
-#: app/templates/partials/sidebar.html:69
+#: app/templates/partials/sidebar.html:72
 msgid "Profil"
 msgstr "Profile"
 
-#: app/templates/partials/sidebar.html:72 app/templates/partials/topbar.html:43
+#: app/templates/partials/sidebar.html:75 app/templates/partials/topbar.html:43
 msgid "Deconnexion"
 msgstr "Log out"
 
@@ -504,3 +571,4 @@ msgstr "Password must contain at least one uppercase letter."
 #: app/utils/security.py:44
 msgid "Le mot de passe doit contenir au moins un chiffre."
 msgstr "Password must contain at least one digit."
+

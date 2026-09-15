@@ -133,9 +133,15 @@ def _register_template_helpers(app):
     @app.template_filter("currency")
     def currency_filter(value):
         # FCFA (XAF) n'a pas de sous-unite en circulation : pas de decimales.
+        # Le libelle affiche (Tenant.currency_label) est purement visuel :
+        # la devise de facturation CinetPay reste XAF quel que soit ce
+        # reglage (voir app.utils.cinetpay et core.settings).
         if value is None:
             return "-"
-        return f"{float(value):,.0f} FCFA".replace(",", " ")
+        label = "FCFA"
+        if current_user.is_authenticated and current_user.tenant and current_user.tenant.currency_label:
+            label = current_user.tenant.currency_label
+        return f"{float(value):,.0f} {label}".replace(",", " ")
 
     @app.template_filter("number")
     def number_filter(value, decimals=0):

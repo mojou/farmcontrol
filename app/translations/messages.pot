@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 14:07+0100\n"
+"POT-Creation-Date: 2026-09-15 15:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,6 +162,30 @@ msgstr ""
 msgid "Mot de passe mis a jour avec succes."
 msgstr ""
 
+#: app/blueprints/core/forms.py:61
+msgid "Nom de l'exploitation"
+msgstr ""
+
+#: app/blueprints/core/forms.py:62
+msgid "Pays"
+msgstr ""
+
+#: app/blueprints/core/forms.py:64
+msgid "Langue par defaut pour les nouveaux utilisateurs"
+msgstr ""
+
+#: app/blueprints/core/forms.py:69
+msgid "Devise affichee"
+msgstr ""
+
+#: app/blueprints/core/forms.py:74
+msgid "Enregistrer"
+msgstr ""
+
+#: app/blueprints/core/routes.py:200
+msgid "Parametres enregistres."
+msgstr ""
+
 #: app/models/core.py:27
 msgid "Super administrateur"
 msgstr ""
@@ -178,13 +202,13 @@ msgstr ""
 msgid "Travailleur"
 msgstr ""
 
-#: app/templates/base.html:26
+#: app/templates/base.html:33
 msgid ""
 "Votre adresse email n'est pas encore confirmee. Verifiez votre boite de "
 "reception (et vos spams)."
 msgstr ""
 
-#: app/templates/base.html:29
+#: app/templates/base.html:36
 msgid "Renvoyer l'email de confirmation"
 msgstr ""
 
@@ -373,6 +397,47 @@ msgstr ""
 msgid "Deja un compte ?"
 msgstr ""
 
+#: app/templates/core/settings.html:3 app/templates/core/settings.html:6
+#: app/templates/partials/sidebar.html:58
+msgid "Parametres"
+msgstr ""
+
+#: app/templates/core/settings.html:11
+msgid "Exploitation"
+msgstr ""
+
+#: app/templates/core/settings.html:16
+msgid "Prix par defaut de l'aliment, du bois et des medicaments"
+msgstr ""
+
+#: app/templates/core/settings.html:18
+msgid "Ces prix se gerent directement depuis la page"
+msgstr ""
+
+#: app/templates/core/settings.html:18 app/templates/partials/sidebar.html:21
+msgid "Stock"
+msgstr ""
+
+#: app/templates/core/settings.html:18
+msgid ""
+", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac,"
+" une bouteille ou un morceau."
+msgstr ""
+
+#: app/templates/core/settings.html:21
+msgid ""
+"Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, "
+"indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids"
+" d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) "
+"et le pre-remplit automatiquement des que vous choisissez cet article en "
+"saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper "
+"ce prix chaque jour."
+msgstr ""
+
+#: app/templates/core/settings.html:24
+msgid "Gerer mes prix dans le Stock"
+msgstr ""
+
 #: app/templates/partials/sidebar.html:4
 msgid "Gestion d'elevage"
 msgstr ""
@@ -391,10 +456,6 @@ msgstr ""
 
 #: app/templates/partials/sidebar.html:18
 msgid "Lots"
-msgstr ""
-
-#: app/templates/partials/sidebar.html:21
-msgid "Stock"
 msgstr ""
 
 #: app/templates/partials/sidebar.html:25
@@ -437,23 +498,23 @@ msgstr ""
 msgid "Journal d'activite"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:61
+#: app/templates/partials/sidebar.html:64
 msgid "Plateforme"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:63
+#: app/templates/partials/sidebar.html:66
 msgid "Clients (tenants)"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:67
+#: app/templates/partials/sidebar.html:70
 msgid "Mon compte"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:69
+#: app/templates/partials/sidebar.html:72
 msgid "Profil"
 msgstr ""
 
-#: app/templates/partials/sidebar.html:72 app/templates/partials/topbar.html:43
+#: app/templates/partials/sidebar.html:75 app/templates/partials/topbar.html:43
 msgid "Deconnexion"
 msgstr ""
 

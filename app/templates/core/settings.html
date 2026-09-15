@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "partials/_form_macros.html" as fm %}
+{% block title %}{{ _('Parametres') }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <h1 class="fc-page-title">{{ _('Parametres') }}</h1>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    {{ fm.form_card(form, _('Exploitation')) }}
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-cash-coin"></i> {{ _("Prix par defaut de l'aliment, du bois et des medicaments") }}</h6>
+        <p class="text-muted small">
+          {{ _('Ces prix se gerent directement depuis la page') }} <a href="{{ url_for('poultry.stock_list') }}">{{ _('Stock') }}</a>{{ _(", pas ici : c'est la que vous indiquez ce que vous avez paye pour un sac, une bouteille ou un morceau.") }}
+        </p>
+        <p class="text-muted small mb-0">
+          {{ _("Par exemple, si vous achetez un sac d'aliment de 40 kg a 20 000 FCFA, indiquez simplement 20 000 FCFA comme prix de l'article et 40 comme poids d'un sac : le systeme calcule lui-meme le prix au kg (500 FCFA/kg ici) et le pre-remplit automatiquement des que vous choisissez cet article en saisie quotidienne. Vous n'avez plus besoin de recalculer ou de retaper ce prix chaque jour.") }}
+        </p>
+        <a href="{{ url_for('poultry.stock_list') }}" class="btn btn-outline-secondary btn-sm mt-3">
+          <i class="bi bi-box-seam"></i> {{ _('Gerer mes prix dans le Stock') }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

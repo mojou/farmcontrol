@@ -70,6 +70,28 @@ def _stock_choices(farm_id, category):
     return choices
 
 
+def _stock_price_map(farm_id, category):
+    """Prix par unite de saisie (kg pour l'aliment, ml pour les
+    medicaments, unite de stock telle quelle pour le bois/litiere) pour
+    chaque article de stock, calcule a partir du prix d'achat et de la
+    conversion deja renseignes sur l'article (StockItem.unit_price /
+    kg_per_unit / ml_per_unit - voir /elevage/stock). Permet de pre-remplir
+    automatiquement le prix en saisie quotidienne : l'eleveur n'a plus a
+    recalculer un prix au kg a la main a chaque fois (ex : sac de 40 kg
+    achete 20000 FCFA -> 500 FCFA/kg pre-rempli)."""
+    items = StockItem.query.filter_by(farm_id=farm_id, category=category, is_active=True).all()
+    prices = {}
+    for i in items:
+        unit_price = float(i.unit_price or 0)
+        if i.kg_per_unit:
+            prices[i.id] = round(unit_price / float(i.kg_per_unit), 2) if i.kg_per_unit else unit_price
+        elif i.ml_per_unit:
+            prices[i.id] = round(unit_price / float(i.ml_per_unit), 2) if i.ml_per_unit else unit_price
+        else:
+            prices[i.id] = unit_price
+    return prices
+
+
 def _farm_has_manager(farm):
     return (
         User.query.filter_by(tenant_id=farm.tenant_id, role="manager", is_active=True)
@@ -175,6 +197,9 @@ def batch_day_detail(day_id):
         total_feed_kg=day.feed_kg,
         total_water_liters=sum((r.quantity_liters or 0) for r in day.water_records),
         total_mortality=day.mortality_count,
+        feed_stock_prices=_stock_price_map(day.batch.farm_id, "feed"),
+        wood_stock_prices=_stock_price_map(day.batch.farm_id, "wood"),
+        medication_stock_prices=_stock_price_map(day.batch.farm_id, "medication"),
     )
 
 

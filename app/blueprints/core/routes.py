@@ -1,13 +1,14 @@
 import json
 
 from flask import Response, abort, current_app, flash, redirect, render_template, request, session, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 from werkzeug.utils import safe_join
 from werkzeug.exceptions import NotFound
 from flask import send_from_directory
 
 from app.blueprints.core import core_bp
-from app.blueprints.core.forms import ProfileForm, TenantForm, UserForm
+from app.blueprints.core.forms import ProfileForm, SettingsForm, TenantForm, UserForm
 from app.decorators import owner_required, super_admin_required
 from app.extensions import db
 from app.models import utcnow
@@ -177,6 +178,31 @@ def profile_avatar_remove():
     return redirect(url_for("core.profile"))
 
 
+@core_bp.route("/parametres", methods=["GET", "POST"])
+@owner_required
+def settings():
+    """Parametres generaux de l'exploitation : pays, langue par defaut pour
+    les nouveaux utilisateurs, libelle de devise affiche. Les prix par
+    defaut de l'aliment/bois/medicaments se gerent directement depuis la
+    page Stock (StockItem.unit_price + conversion) : c'est deja la ou ils
+    sont utilises automatiquement en saisie quotidienne, pas la peine de
+    les dupliquer ici."""
+    tenant = current_user.tenant
+    form = SettingsForm(obj=tenant)
+
+    if form.validate_on_submit():
+        tenant.name = form.name.data
+        tenant.country = form.country.data
+        tenant.default_language = form.default_language.data
+        tenant.currency_label = form.currency_label.data.strip()
+        log_action("update", "tenants", tenant.id, {"action": "settings_update"})
+        db.session.commit()
+        flash(_("Parametres enregistres."), "success")
+        return redirect(url_for("core.settings"))
+
+    return render_template("core/settings.html", form=form)
+
+
 # --------------------------------------------------------------------------
 # Alertes
 # --------------------------------------------------------------------------
@@ -247,6 +273,7 @@ def user_new():
             email=form.email.data.strip().lower(),
             role=form.role.data,
             farm_id=form.farm_id.data or None,
+            preferred_language=current_user.tenant.default_language if current_user.tenant else "fr",
         )
         user.set_password(form.password.data)
         db.session.add(user)

@@ -41,6 +41,15 @@ class Tenant(TimestampMixin, db.Model):
     is_demo = db.Column(db.Boolean, nullable=False, default=False)
     plan = db.Column(db.String(40), nullable=False, default="standard")
 
+    # Parametres generaux (page /parametres) : pays et langue par defaut
+    # appliques aux nouveaux utilisateurs crees par le proprietaire, et
+    # libelle de devise utilise par le filtre `currency` cote affichage
+    # uniquement (la devise de facturation CinetPay reste XAF, voir
+    # app.utils.cinetpay - ce champ ne change pas les montants factures).
+    country = db.Column(db.String(80), nullable=True)
+    default_language = db.Column(db.String(5), nullable=False, default="fr")
+    currency_label = db.Column(db.String(10), nullable=False, default="FCFA")
+
     users = db.relationship("User", back_populates="tenant", cascade="all, delete-orphan")
     farms = db.relationship("Farm", back_populates="tenant", cascade="all, delete-orphan")
     subscription = db.relationship(

@@ -1,4 +1,4 @@
-{% macro render_field(field, extra_class="") %}
+{% macro render_field(field, extra_class="", field_id=None) %}
 <div class="mb-3">
   {% if field.type != 'BooleanField' %}
     {{ field.label(class="form-label") }}
@@ -6,17 +6,17 @@
 
   {% if field.type == 'BooleanField' %}
     <div class="form-check">
-      {{ field(class="form-check-input" ~ (" is-invalid" if field.errors else "")) }}
+      {{ field(class="form-check-input" ~ (" is-invalid" if field.errors else ""), id=field_id or field.id) }}
       {{ field.label(class="form-check-label") }}
     </div>
   {% elif field.type == 'SelectField' %}
-    {{ field(class="form-select" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class) }}
+    {{ field(class="form-select" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class, id=field_id or field.id) }}
   {% elif field.type == 'FileField' %}
-    {{ field(class="form-control" ~ (" is-invalid" if field.errors else "")) }}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else ""), id=field_id or field.id) }}
   {% elif field.type == 'TextAreaField' %}
-    {{ field(class="form-control" ~ (" is-invalid" if field.errors else ""), rows=3) }}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else ""), rows=3, id=field_id or field.id) }}
   {% else %}
-    {{ field(class="form-control" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class) }}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else "") ~ " " ~ extra_class, id=field_id or field.id) }}
   {% endif %}
 
   {% if field.errors %}

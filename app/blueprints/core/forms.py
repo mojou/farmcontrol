@@ -1,3 +1,4 @@
+from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from wtforms import BooleanField, PasswordField, SelectField, StringField, SubmitField
@@ -35,6 +36,42 @@ class UserForm(FlaskForm):
     farm_id = SelectField("Ferme assignee", coerce=int, validators=[Optional()])
     password = PasswordField("Mot de passe initial", validators=[DataRequired(), Length(min=8)])
     submit = SubmitField("Creer l'utilisateur")
+
+
+COUNTRY_CHOICES = [
+    ("Cameroun", "Cameroun"),
+    ("Senegal", "Senegal"),
+    ("Cote d'Ivoire", "Cote d'Ivoire"),
+    ("Mali", "Mali"),
+    ("Burkina Faso", "Burkina Faso"),
+    ("Niger", "Niger"),
+    ("Tchad", "Tchad"),
+    ("Benin", "Benin"),
+    ("Togo", "Togo"),
+    ("Gabon", "Gabon"),
+    ("Congo", "Congo"),
+    ("Republique centrafricaine", "Republique centrafricaine"),
+    ("Guinee equatoriale", "Guinee equatoriale"),
+    ("RD Congo", "RD Congo"),
+    ("Autre", "Autre"),
+]
+
+
+class SettingsForm(FlaskForm):
+    name = StringField(_l("Nom de l'exploitation"), validators=[DataRequired(), Length(max=150)])
+    country = SelectField(_l("Pays"), choices=COUNTRY_CHOICES, validators=[Optional()])
+    default_language = SelectField(
+        _l("Langue par defaut pour les nouveaux utilisateurs"),
+        choices=[("fr", "Francais"), ("en", "English")],
+        default="fr",
+    )
+    currency_label = StringField(
+        _l("Devise affichee"),
+        validators=[DataRequired(), Length(max=10)],
+        default="FCFA",
+        render_kw={"placeholder": "Ex : FCFA"},
+    )
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class ProfileForm(FlaskForm):

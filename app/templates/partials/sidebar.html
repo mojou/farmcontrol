@@ -54,6 +54,9 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.audit_log_list' }}" href="{{ url_for('core.audit_log_list') }}">
       <i class="bi bi-journal-text"></i> {{ _('Journal d\'activite') }}
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.settings' }}" href="{{ url_for('core.settings') }}">
+      <i class="bi bi-gear"></i> {{ _('Parametres') }}
+    </a>
     {% endif %}
     {% endif %}
 
