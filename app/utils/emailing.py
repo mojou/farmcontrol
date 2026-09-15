@@ -3,17 +3,37 @@ from flask import render_template
 from flask_mail import Message
 
 from app.extensions import mail
+from app.utils import brevo
 
 
 def _send(subject: str, recipients: list, template_base: str, **context):
     if not recipients:
         return
-    msg = Message(subject=subject, recipients=recipients)
-    msg.body = render_template(f"{template_base}.txt", **context)
+
+    text_body = render_template(f"{template_base}.txt", **context)
     try:
-        msg.html = render_template(f"{template_base}.html", **context)
+        html_body = render_template(f"{template_base}.html", **context)
     except Exception:
-        pass
+        html_body = None
+
+    if brevo.is_configured():
+        # Chemin privilegie en production : API HTTP Brevo, plus fiable
+        # qu'une connexion SMTP sortante sur un hebergeur gratuit.
+        for recipient in recipients:
+            brevo.send_email(
+                to_email=recipient,
+                subject=subject,
+                html_content=html_body or f"<pre>{text_body}</pre>",
+                text_content=text_body,
+            )
+        return
+
+    # Repli SMTP classique (developpement local, ou tant que Brevo n'est
+    # pas configure) - MAIL_SUPPRESS_SEND=True rend ceci un no-op.
+    msg = Message(subject=subject, recipients=recipients)
+    msg.body = text_body
+    if html_body:
+        msg.html = html_body
     mail.send(msg)
 
 

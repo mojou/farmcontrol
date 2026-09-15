@@ -38,6 +38,10 @@ class Config:
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "notifications@farmcontrol.app")
     MAIL_SUPPRESS_SEND = _bool_env("MAIL_SUPPRESS_SEND", False)
 
+    # Envoi transactionnel via l'API HTTP Brevo (voir app/utils/brevo.py) :
+    # prend le pas sur le SMTP classique des que BREVO_API_KEY est renseigne.
+    BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+
     # Uploads
     UPLOAD_FOLDER = os.path.join(BASE_DIR, os.environ.get("UPLOAD_FOLDER", "uploads"))
     MAX_UPLOAD_SIZE_MB = int(os.environ.get("MAX_UPLOAD_SIZE_MB", 2))
