@@ -6,13 +6,14 @@ from datetime import date
 
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user
+from sqlalchemy import func
 
 from app.blueprints.poultry import poultry_bp
 from app.blueprints.poultry.batches import _get_batch_or_403
 from app.blueprints.poultry.forms import SaleForm, SalePaymentForm
 from app.decorators import ensure_farm_access, owner_required
 from app.extensions import db
-from app.models.poultry import Batch, Sale
+from app.models.poultry import Batch, BatchFinance, Sale, StockPurchase
 from app.utils.audit import log_action
 from app.utils.zootechnie import recompute_batch_finance
 
@@ -131,3 +132,55 @@ def credits_list():
     unpaid = [s for s in all_sales if not s.is_paid]
     total_due = sum((s.balance_due for s in unpaid), 0)
     return render_template("poultry/credits_list.html", sales=unpaid, total_due=total_due)
+
+
+@poultry_bp.route("/depenses")
+@owner_required
+def expenses_summary():
+    """Vue consolidee de toutes les depenses de l'exploitation, tous lots et
+    toutes fermes confondus : les achats de stock (StockPurchase - de
+    l'argent reellement sorti pour acheter aliment/bois/medicaments) d'une
+    part, et les couts sans lien au stock (poussins, main d'oeuvre, saisis
+    directement par lot) d'autre part. Ne pas additionner les couts de
+    consommation du rapport de lot (total_feed_cost etc.) ici : ils ne font
+    que revaloriser un stock deja compte comme depense a l'achat, ce qui
+    compterait deux fois le meme argent depense."""
+    farm_ids = [f.id for f in current_user.tenant.farms] if current_user.tenant else []
+
+    purchases_by_category = {}
+    purchases_total = 0
+    if farm_ids:
+        rows = (
+            StockPurchase.query.filter(StockPurchase.farm_id.in_(farm_ids))
+            .with_entities(StockPurchase.category, func.coalesce(func.sum(StockPurchase.total_cost), 0))
+            .group_by(StockPurchase.category)
+            .all()
+        )
+        purchases_by_category = {category: total for category, total in rows}
+        purchases_total = sum(purchases_by_category.values())
+
+    chick_cost_total = 0
+    labor_cost_total = 0
+    if farm_ids:
+        batch_ids = [b.id for b in Batch.query.filter(Batch.farm_id.in_(farm_ids)).with_entities(Batch.id)]
+        if batch_ids:
+            chick_cost_total, labor_cost_total = (
+                BatchFinance.query.filter(BatchFinance.batch_id.in_(batch_ids))
+                .with_entities(
+                    func.coalesce(func.sum(BatchFinance.chick_cost), 0),
+                    func.coalesce(func.sum(BatchFinance.labor_cost), 0),
+                )
+                .first()
+            )
+
+    grand_total = purchases_total + chick_cost_total + labor_cost_total
+
+    return render_template(
+        "poultry/expenses_summary.html",
+        purchases_by_category=purchases_by_category,
+        purchases_total=purchases_total,
+        chick_cost_total=chick_cost_total,
+        labor_cost_total=labor_cost_total,
+        grand_total=grand_total,
+        category_labels={"feed": "Aliment", "wood": "Bois / litiere", "medication": "Medicament"},
+    )

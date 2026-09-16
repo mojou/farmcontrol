@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-15 22:37+0100\n"
+"POT-Creation-Date: 2026-09-16 01:24+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -265,7 +265,7 @@ msgid "Tarifs"
 msgstr "Pricing"
 
 #: app/templates/core/documentation.html:2 app/templates/home.html:12
-#: app/templates/home.html:40 app/templates/partials/sidebar.html:75
+#: app/templates/home.html:40 app/templates/partials/sidebar.html:78
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -489,7 +489,7 @@ msgstr "Reports and export"
 
 #: app/templates/core/documentation.html:28
 #: app/templates/core/documentation.html:180 app/templates/core/settings.html:3
-#: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:58
+#: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:61
 msgid "Parametres"
 msgstr "Settings"
 
@@ -761,7 +761,7 @@ msgstr "Used to pre-fill the expected end date when you close a batch."
 msgid "Laissez vide pour ne pas etre alerte sur le FCR."
 msgstr "Leave empty to not be alerted on FCR."
 
-#: app/templates/core/settings.html:42 app/templates/partials/sidebar.html:32
+#: app/templates/core/settings.html:42 app/templates/partials/sidebar.html:35
 #: app/templates/partials/topbar.html:10
 msgid "Alertes"
 msgstr "Alerts"
@@ -795,7 +795,7 @@ msgstr "Security"
 msgid "Autres reglages"
 msgstr "Other settings"
 
-#: app/templates/core/settings.html:94 app/templates/partials/sidebar.html:43
+#: app/templates/core/settings.html:94 app/templates/partials/sidebar.html:46
 msgid "Utilisateurs"
 msgstr "Users"
 
@@ -803,11 +803,11 @@ msgstr "Users"
 msgid "Stock et prix"
 msgstr "Stock and prices"
 
-#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:52
+#: app/templates/core/settings.html:118 app/templates/partials/sidebar.html:55
 msgid "Facturation"
 msgstr "Billing"
 
-#: app/templates/core/settings.html:126 app/templates/partials/sidebar.html:55
+#: app/templates/core/settings.html:126 app/templates/partials/sidebar.html:58
 msgid "Journal d'activite"
 msgstr "Activity log"
 
@@ -835,39 +835,43 @@ msgstr "Suppliers"
 msgid "Creances"
 msgstr "Receivables"
 
-#: app/templates/partials/sidebar.html:36
+#: app/templates/partials/sidebar.html:31
+msgid "Depenses"
+msgstr "Expenses"
+
+#: app/templates/partials/sidebar.html:39
 msgid "Messages"
 msgstr "Messages"
 
-#: app/templates/partials/sidebar.html:41
+#: app/templates/partials/sidebar.html:44
 msgid "Administration"
 msgstr "Administration"
 
-#: app/templates/partials/sidebar.html:46
+#: app/templates/partials/sidebar.html:49
 msgid "Courbes de reference"
 msgstr "Growth reference curves"
 
-#: app/templates/partials/sidebar.html:49
+#: app/templates/partials/sidebar.html:52
 msgid "Mon modele sanitaire"
 msgstr "My health program template"
 
-#: app/templates/partials/sidebar.html:64
+#: app/templates/partials/sidebar.html:67
 msgid "Plateforme"
 msgstr "Platform"
 
-#: app/templates/partials/sidebar.html:66
+#: app/templates/partials/sidebar.html:69
 msgid "Clients (tenants)"
 msgstr "Customers (tenants)"
 
-#: app/templates/partials/sidebar.html:70
+#: app/templates/partials/sidebar.html:73
 msgid "Mon compte"
 msgstr "My account"
 
-#: app/templates/partials/sidebar.html:72
+#: app/templates/partials/sidebar.html:75
 msgid "Profil"
 msgstr "Profile"
 
-#: app/templates/partials/sidebar.html:78 app/templates/partials/topbar.html:43
+#: app/templates/partials/sidebar.html:81 app/templates/partials/topbar.html:43
 msgid "Deconnexion"
 msgstr "Log out"
 

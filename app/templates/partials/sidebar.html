@@ -27,6 +27,9 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.credits_list' }}" href="{{ url_for('poultry.credits_list') }}">
       <i class="bi bi-cash-coin"></i> {{ _('Creances') }}
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.expenses_summary' }}" href="{{ url_for('poultry.expenses_summary') }}">
+      <i class="bi bi-wallet2"></i> {{ _('Depenses') }}
+    </a>
     {% endif %}
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.alerts_list' }}" href="{{ url_for('core.alerts_list') }}">
       <i class="bi bi-bell"></i> {{ _('Alertes') }}
