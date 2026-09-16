@@ -129,7 +129,7 @@ class SettingsForm(FlaskForm):
         render_kw={"placeholder": "Ex : 42"},
     )
     fcr_alert_threshold = DecimalField(
-        _l("Seuil d'alerte FCR (indice de consommation)"),
+        _l("Seuil d'alerte pour l'aliment par poulet"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
         render_kw={"placeholder": "Ex : 2.0"},

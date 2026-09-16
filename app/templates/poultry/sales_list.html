@@ -7,32 +7,32 @@
     <h1 class="fc-page-title">Ventes du lot {{ batch.code }}</h1>
     <p class="text-muted mb-0">Enregistrez chaque vente separement : plusieurs acheteurs, plusieurs dates, paiement partiel possible.</p>
   </div>
-  <a href="{{ url_for('poultry.credits_list') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-exclamation-circle"></i> Voir toutes les creances</a>
+  <a href="{{ url_for('poultry.credits_list') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-exclamation-circle"></i> Voir tout l'argent qu'on vous doit</a>
 </div>
 
 <div class="row g-3 mb-4">
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value text-success">{{ cash_collected|currency }}</div>
-      <div class="fc-kpi-label">Encaisse (dans la caisse)</div>
+      <div class="fc-kpi-label">Argent recu (dans la caisse)</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value {{ 'text-danger' if cash_outstanding > 0 }}">{{ cash_outstanding|currency }}</div>
-      <div class="fc-kpi-label">Reste en creance</div>
+      <div class="fc-kpi-label">On vous doit encore</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_sold_subjects }}</div>
-      <div class="fc-kpi-label">Sujets vendus (deduits de l'effectif)</div>
+      <div class="fc-kpi-label">Poulets vendus (retires du nombre de poulets)</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">Effectif restant</div>
+      <div class="fc-kpi-label">Nombre de poulets restants</div>
     </div></div>
   </div>
 </div>
@@ -53,7 +53,7 @@
             <tr class="{{ 'table-warning' if not sale.is_paid }}">
               <td class="text-nowrap">{{ sale.sale_date.strftime('%d/%m/%Y') }}</td>
               <td>{{ sale.buyer_name }}{% if sale.buyer_phone %}<br><span class="text-muted small">{{ sale.buyer_phone }}</span>{% endif %}</td>
-              <td>{{ sale.quantity }} {{ "kg" if sale.unit == "kg" else "sujets" }}</td>
+              <td>{{ sale.quantity }} {{ "kg" if sale.unit == "kg" else "poulets" }}</td>
               <td>{{ sale.total_amount|number }} FCFA</td>
               <td>{{ sale.amount_paid|number }} FCFA</td>
               <td>

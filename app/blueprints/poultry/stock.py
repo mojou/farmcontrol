@@ -136,7 +136,7 @@ def stock_item_restock(item_id):
         log_action("create", "poultry_stock_purchases", None, {"item_name": item.name, "total_cost": str(purchase.total_cost)})
         log_action("update", "poultry_stock_items", item.id, {"quantity_added": str(form.quantity_added.data)})
         db.session.commit()
-        flash(f"Stock de {item.name} reapprovisionne.", "success")
+        flash(f"Stock de {item.name} ajoute.", "success")
     else:
         flash("Quantite invalide.", "danger")
     return redirect(url_for("poultry.stock_list"))

@@ -13,14 +13,14 @@
       <div class="card-body">
         <h5 class="card-title">{{ batch.code }}</h5>
         <p class="text-muted small mb-2">{{ batch.farm.name }} - Souche : {{ batch.breed or "-" }}</p>
-        <p class="mb-1">Effectif courant : <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
+        <p class="mb-1">Nombre de poulets : <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
         <p class="mb-3">Jours enregistres : {{ batch.days|length }}</p>
         <div class="d-flex gap-2">
           <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm">
             <i class="bi bi-clipboard-plus"></i> Saisie quotidienne
           </a>
           <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-clipboard2-pulse"></i> Feuille de route
+            <i class="bi bi-clipboard2-pulse"></i> Calendrier des soins
           </a>
         </div>
       </div>

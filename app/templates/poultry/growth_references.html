@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Courbes de reference - Farm Control{% endblock %}
+{% block title %}Poids normal attendu - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Courbes de croissance de reference</h1>
+  <h1 class="fc-page-title">Poids normal attendu par souche</h1>
 </div>
 
 <div class="row g-3">
@@ -21,7 +21,7 @@
               <td><a href="{{ url_for('poultry.growth_reference_detail', reference_id=ref.id) }}" class="btn btn-sm btn-outline-secondary">Gerer</a></td>
             </tr>
             {% else %}
-            <tr><td colspan="3" class="text-muted text-center py-4">Aucune courbe de reference.</td></tr>
+            <tr><td colspan="3" class="text-muted text-center py-4">Aucun poids de reference enregistre.</td></tr>
             {% endfor %}
           </tbody>
         </table>

@@ -11,7 +11,7 @@
     <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Rapport complet</a>
     {% if current_user.has_role('owner') %}
     <a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cash-coin"></i> Ventes</a>
-    <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Rentabilite</a>
+    <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Ce que vous gagnez</a>
     {% if batch.is_active %}
     <a href="{{ url_for('poultry.batch_close', batch_id=batch.id) }}" class="btn btn-outline-danger btn-sm">Cloturer</a>
     {% endif %}
@@ -23,7 +23,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">Effectif courant / {{ batch.initial_count }}</div>
+      <div class="fc-kpi-label">Nombre de poulets / {{ batch.initial_count }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
@@ -35,7 +35,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">FCR (indice de consommation)</div>
+      <div class="fc-kpi-label">Aliment par poulet</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
@@ -56,11 +56,11 @@
   {% if current_user.has_role('owner') %}
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">
-      <h6 class="text-muted small text-uppercase mb-3">Rentabilite</h6>
+      <h6 class="text-muted small text-uppercase mb-3">Ce que vous gagnez</h6>
       {% if batch.finance %}
-      <p class="mb-1">Charges totales : {{ batch.finance.total_charges|currency }}</p>
-      <p class="mb-1">Resultat net : {{ batch.finance.net_result|currency }}</p>
-      <p class="mb-0">Cout de revient / kg : {{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</p>
+      <p class="mb-1">Depenses totales : {{ batch.finance.total_charges|currency }}</p>
+      <p class="mb-1">Benefice : {{ batch.finance.net_result|currency }}</p>
+      <p class="mb-0">Prix de revient par kilo : {{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</p>
       {% else %}
       <p class="text-muted mb-0">Pas encore calculee.</p>
       {% endif %}

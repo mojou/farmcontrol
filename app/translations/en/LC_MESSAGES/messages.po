@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-16 01:24+0100\n"
+"POT-Creation-Date: 2026-09-16 01:58+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -181,8 +181,8 @@ msgid "Duree de cycle standard (jours)"
 msgstr "Standard cycle length (days)"
 
 #: app/blueprints/core/forms.py:132
-msgid "Seuil d'alerte FCR (indice de consommation)"
-msgstr "FCR alert threshold (feed conversion ratio)"
+msgid "Seuil d'alerte pour l'aliment par poulet"
+msgstr "Alert threshold for feed per chicken"
 
 #: app/blueprints/core/forms.py:140
 msgid "Seuil de mortalite quotidienne qui declenche une alerte (%)"
@@ -282,8 +282,8 @@ msgid "est vraiment rentable."
 msgstr "is truly profitable."
 
 #: app/templates/home.html:35
-msgid "Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout."
-msgstr "Daily tracking, feed conversion ratio (FCR), profitability per batch and automatic alerts for broiler farms. Multitenant, secure, accessible everywhere."
+msgid "Suivi quotidien, aliment consomme par poulet, ce que vous gagnez par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout."
+msgstr "Daily tracking, feed per chicken, what you earn per batch and automatic alerts for broiler farms. Multitenant, secure, accessible everywhere."
 
 #: app/templates/home.html:38
 msgid "Creer mon compte gratuitement"
@@ -310,8 +310,8 @@ msgid "FCFA de resultat net"
 msgstr "FCFA net profit"
 
 #: app/templates/home.html:67
-msgid "Effectif courant"
-msgstr "Current headcount"
+msgid "Nombre de poulets"
+msgstr "Number of chickens"
 
 #: app/templates/home.html:73
 msgid "Taux de survie"
@@ -346,16 +346,16 @@ msgid "Performance zootechnique"
 msgstr "Zootechnical performance"
 
 #: app/templates/home.html:109
-msgid "Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche."
-msgstr "Feed conversion ratio (FCR) calculated automatically and growth curve compared against a reference for each breed."
+msgid "Aliment consomme par poulet calcule automatiquement et courbe de croissance comparee a une reference par souche."
+msgstr "Feed per chicken calculated automatically and growth curve compared against the expected normal weight for the breed."
 
 #: app/templates/home.html:117
-msgid "Rentabilite par lot"
-msgstr "Profitability per batch"
+msgid "Ce que vous gagnez par lot"
+msgstr "What you earn per batch"
 
 #: app/templates/home.html:118
-msgid "Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie."
-msgstr "Costs (feed, chicks, medication, litter), sales revenue and net result calculated with every entry."
+msgid "Depenses (aliment, poussins, medicaments, bois), argent des ventes et benefice calcules a chaque saisie."
+msgstr "Expenses (feed, chicks, medication, wood), sales money and profit calculated with every entry."
 
 #: app/templates/core/documentation.html:26
 #: app/templates/core/documentation.html:160 app/templates/home.html:126
@@ -383,8 +383,8 @@ msgid "Rapports exportables"
 msgstr "Exportable reports"
 
 #: app/templates/home.html:154
-msgid "Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire."
-msgstr "Complete batch report (FCR, mortality, finances) exportable as PDF for your banker or veterinarian."
+msgid "Rapport de lot complet (aliment par poulet, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire."
+msgstr "Complete batch report (feed per chicken, mortality, finances) exportable as PDF for your banker or veterinarian."
 
 #: app/templates/home.html:165
 msgid "Des tarifs accessibles, en FCFA"
@@ -474,13 +474,13 @@ msgstr "Health program"
 
 #: app/templates/core/documentation.html:24
 #: app/templates/core/documentation.html:137
-msgid "Ventes et creances"
-msgstr "Sales and receivables"
+msgid "Ventes et argent qu'on vous doit"
+msgstr "Sales and money owed to you"
 
 #: app/templates/core/documentation.html:25
 #: app/templates/core/documentation.html:149
-msgid "Finances et rentabilite"
-msgstr "Finances and profitability"
+msgid "Finances et ce que vous gagnez"
+msgstr "Finances and what you earn"
 
 #: app/templates/core/documentation.html:27
 #: app/templates/core/documentation.html:170
@@ -538,8 +538,8 @@ msgid "Peut faire"
 msgstr "Can do"
 
 #: app/templates/core/documentation.html:64
-msgid "Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, creances, journal d'activite, export des donnees, courbes de reference et modele sanitaire. C'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock."
-msgstr "Full access: settings, billing, users, suppliers, sales, receivables, activity log, data export, growth reference curves and health program template. This is the only role that sees prices and can edit or delete a stock item."
+msgid "Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu'on vous doit, journal d'activite, export des donnees, poids normal attendu et modele sanitaire. C'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock."
+msgstr "Full access: settings, billing, users, suppliers, sales, money owed to you, activity log, data export, expected normal weight and health program template. This is the only role that sees prices and can edit or delete a stock item."
 
 #: app/templates/core/documentation.html:68
 msgid "Gere le quotidien d'une ou plusieurs fermes : cree des lots, valide les rapports journaliers soumis par les travailleurs, consulte le stock et les alertes."
@@ -558,12 +558,12 @@ msgid "Une \"ferme\" represente un site d'elevage physique. Un \"lot\" (ou bande
 msgstr "A \"farm\" represents a physical rearing site. A \"batch\" (or flock) represents a group of chicks placed on the same date, tracked until it is closed (full sale or end of cycle)."
 
 #: app/templates/core/documentation.html:87
-msgid "A la creation d'un lot, renseignez l'effectif initial, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut)."
-msgstr "When creating a batch, enter the initial headcount, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. An indicative health program is automatically generated for the batch, based on your health program template (or on CEVA Sante Animale Afrique / GIZ-Nafa references by default)."
+msgid "A la creation d'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut)."
+msgstr "When creating a batch, enter the number of chickens at the start, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. An indicative health program is automatically generated for the batch, based on your health program template (or on CEVA Sante Animale Afrique / GIZ-Nafa references by default)."
 
 #: app/templates/core/documentation.html:88
-msgid "L'effectif courant du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque vente au sujet - vous n'avez jamais besoin de le corriger manuellement."
-msgstr "The batch's current headcount (shown on its page) automatically decreases with every recorded mortality and every per-bird sale - you never need to correct it manually."
+msgid "Le nombre de poulets du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque poulet vendu - vous n'avez jamais besoin de le corriger manuellement."
+msgstr "The batch's number of chickens (shown on its page) automatically decreases with every recorded death and every chicken sold - you never need to correct it manually."
 
 #: app/templates/core/documentation.html:89
 msgid "Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres."
@@ -582,8 +582,8 @@ msgid "Eau de boisson (litres)"
 msgstr "Drinking water (liters)"
 
 #: app/templates/core/documentation.html:102
-msgid "Mortalite (nombre de sujets) - reduit immediatement l'effectif courant du lot."
-msgstr "Mortality (number of birds) - immediately reduces the batch's current headcount."
+msgid "Mortalite (nombre de poulets morts) - reduit immediatement le nombre de poulets du lot."
+msgstr "Deaths (number of chickens) - immediately reduces the batch's number of chickens."
 
 #: app/templates/core/documentation.html:103
 msgid "Bois / litiere - decompte le stock correspondant."
@@ -594,8 +594,8 @@ msgid "Medicaments (ml administres) - decompte le stock de medicament lie, conve
 msgstr "Medication (ml administered) - deducts the linked medication stock, converted from liters/bottles if needed."
 
 #: app/templates/core/documentation.html:105
-msgid "Pesees (poids moyen) - alimente la courbe de croissance et declenche une alerte si l'indice de consommation (FCR) depasse le seuil configure."
-msgstr "Weighing (average weight) - feeds the growth curve and triggers an alert if the feed conversion ratio (FCR) exceeds the configured threshold."
+msgid "Pesees (poids moyen) - alimente le suivi du poids et declenche une alerte si l'aliment consomme par poulet depasse le seuil configure."
+msgstr "Weighing (average weight) - feeds the weight tracking and triggers an alert if feed per chicken exceeds the configured threshold."
 
 #: app/templates/core/documentation.html:106
 msgid "Observations libres, avec photo facultative."
@@ -626,12 +626,12 @@ msgid "Seul le proprietaire peut modifier ou supprimer un article de stock. La s
 msgstr "Only the owner can edit or delete a stock item. Deletion remains possible even if past entries reference it: the history is kept, only the link to the item is detached."
 
 #: app/templates/core/documentation.html:127
-msgid "Programme sanitaire (feuille de route)"
-msgstr "Health program (roadmap)"
+msgid "Programme sanitaire (calendrier des soins)"
+msgstr "Health program (care calendar)"
 
 #: app/templates/core/documentation.html:130
-msgid "Chaque lot recoit une feuille de route sanitaire (vaccins, traitements, vitamines) planifiee jour par jour, generee depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut."
-msgstr "Every batch receives a day-by-day health roadmap (vaccines, treatments, vitamins), generated from your customizable health program template (Administration > My health template) or from default references."
+msgid "Chaque lot recoit un calendrier des soins (vaccins, traitements, vitamines) planifie jour par jour, genere depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut."
+msgstr "Every batch receives a day-by-day care calendar (vaccines, treatments, vitamins), generated from your customizable health program template (Administration > My health template) or from default references."
 
 #: app/templates/core/documentation.html:131
 msgid "Quand une tache est realisee, cliquez sur \"Administre\" : une fenetre vous permet d'indiquer la quantite donnee (en ml) et l'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement \"Administre\"."
@@ -642,40 +642,40 @@ msgid "Enregistrez chaque vente separement depuis la fiche du lot : plusieurs ac
 msgstr "Record each sale separately from the batch page: multiple buyers, multiple dates and partial payment are natively supported, unlike a simple \"total sale\" field."
 
 #: app/templates/core/documentation.html:141
-msgid "Pour chaque vente, precisez la quantite (en sujets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme \"a credit\" tant qu'elle n'est pas entierement reglee."
-msgstr "For each sale, enter the quantity (in birds or kg), the unit price and the amount already received: the remaining balance is calculated automatically and the sale shows as \"on credit\" until fully settled."
+msgid "Pour chaque vente, precisez la quantite (en poulets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme \"a credit\" tant qu'elle n'est pas entierement reglee."
+msgstr "For each sale, enter the quantity (in chickens or kg), the unit price and the amount already received: the remaining balance is calculated automatically and the sale shows as \"on credit\" until fully settled."
 
 #: app/templates/core/documentation.html:142
-msgid "La fiche des ventes distingue le revenu total facture (comptabilite d'engagement) du montant reellement encaisse en caisse et du reste en creance - et chaque paiement de creance enregistre vient bien augmenter le montant encaisse. La page Creances (raccourci proprietaire) recense en un coup d'oeil toutes les ventes non soldees, tous lots confondus."
-msgstr "The sales page distinguishes total invoiced revenue (accrual accounting) from the amount actually collected in cash and the remainder still owed - and every recorded receivable payment does increase the collected amount. The Receivables page (owner shortcut) lists at a glance every unsettled sale across all batches."
+msgid "La fiche des ventes distingue le revenu total facture (comptabilite d'engagement) de l'argent reellement recu en caisse et de ce qu'on vous doit encore - et chaque paiement enregistre vient bien augmenter l'argent recu. La page Argent qu'on vous doit (raccourci proprietaire) recense en un coup d'oeil toutes les ventes non soldees, tous lots confondus."
+msgstr "The sales page distinguishes total invoiced revenue (accrual accounting) from the money actually received in cash and from what is still owed to you - and every recorded payment does increase the money received. The Money owed to you page (owner shortcut) lists at a glance every unsettled sale across all batches."
 
 #: app/templates/core/documentation.html:143
-msgid "Toute vente \"au sujet\" reduit automatiquement l'effectif courant du lot, au meme titre que la mortalite."
-msgstr "Every per-bird sale automatically reduces the batch's current headcount, just like mortality does."
+msgid "Toute vente d'un poulet reduit automatiquement le nombre de poulets du lot, au meme titre que la mortalite."
+msgstr "Every chicken sold automatically reduces the batch's number of chickens, just like a death does."
 
 #: app/templates/core/documentation.html:152
-msgid "L'indice de consommation (FCR) est calcule automatiquement a partir de l'aliment distribue et du poids des sujets, et compare a une courbe de reference par souche."
-msgstr "Feed conversion ratio (FCR) is calculated automatically from the feed distributed and the birds' weight, and compared against a reference growth curve for the breed."
+msgid "L'aliment consomme par poulet est calcule automatiquement a partir de l'aliment distribue et du poids des poulets, et compare au poids normal attendu par souche."
+msgstr "Feed per chicken is calculated automatically from the feed distributed and the chickens' weight, and compared against the expected normal weight for the breed."
 
 #: app/templates/core/documentation.html:153
-msgid "Le rapport de rentabilite d'un lot detaille chaque charge (poussins, aliment, medicaments, bois, main d'oeuvre) et chaque revenu (ventes), avec la part deja encaissee en caisse et la part encore en creance, pour un resultat net toujours a jour."
-msgstr "A batch's profitability report breaks down every cost (chicks, feed, medication, wood, labor) and every revenue (sales), showing the part already collected in cash and the part still owed, for a net result that's always up to date."
+msgid "Le rapport de ce que vous gagnez pour un lot detaille chaque depense (poussins, aliment, medicaments, bois, main d'oeuvre) et chaque revenu (ventes), avec la part deja recue en caisse et la part qu'on vous doit encore, pour un benefice toujours a jour."
+msgstr "The \"what you earn\" report for a batch breaks down every expense (chicks, feed, medication, wood, labor) and every revenue (sales), showing the part already received in cash and the part still owed to you, for a profit that's always up to date."
 
 #: app/templates/core/documentation.html:154
 msgid "Ce rapport est exportable en PDF pour le partager avec votre banquier, votre veterinaire ou un associe."
 msgstr "This report can be exported as a PDF to share with your banker, your veterinarian or a partner."
 
 #: app/templates/core/documentation.html:163
-msgid "Trois types d'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et indice de consommation (FCR) degrade."
-msgstr "Three types of alert are monitored at all times: abnormally high mortality, stock dropping below the configured threshold, and a degraded feed conversion ratio (FCR)."
+msgid "Trois types d'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et aliment consomme par poulet trop eleve."
+msgstr "Three types of alert are monitored at all times: abnormally high mortality, stock dropping below the configured threshold, and feed per chicken too high."
 
 #: app/templates/core/documentation.html:164
 msgid "Chaque seuil (taux de mortalite, seuil de stock par defaut) est ajustable dans vos Parametres. Les alertes apparaissent dans le tableau de bord et, si vous le souhaitez, sont egalement envoyees par email au proprietaire - cet envoi peut etre desactive depuis les Parametres."
 msgstr "Each threshold (mortality rate, default stock threshold) is adjustable in your Settings. Alerts appear on the dashboard and, if you wish, are also emailed to the owner - this can be turned off from Settings."
 
 #: app/templates/core/documentation.html:173
-msgid "Le rapport de lot (FCR, mortalite, finances) s'exporte en PDF depuis la fiche du lot."
-msgstr "The batch report (FCR, mortality, finances) can be exported as a PDF from the batch page."
+msgid "Le rapport de lot (aliment par poulet, mortalite, finances) s'exporte en PDF depuis la fiche du lot."
+msgstr "The batch report (feed per chicken, mortality, finances) can be exported as a PDF from the batch page."
 
 #: app/templates/core/documentation.html:174
 msgid "Le proprietaire peut exporter l'integralite des donnees de son exploitation depuis les Parametres, et consulter a tout moment le journal d'activite : qui a cree, modifie ou supprime quoi, et quand."
@@ -690,8 +690,8 @@ msgid "Elevage : pays, devise, langue par defaut, souche et duree de cycle par d
 msgstr "Farming: country, currency, default language, default breed and cycle length, default sale unit."
 
 #: app/templates/core/documentation.html:186
-msgid "Alertes : seuil de mortalite, seuil FCR, delai de rappel sanitaire, activation des emails d'alerte."
-msgstr "Alerts: mortality threshold, FCR threshold, health reminder interval, alert email toggle."
+msgid "Alertes : seuil de mortalite, seuil pour l'aliment par poulet, delai de rappel sanitaire, activation des emails d'alerte."
+msgstr "Alerts: mortality threshold, feed-per-chicken threshold, health reminder interval, alert email toggle."
 
 #: app/templates/core/documentation.html:187
 msgid "Stock et finance : seuil de stock bas par defaut, cout de main d'oeuvre journalier par defaut."
@@ -758,8 +758,8 @@ msgid "Utilise pour pre-remplir la date de fin prevue quand vous cloturez un lot
 msgstr "Used to pre-fill the expected end date when you close a batch."
 
 #: app/templates/core/settings.html:34
-msgid "Laissez vide pour ne pas etre alerte sur le FCR."
-msgstr "Leave empty to not be alerted on FCR."
+msgid "Laissez vide pour ne pas etre alerte sur l'aliment par poulet."
+msgstr "Leave empty to not be alerted on feed per chicken."
 
 #: app/templates/core/settings.html:42 app/templates/partials/sidebar.html:35
 #: app/templates/partials/topbar.html:10
@@ -832,8 +832,8 @@ msgid "Fournisseurs"
 msgstr "Suppliers"
 
 #: app/templates/partials/sidebar.html:28
-msgid "Creances"
-msgstr "Receivables"
+msgid "Argent qu'on vous doit"
+msgstr "Money owed to you"
 
 #: app/templates/partials/sidebar.html:31
 msgid "Depenses"
@@ -848,8 +848,8 @@ msgid "Administration"
 msgstr "Administration"
 
 #: app/templates/partials/sidebar.html:49
-msgid "Courbes de reference"
-msgstr "Growth reference curves"
+msgid "Poids normal attendu"
+msgstr "Expected normal weight"
 
 #: app/templates/partials/sidebar.html:52
 msgid "Mon modele sanitaire"
@@ -918,4 +918,25 @@ msgstr "Password must contain at least one digit."
 
 #~ msgid "Gerer mes prix dans le Stock"
 #~ msgstr "Manage my prices in Stock"
+
+#~ msgid "Seuil d'alerte FCR (indice de consommation)"
+#~ msgstr "FCR alert threshold (feed conversion ratio)"
+
+#~ msgid "Effectif courant"
+#~ msgstr "Current headcount"
+
+#~ msgid "Rentabilite par lot"
+#~ msgstr "Profitability per batch"
+
+#~ msgid "Ventes et creances"
+#~ msgstr "Sales and receivables"
+
+#~ msgid "Finances et rentabilite"
+#~ msgstr "Finances and profitability"
+
+#~ msgid "Creances"
+#~ msgstr "Receivables"
+
+#~ msgid "Courbes de reference"
+#~ msgstr "Growth reference curves"
 

@@ -150,9 +150,9 @@ def check_fcr_alert(batch):
         return None
 
     return create_alert(
-        title=f"FCR eleve - Lot {batch.code}",
+        title=f"Aliment par poulet eleve - Lot {batch.code}",
         message=(
-            f"L'indice de consommation (FCR) du lot {batch.code} est de {fcr}, "
+            f"Le lot {batch.code} consomme {fcr} kg d'aliment par kg de poulet produit, "
             f"au-dela du seuil de {tenant.fcr_alert_threshold} que vous avez defini."
         ),
         alert_type="fcr",

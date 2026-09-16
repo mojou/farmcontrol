@@ -25,7 +25,7 @@
       <i class="bi bi-truck"></i> {{ _('Fournisseurs') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.credits_list' }}" href="{{ url_for('poultry.credits_list') }}">
-      <i class="bi bi-cash-coin"></i> {{ _('Creances') }}
+      <i class="bi bi-cash-coin"></i> {{ _('Argent qu\'on vous doit') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.expenses_summary' }}" href="{{ url_for('poultry.expenses_summary') }}">
       <i class="bi bi-wallet2"></i> {{ _('Depenses') }}
@@ -46,7 +46,7 @@
       <i class="bi bi-people"></i> {{ _('Utilisateurs') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.growth_reference') }}" href="{{ url_for('poultry.growth_references') }}">
-      <i class="bi bi-graph-up"></i> {{ _('Courbes de reference') }}
+      <i class="bi bi-graph-up"></i> {{ _('Poids normal attendu') }}
     </a>
     <a class="fc-nav-link {{ 'active' if request.endpoint and request.endpoint.startswith('poultry.sanitary_template') }}" href="{{ url_for('poultry.sanitary_template') }}">
       <i class="bi bi-clipboard2-pulse"></i> {{ _('Mon modele sanitaire') }}

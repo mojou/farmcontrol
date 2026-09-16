@@ -21,8 +21,8 @@
               <a class="nav-link px-0 py-1" href="#saisie">4. {{ _('Saisie quotidienne') }}</a>
               <a class="nav-link px-0 py-1" href="#stock">5. {{ _('Gestion du stock') }}</a>
               <a class="nav-link px-0 py-1" href="#sanitaire">6. {{ _('Programme sanitaire') }}</a>
-              <a class="nav-link px-0 py-1" href="#ventes">7. {{ _('Ventes et creances') }}</a>
-              <a class="nav-link px-0 py-1" href="#finances">8. {{ _('Finances et rentabilite') }}</a>
+              <a class="nav-link px-0 py-1" href="#ventes">7. {{ _('Ventes et argent qu\'on vous doit') }}</a>
+              <a class="nav-link px-0 py-1" href="#finances">8. {{ _('Finances et ce que vous gagnez') }}</a>
               <a class="nav-link px-0 py-1" href="#alertes">9. {{ _('Alertes automatiques') }}</a>
               <a class="nav-link px-0 py-1" href="#rapports">10. {{ _('Rapports et export') }}</a>
               <a class="nav-link px-0 py-1" href="#parametres">11. {{ _('Parametres') }}</a>
@@ -61,7 +61,7 @@
                   <tbody>
                     <tr>
                       <td><span class="badge bg-primary">{{ _('Proprietaire') }}</span></td>
-                      <td>{{ _('Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, creances, journal d\'activite, export des donnees, courbes de reference et modele sanitaire. C\'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock.') }}</td>
+                      <td>{{ _('Acces complet : parametres, facturation, utilisateurs, fournisseurs, ventes, argent qu\'on vous doit, journal d\'activite, export des donnees, poids normal attendu et modele sanitaire. C\'est le seul role qui voit les prix et peut modifier ou supprimer un article de stock.') }}</td>
                     </tr>
                     <tr>
                       <td><span class="badge bg-info text-dark">{{ _('Responsable') }}</span></td>
@@ -84,8 +84,8 @@
           <div id="c3" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
               <p>{{ _('Une "ferme" represente un site d\'elevage physique. Un "lot" (ou bande) represente un groupe de poussins mis en place a une meme date, suivi jusqu\'a sa cloture (vente complete ou fin de cycle).') }}</p>
-              <p>{{ _('A la creation d\'un lot, renseignez l\'effectif initial, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut).') }}</p>
-              <p>{{ _('L\'effectif courant du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque vente au sujet - vous n\'avez jamais besoin de le corriger manuellement.') }}</p>
+              <p>{{ _('A la creation d\'un lot, renseignez le nombre de poulets au depart, la souche (race) et la date de mise en place. La souche et la duree de cycle par defaut sont pre-remplies depuis vos Parametres pour accelerer la saisie. Un programme sanitaire indicatif est automatiquement genere pour le lot, base sur votre modele sanitaire (ou sur des references CEVA Sante Animale Afrique / GIZ-Nafa par defaut).') }}</p>
+              <p>{{ _('Le nombre de poulets du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque poulet vendu - vous n\'avez jamais besoin de le corriger manuellement.') }}</p>
               <p>{{ _('Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres.') }}</p>
             </div>
           </div>
@@ -99,10 +99,10 @@
               <ul>
                 <li>{{ _('Aliment (kg) - decompte automatiquement le stock d\'aliment lie, converti depuis les sacs si necessaire.') }}</li>
                 <li>{{ _('Eau de boisson (litres)') }}</li>
-                <li>{{ _('Mortalite (nombre de sujets) - reduit immediatement l\'effectif courant du lot.') }}</li>
+                <li>{{ _('Mortalite (nombre de poulets morts) - reduit immediatement le nombre de poulets du lot.') }}</li>
                 <li>{{ _('Bois / litiere - decompte le stock correspondant.') }}</li>
                 <li>{{ _('Medicaments (ml administres) - decompte le stock de medicament lie, converti depuis les litres/bouteilles si necessaire.') }}</li>
-                <li>{{ _('Pesees (poids moyen) - alimente la courbe de croissance et declenche une alerte si l\'indice de consommation (FCR) depasse le seuil configure.') }}</li>
+                <li>{{ _('Pesees (poids moyen) - alimente le suivi du poids et declenche une alerte si l\'aliment consomme par poulet depasse le seuil configure.') }}</li>
                 <li>{{ _('Observations libres, avec photo facultative.') }}</li>
               </ul>
               <p>{{ _('Le prix des intrants n\'est jamais saisi ni visible a ce niveau : il est calcule automatiquement a partir du prix d\'achat deja renseigne dans le Stock, une information reservee au proprietaire.') }}</p>
@@ -124,33 +124,33 @@
         </div>
 
         <div class="accordion-item" id="sanitaire">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6"><strong>6. {{ _('Programme sanitaire (feuille de route)') }}</strong></button></h2>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6"><strong>6. {{ _('Programme sanitaire (calendrier des soins)') }}</strong></button></h2>
           <div id="c6" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
-              <p>{{ _('Chaque lot recoit une feuille de route sanitaire (vaccins, traitements, vitamines) planifiee jour par jour, generee depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut.') }}</p>
+              <p>{{ _('Chaque lot recoit un calendrier des soins (vaccins, traitements, vitamines) planifie jour par jour, genere depuis votre modele sanitaire personnalisable (Administration > Mon modele sanitaire) ou depuis des references par defaut.') }}</p>
               <p>{{ _('Quand une tache est realisee, cliquez sur "Administre" : une fenetre vous permet d\'indiquer la quantite donnee (en ml) et l\'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l\'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement "Administre".') }}</p>
             </div>
           </div>
         </div>
 
         <div class="accordion-item" id="ventes">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7"><strong>7. {{ _('Ventes et creances') }}</strong></button></h2>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7"><strong>7. {{ _('Ventes et argent qu\'on vous doit') }}</strong></button></h2>
           <div id="c7" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
               <p>{{ _('Enregistrez chaque vente separement depuis la fiche du lot : plusieurs acheteurs, plusieurs dates et paiement partiel sont geres nativement, contrairement a une simple case "vente totale".') }}</p>
-              <p>{{ _('Pour chaque vente, precisez la quantite (en sujets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme "a credit" tant qu\'elle n\'est pas entierement reglee.') }}</p>
-              <p>{{ _('La fiche des ventes distingue le revenu total facture (comptabilite d\'engagement) du montant reellement encaisse en caisse et du reste en creance - et chaque paiement de creance enregistre vient bien augmenter le montant encaisse. La page Creances (raccourci proprietaire) recense en un coup d\'oeil toutes les ventes non soldees, tous lots confondus.') }}</p>
-              <p>{{ _('Toute vente "au sujet" reduit automatiquement l\'effectif courant du lot, au meme titre que la mortalite.') }}</p>
+              <p>{{ _('Pour chaque vente, precisez la quantite (en poulets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme "a credit" tant qu\'elle n\'est pas entierement reglee.') }}</p>
+              <p>{{ _('La fiche des ventes distingue le revenu total facture (comptabilite d\'engagement) de l\'argent reellement recu en caisse et de ce qu\'on vous doit encore - et chaque paiement enregistre vient bien augmenter l\'argent recu. La page Argent qu\'on vous doit (raccourci proprietaire) recense en un coup d\'oeil toutes les ventes non soldees, tous lots confondus.') }}</p>
+              <p>{{ _('Toute vente d\'un poulet reduit automatiquement le nombre de poulets du lot, au meme titre que la mortalite.') }}</p>
             </div>
           </div>
         </div>
 
         <div class="accordion-item" id="finances">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8"><strong>8. {{ _('Finances et rentabilite') }}</strong></button></h2>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8"><strong>8. {{ _('Finances et ce que vous gagnez') }}</strong></button></h2>
           <div id="c8" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
-              <p>{{ _('L\'indice de consommation (FCR) est calcule automatiquement a partir de l\'aliment distribue et du poids des sujets, et compare a une courbe de reference par souche.') }}</p>
-              <p>{{ _('Le rapport de rentabilite d\'un lot detaille chaque charge (poussins, aliment, medicaments, bois, main d\'oeuvre) et chaque revenu (ventes), avec la part deja encaissee en caisse et la part encore en creance, pour un resultat net toujours a jour.') }}</p>
+              <p>{{ _('L\'aliment consomme par poulet est calcule automatiquement a partir de l\'aliment distribue et du poids des poulets, et compare au poids normal attendu par souche.') }}</p>
+              <p>{{ _('Le rapport de ce que vous gagnez pour un lot detaille chaque depense (poussins, aliment, medicaments, bois, main d\'oeuvre) et chaque revenu (ventes), avec la part deja recue en caisse et la part qu\'on vous doit encore, pour un benefice toujours a jour.') }}</p>
               <p>{{ _('Ce rapport est exportable en PDF pour le partager avec votre banquier, votre veterinaire ou un associe.') }}</p>
             </div>
           </div>
@@ -160,7 +160,7 @@
           <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c9"><strong>9. {{ _('Alertes automatiques') }}</strong></button></h2>
           <div id="c9" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
-              <p>{{ _('Trois types d\'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et indice de consommation (FCR) degrade.') }}</p>
+              <p>{{ _('Trois types d\'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et aliment consomme par poulet trop eleve.') }}</p>
               <p>{{ _('Chaque seuil (taux de mortalite, seuil de stock par defaut) est ajustable dans vos Parametres. Les alertes apparaissent dans le tableau de bord et, si vous le souhaitez, sont egalement envoyees par email au proprietaire - cet envoi peut etre desactive depuis les Parametres.') }}</p>
             </div>
           </div>
@@ -170,7 +170,7 @@
           <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c10"><strong>10. {{ _('Rapports et export') }}</strong></button></h2>
           <div id="c10" class="accordion-collapse collapse" data-bs-parent="#docAccordion">
             <div class="accordion-body">
-              <p>{{ _('Le rapport de lot (FCR, mortalite, finances) s\'exporte en PDF depuis la fiche du lot.') }}</p>
+              <p>{{ _('Le rapport de lot (aliment par poulet, mortalite, finances) s\'exporte en PDF depuis la fiche du lot.') }}</p>
               <p>{{ _('Le proprietaire peut exporter l\'integralite des donnees de son exploitation depuis les Parametres, et consulter a tout moment le journal d\'activite : qui a cree, modifie ou supprime quoi, et quand.') }}</p>
             </div>
           </div>
@@ -183,7 +183,7 @@
               <p>{{ _('Accessible au proprietaire, le hub de Parametres centralise toute la configuration de l\'exploitation, organisee en quatre groupes :') }}</p>
               <ul>
                 <li>{{ _('Elevage : pays, devise, langue par defaut, souche et duree de cycle par defaut, unite de vente par defaut.') }}</li>
-                <li>{{ _('Alertes : seuil de mortalite, seuil FCR, delai de rappel sanitaire, activation des emails d\'alerte.') }}</li>
+                <li>{{ _('Alertes : seuil de mortalite, seuil pour l\'aliment par poulet, delai de rappel sanitaire, activation des emails d\'alerte.') }}</li>
                 <li>{{ _('Stock et finance : seuil de stock bas par defaut, cout de main d\'oeuvre journalier par defaut.') }}</li>
                 <li>{{ _('Securite : nombre de tentatives de connexion autorisees et duree de verrouillage du compte en cas d\'echecs repetes.') }}</li>
               </ul>

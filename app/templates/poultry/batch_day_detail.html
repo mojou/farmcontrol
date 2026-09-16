@@ -24,7 +24,7 @@
 <div class="alert alert-warning">
   <i class="bi bi-exclamation-triangle-fill"></i> <strong>A ne pas oublier aujourd'hui :</strong>
   {% for item in pending_today %}{{ item.product_name }}{% if not loop.last %}, {% endif %}{% endfor %}.
-  <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="alert-link">Voir la feuille de route complete</a>.
+  <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="alert-link">Voir le calendrier des soins complet</a>.
 </div>
 {% endif %}
 
@@ -50,7 +50,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">Effectif restant</div>
+      <div class="fc-kpi-label">Nombre de poulets restants</div>
     </div></div>
   </div>
 </div>
@@ -259,7 +259,7 @@
           </table>
           </div>
           {% endif %}
-          <p class="text-muted small">Astuce : consultez la <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">feuille de route</a> pour savoir quoi administrer aujourd'hui.</p>
+          <p class="text-muted small">Astuce : consultez le <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" target="_blank">calendrier des soins</a> pour savoir quoi administrer aujourd'hui.</p>
           {{ fm.render_field(medication_form.medication_name) }}
           {{ fm.render_field(medication_form.quantity) }}
           {{ fm.render_field(medication_form.notes) }}

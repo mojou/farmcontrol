@@ -20,7 +20,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">FCR (indice de consommation)</div>
+      <div class="fc-kpi-label">Aliment par poulet</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
@@ -32,13 +32,13 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
-      <div class="fc-kpi-label">Resultat net</div>
+      <div class="fc-kpi-label">Benefice</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.finance.cost_per_kg|currency if batch.finance and batch.finance.cost_per_kg is not none else "-" }}</div>
-      <div class="fc-kpi-label">Cout de revient / kg</div>
+      <div class="fc-kpi-label">Prix de revient par kilo</div>
     </div></div>
   </div>
 </div>
@@ -71,21 +71,21 @@
     {% if batch.finance %}
     <div class="table-responsive">
     <table class="table table-sm">
-      <tr><td>Cout poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
-      <tr><td>Cout aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
-      <tr><td>Cout medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
-      <tr><td>Cout bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
-      <tr><td>Cout main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
-      <tr class="fw-bold"><td>Total des charges</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
+      <tr><td>Poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+      <tr><td>Aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
+      <tr><td>Medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
+      <tr><td>Bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
+      <tr><td>Main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
+      <tr class="fw-bold"><td>Total des depenses</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
       <tr>
-        <td>Revenu de vente (facture) {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">(detail des ventes)</a>{% endif %}</td>
+        <td>Argent des ventes {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">(detail des ventes)</a>{% endif %}</td>
         <td class="text-end">{{ batch.finance.sale_revenue|currency }}</td>
       </tr>
-      <tr class="text-success"><td>dont encaisse en caisse</td><td class="text-end">{{ cash_collected|currency }}</td></tr>
+      <tr class="text-success"><td>dont argent recu</td><td class="text-end">{{ cash_collected|currency }}</td></tr>
       {% if cash_outstanding > 0 %}
-      <tr class="text-danger"><td>dont encore en creance (non paye)</td><td class="text-end">{{ cash_outstanding|currency }}</td></tr>
+      <tr class="text-danger"><td>dont on vous doit encore (non paye)</td><td class="text-end">{{ cash_outstanding|currency }}</td></tr>
       {% endif %}
-      <tr class="fw-bold"><td>Resultat net</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
+      <tr class="fw-bold"><td>Benefice</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
     </table>
     </div>
     {% else %}

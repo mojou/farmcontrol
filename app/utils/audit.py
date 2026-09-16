@@ -24,7 +24,7 @@ TABLE_LABELS = {
     "poultry_sanitary_program_items": "Programme sanitaire",
     "poultry_sanitary_program_template_items": "Modele sanitaire",
     "poultry_daily_reports": "Rapport journalier",
-    "poultry_batch_finance": "Rentabilite",
+    "poultry_batch_finance": "Ce que vous gagnez",
     "billing_subscriptions": "Abonnement",
     "messages": "Message",
     "poultry_sales": "Vente",

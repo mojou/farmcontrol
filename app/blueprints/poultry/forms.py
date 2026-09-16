@@ -22,11 +22,11 @@ class BatchForm(FlaskForm):
     farm_id = SelectField("Ferme", coerce=int, validators=[DataRequired()])
     code = StringField("Code / nom du lot", validators=[DataRequired()])
     breed = StringField("Souche", validators=[Optional()])
-    initial_count = IntegerField("Effectif initial", validators=[DataRequired(), NumberRange(min=1)])
+    initial_count = IntegerField("Nombre de poulets au depart", validators=[DataRequired(), NumberRange(min=1)])
     chick_unit_price = DecimalField("Prix unitaire poussin", validators=[DataRequired(), NumberRange(min=0)], places=2)
     supplier_id = SelectField("Fournisseur des poussins (facultatif)", coerce=int, validators=[Optional()])
     start_date = DateField("Date de mise en place", validators=[DataRequired()])
-    growth_reference_id = SelectField("Courbe de reference (souche)", coerce=int, validators=[Optional()])
+    growth_reference_id = SelectField("Poids normal attendu (souche)", coerce=int, validators=[Optional()])
     submit = SubmitField("Enregistrer")
 
 
@@ -60,7 +60,7 @@ class SaleForm(FlaskForm):
         "Quantite vendue", validators=[DataRequired(), NumberRange(min=0.01)], places=2,
         render_kw={"placeholder": "Ex : 50"},
     )
-    unit = SelectField("Unite", choices=[("unit", "Sujets (poulets)"), ("kg", "Kilogrammes")], default="unit")
+    unit = SelectField("Unite", choices=[("unit", "Poulets"), ("kg", "Kilogrammes")], default="unit")
     unit_price = DecimalField(
         "Prix unitaire (FCFA)", validators=[DataRequired(), NumberRange(min=0)], places=2,
         render_kw={"placeholder": "Ex : 3500"},
@@ -209,7 +209,7 @@ class BatchFinanceForm(FlaskForm):
     sale_quantity = IntegerField("Quantite vendue", validators=[Optional(), NumberRange(min=0)])
     sale_unit = SelectField("Unite de vente", choices=[("kg", "Kilogramme"), ("unit", "Unite (par sujet)")], default="kg")
     sale_unit_price = DecimalField("Prix de vente unitaire", validators=[Optional(), NumberRange(min=0)], places=2)
-    submit = SubmitField("Enregistrer la rentabilite")
+    submit = SubmitField("Enregistrer")
 
 
 class StockItemForm(FlaskForm):

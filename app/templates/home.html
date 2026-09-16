@@ -32,7 +32,7 @@
             <span style="background: linear-gradient(90deg, #f3cd7e, #d99a3d); -webkit-background-clip: text; background-clip: text; color: transparent;">{{ _('est vraiment rentable.') }}</span>
           </h1>
           <p class="mb-4" style="font-size: 1.15rem; color: rgba(255,255,255,0.85); max-width: 560px;">
-            {{ _('Suivi quotidien, indice de consommation (FCR), rentabilite par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout.') }}
+            {{ _('Suivi quotidien, aliment consomme par poulet, ce que vous gagnez par lot et alertes automatiques pour les elevages de poulets de chair. Multitenant, securise, accessible partout.') }}
           </p>
           <div class="d-flex gap-3 flex-wrap">
             <a href="{{ url_for('auth.signup') }}" class="btn btn-lg fw-bold" style="background-color: var(--fc-accent); border-color: var(--fc-accent); color: #1c1200;">{{ _('Creer mon compte gratuitement') }}</a>
@@ -52,7 +52,7 @@
               <div class="col-6">
                 <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
                   <div class="fw-bold fs-4" style="color: var(--fc-primary);">1.8</div>
-                  <div class="small text-muted">FCR</div>
+                  <div class="small text-muted">Aliment/poulet</div>
                 </div>
               </div>
               <div class="col-6">
@@ -64,7 +64,7 @@
               <div class="col-6">
                 <div class="rounded-3 p-3" style="background: rgba(255,255,255,0.9);">
                   <div class="fw-bold fs-4">972</div>
-                  <div class="small text-muted">{{ _('Effectif courant') }}</div>
+                  <div class="small text-muted">{{ _('Nombre de poulets') }}</div>
                 </div>
               </div>
               <div class="col-6">
@@ -106,7 +106,7 @@
               <i class="bi bi-graph-up-arrow fs-4" style="color: var(--fc-primary);"></i>
             </div>
             <h5>{{ _('Performance zootechnique') }}</h5>
-            <p class="text-muted mb-0">{{ _('Indice de consommation (FCR) calcule automatiquement et courbe de croissance comparee a une reference par souche.') }}</p>
+            <p class="text-muted mb-0">{{ _('Aliment consomme par poulet calcule automatiquement et courbe de croissance comparee a une reference par souche.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -114,8 +114,8 @@
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:52px; height:52px; background: linear-gradient(135deg, #fdf1dd, #f6dfb2);">
               <i class="bi bi-cash-coin fs-4" style="color: var(--fc-accent);"></i>
             </div>
-            <h5>{{ _('Rentabilite par lot') }}</h5>
-            <p class="text-muted mb-0">{{ _('Charges (aliment, poussins, medicaments, bois), revenu de vente et resultat net calcules a chaque saisie.') }}</p>
+            <h5>{{ _('Ce que vous gagnez par lot') }}</h5>
+            <p class="text-muted mb-0">{{ _('Depenses (aliment, poussins, medicaments, bois), argent des ventes et benefice calcules a chaque saisie.') }}</p>
           </div></div>
         </div>
         <div class="col-md-4">
@@ -151,7 +151,7 @@
               <i class="bi bi-file-earmark-pdf fs-4" style="color: var(--fc-accent);"></i>
             </div>
             <h5>{{ _('Rapports exportables') }}</h5>
-            <p class="text-muted mb-0">{{ _('Rapport de lot complet (FCR, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.') }}</p>
+            <p class="text-muted mb-0">{{ _('Rapport de lot complet (aliment par poulet, mortalite, finances) exportable en PDF pour votre banquier ou votre veterinaire.') }}</p>
           </div></div>
         </div>
       </div>

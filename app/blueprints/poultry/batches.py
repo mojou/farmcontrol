@@ -88,7 +88,7 @@ def batch_new():
 
     form = BatchForm()
     form.farm_id.choices = [(f.id, f.name) for f in Farm.query.order_by(Farm.name).all()]
-    form.growth_reference_id.choices = [(0, "Aucune")] + [
+    form.growth_reference_id.choices = [(0, "Aucun")] + [
         (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
     ]
     form.supplier_id.choices = [(0, "Aucun")] + [
@@ -122,8 +122,8 @@ def batch_new():
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
         flash(
-            f"Lot {batch.code} cree avec succes. Sa feuille de route sanitaire "
-            "(vaccins, traitements, alimentation) a ete generee automatiquement.",
+            f"Lot {batch.code} cree avec succes. Son calendrier des soins "
+            "(vaccins, traitements, alimentation) a ete genere automatiquement.",
             "success",
         )
         return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
@@ -185,7 +185,7 @@ def batch_finance(batch_id):
         recompute_batch_finance(batch)
         log_action("update", "poultry_batch_finance", finance.id, {"sale_quantity": finance.sale_quantity})
         db.session.commit()
-        flash("Rentabilite du lot mise a jour.", "success")
+        flash("Informations sur ce que vous gagnez mises a jour.", "success")
         return redirect(url_for("poultry.batch_report", batch_id=batch.id))
 
     return render_template("poultry/batch_finance_form.html", batch=batch, form=form)
@@ -306,7 +306,7 @@ def sanitary_program_mark_done(item_id):
             medication_name=item.product_name,
             quantity=quantity_ml,
             unit_price=_stock_entry_price(stock_item_id, price_is_ml=True),
-            notes=f"Administre depuis la feuille de route (jour {item.day_number}).",
+            notes=f"Administre depuis le calendrier des soins (jour {item.day_number}).",
             created_by=current_user.id,
         )
         db.session.add(record)
@@ -340,7 +340,7 @@ def growth_references():
         )
         db.session.add(reference)
         db.session.commit()
-        flash(f"Courbe de reference {reference.name} creee.", "success")
+        flash(f"Poids de reference pour {reference.name} cree.", "success")
         return redirect(url_for("poultry.growth_references"))
 
     references = GrowthReference.query.order_by(GrowthReference.name).all()

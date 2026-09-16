@@ -32,7 +32,7 @@
   <div class="kpi-row">
     <div class="kpi">
       <div class="kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="kpi-label">FCR (indice de consommation)</div>
+      <div class="kpi-label">Aliment par poulet</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.total_mortality }}</div>
@@ -40,26 +40,26 @@
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.current_count }} / {{ batch.initial_count }}</div>
-      <div class="kpi-label">Effectif final / initial</div>
+      <div class="kpi-label">Nombre de poulets final / initial</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
-      <div class="kpi-label">Resultat net</div>
+      <div class="kpi-label">Benefice</div>
     </div>
   </div>
 
-  <div class="section-title">Rentabilite du lot</div>
+  <div class="section-title">Ce que vous gagnez</div>
   {% if batch.finance %}
   <table>
-    <tr><td>Cout poussins</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
-    <tr><td>Cout aliment</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
-    <tr><td>Cout medicaments</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
-    <tr><td>Cout bois / litiere</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>
-    <tr><td>Cout main d'oeuvre</td><td>{{ batch.finance.labor_cost|currency }}</td></tr>
-    <tr class="total-row"><td>Total des charges</td><td>{{ batch.finance.total_charges|currency }}</td></tr>
-    <tr><td>Revenu de vente</td><td>{{ batch.finance.sale_revenue|currency }}</td></tr>
-    <tr class="total-row"><td>Resultat net</td><td>{{ batch.finance.net_result|currency }}</td></tr>
-    <tr class="total-row"><td>Cout de revient / kg</td><td>{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
+    <tr><td>Poussins</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
+    <tr><td>Aliment</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
+    <tr><td>Medicaments</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
+    <tr><td>Bois / litiere</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>
+    <tr><td>Main d'oeuvre</td><td>{{ batch.finance.labor_cost|currency }}</td></tr>
+    <tr class="total-row"><td>Total des depenses</td><td>{{ batch.finance.total_charges|currency }}</td></tr>
+    <tr><td>Argent des ventes</td><td>{{ batch.finance.sale_revenue|currency }}</td></tr>
+    <tr class="total-row"><td>Benefice</td><td>{{ batch.finance.net_result|currency }}</td></tr>
+    <tr class="total-row"><td>Prix de revient par kilo</td><td>{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
   </table>
   {% else %}
   <p>Aucune donnee financiere disponible pour ce lot.</p>

@@ -51,7 +51,7 @@
               {% if current_user.has_role('owner') %}
               <input type="number" step="0.01" min="0" name="unit_price" class="form-control form-control-sm" style="width:110px" placeholder="Prix paye (facultatif)">
               {% endif %}
-              <button class="btn btn-sm btn-outline-primary">Reapprovisionner</button>
+              <button class="btn btn-sm btn-outline-primary">Ajouter du stock</button>
             </form>
           </td>
           {% if current_user.has_role('owner') %}
