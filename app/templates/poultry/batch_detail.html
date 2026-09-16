@@ -53,6 +53,7 @@
       <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Gerer le programme sanitaire</a>
     </div></div>
   </div>
+  {% if current_user.has_role('owner') %}
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">
       <h6 class="text-muted small text-uppercase mb-3">Rentabilite</h6>
@@ -62,6 +63,24 @@
       <p class="mb-0">Cout de revient / kg : {{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</p>
       {% else %}
       <p class="text-muted mb-0">Pas encore calculee.</p>
+      {% endif %}
+    </div></div>
+  </div>
+  {% endif %}
+  <div class="col-lg-6">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="text-muted small text-uppercase mb-3">Qui a travaille sur ce lot</h6>
+      {% if batch.contributors %}
+      <ul class="list-unstyled mb-0">
+        {% for user in batch.contributors %}
+        <li class="mb-1">
+          <i class="bi bi-person-fill"></i> {{ user.first_name }} {{ user.last_name }}
+          <span class="badge bg-secondary">{{ user.role_label }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted mb-0">Aucune saisie enregistree pour l'instant.</p>
       {% endif %}
     </div></div>
   </div>

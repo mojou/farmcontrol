@@ -12,6 +12,7 @@ from decimal import Decimal
 
 from app.extensions import db
 from app.models import TenantMixin, TimestampMixin
+from app.models.core import User
 
 # -- Constantes -----------------------------------------------------------
 
@@ -171,6 +172,27 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     @property
     def total_feed_kg(self):
         return sum(r.quantity_kg for day in self.days for r in day.feed_records)
+
+    @property
+    def contributors(self):
+        """Utilisateurs ayant reellement saisi une donnee sur ce lot (aliment,
+        eau, mortalite, bois, medicaments, pesee, observation) - pour savoir
+        qui a travaille sur ce lot precis, pas seulement qui est rattache a
+        la ferme en general."""
+        user_ids = set()
+        for day in self.days:
+            for records in (
+                day.feed_records, day.water_records, day.mortality_records,
+                day.wood_records, day.medication_records, day.observations,
+                day.weight_records,
+            ):
+                for record in records:
+                    if record.created_by:
+                        user_ids.add(record.created_by)
+        if not user_ids:
+            return []
+        users = User.query.filter(User.id.in_(user_ids)).order_by(User.first_name, User.last_name).all()
+        return users
 
     def __repr__(self):
         return f"<Batch {self.code}>"

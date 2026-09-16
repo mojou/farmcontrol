@@ -18,7 +18,7 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle">
-      <thead><tr><th>Ferme</th><th>Lot</th><th>Souche</th><th>Debut</th><th>Effectif courant</th><th></th></tr></thead>
+      <thead><tr><th>Ferme</th><th>Lot</th><th>Souche</th><th>Debut</th><th>Effectif courant</th>{% if current_user.has_role('owner') %}<th>Resultat net</th><th>Cout/kg</th>{% endif %}<th></th></tr></thead>
       <tbody>
         {% for batch in pagination.items %}
         <tr>
@@ -27,13 +27,23 @@
           <td>{{ batch.breed or "-" }}</td>
           <td>{{ batch.start_date.strftime('%d/%m/%Y') }}</td>
           <td>{{ batch.current_count }} / {{ batch.initial_count }}</td>
+          {% if current_user.has_role('owner') %}
+          <td>
+            {% if batch.finance %}
+            <span class="{{ 'text-success' if batch.finance.net_result >= 0 else 'text-danger' }} fw-bold">{{ batch.finance.net_result|currency }}</span>
+            {% else %}
+            <span class="text-muted">-</span>
+            {% endif %}
+          </td>
+          <td>{{ batch.finance.cost_per_kg|currency if batch.finance and batch.finance.cost_per_kg is not none else "-" }}</td>
+          {% endif %}
           <td>
             <a href="{{ url_for('poultry.batch_detail', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a>
             <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Rapport</a>
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="6" class="text-muted text-center py-4">Aucun lot.</td></tr>
+        <tr><td colspan="8" class="text-muted text-center py-4">Aucun lot.</td></tr>
         {% endfor %}
       </tbody>
     </table>
