@@ -38,6 +38,23 @@ class UserForm(FlaskForm):
     submit = SubmitField("Creer l'utilisateur")
 
 
+class UserEditForm(FlaskForm):
+    """Corrige les informations d'un utilisateur existant (role, ferme
+    assignee, coordonnees) - le mot de passe n'est change que si un nouveau
+    est saisi, pour ne pas forcer une reinitialisation a chaque correction."""
+
+    first_name = StringField("Prenom", validators=[DataRequired(), Length(max=80)])
+    last_name = StringField("Nom", validators=[DataRequired(), Length(max=80)])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    role = SelectField(
+        "Role",
+        choices=[(ROLE_MANAGER, ROLE_LABELS[ROLE_MANAGER]), (ROLE_WORKER, ROLE_LABELS[ROLE_WORKER])],
+    )
+    farm_id = SelectField("Ferme assignee", coerce=int, validators=[Optional()])
+    password = PasswordField("Nouveau mot de passe (laisser vide pour ne pas changer)", validators=[Optional(), Length(min=8)])
+    submit = SubmitField("Enregistrer")
+
+
 # Les 54 pays membres de l'Union Africaine + "Autre" en repli. Chacun est
 # associe a sa devise officielle (COUNTRY_CURRENCY) pour la suggestion
 # automatique dans /parametres (paragraphe "tous les pays d'Afrique").

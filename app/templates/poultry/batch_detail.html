@@ -13,6 +13,7 @@
     <a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cash-coin"></i> Ventes</a>
     <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Ce que vous gagnez</a>
     {% if batch.is_active %}
+    <a href="{{ url_for('poultry.batch_edit', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" title="Modifier"><i class="bi bi-pencil"></i></a>
     <a href="{{ url_for('poultry.batch_close', batch_id=batch.id) }}" class="btn btn-outline-danger btn-sm">Cloturer</a>
     {% endif %}
     {% endif %}

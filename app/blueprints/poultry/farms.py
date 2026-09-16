@@ -57,3 +57,35 @@ def farm_detail(farm_id):
         abort(403)
     batches = Batch.query.filter_by(farm_id=farm.id).order_by(Batch.start_date.desc()).all()
     return render_template("poultry/farm_detail.html", farm=farm, batches=batches)
+
+
+@poultry_bp.route("/fermes/<int:farm_id>/modifier", methods=["GET", "POST"])
+@owner_required
+def farm_edit(farm_id):
+    """Corrige le nom ou la localisation d'une ferme existante (erreur de
+    saisie), reserve au proprietaire comme les autres corrections."""
+    farm = Farm.query.get_or_404(farm_id)
+    form = FarmForm(obj=farm)
+
+    if form.validate_on_submit():
+        farm.name = form.name.data
+        farm.location = form.location.data
+        log_action("update", "farms", farm.id, {"name": farm.name})
+        db.session.commit()
+        flash(f"Ferme {farm.name} modifiee.", "success")
+        return redirect(url_for("poultry.farm_detail", farm_id=farm.id))
+
+    return render_template("poultry/farm_form.html", form=form, farm=farm)
+
+
+@poultry_bp.route("/fermes/<int:farm_id>/toggle", methods=["POST"])
+@owner_required
+def farm_toggle(farm_id):
+    """Active/desactive une ferme (ex : site ferme temporairement) sans
+    perdre son historique de lots, contrairement a une suppression."""
+    farm = Farm.query.get_or_404(farm_id)
+    farm.is_active = not farm.is_active
+    log_action("update", "farms", farm.id, {"is_active": farm.is_active})
+    db.session.commit()
+    flash(f"Ferme {farm.name} {'activee' if farm.is_active else 'desactivee'}.", "success")
+    return redirect(url_for("poultry.farms_list"))

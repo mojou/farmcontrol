@@ -22,8 +22,9 @@
           <td><span class="badge bg-secondary">{{ user.role_label }}</span></td>
           <td>{{ user.farm.name if user.farm else "Toutes" }}</td>
           <td>{% if user.is_active %}<span class="badge bg-success">Actif</span>{% else %}<span class="badge bg-danger">Inactif</span>{% endif %}</td>
-          <td>
+          <td class="d-flex gap-1">
             {% if user.role != 'owner' %}
+            <a href="{{ url_for('core.user_edit', user_id=user.id) }}" class="btn btn-sm btn-outline-secondary" title="Modifier"><i class="bi bi-pencil"></i></a>
             <form method="post" action="{{ url_for('core.user_toggle', user_id=user.id) }}">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <button class="btn btn-sm btn-outline-secondary">{{ "Desactiver" if user.is_active else "Activer" }}</button>

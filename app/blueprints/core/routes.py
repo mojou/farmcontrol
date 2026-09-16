@@ -8,7 +8,7 @@ from werkzeug.exceptions import NotFound
 from flask import send_from_directory
 
 from app.blueprints.core import core_bp
-from app.blueprints.core.forms import COUNTRY_CURRENCY, ProfileForm, SettingsForm, TenantForm, UserForm
+from app.blueprints.core.forms import COUNTRY_CURRENCY, ProfileForm, SettingsForm, TenantForm, UserEditForm, UserForm
 from app.decorators import owner_required, super_admin_required
 from app.extensions import db
 from app.models import utcnow
@@ -302,6 +302,56 @@ def user_new():
         return redirect(url_for("core.users_list"))
 
     return render_template("core/user_form.html", form=form)
+
+
+@core_bp.route("/users/<int:user_id>/modifier", methods=["GET", "POST"])
+@owner_required
+def user_edit(user_id):
+    """Corrige le role, la ferme assignee ou les coordonnees d'un
+    utilisateur existant (ex : promouvoir un travailleur en responsable,
+    ou corriger la ferme assignee) sans avoir a le desactiver et en recreer
+    un autre, ce qui perdrait le lien avec ses saisies passees."""
+    user = User.query.get_or_404(user_id)
+    if user.role == ROLE_OWNER:
+        flash("Le compte proprietaire ne peut pas etre modifie ici.", "danger")
+        return redirect(url_for("core.users_list"))
+
+    form = UserEditForm(obj=user)
+    form.farm_id.choices = [(0, "Toutes les fermes")] + [
+        (f.id, f.name) for f in Farm.query.order_by(Farm.name).all()
+    ]
+    if request.method == "GET":
+        form.farm_id.data = user.farm_id or 0
+
+    if form.validate_on_submit():
+        if form.password.data:
+            errors = validate_password_policy(form.password.data)
+            if errors:
+                for error in errors:
+                    flash(error, "danger")
+                return render_template("core/user_form.html", form=form, user=user)
+
+        with tenant_bypass():
+            existing = User.query.filter(
+                User.email == form.email.data.strip().lower(), User.id != user.id
+            ).first()
+        if existing:
+            flash("Un autre utilisateur existe deja avec cet email.", "danger")
+            return render_template("core/user_form.html", form=form, user=user)
+
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data.strip().lower()
+        user.role = form.role.data
+        user.farm_id = form.farm_id.data or None
+        if form.password.data:
+            user.set_password(form.password.data)
+        log_action("update", "users", user.id, {"email": user.email, "role": user.role})
+        db.session.commit()
+        flash(f"Utilisateur {user.full_name} modifie.", "success")
+        return redirect(url_for("core.users_list"))
+
+    return render_template("core/user_form.html", form=form, user=user)
 
 
 @core_bp.route("/users/<int:user_id>/toggle", methods=["POST"])

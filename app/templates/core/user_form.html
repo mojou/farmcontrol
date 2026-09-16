@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Nouvel utilisateur - Farm Control{% endblock %}
+{% block title %}{{ "Modifier " ~ user.full_name if user else "Nouvel utilisateur" }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Nouvel utilisateur</h1>
+  <h1 class="fc-page-title">{{ "Modifier " ~ user.full_name if user else "Nouvel utilisateur" }}</h1>
 </div>
 <div class="row">
   <div class="col-lg-6">

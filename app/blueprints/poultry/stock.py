@@ -62,7 +62,7 @@ def stock_list():
 @owner_required
 def stock_item_new():
     form = StockItemForm()
-    form.farm_id.choices = [(f.id, f.name) for f in Farm.query.order_by(Farm.name).all()]
+    form.farm_id.choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
     if request.method == "GET" and current_user.tenant and current_user.tenant.default_stock_low_threshold is not None:
         form.min_threshold.data = current_user.tenant.default_stock_low_threshold
 

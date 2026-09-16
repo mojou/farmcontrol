@@ -86,7 +86,7 @@ def batch_new():
             return redirect(url_for("billing.pricing"))
 
     form = BatchForm()
-    form.farm_id.choices = [(f.id, f.name) for f in Farm.query.order_by(Farm.name).all()]
+    form.farm_id.choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
     form.growth_reference_id.choices = [(0, "Aucun")] + [
         (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
     ]
@@ -127,6 +127,59 @@ def batch_new():
         return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
 
     return render_template("poultry/batch_form.html", form=form)
+
+
+@poultry_bp.route("/lots/<int:batch_id>/modifier", methods=["GET", "POST"])
+@owner_required
+def batch_edit(batch_id):
+    """Corrige les informations de base d'un lot (erreur de saisie a la
+    creation : nombre de poulets, souche, prix du poussin...). Reserve aux
+    lots encore actifs : un lot cloture garde son bilan final tel quel."""
+    batch = _get_batch_or_403(batch_id)
+    if not batch.is_active:
+        flash("Un lot cloture ne peut plus etre modifie.", "warning")
+        return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
+
+    form = BatchForm(obj=batch)
+    farm_choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
+    if batch.farm_id not in [f[0] for f in farm_choices]:
+        farm_choices = [(batch.farm_id, batch.farm.name)] + farm_choices
+    form.farm_id.choices = farm_choices
+    form.growth_reference_id.choices = [(0, "Aucun")] + [
+        (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
+    ]
+    form.supplier_id.choices = [(0, "Aucun")] + [
+        (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
+    ]
+    if request.method == "GET":
+        form.supplier_id.data = batch.supplier_id or 0
+        form.growth_reference_id.data = batch.growth_reference_id or 0
+
+    if form.validate_on_submit():
+        existing = (
+            Batch.query.filter_by(farm_id=form.farm_id.data, code=form.code.data)
+            .filter(Batch.id != batch.id)
+            .first()
+        )
+        if existing:
+            flash("Un lot avec ce code existe deja pour cette ferme.", "danger")
+            return render_template("poultry/batch_form.html", form=form, batch=batch)
+
+        batch.farm_id = form.farm_id.data
+        batch.code = form.code.data
+        batch.breed = form.breed.data
+        batch.initial_count = form.initial_count.data
+        batch.chick_unit_price = form.chick_unit_price.data
+        batch.supplier_id = form.supplier_id.data or None
+        batch.start_date = form.start_date.data
+        batch.growth_reference_id = form.growth_reference_id.data or None
+        recompute_batch_finance(batch)
+        log_action("update", "poultry_batches", batch.id, {"code": batch.code})
+        db.session.commit()
+        flash(f"Lot {batch.code} modifie.", "success")
+        return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
+
+    return render_template("poultry/batch_form.html", form=form, batch=batch)
 
 
 @poultry_bp.route("/lots/<int:batch_id>")
