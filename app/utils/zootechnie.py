@@ -115,6 +115,11 @@ def recompute_batch_finance(batch):
         # Ancienne saisie manuelle en un seul bloc, conservee pour les lots
         # qui n'utilisent pas le suivi de ventes detaille.
         finance.sale_revenue = Decimal(finance.sale_quantity) * Decimal(finance.sale_unit_price)
+    else:
+        # Aucune vente detaillee ni saisie manuelle (ex : la derniere vente
+        # du lot vient d'etre supprimee) : le revenu ne doit pas rester sur
+        # son ancienne valeur.
+        finance.sale_revenue = Decimal(0)
 
     finance.net_result = Decimal(finance.sale_revenue or 0) - finance.total_charges
 
