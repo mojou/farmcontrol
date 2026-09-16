@@ -29,6 +29,7 @@ TABLE_LABELS = {
     "messages": "Message",
     "poultry_sales": "Vente",
     "poultry_suppliers": "Fournisseur",
+    "poultry_stock_purchases": "Achat de stock",
 }
 
 ACTION_LABELS = {"create": "Creation", "update": "Modification", "delete": "Suppression"}

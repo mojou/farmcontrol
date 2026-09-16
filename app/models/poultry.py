@@ -69,6 +69,9 @@ class Farm(TimestampMixin, TenantMixin, db.Model):
         "Alert", back_populates="farm", cascade="all, delete-orphan",
         foreign_keys="Alert.farm_id",
     )
+    stock_purchases = db.relationship(
+        "StockPurchase", back_populates="farm", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Farm {self.name}>"
@@ -249,6 +252,35 @@ class StockItem(TimestampMixin, TenantMixin, db.Model):
     @property
     def is_low(self) -> bool:
         return Decimal(self.quantity_on_hand or 0) <= Decimal(self.min_threshold or 0)
+
+
+class StockPurchase(TimestampMixin, TenantMixin, db.Model):
+    """Trace un achat de stock (creation d'article ou reapprovisionnement) en
+    tant que depense reelle - independamment de la consommation, qui elle
+    est deja suivie par lot via FeedRecord/WoodRecord/MedicationRecord.total_cost.
+    Un achat de stock n'est jamais rattache a un lot precis (le stock est
+    partage par ferme, entre lots actifs) : ces depenses apparaissent donc
+    au niveau de la ferme (page Stock), separement de la rentabilite d'un
+    lot qui ne reflete que ce qui a ete reellement consomme par ce lot."""
+
+    __tablename__ = "poultry_stock_purchases"
+
+    id = db.Column(db.Integer, primary_key=True)
+    farm_id = db.Column(db.Integer, db.ForeignKey("farms.id"), nullable=False, index=True)
+    stock_item_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_stock_items.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+
+    category = db.Column(db.String(20), nullable=False)
+    item_name = db.Column(db.String(150), nullable=False)
+    quantity = db.Column(db.Numeric(12, 2), nullable=False)
+    unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
+    total_cost = db.Column(db.Numeric(12, 2), nullable=False, default=0)
+    purchase_date = db.Column(db.Date, nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    farm = db.relationship("Farm", back_populates="stock_purchases")
+    stock_item = db.relationship("StockItem")
 
 
 class FeedRecord(TimestampMixin, TenantMixin, db.Model):

@@ -9,6 +9,23 @@
   {% endif %}
 </div>
 
+{% if current_user.has_role('owner') %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ purchases_month|currency }}</div>
+      <div class="fc-kpi-label">Depenses stock (ce mois-ci)</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ purchases_total|currency }}</div>
+      <div class="fc-kpi-label">Depenses stock (total)</div>
+    </div></div>
+  </div>
+</div>
+{% endif %}
+
 <div class="card">
   <div class="card-body">
     <div class="table-responsive">
@@ -31,6 +48,9 @@
             <form method="post" action="{{ url_for('poultry.stock_item_restock', item_id=item.id) }}" class="d-flex gap-1">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <input type="number" step="0.01" name="quantity_added" class="form-control form-control-sm" style="width:100px" placeholder="Quantite" required>
+              {% if current_user.has_role('owner') %}
+              <input type="number" step="0.01" min="0" name="unit_price" class="form-control form-control-sm" style="width:110px" placeholder="Prix paye (facultatif)">
+              {% endif %}
               <button class="btn btn-sm btn-outline-primary">Reapprovisionner</button>
             </form>
           </td>

@@ -9,6 +9,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// Desactive le bouton d'envoi de tout formulaire classique (POST + rechargement
+// de page) des le clic, pour eviter les doubles soumissions (double-clic par
+// impatience quand le reseau/serveur met un instant a repondre) et donner un
+// retour visuel immediat. Sans effet sur les formulaires geres par
+// offline-queue.js, qui reactivent deja le bouton eux-memes en cas d'erreur.
+document.addEventListener("submit", function (event) {
+  var form = event.target;
+  if (!(form instanceof HTMLFormElement)) return;
+  var submitBtn = form.querySelector('button[type="submit"]');
+  if (!submitBtn || submitBtn.disabled) return;
+  submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> ' + submitBtn.innerHTML;
+});
+
 // Trace les courbes de mortalite cumulee et de consommation d'aliment
 // cumulee (paragraphe 4) a partir des donnees JSON fournies par le serveur.
 function renderBatchCharts(canvasIds, series) {
