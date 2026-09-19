@@ -29,6 +29,7 @@ from app.models.poultry import (
     SanitaryProgramTemplateItem,
     StockItem,
     WaterRecord,
+    EggRecord,
     WeightRecord,
     WoodRecord,
 )
@@ -61,6 +62,7 @@ def build_tenant_export(tenant) -> dict:
         "stock": [_model_to_dict(r) for r in StockItem.query.all()],
         "aliment": [_model_to_dict(r) for r in FeedRecord.query.all()],
         "eau": [_model_to_dict(r) for r in WaterRecord.query.all()],
+        "oeufs": [_model_to_dict(r) for r in EggRecord.query.all()],
         "mortalite": [_model_to_dict(r) for r in MortalityRecord.query.all()],
         "bois_litiere": [_model_to_dict(r) for r in WoodRecord.query.all()],
         "medicaments": [_model_to_dict(r) for r in MedicationRecord.query.all()],

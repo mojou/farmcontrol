@@ -112,6 +112,21 @@ class FeedRecordForm(FlaskForm):
     submit = SubmitField(_l("Enregistrer"))
 
 
+class EggRecordForm(FlaskForm):
+    eggs_collected = IntegerField(
+        _l("Oeufs ramasses (casses inclus)"),
+        validators=[DataRequired(), NumberRange(min=0)],
+        render_kw={"placeholder": _l("Ex : 250")},
+    )
+    eggs_broken = IntegerField(
+        _l("Dont oeufs casses ou fendus (facultatif)"),
+        validators=[Optional(), NumberRange(min=0)],
+        default=0,
+        render_kw={"placeholder": _l("Ex : 3")},
+    )
+    submit = SubmitField(_l("Enregistrer"))
+
+
 class WaterRecordForm(FlaskForm):
     quantity_liters = DecimalField(
         _l("Quantite d'eau donnee (litres)"),

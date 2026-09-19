@@ -30,6 +30,7 @@ DECLARE
         'poultry_stock_items',
         'poultry_feed_records',
         'poultry_water_records',
+        'poultry_egg_records',
         'poultry_mortality_records',
         'poultry_wood_records',
         'poultry_medication_records',

@@ -14,12 +14,14 @@ SPECIES_GUINEA_FOWL = "guinea_fowl"
 SPECIES_TURKEY = "turkey"
 SPECIES_DUCK = "duck"
 SPECIES_QUAIL = "quail"
+SPECIES_LAYER = "layer"
 
 DEFAULT_SPECIES = SPECIES_BROILER
 
 # (code stocke en base, libelle affiche)
 SPECIES_CHOICES = [
     (SPECIES_BROILER, _l("Poulet de chair")),
+    (SPECIES_LAYER, _l("Poule pondeuse")),
     (SPECIES_GUINEA_FOWL, _l("Pintade")),
     (SPECIES_TURKEY, _l("Dinde")),
     (SPECIES_DUCK, _l("Canard")),

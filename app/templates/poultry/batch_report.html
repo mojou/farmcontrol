@@ -19,8 +19,13 @@
 <div class="row g-3 mb-4">
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
+      {% if batch.is_layer %}
+      <div class="fc-kpi-value">{{ (laying_rate ~ " %") if laying_rate is not none else "-" }}</div>
+      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}</div>
+      {% else %}
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
       <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
+      {% endif %}
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
@@ -37,8 +42,13 @@
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
+      {% if batch.is_layer %}
+      <div class="fc-kpi-value">{{ batch.cost_per_egg|currency if batch.cost_per_egg is not none else "-" }}</div>
+      <div class="fc-kpi-label">{{ _('Prix de revient par oeuf') }}</div>
+      {% else %}
       <div class="fc-kpi-value">{{ batch.finance.cost_per_kg|currency if batch.finance and batch.finance.cost_per_kg is not none else "-" }}</div>
       <div class="fc-kpi-label">{{ _('Prix de revient par kilo') }}</div>
+      {% endif %}
     </div></div>
   </div>
 </div>
@@ -57,6 +67,26 @@
     </div></div>
   </div>
 </div>
+
+{% if batch.is_layer %}
+<div class="card mb-4"><div class="card-body">
+  <h6 class="text-muted small text-uppercase mb-3">{{ _('Production d\'oeufs (par jour)') }}</h6>
+  {% if egg_data|selectattr('eggs')|list %}
+  <div class="table-responsive">
+  <table class="table table-sm mb-0">
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Date') }}</th><th>{{ _('Oeufs ramasses') }}</th><th>{{ _('Dont casses') }}</th><th>{{ _('Poules') }}</th><th>{{ _('Taux de ponte') }}</th></tr></thead>
+    <tbody>
+      {% for row in egg_data if row.eggs %}
+      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.eggs }}</td><td>{{ row.broken }}</td><td>{{ row.hens }}</td><td>{{ row.rate }} %</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <p class="text-muted mb-0">{{ _('Aucun oeuf enregistre pour ce lot.') }}</p>
+  {% endif %}
+</div></div>
+{% endif %}
 
 {% if growth_data %}
 <div class="card mb-4"><div class="card-body">

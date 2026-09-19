@@ -56,6 +56,38 @@ def mortality_series(batch):
     return series
 
 
+def egg_production_series(batch):
+    """Serie {jour, oeufs, casses, poules, taux de ponte %} par jour de suivi
+    (poules pondeuses). Le nombre de poules d'un jour = effectif de depart
+    moins les morts cumules jusqu'a ce jour moins les poules vendues a cette
+    date ou avant ; le taux de ponte = oeufs du jour / poules du jour."""
+    from app.models.poultry import Sale
+
+    series = []
+    dead = 0
+    for day in batch.days:
+        dead += day.mortality_count
+        sold = sum(
+            s.quantity for s in batch.sales if s.unit == Sale.UNIT_SUBJECT and s.sale_date <= day.date
+        )
+        hens = max(int(batch.initial_count - dead - sold), 0)
+        eggs = sum(r.eggs_collected for r in day.egg_records)
+        broken = sum(r.eggs_broken for r in day.egg_records)
+        rate = round(eggs * 100 / hens, 1) if hens and day.egg_records else None
+        series.append(
+            {"day": day.day_number, "date": day.date.isoformat(), "eggs": eggs, "broken": broken,
+             "hens": hens, "rate": rate}
+        )
+    return series
+
+
+def average_laying_rate(batch, last_days=7):
+    """Taux de ponte moyen (%) sur les derniers jours ou des oeufs ont ete
+    saisis, ou None s'il n'y en a pas encore."""
+    rates = [p["rate"] for p in egg_production_series(batch) if p["rate"] is not None][-last_days:]
+    return round(sum(rates) / len(rates), 1) if rates else None
+
+
 def feed_series(batch):
     """Serie {jour, aliment_du_jour, cumul} pour la courbe de consommation (paragraphe 4)."""
     series = []

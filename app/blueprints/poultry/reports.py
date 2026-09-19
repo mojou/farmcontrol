@@ -47,7 +47,7 @@ def batch_report_csv(batch_id):
     writer.writerow([
         _("Jour"), _("Date"), _("Aliment (kg)"), _("Eau (litres)"), _("Morts du jour"),
         _("Poids moyen (g)"), _("Cout aliment (FCFA)"), _("Cout medicaments (FCFA)"), _("Cout bois/litiere (FCFA)"),
-    ])
+    ] + ([_("Oeufs ramasses"), _("Dont casses")] if batch.is_layer else []))
 
     for day in sorted(batch.days, key=lambda d: d.day_number):
         feed_cost = sum((r.quantity_kg or 0) * (r.unit_price or 0) for r in day.feed_records)
@@ -64,7 +64,7 @@ def batch_report_csv(batch_id):
             feed_cost,
             medication_cost,
             wood_cost,
-        ])
+        ] + ([sum(r.eggs_collected for r in day.egg_records), sum(r.eggs_broken for r in day.egg_records)] if batch.is_layer else []))
 
     filename = f"rapport-lot-{batch.code}.csv"
     return Response(

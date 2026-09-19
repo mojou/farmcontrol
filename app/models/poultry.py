@@ -186,6 +186,25 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
         return self.species == "broiler"
 
     @property
+    def is_layer(self) -> bool:
+        return self.species == "layer"
+
+    @property
+    def total_eggs(self) -> int:
+        return sum(r.eggs_collected for day in self.days for r in day.egg_records)
+
+    @property
+    def total_eggs_broken(self) -> int:
+        return sum(r.eggs_broken for day in self.days for r in day.egg_records)
+
+    @property
+    def cost_per_egg(self):
+        """Prix de revient d'un oeuf : depenses du lot / oeufs ramasses."""
+        if not self.finance or not self.total_eggs:
+            return None
+        return self.finance.total_charges / self.total_eggs
+
+    @property
     def contributors(self):
         """Utilisateurs ayant reellement saisi une donnee sur ce lot (aliment,
         eau, mortalite, bois, medicaments, pesee, observation) - pour savoir
@@ -221,6 +240,7 @@ class BatchDay(TimestampMixin, TenantMixin, db.Model):
     batch = db.relationship("Batch", back_populates="days")
     feed_records = db.relationship("FeedRecord", back_populates="batch_day", cascade="all, delete-orphan")
     water_records = db.relationship("WaterRecord", back_populates="batch_day", cascade="all, delete-orphan")
+    egg_records = db.relationship("EggRecord", back_populates="batch_day", cascade="all, delete-orphan")
     mortality_records = db.relationship("MortalityRecord", back_populates="batch_day", cascade="all, delete-orphan")
     wood_records = db.relationship("WoodRecord", back_populates="batch_day", cascade="all, delete-orphan")
     medication_records = db.relationship("MedicationRecord", back_populates="batch_day", cascade="all, delete-orphan")
@@ -368,6 +388,23 @@ class MortalityRecord(TimestampMixin, TenantMixin, db.Model):
     batch_day = db.relationship("BatchDay", back_populates="mortality_records")
 
 
+class EggRecord(TimestampMixin, TenantMixin, db.Model):
+    """Ramassage d'oeufs (poules pondeuses). Plusieurs ramassages possibles
+    dans la meme journee (matin/soir) : le total du jour est leur somme."""
+
+    __tablename__ = "poultry_egg_records"
+
+    id = db.Column(db.Integer, primary_key=True)
+    batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)
+    batch_day_id = db.Column(db.Integer, db.ForeignKey("poultry_batch_days.id"), nullable=False, index=True)
+
+    eggs_collected = db.Column(db.Integer, nullable=False)  # oeufs ramasses (casses inclus)
+    eggs_broken = db.Column(db.Integer, nullable=False, default=0)  # dont casses / fele
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    batch_day = db.relationship("BatchDay", back_populates="egg_records")
+
+
 class WoodRecord(TimestampMixin, TenantMixin, db.Model):
     __tablename__ = "poultry_wood_records"
 
@@ -460,7 +497,12 @@ class Sale(TimestampMixin, TenantMixin, db.Model):
 
     UNIT_KG = "kg"
     UNIT_SUBJECT = "unit"
-    UNITS = [UNIT_KG, UNIT_SUBJECT]
+    # Poules pondeuses : vente d'oeufs a l'unite ou par plateau de 30. Seule
+    # UNIT_SUBJECT retire des poules de l'effectif (voir Batch.total_sold_subjects).
+    UNIT_EGG = "egg"
+    UNIT_TRAY = "tray"
+    EGGS_PER_TRAY = 30
+    UNITS = [UNIT_KG, UNIT_SUBJECT, UNIT_EGG, UNIT_TRAY]
 
     id = db.Column(db.Integer, primary_key=True)
     batch_id = db.Column(db.Integer, db.ForeignKey("poultry_batches.id"), nullable=False, index=True)

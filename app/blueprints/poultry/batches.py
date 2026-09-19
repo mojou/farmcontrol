@@ -39,7 +39,9 @@ from app.utils.sanitary import (
     get_pending_items,
 )
 from app.utils.zootechnie import (
+    average_laying_rate,
     compute_fcr,
+    egg_production_series,
     feed_series,
     growth_curve_comparison,
     mortality_series,
@@ -191,7 +193,8 @@ def batch_edit(batch_id):
 def batch_detail(batch_id):
     batch = _get_batch_or_403(batch_id)
     fcr = compute_fcr(batch)
-    return render_template("poultry/batch_detail.html", batch=batch, fcr=fcr)
+    laying_rate = average_laying_rate(batch) if batch.is_layer else None
+    return render_template("poultry/batch_detail.html", batch=batch, fcr=fcr, laying_rate=laying_rate)
 
 
 @poultry_bp.route("/lots/<int:batch_id>/cloturer", methods=["GET", "POST"])
@@ -291,6 +294,8 @@ def batch_report(batch_id):
         mortality_data=mortality_series(batch),
         feed_data=feed_series(batch),
         growth_data=growth_curve_comparison(batch),
+        egg_data=egg_production_series(batch) if batch.is_layer else [],
+        laying_rate=average_laying_rate(batch) if batch.is_layer else None,
         cash_collected=cash_collected,
         cash_outstanding=cash_outstanding,
         stock_purchases_total=stock_purchases_total,

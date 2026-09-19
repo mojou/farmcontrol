@@ -33,12 +33,27 @@
       <div class="fc-kpi-label">{{ _('Mortalite totale') }}</div>
     </div></div>
   </div>
+  {% if batch.is_layer %}
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ (laying_rate ~ " %") if laying_rate is not none else "-" }}</div>
+      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card fc-kpi-card h-100"><div class="card-body">
+      <div class="fc-kpi-value">{{ batch.total_eggs }}</div>
+      <div class="fc-kpi-label">{{ _('Oeufs ramasses (dont %(broken)s casses)', broken=(batch.total_eggs_broken)) }}</div>
+    </div></div>
+  </div>
+  {% else %}
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
       <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
     </div></div>
   </div>
+  {% endif %}
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_feed_kg|number(1) }}</div>
@@ -61,7 +76,7 @@
       {% if batch.finance %}
       <p class="mb-1">{{ _('Depenses totales : %(total_charges)s', total_charges=(batch.finance.total_charges|currency)) }}</p>
       <p class="mb-1">{{ _('Benefice : %(net_result)s', net_result=(batch.finance.net_result|currency)) }}</p>
-      <p class="mb-0">{{ _('Prix de revient par kilo : %(cost_per_kg)s', cost_per_kg=(batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-")) }}</p>
+      <p class="mb-0">{% if batch.is_layer %}{{ _('Prix de revient par oeuf : %(cost_per_egg)s', cost_per_egg=(batch.cost_per_egg|currency if batch.cost_per_egg is not none else "-")) }}{% else %}{{ _('Prix de revient par kilo : %(cost_per_kg)s', cost_per_kg=(batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-")) }}{% endif %}</p>
       {% else %}
       <p class="text-muted mb-0">{{ _('Pas encore calculee.') }}</p>
       {% endif %}

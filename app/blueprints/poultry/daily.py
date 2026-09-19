@@ -15,6 +15,7 @@ from app.blueprints.poultry.forms import (
     MortalityRecordForm,
     ObservationForm,
     WaterRecordForm,
+    EggRecordForm,
     WeightRecordForm,
     WoodRecordForm,
 )
@@ -28,6 +29,7 @@ from app.models.poultry import (
     Batch,
     BatchDay,
     DailyReport,
+    EggRecord,
     FeedRecord,
     MedicationRecord,
     MortalityRecord,
@@ -204,6 +206,7 @@ def batch_day_detail(day_id):
         batch=day.batch,
         feed_form=feed_form,
         water_form=WaterRecordForm(),
+        egg_form=EggRecordForm(),
         mortality_form=MortalityRecordForm(),
         wood_form=wood_form,
         medication_form=medication_form,
@@ -294,6 +297,50 @@ def water_record_new(day_id):
     else:
         flash(_("Erreur dans le formulaire eau."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/jours/<int:day_id>/oeufs", methods=["POST"])
+@login_required
+def egg_record_new(day_id):
+    day = _get_day_or_403(day_id)
+    if not day.batch.is_layer:
+        abort(404)
+    form = EggRecordForm()
+    if form.validate_on_submit():
+        broken = form.eggs_broken.data or 0
+        if broken > form.eggs_collected.data:
+            flash(_("Les oeufs casses ne peuvent pas depasser les oeufs ramasses."), "danger")
+            return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+        record = EggRecord(
+            tenant_id=current_user.tenant_id,
+            batch_id=day.batch_id,
+            batch_day_id=day.id,
+            eggs_collected=form.eggs_collected.data,
+            eggs_broken=broken,
+            created_by=current_user.id,
+        )
+        db.session.add(record)
+        db.session.flush()
+        log_action("create", "poultry_egg_records", None, {"eggs_collected": form.eggs_collected.data})
+        db.session.commit()
+        flash(_("Ramassage d'oeufs enregistre."), "success")
+    else:
+        flash(_("Erreur dans le formulaire oeufs."), "danger")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
+
+
+@poultry_bp.route("/oeufs/<int:record_id>/supprimer", methods=["POST"])
+@owner_required
+def egg_record_delete(record_id):
+    record = EggRecord.query.get_or_404(record_id)
+    if not ensure_farm_access(record.batch_day.batch.farm):
+        abort(403)
+    day_id = record.batch_day_id
+    log_action("delete", "poultry_egg_records", record.id, {"eggs_collected": record.eggs_collected})
+    db.session.delete(record)
+    db.session.commit()
+    flash(_("Ramassage d'oeufs supprime."), "success")
+    return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
 @poultry_bp.route("/eau/<int:record_id>/supprimer", methods=["POST"])

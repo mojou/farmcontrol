@@ -26,6 +26,17 @@ def sales_list(batch_id):
     form = SaleForm(sale_date=date.today())
     if request.method == "GET" and current_user.tenant and current_user.tenant.default_sale_unit:
         form.unit.data = current_user.tenant.default_sale_unit
+    if batch.is_layer:
+        # Poules pondeuses : on vend surtout des oeufs (plateaux de 30 ou a
+        # l'unite), et parfois les poules de reforme.
+        form.unit.choices = [
+            (Sale.UNIT_TRAY, _("Plateaux de 30 oeufs")),
+            (Sale.UNIT_EGG, _("Oeufs (a l'unite)")),
+            (Sale.UNIT_SUBJECT, _("Poules de reforme")),
+            (Sale.UNIT_KG, _("Kilogrammes")),
+        ]
+        if request.method == "GET":
+            form.unit.data = Sale.UNIT_TRAY
 
     if form.validate_on_submit():
         total_amount = form.quantity.data * form.unit_price.data

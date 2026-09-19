@@ -53,7 +53,7 @@
             <tr class="{{ 'table-warning' if not sale.is_paid }}">
               <td class="text-nowrap">{{ sale.sale_date.strftime('%d/%m/%Y') }}</td>
               <td>{{ sale.buyer_name }}{% if sale.buyer_phone %}<br><span class="text-muted small">{{ sale.buyer_phone }}</span>{% endif %}</td>
-              <td>{{ sale.quantity }} {{ "kg" if sale.unit == "kg" else _("poulets") }}</td>
+              <td>{{ sale.quantity }} {{ {"kg": "kg", "egg": _("oeufs"), "tray": _("plateaux")}.get(sale.unit, _("poulets")) }}</td>
               <td>{{ sale.total_amount|number }} FCFA</td>
               <td>{{ sale.amount_paid|number }} FCFA</td>
               <td>

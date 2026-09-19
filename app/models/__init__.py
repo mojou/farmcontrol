@@ -89,6 +89,7 @@ from app.models.poultry import (  # noqa: E402,F401
     StockItem,
     FeedRecord,
     WaterRecord,
+    EggRecord,
     MortalityRecord,
     WoodRecord,
     MedicationRecord,

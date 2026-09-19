@@ -16,6 +16,7 @@ TABLE_LABELS = {
     "poultry_batch_days": _l("Jour de suivi"),
     "poultry_feed_records": _l("Aliment"),
     "poultry_water_records": _l("Eau"),
+    "poultry_egg_records": _l("Oeufs"),
     "poultry_mortality_records": _l("Mortalite"),
     "poultry_wood_records": _l("Bois / litiere"),
     "poultry_medication_records": _l("Medicament"),

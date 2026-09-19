@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-20 00:50+0100\n"
+"POT-Creation-Date: 2026-09-20 00:57+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -66,7 +66,7 @@ msgstr "You must accept the terms to continue."
 #: app/templates/auth/signup.html:9
 #: app/templates/billing/_pricing_cards.html:38
 #: app/templates/billing/pricing.html:17 app/templates/core/contact.html:36
-#: app/templates/core/documentation.html:254 app/templates/core/privacy.html:63
+#: app/templates/core/documentation.html:255 app/templates/core/privacy.html:63
 #: app/templates/core/terms.html:52 app/templates/home.html:14
 msgid "Creer mon compte"
 msgstr "Create my account"
@@ -78,7 +78,7 @@ msgstr "Remember me"
 #: app/blueprints/auth/forms.py:30 app/templates/auth/signup.html:36
 #: app/templates/billing/payment_return.html:24
 #: app/templates/billing/pricing.html:16 app/templates/core/contact.html:35
-#: app/templates/core/documentation.html:253 app/templates/core/privacy.html:62
+#: app/templates/core/documentation.html:254 app/templates/core/privacy.html:62
 #: app/templates/core/terms.html:51 app/templates/errors/403.html:14
 #: app/templates/errors/404.html:14 app/templates/home.html:13
 msgid "Se connecter"
@@ -270,18 +270,20 @@ msgstr "New password (leave empty to keep the current one)"
 #: app/blueprints/core/forms.py:55 app/blueprints/core/forms.py:263
 #: app/blueprints/core/forms.py:275 app/blueprints/poultry/forms.py:21
 #: app/blueprints/poultry/forms.py:34 app/blueprints/poultry/forms.py:54
-#: app/blueprints/poultry/forms.py:112 app/blueprints/poultry/forms.py:122
-#: app/blueprints/poultry/forms.py:136 app/blueprints/poultry/forms.py:150
-#: app/blueprints/poultry/forms.py:174 app/blueprints/poultry/forms.py:192
-#: app/blueprints/poultry/forms.py:208 app/blueprints/poultry/forms.py:216
-#: app/blueprints/poultry/forms.py:269 app/blueprints/poultry/forms.py:274
-#: app/templates/poultry/batch_day_detail.html:150
-#: app/templates/poultry/batch_day_detail.html:195
-#: app/templates/poultry/batch_day_detail.html:241
-#: app/templates/poultry/batch_day_detail.html:288
-#: app/templates/poultry/batch_day_detail.html:336
-#: app/templates/poultry/batch_day_detail.html:382
-#: app/templates/poultry/batch_day_detail.html:429
+#: app/blueprints/poultry/forms.py:112 app/blueprints/poultry/forms.py:127
+#: app/blueprints/poultry/forms.py:137 app/blueprints/poultry/forms.py:151
+#: app/blueprints/poultry/forms.py:165 app/blueprints/poultry/forms.py:189
+#: app/blueprints/poultry/forms.py:207 app/blueprints/poultry/forms.py:223
+#: app/blueprints/poultry/forms.py:231 app/blueprints/poultry/forms.py:284
+#: app/blueprints/poultry/forms.py:289
+#: app/templates/poultry/batch_day_detail.html:153
+#: app/templates/poultry/batch_day_detail.html:198
+#: app/templates/poultry/batch_day_detail.html:245
+#: app/templates/poultry/batch_day_detail.html:292
+#: app/templates/poultry/batch_day_detail.html:339
+#: app/templates/poultry/batch_day_detail.html:387
+#: app/templates/poultry/batch_day_detail.html:433
+#: app/templates/poultry/batch_day_detail.html:480
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -574,7 +576,7 @@ msgstr "Enable email alerts for the whole farm"
 msgid "Seuil d'alerte stock faible suggere par defaut"
 msgstr "Default suggested low-stock alert threshold"
 
-#: app/blueprints/core/forms.py:235 app/blueprints/poultry/forms.py:247
+#: app/blueprints/core/forms.py:235 app/blueprints/poultry/forms.py:262
 msgid "Ex : 2"
 msgstr "E.g. 2"
 
@@ -610,7 +612,7 @@ msgstr "Lockout duration after failures (minutes)"
 msgid "Photo de profil"
 msgstr "Profile photo"
 
-#: app/blueprints/core/forms.py:272 app/blueprints/poultry/forms.py:190
+#: app/blueprints/core/forms.py:272 app/blueprints/poultry/forms.py:205
 msgid "Format d'image non autorise."
 msgstr "Image format not allowed."
 
@@ -707,7 +709,7 @@ msgid "Sujet"
 msgstr "Subject"
 
 #: app/blueprints/messaging/forms.py:10 app/templates/core/alerts.html:13
-#: app/utils/audit.py:30
+#: app/utils/audit.py:31
 msgid "Message"
 msgstr "Message"
 
@@ -744,180 +746,196 @@ msgstr "Reply sent."
 msgid "Impossible d'envoyer la reponse (message vide ?)."
 msgstr "Unable to send the reply (empty message?)."
 
-#: app/blueprints/poultry/batches.py:86
+#: app/blueprints/poultry/batches.py:88
 #, python-format
 msgid "Votre plan %(name)s est limite a %(max_active_batches)s lot(s) actif(s). Cloturez un lot existant ou passez a un plan superieur."
 msgstr "Your %(name)s plan is limited to %(max_active_batches)s active batch(es). Close an existing batch or upgrade to a higher plan."
 
-#: app/blueprints/poultry/batches.py:93 app/blueprints/poultry/batches.py:96
-#: app/blueprints/poultry/batches.py:151 app/blueprints/poultry/batches.py:154
+#: app/blueprints/poultry/batches.py:95 app/blueprints/poultry/batches.py:98
+#: app/blueprints/poultry/batches.py:153 app/blueprints/poultry/batches.py:156
 #: app/templates/poultry/_sanitary_done_modal.html:25
 msgid "Aucun"
 msgstr "None"
 
-#: app/blueprints/poultry/batches.py:105 app/blueprints/poultry/batches.py:168
+#: app/blueprints/poultry/batches.py:107 app/blueprints/poultry/batches.py:170
 msgid "Un lot avec ce code existe deja pour cette ferme."
 msgstr "A batch with this code already exists for this farm."
 
-#: app/blueprints/poultry/batches.py:127
+#: app/blueprints/poultry/batches.py:129
 #, python-format
 msgid "Lot %(code)s cree avec succes. Ajoutez vous-meme les vaccins et traitements prevus dans son calendrier des soins."
 msgstr "Batch %(code)s created successfully. Add the vaccines and treatments you plan yourself in its care calendar."
 
-#: app/blueprints/poultry/batches.py:143
+#: app/blueprints/poultry/batches.py:145
 msgid "Un lot cloture ne peut plus etre modifie."
 msgstr "A closed batch can no longer be edited."
 
-#: app/blueprints/poultry/batches.py:183
+#: app/blueprints/poultry/batches.py:185
 #, python-format
 msgid "Lot %(code)s modifie."
 msgstr "Batch %(code)s updated."
 
-#: app/blueprints/poultry/batches.py:212
+#: app/blueprints/poultry/batches.py:215
 #, python-format
 msgid "Lot %(code)s cloture."
 msgstr "Batch %(code)s closed."
 
-#: app/blueprints/poultry/batches.py:243
+#: app/blueprints/poultry/batches.py:246
 msgid "Informations sur ce que vous gagnez mises a jour."
 msgstr "Profit information updated."
 
-#: app/blueprints/poultry/batches.py:321
+#: app/blueprints/poultry/batches.py:326
 msgid "Element du programme sanitaire ajoute."
 msgstr "Health program item added."
 
-#: app/blueprints/poultry/batches.py:376
+#: app/blueprints/poultry/batches.py:381
 msgid "Impossible d'enregistrer la quantite : creez d'abord un jour de suivi pour ce lot (Saisie quotidienne)."
 msgstr "Unable to save the quantity: first create a tracking day for this batch (Daily entry)."
 
-#: app/blueprints/poultry/batches.py:406
+#: app/blueprints/poultry/batches.py:411
 msgid "Element marque comme realise."
 msgstr "Item marked as done."
 
-#: app/blueprints/poultry/batches.py:425
+#: app/blueprints/poultry/batches.py:430
 msgid "Element retire du calendrier des soins."
 msgstr "Item removed from the care calendar."
 
-#: app/blueprints/poultry/batches.py:443
+#: app/blueprints/poultry/batches.py:448
 #, python-format
 msgid "Poids de reference pour %(name)s cree."
 msgstr "Reference weight for %(name)s created."
 
-#: app/blueprints/poultry/batches.py:464
+#: app/blueprints/poultry/batches.py:469
 msgid "Point de courbe ajoute."
 msgstr "Curve point added."
 
-#: app/blueprints/poultry/daily.py:63
+#: app/blueprints/poultry/daily.py:65
 msgid "Aucun (saisie libre)"
 msgstr "None (free entry)"
 
-#: app/blueprints/poultry/daily.py:65
+#: app/blueprints/poultry/daily.py:67
 #, python-format
 msgid "%(name)s (%(qty)s %(unit)s en stock)"
 msgstr "%(name)s (%(qty)s %(unit)s in stock)"
 
-#: app/blueprints/poultry/daily.py:183
+#: app/blueprints/poultry/daily.py:185
 #, python-format
 msgid "Jour %(day_number)s cree."
 msgstr "Day %(day_number)s created."
 
-#: app/blueprints/poultry/daily.py:252
+#: app/blueprints/poultry/daily.py:255
 msgid "Consommation d'aliment enregistree."
 msgstr "Feed consumption saved."
 
-#: app/blueprints/poultry/daily.py:254
+#: app/blueprints/poultry/daily.py:257
 msgid "Erreur dans le formulaire aliment."
 msgstr "Error in the feed form."
 
-#: app/blueprints/poultry/daily.py:272
+#: app/blueprints/poultry/daily.py:275
 msgid "Saisie d'aliment supprimee."
 msgstr "Feed entry deleted."
 
-#: app/blueprints/poultry/daily.py:293
+#: app/blueprints/poultry/daily.py:296
 msgid "Consommation d'eau enregistree."
 msgstr "Water consumption saved."
 
-#: app/blueprints/poultry/daily.py:295
+#: app/blueprints/poultry/daily.py:298
 msgid "Erreur dans le formulaire eau."
 msgstr "Error in the water form."
 
-#: app/blueprints/poultry/daily.py:309
+#: app/blueprints/poultry/daily.py:312
+msgid "Les oeufs casses ne peuvent pas depasser les oeufs ramasses."
+msgstr "Broken eggs cannot exceed the eggs collected."
+
+#: app/blueprints/poultry/daily.py:326
+msgid "Ramassage d'oeufs enregistre."
+msgstr "Egg collection saved."
+
+#: app/blueprints/poultry/daily.py:328
+msgid "Erreur dans le formulaire oeufs."
+msgstr "Error in the eggs form."
+
+#: app/blueprints/poultry/daily.py:342
+msgid "Ramassage d'oeufs supprime."
+msgstr "Egg collection deleted."
+
+#: app/blueprints/poultry/daily.py:356
 msgid "Saisie d'eau supprimee."
 msgstr "Water entry deleted."
 
-#: app/blueprints/poultry/daily.py:332
+#: app/blueprints/poultry/daily.py:379
 msgid "Mortalite enregistree."
 msgstr "Mortality saved."
 
-#: app/blueprints/poultry/daily.py:334
+#: app/blueprints/poultry/daily.py:381
 msgid "Erreur dans le formulaire mortalite."
 msgstr "Error in the mortality form."
 
-#: app/blueprints/poultry/daily.py:348
+#: app/blueprints/poultry/daily.py:395
 msgid "Saisie de mortalite supprimee."
 msgstr "Mortality entry deleted."
 
-#: app/blueprints/poultry/daily.py:377
+#: app/blueprints/poultry/daily.py:424
 msgid "Consommation de bois/litiere enregistree."
 msgstr "Wood/litter consumption saved."
 
-#: app/blueprints/poultry/daily.py:379
+#: app/blueprints/poultry/daily.py:426
 msgid "Erreur dans le formulaire bois."
 msgstr "Error in the wood form."
 
-#: app/blueprints/poultry/daily.py:397
+#: app/blueprints/poultry/daily.py:444
 msgid "Saisie de bois/litiere supprimee."
 msgstr "Wood/litter entry deleted."
 
-#: app/blueprints/poultry/daily.py:428
+#: app/blueprints/poultry/daily.py:475
 msgid "Traitement medical enregistre."
 msgstr "Medical treatment saved."
 
-#: app/blueprints/poultry/daily.py:430
+#: app/blueprints/poultry/daily.py:477
 msgid "Erreur dans le formulaire medicaments."
 msgstr "Error in the medication form."
 
-#: app/blueprints/poultry/daily.py:448
+#: app/blueprints/poultry/daily.py:495
 msgid "Saisie de medicament supprimee."
 msgstr "Medication entry deleted."
 
-#: app/blueprints/poultry/daily.py:480
+#: app/blueprints/poultry/daily.py:527
 msgid "Observation enregistree."
 msgstr "Observation saved."
 
-#: app/blueprints/poultry/daily.py:482
+#: app/blueprints/poultry/daily.py:529
 msgid "Erreur dans le formulaire observation."
 msgstr "Error in the observation form."
 
-#: app/blueprints/poultry/daily.py:498
+#: app/blueprints/poultry/daily.py:545
 msgid "Observation supprimee."
 msgstr "Observation deleted."
 
-#: app/blueprints/poultry/daily.py:524
+#: app/blueprints/poultry/daily.py:571
 msgid "Pesee enregistree."
 msgstr "Weighing saved."
 
-#: app/blueprints/poultry/daily.py:526
+#: app/blueprints/poultry/daily.py:573
 msgid "Erreur dans le formulaire pesee."
 msgstr "Error in the weighing form."
 
-#: app/blueprints/poultry/daily.py:543
+#: app/blueprints/poultry/daily.py:590
 msgid "Pesee supprimee."
 msgstr "Weighing deleted."
 
-#: app/blueprints/poultry/daily.py:558
+#: app/blueprints/poultry/daily.py:605
 msgid "Ce rapport a deja ete soumis."
 msgstr "This report has already been submitted."
 
-#: app/blueprints/poultry/daily.py:574
+#: app/blueprints/poultry/daily.py:621
 msgid "Rapport journalier soumis."
 msgstr "Daily report submitted."
 
-#: app/blueprints/poultry/daily.py:588
+#: app/blueprints/poultry/daily.py:635
 msgid "Ce rapport n'est pas en attente de validation."
 msgstr "This report is not waiting for validation."
 
-#: app/blueprints/poultry/daily.py:598
+#: app/blueprints/poultry/daily.py:645
 msgid "Rapport journalier valide."
 msgstr "Daily report validated."
 
@@ -954,7 +972,7 @@ msgstr "Farm name"
 msgid "Localisation"
 msgstr "Location"
 
-#: app/blueprints/poultry/forms.py:25 app/blueprints/poultry/forms.py:220
+#: app/blueprints/poultry/forms.py:25 app/blueprints/poultry/forms.py:235
 #: app/templates/core/dashboard_manager.html:59
 #: app/templates/poultry/batches_list.html:21
 #: app/templates/poultry/stock_list.html:33 app/utils/audit.py:14
@@ -1011,17 +1029,17 @@ msgstr "Mainly supplies"
 #: app/blueprints/poultry/forms.py:46 app/blueprints/poultry/suppliers.py:18
 #: app/templates/pdf/batch_report.html:53
 #: app/templates/poultry/batch_finance_form.html:20
-#: app/templates/poultry/batch_report.html:74
+#: app/templates/poultry/batch_report.html:104
 #: app/templates/poultry/expenses_summary.html:21
 msgid "Poussins"
 msgstr "Chicks"
 
-#: app/blueprints/poultry/forms.py:47 app/blueprints/poultry/forms.py:223
-#: app/blueprints/poultry/sales.py:185 app/blueprints/poultry/suppliers.py:19
+#: app/blueprints/poultry/forms.py:47 app/blueprints/poultry/forms.py:238
+#: app/blueprints/poultry/sales.py:196 app/blueprints/poultry/suppliers.py:19
 #: app/templates/pdf/batch_report.html:54
 #: app/templates/poultry/batch_day_detail.html:99
 #: app/templates/poultry/batch_finance_form.html:21
-#: app/templates/poultry/batch_report.html:75
+#: app/templates/poultry/batch_report.html:105
 #: app/templates/poultry/stock_list.html:38 app/utils/audit.py:17
 msgid "Aliment"
 msgstr "Feed"
@@ -1029,7 +1047,7 @@ msgstr "Feed"
 #: app/blueprints/poultry/forms.py:48 app/blueprints/poultry/suppliers.py:20
 #: app/templates/pdf/batch_report.html:55
 #: app/templates/poultry/batch_finance_form.html:22
-#: app/templates/poultry/batch_report.html:76
+#: app/templates/poultry/batch_report.html:106
 msgid "Medicaments"
 msgstr "Medications"
 
@@ -1065,7 +1083,7 @@ msgstr "E.g. Mrs Njoya"
 msgid "Telephone de l'acheteur (facultatif)"
 msgstr "Buyer's phone (optional)"
 
-#: app/blueprints/poultry/forms.py:64 app/blueprints/poultry/forms.py:213
+#: app/blueprints/poultry/forms.py:64 app/blueprints/poultry/forms.py:228
 msgid "Quantite vendue"
 msgstr "Quantity sold"
 
@@ -1082,7 +1100,7 @@ msgstr "Unit"
 msgid "Poulets"
 msgstr "Chickens"
 
-#: app/blueprints/poultry/forms.py:67
+#: app/blueprints/poultry/forms.py:67 app/blueprints/poultry/sales.py:36
 msgid "Kilogrammes"
 msgstr "Kilograms"
 
@@ -1142,271 +1160,288 @@ msgstr "Quantity given (kg)"
 msgid "Ex : 25"
 msgstr "E.g. 25"
 
-#: app/blueprints/poultry/forms.py:109 app/blueprints/poultry/forms.py:147
-#: app/blueprints/poultry/forms.py:171
+#: app/blueprints/poultry/forms.py:109 app/blueprints/poultry/forms.py:162
+#: app/blueprints/poultry/forms.py:186
 msgid "Prelever depuis un stock enregistre (le prix est calcule automatiquement)"
 msgstr "Take from a recorded stock (the price is calculated automatically)"
 
 #: app/blueprints/poultry/forms.py:117
+msgid "Oeufs ramasses (casses inclus)"
+msgstr "Eggs collected (broken ones included)"
+
+#: app/blueprints/poultry/forms.py:119
+msgid "Ex : 250"
+msgstr "E.g. 250"
+
+#: app/blueprints/poultry/forms.py:122
+msgid "Dont oeufs casses ou fendus (facultatif)"
+msgstr "Of which broken or cracked eggs (optional)"
+
+#: app/blueprints/poultry/forms.py:125
+msgid "Ex : 3"
+msgstr "E.g. 3"
+
+#: app/blueprints/poultry/forms.py:132
 msgid "Quantite d'eau donnee (litres)"
 msgstr "Quantity of water given (liters)"
 
-#: app/blueprints/poultry/forms.py:120
+#: app/blueprints/poultry/forms.py:135
 msgid "Ex : 80"
 msgstr "E.g. 80"
 
-#: app/blueprints/poultry/forms.py:127
+#: app/blueprints/poultry/forms.py:142
 msgid "Nombre de poulets morts aujourd'hui"
 msgstr "Number of chickens that died today"
 
-#: app/blueprints/poultry/forms.py:129
+#: app/blueprints/poultry/forms.py:144
 msgid "Ex : 2 (mettre 0 si aucun mort)"
 msgstr "E.g. 2 (enter 0 if none died)"
 
-#: app/blueprints/poultry/forms.py:132
+#: app/blueprints/poultry/forms.py:147
 msgid "Cause probable (si connue)"
 msgstr "Probable cause (if known)"
 
-#: app/blueprints/poultry/forms.py:134
+#: app/blueprints/poultry/forms.py:149
 msgid "Ex : Chaleur, ecrasement, maladie..."
 msgstr "E.g. Heat, crushing, disease..."
 
-#: app/blueprints/poultry/forms.py:141
+#: app/blueprints/poultry/forms.py:156
 msgid "Quantite de bois / litiere ajoutee"
 msgstr "Quantity of wood / litter added"
 
-#: app/blueprints/poultry/forms.py:144 app/blueprints/poultry/forms.py:205
-#: app/blueprints/poultry/forms.py:241
+#: app/blueprints/poultry/forms.py:159 app/blueprints/poultry/forms.py:220
+#: app/blueprints/poultry/forms.py:256
 msgid "Ex : 10"
 msgstr "E.g. 10"
 
-#: app/blueprints/poultry/forms.py:155
+#: app/blueprints/poultry/forms.py:170
 msgid "Nom du medicament / vaccin"
 msgstr "Name of the medication / vaccine"
 
-#: app/blueprints/poultry/forms.py:157
+#: app/blueprints/poultry/forms.py:172
 msgid "Ex : Newcastle, Vitamines, Anticoccidien..."
 msgstr "E.g. Newcastle, Vitamins, Anticoccidial..."
 
-#: app/blueprints/poultry/forms.py:160
+#: app/blueprints/poultry/forms.py:175
 msgid "Quantite administree (en ml)"
 msgstr "Quantity administered (in ml)"
 
-#: app/blueprints/poultry/forms.py:163
+#: app/blueprints/poultry/forms.py:178
 msgid "Ex : 50 (pour 50 ml, verse dans l'eau de boisson)"
 msgstr "E.g. 50 (for 50 ml, poured into the drinking water)"
 
-#: app/blueprints/poultry/forms.py:166
+#: app/blueprints/poultry/forms.py:181
 msgid "Comment l'avez-vous administre ? (facultatif)"
 msgstr "How did you administer it? (optional)"
 
-#: app/blueprints/poultry/forms.py:168
+#: app/blueprints/poultry/forms.py:183
 msgid "Ex : dans l'eau de boisson, en injection..."
 msgstr "E.g. in the drinking water, by injection..."
 
-#: app/blueprints/poultry/forms.py:179
+#: app/blueprints/poultry/forms.py:194
 msgid "Que remarquez-vous ?"
 msgstr "What did you notice?"
 
-#: app/blueprints/poultry/forms.py:181
+#: app/blueprints/poultry/forms.py:196
 msgid "Ex : 3 poussins faibles dans le coin nord de la ferme"
 msgstr "E.g. 3 weak chicks in the north corner of the farm"
 
-#: app/blueprints/poultry/forms.py:184
+#: app/blueprints/poultry/forms.py:199
 msgid "Est-ce urgent ?"
 msgstr "Is it urgent?"
 
-#: app/blueprints/poultry/forms.py:185
+#: app/blueprints/poultry/forms.py:200
 msgid "Non, simple remarque"
 msgstr "No, just a remark"
 
-#: app/blueprints/poultry/forms.py:185
+#: app/blueprints/poultry/forms.py:200
 msgid "Oui, prevenir immediatement le proprietaire"
 msgstr "Yes, notify the owner immediately"
 
-#: app/blueprints/poultry/forms.py:189
+#: app/blueprints/poultry/forms.py:204
 msgid "Ajouter une photo (facultatif)"
 msgstr "Add a photo (optional)"
 
-#: app/blueprints/poultry/forms.py:197
+#: app/blueprints/poultry/forms.py:212
 msgid "Poids moyen d'un poulet (grammes)"
 msgstr "Average weight of a chicken (grams)"
 
-#: app/blueprints/poultry/forms.py:200
+#: app/blueprints/poultry/forms.py:215
 msgid "Ex : 450"
 msgstr "E.g. 450"
 
-#: app/blueprints/poultry/forms.py:203
+#: app/blueprints/poultry/forms.py:218
 msgid "Nombre de poulets peses"
 msgstr "Number of chickens weighed"
 
-#: app/blueprints/poultry/forms.py:207
+#: app/blueprints/poultry/forms.py:222
 msgid "Remarque (facultatif)"
 msgstr "Remark (optional)"
 
-#: app/blueprints/poultry/forms.py:212
+#: app/blueprints/poultry/forms.py:227
 msgid "Cout main d'oeuvre"
 msgstr "Labor cost"
 
-#: app/blueprints/poultry/forms.py:214
+#: app/blueprints/poultry/forms.py:229
 msgid "Unite de vente"
 msgstr "Sale unit"
 
-#: app/blueprints/poultry/forms.py:214
+#: app/blueprints/poultry/forms.py:229
 msgid "Kilogramme"
 msgstr "Kilogram"
 
-#: app/blueprints/poultry/forms.py:214
+#: app/blueprints/poultry/forms.py:229
 msgid "Unite (par sujet)"
 msgstr "Unit (per chicken)"
 
-#: app/blueprints/poultry/forms.py:215
+#: app/blueprints/poultry/forms.py:230
 msgid "Prix de vente unitaire"
 msgstr "Unit selling price"
 
-#: app/blueprints/poultry/forms.py:222
+#: app/blueprints/poultry/forms.py:237
 #: app/templates/poultry/expenses_summary.html:43
 #: app/templates/poultry/stock_list.html:33
 msgid "Categorie"
 msgstr "Category"
 
-#: app/blueprints/poultry/forms.py:223 app/blueprints/poultry/sales.py:185
+#: app/blueprints/poultry/forms.py:238 app/blueprints/poultry/sales.py:196
 #: app/templates/pdf/batch_report.html:56
-#: app/templates/poultry/batch_day_detail.html:102
-#: app/templates/poultry/batch_day_detail.html:255
+#: app/templates/poultry/batch_day_detail.html:105
+#: app/templates/poultry/batch_day_detail.html:306
 #: app/templates/poultry/batch_finance_form.html:23
-#: app/templates/poultry/batch_report.html:77
-#: app/templates/poultry/stock_list.html:38 app/utils/audit.py:20
+#: app/templates/poultry/batch_report.html:107
+#: app/templates/poultry/stock_list.html:38 app/utils/audit.py:21
 msgid "Bois / litiere"
 msgstr "Wood / litter"
 
-#: app/blueprints/poultry/forms.py:223 app/blueprints/poultry/sales.py:185
-#: app/templates/poultry/stock_list.html:38 app/utils/audit.py:21
+#: app/blueprints/poultry/forms.py:238 app/blueprints/poultry/sales.py:196
+#: app/templates/poultry/stock_list.html:38 app/utils/audit.py:22
 msgid "Medicament"
 msgstr "Medication"
 
-#: app/blueprints/poultry/forms.py:226
+#: app/blueprints/poultry/forms.py:241
 msgid "Nom de l'article"
 msgstr "Item name"
 
-#: app/blueprints/poultry/forms.py:228
+#: app/blueprints/poultry/forms.py:243
 msgid "Ex : Aliment demarrage, Copeaux de bois, Vitamines..."
 msgstr "E.g. Starter feed, Wood shavings, Vitamins..."
 
-#: app/blueprints/poultry/forms.py:231
+#: app/blueprints/poultry/forms.py:246
 msgid "Unite de mesure"
 msgstr "Unit of measure"
 
-#: app/blueprints/poultry/forms.py:234
+#: app/blueprints/poultry/forms.py:249
 msgid "Ex : sac, morceau, L (litre), kg..."
 msgstr "E.g. bag, piece, L (liter), kg..."
 
-#: app/blueprints/poultry/forms.py:238
+#: app/blueprints/poultry/forms.py:253
 msgid "Quantite actuellement en stock"
 msgstr "Quantity currently in stock"
 
-#: app/blueprints/poultry/forms.py:244
+#: app/blueprints/poultry/forms.py:259
 msgid "Seuil d'alerte (stock faible)"
 msgstr "Alert threshold (low stock)"
 
-#: app/blueprints/poultry/forms.py:250
+#: app/blueprints/poultry/forms.py:265
 msgid "Prix par unite (FCFA)"
 msgstr "Price per unit (FCFA)"
 
-#: app/blueprints/poultry/forms.py:253
+#: app/blueprints/poultry/forms.py:268
 msgid "Ex : 15000"
 msgstr "E.g. 15000"
 
-#: app/blueprints/poultry/forms.py:256
+#: app/blueprints/poultry/forms.py:271
 msgid "Poids en kg d'une unite (uniquement pour l'aliment)"
 msgstr "Weight in kg of one unit (feed only)"
 
-#: app/blueprints/poultry/forms.py:259
+#: app/blueprints/poultry/forms.py:274
 msgid "Ex : 50 (un sac de 50 kg)"
 msgstr "E.g. 50 (a 50 kg bag)"
 
-#: app/blueprints/poultry/forms.py:263
+#: app/blueprints/poultry/forms.py:278
 msgid "Volume en ml d'une unite (uniquement pour les medicaments liquides)"
 msgstr "Volume in ml of one unit (liquid medications only)"
 
-#: app/blueprints/poultry/forms.py:266
+#: app/blueprints/poultry/forms.py:281
 msgid "Ex : 1000 (1 litre) ou 3000 (bouteille de 3 litres)"
 msgstr "E.g. 1000 (1 liter) or 3000 (3-liter bottle)"
 
-#: app/blueprints/poultry/forms.py:273
+#: app/blueprints/poultry/forms.py:288
 msgid "Nom de la souche"
 msgstr "Breed name"
 
-#: app/blueprints/poultry/forms.py:278 app/blueprints/poultry/forms.py:284
+#: app/blueprints/poultry/forms.py:293 app/blueprints/poultry/forms.py:299
 #: app/blueprints/poultry/reports.py:48
 #: app/templates/core/dashboard_manager.html:35
 #: app/templates/pdf/batch_report.html:75
 #: app/templates/pdf/batch_report.html:85
 #: app/templates/pdf/batch_report.html:96
 #: app/templates/poultry/batch_days_list.html:23
+#: app/templates/poultry/batch_report.html:77
 #: app/templates/poultry/growth_reference_detail.html:15
 #: app/templates/poultry/sanitary_program.html:69
 msgid "Jour"
 msgstr "Day"
 
-#: app/blueprints/poultry/forms.py:279
+#: app/blueprints/poultry/forms.py:294
 msgid "Poids attendu (grammes)"
 msgstr "Expected weight (grams)"
 
-#: app/blueprints/poultry/forms.py:280
+#: app/blueprints/poultry/forms.py:295
 msgid "Ajouter le point"
 msgstr "Add the point"
 
-#: app/blueprints/poultry/forms.py:286
-#: app/templates/poultry/batch_day_detail.html:122
+#: app/blueprints/poultry/forms.py:301
+#: app/templates/poultry/batch_day_detail.html:125
 #: app/templates/poultry/batches_list.html:21
 #: app/templates/poultry/farm_detail.html:16
 #: app/templates/poultry/sanitary_program.html:69
 msgid "Type"
 msgstr "Type"
 
-#: app/blueprints/poultry/forms.py:288
+#: app/blueprints/poultry/forms.py:303
 #: app/templates/poultry/sanitary_program.html:74
 msgid "Vaccination"
 msgstr "Vaccination"
 
-#: app/blueprints/poultry/forms.py:289
+#: app/blueprints/poultry/forms.py:304
 #: app/templates/poultry/sanitary_program.html:74
 msgid "Traitement"
 msgstr "Treatment"
 
-#: app/blueprints/poultry/forms.py:290
+#: app/blueprints/poultry/forms.py:305
 #: app/templates/poultry/sanitary_program.html:74
 msgid "Alimentation"
 msgstr "Feeding"
 
-#: app/blueprints/poultry/forms.py:291
+#: app/blueprints/poultry/forms.py:306
 msgid "Complement (probiotique, anti-stress, litiere...)"
 msgstr "Supplement (probiotic, anti-stress, litter...)"
 
-#: app/blueprints/poultry/forms.py:295
-#: app/templates/poultry/batch_day_detail.html:309
+#: app/blueprints/poultry/forms.py:310
+#: app/templates/poultry/batch_day_detail.html:360
 msgid "Produit"
 msgstr "Product"
 
-#: app/blueprints/poultry/forms.py:296 app/blueprints/poultry/forms.py:301
+#: app/blueprints/poultry/forms.py:311 app/blueprints/poultry/forms.py:316
 #: app/templates/poultry/suppliers_list.html:15
 msgid "Notes"
 msgstr "Notes"
 
-#: app/blueprints/poultry/forms.py:297
+#: app/blueprints/poultry/forms.py:312
 msgid "Ajouter"
 msgstr "Add"
 
-#: app/blueprints/poultry/forms.py:302
+#: app/blueprints/poultry/forms.py:317
 msgid "Soumettre le rapport"
 msgstr "Submit the report"
 
-#: app/blueprints/poultry/forms.py:306
+#: app/blueprints/poultry/forms.py:321
 msgid "Commentaire du responsable"
 msgstr "Manager's comment"
 
-#: app/blueprints/poultry/forms.py:307
+#: app/blueprints/poultry/forms.py:322
 #: app/templates/poultry/batch_day_detail.html:77
 msgid "Valider le rapport"
 msgstr "Validate the report"
@@ -1417,6 +1452,7 @@ msgstr "Validate the report"
 #: app/templates/messaging/sent.html:17 app/templates/pdf/batch_report.html:75
 #: app/templates/pdf/batch_report.html:85
 #: app/templates/poultry/batch_days_list.html:23
+#: app/templates/poultry/batch_report.html:77
 #: app/templates/poultry/credits_list.html:20
 #: app/templates/poultry/sales_list.html:50
 msgid "Date"
@@ -1451,29 +1487,53 @@ msgstr "Medication cost (FCFA)"
 msgid "Cout bois/litiere (FCFA)"
 msgstr "Wood/litter cost (FCFA)"
 
+#: app/blueprints/poultry/reports.py:50
+#: app/templates/poultry/batch_day_detail.html:220
+#: app/templates/poultry/batch_report.html:77
+msgid "Oeufs ramasses"
+msgstr "Eggs collected"
+
+#: app/blueprints/poultry/reports.py:50
+#: app/templates/poultry/batch_day_detail.html:220
+#: app/templates/poultry/batch_report.html:77
+msgid "Dont casses"
+msgstr "Of which broken"
+
+#: app/blueprints/poultry/sales.py:33
+msgid "Plateaux de 30 oeufs"
+msgstr "Trays of 30 eggs"
+
 #: app/blueprints/poultry/sales.py:34
+msgid "Oeufs (a l'unite)"
+msgstr "Eggs (single)"
+
+#: app/blueprints/poultry/sales.py:35
+msgid "Poules de reforme"
+msgstr "Culled hens"
+
+#: app/blueprints/poultry/sales.py:45
 msgid "Le montant recu ne peut pas depasser le montant total de la vente."
 msgstr "The amount received cannot exceed the total amount of the sale."
 
-#: app/blueprints/poultry/sales.py:60
+#: app/blueprints/poultry/sales.py:71
 #, python-format
 msgid "Vente a %(buyer_name)s enregistree."
 msgstr "Sale to %(buyer_name)s saved."
 
-#: app/blueprints/poultry/sales.py:89
+#: app/blueprints/poultry/sales.py:100
 #, python-format
 msgid "Ce paiement (%(amount)s FCFA) depasse le solde restant du (%(balance_due)s FCFA). Verifiez le montant."
 msgstr "This payment (%(amount)s FCFA) exceeds the remaining balance (%(balance_due)s FCFA). Please check the amount."
 
-#: app/blueprints/poultry/sales.py:96
+#: app/blueprints/poultry/sales.py:107
 msgid "Paiement enregistre."
 msgstr "Payment saved."
 
-#: app/blueprints/poultry/sales.py:98
+#: app/blueprints/poultry/sales.py:109
 msgid "Montant invalide."
 msgstr "Invalid amount."
 
-#: app/blueprints/poultry/sales.py:113
+#: app/blueprints/poultry/sales.py:124
 msgid "Vente supprimee."
 msgstr "Sale deleted."
 
@@ -1545,13 +1605,14 @@ msgstr "Resend confirmation email"
 #: app/templates/pdf/batch_report.html:88
 #: app/templates/pdf/batch_report.html:99
 #: app/templates/poultry/batch_days_list.html:28
-#: app/templates/poultry/batch_report.html:126
+#: app/templates/poultry/batch_report.html:80
+#: app/templates/poultry/batch_report.html:156
 #: app/templates/poultry/growth_reference_detail.html:18
 #: app/templates/poultry/sanitary_program.html:73
 msgid "J"
 msgstr "D"
 
-#: app/templates/base.html:53 app/templates/poultry/batch_report.html:49
+#: app/templates/base.html:53 app/templates/poultry/batch_report.html:59
 msgid "Mortalite cumulee"
 msgstr "Cumulative mortality"
 
@@ -1693,7 +1754,7 @@ msgid "Depenses (aliment, poussins, medicaments, bois), argent des ventes et ben
 msgstr "Expenses (feed, chicks, medication, wood), sales money and profit calculated with every entry."
 
 #: app/templates/core/documentation.html:26
-#: app/templates/core/documentation.html:161 app/templates/home.html:126
+#: app/templates/core/documentation.html:162 app/templates/home.html:126
 msgid "Alertes automatiques"
 msgstr "Automatic alerts"
 
@@ -2369,7 +2430,7 @@ msgstr "Days recorded: %(days)s"
 
 #: app/templates/core/dashboard_worker.html:20
 #: app/templates/core/documentation.html:21
-#: app/templates/core/documentation.html:96
+#: app/templates/core/documentation.html:97
 #: app/templates/poultry/batch_detail.html:10
 msgid "Saisie quotidienne"
 msgstr "Daily entry"
@@ -2410,53 +2471,53 @@ msgid "Fermes et lots"
 msgstr "Farms and batches"
 
 #: app/templates/core/documentation.html:22
-#: app/templates/core/documentation.html:116
+#: app/templates/core/documentation.html:117
 msgid "Gestion du stock"
 msgstr "Stock management"
 
 #: app/templates/core/documentation.html:23
-#: app/templates/poultry/batch_detail.html:53 app/utils/audit.py:25
+#: app/templates/poultry/batch_detail.html:68 app/utils/audit.py:26
 msgid "Programme sanitaire"
 msgstr "Health program"
 
 #: app/templates/core/documentation.html:24
-#: app/templates/core/documentation.html:138
+#: app/templates/core/documentation.html:139
 msgid "Ventes et argent qu'on vous doit"
 msgstr "Sales and money owed to you"
 
 #: app/templates/core/documentation.html:25
-#: app/templates/core/documentation.html:150
+#: app/templates/core/documentation.html:151
 msgid "Finances et ce que vous gagnez"
 msgstr "Finances and what you earn"
 
 #: app/templates/core/documentation.html:27
-#: app/templates/core/documentation.html:171
+#: app/templates/core/documentation.html:172
 msgid "Rapports et export"
 msgstr "Reports and export"
 
 #: app/templates/core/documentation.html:28
-#: app/templates/core/documentation.html:181 app/templates/core/settings.html:3
+#: app/templates/core/documentation.html:182 app/templates/core/settings.html:3
 #: app/templates/core/settings.html:6 app/templates/partials/sidebar.html:58
 msgid "Parametres"
 msgstr "Settings"
 
 #: app/templates/core/documentation.html:29
-#: app/templates/core/documentation.html:197
+#: app/templates/core/documentation.html:198
 msgid "Securite des donnees"
 msgstr "Data security"
 
 #: app/templates/core/documentation.html:30
-#: app/templates/core/documentation.html:207
+#: app/templates/core/documentation.html:208
 msgid "Mode hors-ligne"
 msgstr "Offline mode"
 
 #: app/templates/core/documentation.html:31
-#: app/templates/core/documentation.html:217
+#: app/templates/core/documentation.html:218
 msgid "Facturation et tarifs"
 msgstr "Billing and pricing"
 
 #: app/templates/core/documentation.html:32
-#: app/templates/core/documentation.html:227
+#: app/templates/core/documentation.html:228
 msgid "Langue"
 msgstr "Language"
 
@@ -2505,186 +2566,190 @@ msgid "A la creation d'un lot, renseignez le nombre de poulets au depart, la sou
 msgstr "When creating a batch, enter the number of chickens at the start, the breed and the placement date. The default breed and cycle length are pre-filled from your Settings to speed up entry. The batch's care calendar starts empty: you add each planned vaccine or treatment yourself."
 
 #: app/templates/core/documentation.html:88
-msgid "Le type d'elevage (poulet de chair, pintade, dinde, canard, caille) se choisit a la creation du lot. Le suivi quotidien est le meme pour toutes ces volailles. Les estimations automatiques d'eau et d'aliment du jour et l'alerte sur l'aliment par poulet sont propres au poulet de chair : pour les autres types, creez votre propre poids normal attendu dans le menu Poids normal attendu."
-msgstr "The type of livestock (broiler, guinea fowl, turkey, duck, quail) is chosen when the batch is created. Daily tracking is the same for all these birds. The automatic daily water and feed estimates and the feed-per-chicken alert are specific to broilers: for the other types, create your own expected normal weight in the Expected normal weight menu."
+msgid "Le type d'elevage (poulet de chair, poule pondeuse, pintade, dinde, canard, caille) se choisit a la creation du lot. Le suivi quotidien est le meme pour toutes ces volailles. Les estimations automatiques d'eau et d'aliment du jour et l'alerte sur l'aliment par poulet sont propres au poulet de chair : pour les autres types, creez votre propre poids normal attendu dans le menu Poids normal attendu."
+msgstr "The type of livestock (broiler, laying hen, guinea fowl, turkey, duck, quail) is chosen when the batch is created. Daily tracking is the same for all these birds. The automatic daily water and feed estimates and the feed-per-chicken alert are specific to broilers: for the other types, create your own expected normal weight in the Expected normal weight menu."
 
 #: app/templates/core/documentation.html:89
+msgid "Pour les poules pondeuses, une case Oeufs apparait dans la saisie quotidienne (oeufs ramasses et oeufs casses) : vous suivez le taux de ponte et le prix de revient d'un oeuf. Les ventes se font en plateaux de 30 oeufs, a l'unite, ou en poules de reforme."
+msgstr "For laying hens, an Eggs box appears in the daily entry (eggs collected and broken eggs): you track the laying rate and the cost price of an egg. Sales are made in trays of 30 eggs, single eggs, or culled hens."
+
+#: app/templates/core/documentation.html:90
 msgid "Le nombre de poulets du lot (visible sur sa fiche) diminue automatiquement a chaque mortalite enregistree et a chaque poulet vendu - vous n'avez jamais besoin de le corriger manuellement."
 msgstr "The batch's number of chickens (shown on its page) automatically decreases with every recorded death and every chicken sold - you never need to correct it manually."
 
-#: app/templates/core/documentation.html:90
+#: app/templates/core/documentation.html:91
 msgid "Cloturer un lot fige ses donnees et son bilan financier final ; la date de fin proposee par defaut tient compte de la duree de cycle configuree dans vos Parametres."
 msgstr "Closing a batch freezes its data and final financial summary; the default end date suggested takes into account the cycle length configured in your Settings."
 
-#: app/templates/core/documentation.html:99
+#: app/templates/core/documentation.html:100
 msgid "Chaque jour de suivi d'un lot regroupe sept types de saisie, chacun facultatif selon ce qui s'est reellement passe ce jour-la :"
 msgstr "Each tracking day for a batch groups seven types of entry, each optional depending on what actually happened that day:"
 
-#: app/templates/core/documentation.html:101
+#: app/templates/core/documentation.html:102
 msgid "Aliment (kg) - decompte automatiquement le stock d'aliment lie, converti depuis les sacs si necessaire."
 msgstr "Feed (kg) - automatically deducts the linked feed stock, converted from bags if needed."
 
-#: app/templates/core/documentation.html:102
+#: app/templates/core/documentation.html:103
 msgid "Eau de boisson (litres)"
 msgstr "Drinking water (liters)"
 
-#: app/templates/core/documentation.html:103
+#: app/templates/core/documentation.html:104
 msgid "Mortalite (nombre de poulets morts) - reduit immediatement le nombre de poulets du lot."
 msgstr "Deaths (number of chickens) - immediately reduces the batch's number of chickens."
 
-#: app/templates/core/documentation.html:104
+#: app/templates/core/documentation.html:105
 msgid "Bois / litiere - decompte le stock correspondant."
 msgstr "Wood / bedding - deducts the corresponding stock."
 
-#: app/templates/core/documentation.html:105
+#: app/templates/core/documentation.html:106
 msgid "Medicaments (ml administres) - decompte le stock de medicament lie, converti depuis les litres/bouteilles si necessaire."
 msgstr "Medication (ml administered) - deducts the linked medication stock, converted from liters/bottles if needed."
 
-#: app/templates/core/documentation.html:106
+#: app/templates/core/documentation.html:107
 msgid "Pesees (poids moyen) - alimente le suivi du poids et declenche une alerte si l'aliment consomme par poulet depasse le seuil configure."
 msgstr "Weighing (average weight) - feeds the weight tracking and triggers an alert if feed per chicken exceeds the configured threshold."
 
-#: app/templates/core/documentation.html:107
+#: app/templates/core/documentation.html:108
 msgid "Observations libres, avec photo facultative."
 msgstr "Free-text observations, with an optional photo."
 
-#: app/templates/core/documentation.html:109
+#: app/templates/core/documentation.html:110
 msgid "Le prix des intrants n'est jamais saisi ni visible a ce niveau : il est calcule automatiquement a partir du prix d'achat deja renseigne dans le Stock, une information reservee au proprietaire."
 msgstr "Input prices are never entered or visible at this level: they're calculated automatically from the purchase price already set in Stock, information reserved for the owner."
 
-#: app/templates/core/documentation.html:110
+#: app/templates/core/documentation.html:111
 msgid "Une fois la journee saisie, le travailleur soumet son rapport journalier. Si un responsable est rattache a la ferme, le rapport reste \"en attente de validation\" jusqu'a ce qu'il le valide ; sinon, il est automatiquement considere comme valide pour ne pas bloquer le suivi."
 msgstr "Once the day's entries are in, the worker submits their daily report. If a manager is assigned to the farm, the report stays \"pending review\" until they approve it; otherwise it's automatically marked as reviewed so tracking isn't blocked."
 
-#: app/templates/core/documentation.html:119
+#: app/templates/core/documentation.html:120
 msgid "Le stock est organise par ferme et par categorie : Aliment, Bois / litiere, Medicament. Chaque article a une unite d'achat (ex : sac, bidon, bouteille) et un prix d'achat, reserves au proprietaire."
 msgstr "Stock is organized by farm and category: Feed, Wood / bedding, Medication. Each item has a purchase unit (e.g. bag, jerrycan, bottle) and a purchase price, both reserved for the owner."
 
-#: app/templates/core/documentation.html:120
+#: app/templates/core/documentation.html:121
 msgid "Pour l'aliment et les medicaments, indiquez la conversion de votre unite d'achat vers l'unite de saisie quotidienne (kg par sac, ou ml par bidon/bouteille) : le stock se decompte alors automatiquement et correctement a chaque saisie, meme si vous achetez en sacs de 25 kg ou en bidons de 5 litres."
 msgstr "For feed and medication, enter the conversion from your purchase unit to the daily-entry unit (kg per bag, or ml per jerrycan/bottle): stock is then deducted automatically and correctly with every entry, even if you buy 25 kg bags or 5-liter jerrycans."
 
-#: app/templates/core/documentation.html:121
+#: app/templates/core/documentation.html:122
 msgid "Un seuil d'alerte (prerempli depuis vos Parametres) declenche une notification par email des que la quantite disponible passe en dessous."
 msgstr "A low-stock threshold (pre-filled from your Settings) triggers an email notification as soon as the available quantity drops below it."
 
-#: app/templates/core/documentation.html:122
+#: app/templates/core/documentation.html:123
 msgid "Seul le proprietaire peut modifier ou supprimer un article de stock. La suppression reste possible meme si des saisies passees y font reference : l'historique est conserve, seul le lien vers l'article est detache."
 msgstr "Only the owner can edit or delete a stock item. Deletion remains possible even if past entries reference it: the history is kept, only the link to the item is detached."
 
-#: app/templates/core/documentation.html:128
+#: app/templates/core/documentation.html:129
 msgid "Programme sanitaire (calendrier des soins)"
 msgstr "Health program (care calendar)"
 
-#: app/templates/core/documentation.html:131
+#: app/templates/core/documentation.html:132
 msgid "Le calendrier des soins d'un lot demarre vide : ajoutez vous-meme chaque vaccin, traitement ou vitamine prevu (jour, produit, notes) depuis la page du lot, au fur et a mesure de vos besoins."
 msgstr "A batch's care calendar starts empty: add each planned vaccine, treatment or vitamin (day, product, notes) yourself from the batch page, as your needs come up."
 
-#: app/templates/core/documentation.html:132
+#: app/templates/core/documentation.html:133
 msgid "Quand une tache est realisee, cliquez sur \"Administre\" : une fenetre vous permet d'indiquer la quantite donnee (en ml) et l'article de stock correspondant, qui sera alors decompte automatiquement et enregistre dans l'historique des medicaments du lot - exactement comme depuis la saisie quotidienne. Pour un vaccin a dose unique non suivi en stock, laissez ces champs vides et cochez simplement \"Administre\"."
 msgstr "When a task is done, click \"Administered\": a window lets you enter the dose given (in ml) and the matching stock item, which will then be deducted automatically and logged in the batch's medication history - exactly as from daily entry. For a single-dose vaccine not tracked in stock, leave these fields empty and simply check \"Administered\"."
 
-#: app/templates/core/documentation.html:141
+#: app/templates/core/documentation.html:142
 msgid "Enregistrez chaque vente separement depuis la fiche du lot : plusieurs acheteurs, plusieurs dates et paiement partiel sont geres nativement, contrairement a une simple case \"vente totale\"."
 msgstr "Record each sale separately from the batch page: multiple buyers, multiple dates and partial payment are natively supported, unlike a simple \"total sale\" field."
 
-#: app/templates/core/documentation.html:142
+#: app/templates/core/documentation.html:143
 msgid "Pour chaque vente, precisez la quantite (en poulets ou en kg), le prix unitaire et le montant deja recu : le solde restant est calcule automatiquement et la vente apparait comme \"a credit\" tant qu'elle n'est pas entierement reglee."
 msgstr "For each sale, enter the quantity (in chickens or kg), the unit price and the amount already received: the remaining balance is calculated automatically and the sale shows as \"on credit\" until fully settled."
 
-#: app/templates/core/documentation.html:143
+#: app/templates/core/documentation.html:144
 msgid "La fiche des ventes distingue le revenu total facture (comptabilite d'engagement) de l'argent reellement recu en caisse et de ce qu'on vous doit encore - et chaque paiement enregistre vient bien augmenter l'argent recu. La page Argent qu'on vous doit (raccourci proprietaire) recense en un coup d'oeil toutes les ventes non soldees, tous lots confondus."
 msgstr "The sales page distinguishes total invoiced revenue (accrual accounting) from the money actually received in cash and from what is still owed to you - and every recorded payment does increase the money received. The Money owed to you page (owner shortcut) lists at a glance every unsettled sale across all batches."
 
-#: app/templates/core/documentation.html:144
+#: app/templates/core/documentation.html:145
 msgid "Toute vente d'un poulet reduit automatiquement le nombre de poulets du lot, au meme titre que la mortalite."
 msgstr "Every chicken sold automatically reduces the batch's number of chickens, just like a death does."
 
-#: app/templates/core/documentation.html:153
+#: app/templates/core/documentation.html:154
 msgid "L'aliment consomme par poulet est calcule automatiquement a partir de l'aliment distribue et du poids des poulets, et compare au poids normal attendu par souche."
 msgstr "Feed per chicken is calculated automatically from the feed distributed and the chickens' weight, and compared against the expected normal weight for the breed."
 
-#: app/templates/core/documentation.html:154
+#: app/templates/core/documentation.html:155
 msgid "Le rapport de ce que vous gagnez pour un lot detaille chaque depense (poussins, aliment, medicaments, bois, main d'oeuvre) et chaque revenu (ventes), avec la part deja recue en caisse et la part qu'on vous doit encore, pour un benefice toujours a jour."
 msgstr "The \"what you earn\" report for a batch breaks down every expense (chicks, feed, medication, wood, labor) and every revenue (sales), showing the part already received in cash and the part still owed to you, for a profit that's always up to date."
 
-#: app/templates/core/documentation.html:155
+#: app/templates/core/documentation.html:156
 msgid "Ce rapport est exportable en PDF pour le partager avec votre banquier, votre veterinaire ou un associe."
 msgstr "This report can be exported as a PDF to share with your banker, your veterinarian or a partner."
 
-#: app/templates/core/documentation.html:164
+#: app/templates/core/documentation.html:165
 msgid "Trois types d'alerte sont surveilles en permanence : mortalite anormalement elevee, stock passe sous le seuil configure, et aliment consomme par poulet trop eleve."
 msgstr "Three types of alert are monitored at all times: abnormally high mortality, stock dropping below the configured threshold, and feed per chicken too high."
 
-#: app/templates/core/documentation.html:165
+#: app/templates/core/documentation.html:166
 msgid "Chaque seuil (taux de mortalite, seuil de stock par defaut) est ajustable dans vos Parametres. Les alertes apparaissent dans le tableau de bord et, si vous le souhaitez, sont egalement envoyees par email au proprietaire - cet envoi peut etre desactive depuis les Parametres."
 msgstr "Each threshold (mortality rate, default stock threshold) is adjustable in your Settings. Alerts appear on the dashboard and, if you wish, are also emailed to the owner - this can be turned off from Settings."
 
-#: app/templates/core/documentation.html:174
+#: app/templates/core/documentation.html:175
 msgid "Le rapport de lot (aliment par poulet, mortalite, finances) s'exporte en PDF depuis la fiche du lot."
 msgstr "The batch report (feed per chicken, mortality, finances) can be exported as a PDF from the batch page."
 
-#: app/templates/core/documentation.html:175
+#: app/templates/core/documentation.html:176
 msgid "Le proprietaire peut exporter l'integralite des donnees de son exploitation depuis les Parametres, et consulter a tout moment le journal d'activite : qui a cree, modifie ou supprime quoi, et quand."
 msgstr "The owner can export the entirety of their farm's data from Settings, and check the activity log at any time: who created, edited or deleted what, and when."
 
-#: app/templates/core/documentation.html:184
+#: app/templates/core/documentation.html:185
 msgid "Accessible au proprietaire, le hub de Parametres centralise toute la configuration de l'exploitation, organisee en quatre groupes :"
 msgstr "Accessible to the owner, the Settings hub centralizes the farm's entire configuration, organized into four groups:"
 
-#: app/templates/core/documentation.html:186
+#: app/templates/core/documentation.html:187
 msgid "Elevage : pays, devise, langue par defaut, souche et duree de cycle par defaut, unite de vente par defaut."
 msgstr "Farming: country, currency, default language, default breed and cycle length, default sale unit."
 
-#: app/templates/core/documentation.html:187
+#: app/templates/core/documentation.html:188
 msgid "Alertes : seuil de mortalite, seuil pour l'aliment par poulet, delai de rappel sanitaire, activation des emails d'alerte."
 msgstr "Alerts: mortality threshold, feed-per-chicken threshold, health reminder interval, alert email toggle."
 
-#: app/templates/core/documentation.html:188
+#: app/templates/core/documentation.html:189
 msgid "Stock et finance : seuil de stock bas par defaut, cout de main d'oeuvre journalier par defaut."
 msgstr "Stock and finance: default low-stock threshold, default daily labor cost."
 
-#: app/templates/core/documentation.html:189
+#: app/templates/core/documentation.html:190
 msgid "Securite : nombre de tentatives de connexion autorisees et duree de verrouillage du compte en cas d'echecs repetes."
 msgstr "Security: number of allowed login attempts and account lockout duration after repeated failures."
 
-#: app/templates/core/documentation.html:191
+#: app/templates/core/documentation.html:192
 msgid "Ces valeurs par defaut ne font que pre-remplir les formulaires concernes : elles restent modifiables au cas par cas a chaque saisie."
 msgstr "These defaults only pre-fill the relevant forms: they remain editable case by case at each entry."
 
-#: app/templates/core/documentation.html:200
+#: app/templates/core/documentation.html:201
 msgid "Farm Control est multitenant : les donnees de chaque exploitation sont strictement isolees de celles des autres clients, a deux niveaux independants - au niveau de l'application et directement au niveau de la base de donnees (Row Level Security)."
 msgstr "Farm Control is multitenant: each farm business's data is strictly isolated from other customers', at two independent levels - at the application level and directly at the database level (Row Level Security)."
 
-#: app/templates/core/documentation.html:201
+#: app/templates/core/documentation.html:202
 msgid "Les mots de passe sont chiffres, les connexions sont chiffrees (HTTPS) et un compte est temporairement verrouille apres plusieurs echecs de connexion consecutifs, selon le seuil defini dans vos Parametres."
 msgstr "Passwords are encrypted, connections are encrypted (HTTPS) and an account is temporarily locked after several consecutive failed logins, according to the threshold set in your Settings."
 
-#: app/templates/core/documentation.html:210
+#: app/templates/core/documentation.html:211
 msgid "Farm Control peut s'installer comme une application sur votre telephone (icone sur l'ecran d'accueil, sans passer par un store) directement depuis votre navigateur."
 msgstr "Farm Control can be installed as an app on your phone (an icon on your home screen, no app store needed) directly from your browser."
 
-#: app/templates/core/documentation.html:211
+#: app/templates/core/documentation.html:212
 msgid "En cas de coupure reseau au poulailler, vos saisies quotidiennes restent possibles : elles sont mises en attente sur votre appareil puis envoyees automatiquement des que la connexion revient, sans rien perdre."
 msgstr "If the network drops at the coop, your daily entries are still possible: they're queued on your device and sent automatically once the connection is back, without losing anything."
 
-#: app/templates/core/documentation.html:220
+#: app/templates/core/documentation.html:221
 msgid "Une formule gratuite (limitee en nombre de fermes et d'utilisateurs) est disponible en permanence. Les formules payantes, facturees en FCFA, retirent ces limites et sont detaillees sur la page Tarifs."
 msgstr "A free plan (limited in number of farms and users) is always available. Paid plans, billed in FCFA, remove these limits and are detailed on the Pricing page."
 
-#: app/templates/core/documentation.html:221
+#: app/templates/core/documentation.html:222
 msgid "Le detail de votre abonnement, son statut et son historique sont visibles dans Administration > Facturation."
 msgstr "Your subscription's details, status and history are visible under Administration > Billing."
 
-#: app/templates/core/documentation.html:230
+#: app/templates/core/documentation.html:231
 msgid "L'interface est disponible en francais et en anglais. Changez de langue a tout moment via le selecteur en haut de l'ecran ; votre choix est retenu sur votre profil et vous suit sur tous vos appareils."
 msgstr "The interface is available in French and English. Switch languages at any time via the selector at the top of the screen; your choice is saved to your profile and follows you across all your devices."
 
-#: app/templates/core/documentation.html:238
+#: app/templates/core/documentation.html:239
 msgid "Une question qui n'est pas couverte ici ?"
 msgstr "A question not covered here?"
 
-#: app/templates/core/documentation.html:239
+#: app/templates/core/documentation.html:240
 #: app/templates/partials/sidebar.html:78
 msgid "Contacter le support"
 msgstr "Contact support"
@@ -3340,14 +3405,14 @@ msgid "au"
 msgstr "to"
 
 #: app/templates/pdf/batch_report.html:34
-#: app/templates/poultry/batch_detail.html:39
-#: app/templates/poultry/batch_report.html:23
+#: app/templates/poultry/batch_detail.html:53
+#: app/templates/poultry/batch_report.html:27
 msgid "Aliment par poulet"
 msgstr "Feed per chicken"
 
 #: app/templates/pdf/batch_report.html:38
 #: app/templates/poultry/batch_detail.html:33
-#: app/templates/poultry/batch_report.html:29
+#: app/templates/poultry/batch_report.html:34
 msgid "Mortalite totale"
 msgstr "Total mortality"
 
@@ -3358,40 +3423,40 @@ msgstr "Final / initial number of chickens"
 #: app/templates/pdf/batch_report.html:46
 #: app/templates/pdf/batch_report.html:60
 #: app/templates/poultry/batch_finance_form.html:27
-#: app/templates/poultry/batch_report.html:35
-#: app/templates/poultry/batch_report.html:88
+#: app/templates/poultry/batch_report.html:40
+#: app/templates/poultry/batch_report.html:118
 #: app/templates/poultry/batches_list.html:21
 msgid "Benefice"
 msgstr "Profit"
 
 #: app/templates/pdf/batch_report.html:50
 #: app/templates/poultry/batch_detail.html:14
-#: app/templates/poultry/batch_detail.html:60 app/utils/audit.py:28
+#: app/templates/poultry/batch_detail.html:75 app/utils/audit.py:29
 msgid "Ce que vous gagnez"
 msgstr "What you earn"
 
 #: app/templates/pdf/batch_report.html:57
 #: app/templates/poultry/batch_finance_form.html:24
-#: app/templates/poultry/batch_report.html:78
+#: app/templates/poultry/batch_report.html:108
 #: app/templates/poultry/expenses_summary.html:27
 msgid "Main d'oeuvre"
 msgstr "Labor"
 
 #: app/templates/pdf/batch_report.html:58
 #: app/templates/poultry/batch_finance_form.html:25
-#: app/templates/poultry/batch_report.html:79
+#: app/templates/poultry/batch_report.html:109
 msgid "Total des depenses"
 msgstr "Total expenses"
 
 #: app/templates/pdf/batch_report.html:59
 #: app/templates/poultry/batch_finance_form.html:26
-#: app/templates/poultry/batch_report.html:81
+#: app/templates/poultry/batch_report.html:111
 msgid "Argent des ventes"
 msgstr "Sales income"
 
 #: app/templates/pdf/batch_report.html:61
 #: app/templates/poultry/batch_finance_form.html:28
-#: app/templates/poultry/batch_report.html:41
+#: app/templates/poultry/batch_report.html:50
 msgid "Prix de revient par kilo"
 msgstr "Cost price per kilo"
 
@@ -3401,7 +3466,7 @@ msgstr "No financial data available for this batch."
 
 #: app/templates/pdf/batch_report.html:67
 #: app/templates/poultry/batch_finance_form.html:39
-#: app/templates/poultry/batch_report.html:100
+#: app/templates/poultry/batch_report.html:130
 msgid "Achats de stock sur la ferme pendant cette periode"
 msgstr "Stock purchases on the farm during this period"
 
@@ -3434,12 +3499,12 @@ msgid "Suivi de croissance"
 msgstr "Growth tracking"
 
 #: app/templates/pdf/batch_report.html:96
-#: app/templates/poultry/batch_report.html:129
+#: app/templates/poultry/batch_report.html:159
 msgid "Poids reel (g)"
 msgstr "Actual weight (g)"
 
 #: app/templates/pdf/batch_report.html:96
-#: app/templates/poultry/batch_report.html:135
+#: app/templates/poultry/batch_report.html:165
 msgid "Poids de reference (g)"
 msgstr "Reference weight (g)"
 
@@ -3466,13 +3531,14 @@ msgid "Article de stock a decompter (facultatif)"
 msgstr "Stock item to deduct (optional)"
 
 #: app/templates/poultry/_sanitary_done_modal.html:33
-#: app/templates/poultry/batch_day_detail.html:149
-#: app/templates/poultry/batch_day_detail.html:194
-#: app/templates/poultry/batch_day_detail.html:240
-#: app/templates/poultry/batch_day_detail.html:287
-#: app/templates/poultry/batch_day_detail.html:335
-#: app/templates/poultry/batch_day_detail.html:381
-#: app/templates/poultry/batch_day_detail.html:428
+#: app/templates/poultry/batch_day_detail.html:152
+#: app/templates/poultry/batch_day_detail.html:197
+#: app/templates/poultry/batch_day_detail.html:244
+#: app/templates/poultry/batch_day_detail.html:291
+#: app/templates/poultry/batch_day_detail.html:338
+#: app/templates/poultry/batch_day_detail.html:386
+#: app/templates/poultry/batch_day_detail.html:432
+#: app/templates/poultry/batch_day_detail.html:479
 msgid "Annuler"
 msgstr "Cancel"
 
@@ -3519,12 +3585,12 @@ msgid "Voir le calendrier des soins complet"
 msgstr "See the full care calendar"
 
 #: app/templates/poultry/batch_day_detail.html:33
-#: app/templates/poultry/batch_day_detail.html:115
+#: app/templates/poultry/batch_day_detail.html:118
 msgid "Aliment donne aujourd'hui"
 msgstr "Feed given today"
 
 #: app/templates/poultry/batch_day_detail.html:39
-#: app/templates/poultry/batch_day_detail.html:164
+#: app/templates/poultry/batch_day_detail.html:167
 msgid "Eau donnee aujourd'hui"
 msgstr "Water given today"
 
@@ -3537,7 +3603,7 @@ msgstr "Deaths today"
 msgid "Nombre de poulets restants"
 msgstr "Number of chickens remaining"
 
-#: app/templates/poultry/batch_day_detail.html:59 app/utils/audit.py:27
+#: app/templates/poultry/batch_day_detail.html:59 app/utils/audit.py:28
 msgid "Rapport journalier"
 msgstr "Daily report"
 
@@ -3572,11 +3638,12 @@ msgstr "What do you want to record?"
 
 #: app/templates/poultry/batch_day_detail.html:99
 #: app/templates/poultry/batch_day_detail.html:100
-#: app/templates/poultry/batch_day_detail.html:101
 #: app/templates/poultry/batch_day_detail.html:102
-#: app/templates/poultry/batch_day_detail.html:103
 #: app/templates/poultry/batch_day_detail.html:104
 #: app/templates/poultry/batch_day_detail.html:105
+#: app/templates/poultry/batch_day_detail.html:106
+#: app/templates/poultry/batch_day_detail.html:107
+#: app/templates/poultry/batch_day_detail.html:108
 #, python-format
 msgid "%(count)s entree(s) aujourd'hui"
 msgstr "%(count)s entry(ies) today"
@@ -3585,135 +3652,149 @@ msgstr "%(count)s entry(ies) today"
 msgid "Eau"
 msgstr "Water"
 
-#: app/templates/poultry/batch_day_detail.html:101 app/utils/audit.py:19
+#: app/templates/poultry/batch_day_detail.html:102 app/utils/audit.py:19
+msgid "Oeufs"
+msgstr "Eggs"
+
+#: app/templates/poultry/batch_day_detail.html:104 app/utils/audit.py:20
 msgid "Mortalite"
 msgstr "Mortality"
 
-#: app/templates/poultry/batch_day_detail.html:103
+#: app/templates/poultry/batch_day_detail.html:106
 msgid "Medicaments / vaccins"
 msgstr "Medications / vaccines"
 
-#: app/templates/poultry/batch_day_detail.html:104 app/utils/audit.py:22
+#: app/templates/poultry/batch_day_detail.html:107 app/utils/audit.py:23
 msgid "Observation"
 msgstr "Observation"
 
-#: app/templates/poultry/batch_day_detail.html:105
-#: app/templates/poultry/batch_day_detail.html:396 app/utils/audit.py:23
+#: app/templates/poultry/batch_day_detail.html:108
+#: app/templates/poultry/batch_day_detail.html:447 app/utils/audit.py:24
 msgid "Pesee"
 msgstr "Weighing"
 
-#: app/templates/poultry/batch_day_detail.html:122
-#: app/templates/poultry/batch_day_detail.html:171
-#: app/templates/poultry/batch_day_detail.html:262
+#: app/templates/poultry/batch_day_detail.html:125
+#: app/templates/poultry/batch_day_detail.html:174
+#: app/templates/poultry/batch_day_detail.html:313
 #: app/templates/poultry/sales_list.html:50
 #: app/templates/poultry/stock_list.html:33
 #: app/templates/poultry/stock_list.html:50
 msgid "Quantite"
 msgstr "Quantity"
 
-#: app/templates/poultry/batch_day_detail.html:122
+#: app/templates/poultry/batch_day_detail.html:125
 msgid "Prix/kg"
 msgstr "Price/kg"
 
-#: app/templates/poultry/batch_day_detail.html:130
-#: app/templates/poultry/batch_day_detail.html:178
-#: app/templates/poultry/batch_day_detail.html:223
-#: app/templates/poultry/batch_day_detail.html:270
-#: app/templates/poultry/batch_day_detail.html:316
-#: app/templates/poultry/batch_day_detail.html:410
+#: app/templates/poultry/batch_day_detail.html:133
+#: app/templates/poultry/batch_day_detail.html:181
+#: app/templates/poultry/batch_day_detail.html:227
+#: app/templates/poultry/batch_day_detail.html:274
+#: app/templates/poultry/batch_day_detail.html:321
+#: app/templates/poultry/batch_day_detail.html:367
+#: app/templates/poultry/batch_day_detail.html:461
 msgid "Supprimer cette saisie ?"
 msgstr "Delete this entry?"
 
-#: app/templates/poultry/batch_day_detail.html:132
-#: app/templates/poultry/batch_day_detail.html:180
-#: app/templates/poultry/batch_day_detail.html:225
-#: app/templates/poultry/batch_day_detail.html:272
-#: app/templates/poultry/batch_day_detail.html:318
-#: app/templates/poultry/batch_day_detail.html:366
-#: app/templates/poultry/batch_day_detail.html:412
+#: app/templates/poultry/batch_day_detail.html:135
+#: app/templates/poultry/batch_day_detail.html:183
+#: app/templates/poultry/batch_day_detail.html:229
+#: app/templates/poultry/batch_day_detail.html:276
+#: app/templates/poultry/batch_day_detail.html:323
+#: app/templates/poultry/batch_day_detail.html:369
+#: app/templates/poultry/batch_day_detail.html:417
+#: app/templates/poultry/batch_day_detail.html:463
 #: app/templates/poultry/sales_list.html:78
 #: app/templates/poultry/sanitary_program.html:92
 #: app/templates/poultry/stock_list.html:65
 msgid "Supprimer"
 msgstr "Delete"
 
-#: app/templates/poultry/batch_day_detail.html:142
+#: app/templates/poultry/batch_day_detail.html:145
 msgid "Indiquez le type d'aliment donne (ex : Demarrage, Croissance) et la quantite en kilogrammes."
 msgstr "Enter the type of feed given (e.g. Starter, Grower) and the quantity in kilograms."
 
-#: app/templates/poultry/batch_day_detail.html:145
+#: app/templates/poultry/batch_day_detail.html:148
 msgid "Si cet aliment vient de votre stock enregistre, selectionnez-le ici pour que la quantite soit deduite automatiquement (le prix est deja defini dans le Stock, facultatif) :"
 msgstr "If this feed comes from your recorded stock, select it here so that the quantity is deducted automatically (the price is already set in Stock, optional):"
 
-#: app/templates/poultry/batch_day_detail.html:190
+#: app/templates/poultry/batch_day_detail.html:193
 msgid "Combien de litres d'eau de boisson avez-vous donne au total aujourd'hui ?"
 msgstr "How many liters of drinking water did you give in total today?"
 
-#: app/templates/poultry/batch_day_detail.html:209
+#: app/templates/poultry/batch_day_detail.html:213
+msgid "Oeufs ramasses aujourd'hui"
+msgstr "Eggs collected today"
+
+#: app/templates/poultry/batch_day_detail.html:239
+msgid "Comptez les oeufs ramasses (matin, soir...). Vous pouvez faire plusieurs saisies dans la journee."
+msgstr "Count the eggs collected (morning, evening...). You can make several entries during the day."
+
+#: app/templates/poultry/batch_day_detail.html:260
 msgid "Mortalite du jour"
 msgstr "Mortality of the day"
 
-#: app/templates/poultry/batch_day_detail.html:216
+#: app/templates/poultry/batch_day_detail.html:267
 msgid "Nombre"
 msgstr "Number"
 
-#: app/templates/poultry/batch_day_detail.html:216
+#: app/templates/poultry/batch_day_detail.html:267
 msgid "Cause"
 msgstr "Cause"
 
-#: app/templates/poultry/batch_day_detail.html:235
+#: app/templates/poultry/batch_day_detail.html:286
 msgid "Combien de poulets sont morts aujourd'hui ? Mettez 0 si aucun."
 msgstr "How many chickens died today? Enter 0 if none."
 
-#: app/templates/poultry/batch_day_detail.html:262
+#: app/templates/poultry/batch_day_detail.html:313
 msgid "Prix"
 msgstr "Price"
 
-#: app/templates/poultry/batch_day_detail.html:282
+#: app/templates/poultry/batch_day_detail.html:333
 msgid "Quantite de bois / copeaux / litiere ajoutee aujourd'hui."
 msgstr "Quantity of wood / shavings / litter added today."
 
-#: app/templates/poultry/batch_day_detail.html:302
+#: app/templates/poultry/batch_day_detail.html:353
 msgid "Medicament / vaccin administre"
 msgstr "Medication / vaccine administered"
 
-#: app/templates/poultry/batch_day_detail.html:309
+#: app/templates/poultry/batch_day_detail.html:360
 msgid "Quantite (ml)"
 msgstr "Quantity (ml)"
 
-#: app/templates/poultry/batch_day_detail.html:328
+#: app/templates/poultry/batch_day_detail.html:379
 msgid "Astuce : consultez le"
 msgstr "Tip: check the"
 
-#: app/templates/poultry/batch_day_detail.html:328
+#: app/templates/poultry/batch_day_detail.html:379
 msgid "calendrier des soins"
 msgstr "care calendar"
 
-#: app/templates/poultry/batch_day_detail.html:328
+#: app/templates/poultry/batch_day_detail.html:379
 msgid "pour savoir quoi administrer aujourd'hui."
 msgstr "to know what to administer today."
 
-#: app/templates/poultry/batch_day_detail.html:350
+#: app/templates/poultry/batch_day_detail.html:401
 msgid "Signaler une observation"
 msgstr "Report an observation"
 
-#: app/templates/poultry/batch_day_detail.html:364
+#: app/templates/poultry/batch_day_detail.html:415
 msgid "Supprimer cette observation ?"
 msgstr "Delete this observation?"
 
-#: app/templates/poultry/batch_day_detail.html:375
+#: app/templates/poultry/batch_day_detail.html:426
 msgid "Decrivez ce que vous avez remarque (poussin malade, probleme de materiel...). Choisissez \"Urgente\" si le proprietaire doit etre prevenu immediatement."
 msgstr "Describe what you noticed (sick chick, equipment problem...). Choose \"Urgent\" if the owner must be notified immediately."
 
-#: app/templates/poultry/batch_day_detail.html:403
+#: app/templates/poultry/batch_day_detail.html:454
 msgid "Poids moyen"
 msgstr "Average weight"
 
-#: app/templates/poultry/batch_day_detail.html:403
+#: app/templates/poultry/batch_day_detail.html:454
 msgid "Poulets peses"
 msgstr "Chickens weighed"
 
-#: app/templates/poultry/batch_day_detail.html:422
+#: app/templates/poultry/batch_day_detail.html:473
 msgid "Pesez quelques poussins au hasard et indiquez leur poids moyen en grammes."
 msgstr "Weigh a few chicks at random and enter their average weight in grams."
 
@@ -3783,38 +3864,53 @@ msgstr "Close"
 msgid "Nombre de poulets / %(initial_count)s"
 msgstr "Number of chickens / %(initial_count)s"
 
-#: app/templates/poultry/batch_detail.html:45
+#: app/templates/poultry/batch_detail.html:40
+#: app/templates/poultry/batch_report.html:24
+msgid "Taux de ponte (7 derniers jours)"
+msgstr "Laying rate (last 7 days)"
+
+#: app/templates/poultry/batch_detail.html:46
+#, python-format
+msgid "Oeufs ramasses (dont %(broken)s casses)"
+msgstr "Eggs collected (of which %(broken)s broken)"
+
+#: app/templates/poultry/batch_detail.html:60
 msgid "Aliment total (kg)"
 msgstr "Total feed (kg)"
 
-#: app/templates/poultry/batch_detail.html:54
+#: app/templates/poultry/batch_detail.html:69
 msgid "Gerer le programme sanitaire"
 msgstr "Manage the health program"
 
-#: app/templates/poultry/batch_detail.html:62
+#: app/templates/poultry/batch_detail.html:77
 #, python-format
 msgid "Depenses totales : %(total_charges)s"
 msgstr "Total expenses: %(total_charges)s"
 
-#: app/templates/poultry/batch_detail.html:63
+#: app/templates/poultry/batch_detail.html:78
 #, python-format
 msgid "Benefice : %(net_result)s"
 msgstr "Profit: %(net_result)s"
 
-#: app/templates/poultry/batch_detail.html:64
+#: app/templates/poultry/batch_detail.html:79
+#, python-format
+msgid "Prix de revient par oeuf : %(cost_per_egg)s"
+msgstr "Cost price per egg: %(cost_per_egg)s"
+
+#: app/templates/poultry/batch_detail.html:79
 #, python-format
 msgid "Prix de revient par kilo : %(cost_per_kg)s"
 msgstr "Cost price per kilo: %(cost_per_kg)s"
 
-#: app/templates/poultry/batch_detail.html:66
+#: app/templates/poultry/batch_detail.html:81
 msgid "Pas encore calculee."
 msgstr "Not calculated yet."
 
-#: app/templates/poultry/batch_detail.html:73
+#: app/templates/poultry/batch_detail.html:88
 msgid "Qui a travaille sur ce lot"
 msgstr "Who worked on this batch"
 
-#: app/templates/poultry/batch_detail.html:84
+#: app/templates/poultry/batch_detail.html:99
 msgid "Aucune saisie enregistree pour l'instant."
 msgstr "No entry recorded yet."
 
@@ -3874,39 +3970,59 @@ msgstr "Export to Excel/CSV"
 msgid "Exporter en PDF"
 msgstr "Export to PDF"
 
-#: app/templates/poultry/batch_report.html:55
+#: app/templates/poultry/batch_report.html:47
+msgid "Prix de revient par oeuf"
+msgstr "Cost price per egg"
+
+#: app/templates/poultry/batch_report.html:65
 msgid "Consommation d'aliment cumulee"
 msgstr "Cumulative feed consumption"
 
-#: app/templates/poultry/batch_report.html:63
+#: app/templates/poultry/batch_report.html:73
+msgid "Production d'oeufs (par jour)"
+msgstr "Egg production (per day)"
+
+#: app/templates/poultry/batch_report.html:77
+msgid "Poules"
+msgstr "Hens"
+
+#: app/templates/poultry/batch_report.html:77
+msgid "Taux de ponte"
+msgstr "Laying rate"
+
+#: app/templates/poultry/batch_report.html:86
+msgid "Aucun oeuf enregistre pour ce lot."
+msgstr "No egg recorded for this batch."
+
+#: app/templates/poultry/batch_report.html:93
 msgid "Courbe de croissance (reel vs reference)"
 msgstr "Growth curve (actual vs reference)"
 
-#: app/templates/poultry/batch_report.html:70
+#: app/templates/poultry/batch_report.html:100
 msgid "Detail financier"
 msgstr "Financial details"
 
-#: app/templates/poultry/batch_report.html:81
+#: app/templates/poultry/batch_report.html:111
 msgid "(detail des ventes)"
 msgstr "(sales details)"
 
-#: app/templates/poultry/batch_report.html:84
+#: app/templates/poultry/batch_report.html:114
 msgid "dont argent recu"
 msgstr "of which money received"
 
-#: app/templates/poultry/batch_report.html:86
+#: app/templates/poultry/batch_report.html:116
 msgid "dont on vous doit encore (non paye)"
 msgstr "of which still owed to you (unpaid)"
 
-#: app/templates/poultry/batch_report.html:92
+#: app/templates/poultry/batch_report.html:122
 msgid "Aucune donnee financiere pour ce lot."
 msgstr "No financial data for this batch."
 
-#: app/templates/poultry/batch_report.html:103
+#: app/templates/poultry/batch_report.html:133
 msgid "Voir le detail des depenses"
 msgstr "See expense details"
 
-#: app/templates/poultry/batch_report.html:106
+#: app/templates/poultry/batch_report.html:136
 msgid "Ce montant est different du \"Total des depenses\" ci-dessus : il compte tout ce qui a ete achete pour cette ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif en meme temps. Le \"Total des depenses\" du lot, lui, ne compte que ce que CE lot a reellement consomme."
 msgstr "This amount is different from the \"Total expenses\" above: it counts everything that was bought for this farm (feed, wood, medications) over the batch period, even what was used by another active batch at the same time. The batch's \"Total expenses\", on the other hand, only counts what THIS batch actually consumed."
 
@@ -4152,6 +4268,14 @@ msgstr "Sales history"
 #: app/templates/poultry/sales_list.html:50
 msgid "Solde"
 msgstr "Balance"
+
+#: app/templates/poultry/sales_list.html:56
+msgid "oeufs"
+msgstr "eggs"
+
+#: app/templates/poultry/sales_list.html:56
+msgid "plateaux"
+msgstr "trays"
 
 #: app/templates/poultry/sales_list.html:56
 msgid "poulets"
@@ -4403,39 +4527,39 @@ msgstr "Client account"
 msgid "Jour de suivi"
 msgstr "Tracking day"
 
-#: app/utils/audit.py:24
+#: app/utils/audit.py:25
 msgid "Article de stock"
 msgstr "Stock item"
 
-#: app/utils/audit.py:26
+#: app/utils/audit.py:27
 msgid "Modele sanitaire"
 msgstr "Health template"
 
-#: app/utils/audit.py:29
+#: app/utils/audit.py:30
 msgid "Abonnement"
 msgstr "Subscription"
 
-#: app/utils/audit.py:31
+#: app/utils/audit.py:32
 msgid "Vente"
 msgstr "Sale"
 
-#: app/utils/audit.py:32
+#: app/utils/audit.py:33
 msgid "Fournisseur"
 msgstr "Supplier"
 
-#: app/utils/audit.py:33
+#: app/utils/audit.py:34
 msgid "Achat de stock"
 msgstr "Stock purchase"
 
-#: app/utils/audit.py:36
+#: app/utils/audit.py:37
 msgid "Creation"
 msgstr "Creation"
 
-#: app/utils/audit.py:36
+#: app/utils/audit.py:37
 msgid "Modification"
 msgstr "Edit"
 
-#: app/utils/audit.py:36
+#: app/utils/audit.py:37
 msgid "Suppression"
 msgstr "Deletion"
 
@@ -4472,23 +4596,27 @@ msgstr "Password must contain at least one uppercase letter."
 msgid "Le mot de passe doit contenir au moins un chiffre."
 msgstr "Password must contain at least one digit."
 
-#: app/utils/species.py:22
+#: app/utils/species.py:23
 msgid "Poulet de chair"
 msgstr "Broiler chicken"
 
-#: app/utils/species.py:23
+#: app/utils/species.py:24
+msgid "Poule pondeuse"
+msgstr "Laying hen"
+
+#: app/utils/species.py:25
 msgid "Pintade"
 msgstr "Guinea fowl"
 
-#: app/utils/species.py:24
+#: app/utils/species.py:26
 msgid "Dinde"
 msgstr "Turkey"
 
-#: app/utils/species.py:25
+#: app/utils/species.py:27
 msgid "Canard"
 msgstr "Duck"
 
-#: app/utils/species.py:26
+#: app/utils/species.py:28
 msgid "Caille"
 msgstr "Quail"
 

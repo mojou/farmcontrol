@@ -98,6 +98,9 @@
 
   {{ tile("feed", "bi-basket2-fill", _("Aliment"), _("%(count)s entree(s) aujourd\'hui", count=day.feed_records|length)) }}
   {{ tile("water", "bi-droplet-fill", _("Eau"), _("%(count)s entree(s) aujourd\'hui", count=day.water_records|length)) }}
+  {% if batch.is_layer %}
+  {{ tile("eggs", "bi-egg-fill", _("Oeufs"), _("%(count)s entree(s) aujourd\'hui", count=day.egg_records|length)) }}
+  {% endif %}
   {{ tile("mortality", "bi-exclamation-octagon-fill", _("Mortalite"), _("%(count)s entree(s) aujourd\'hui", count=day.mortality_records|length)) }}
   {{ tile("wood", "bi-layers-fill", _("Bois / litiere"), _("%(count)s entree(s) aujourd\'hui", count=day.wood_records|length)) }}
   {{ tile("medication", "bi-capsule", _("Medicaments / vaccins"), _("%(count)s entree(s) aujourd\'hui", count=day.medication_records|length)) }}
@@ -198,6 +201,54 @@
     </div>
   </div>
 </div>
+
+{% if batch.is_layer %}
+<!-- ============================= Modale Oeufs ============================= -->
+<div class="modal fade" id="eggsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="fc-form-eggs" method="post" action="{{ url_for('poultry.egg_record_new', day_id=day.id) }}">
+        {{ egg_form.hidden_tag() }}
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-egg-fill"></i> {{ _('Oeufs ramasses aujourd\'hui') }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {% if day.egg_records %}
+          <div class="table-responsive">
+          <table class="table table-sm mb-3">
+            <thead><tr><th>{{ _('Oeufs ramasses') }}</th><th>{{ _('Dont casses') }}</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <tbody>
+              {% for r in day.egg_records %}
+              <tr>
+                <td>{{ r.eggs_collected }}</td><td>{{ r.eggs_broken }}</td>
+                {% if current_user.has_role('owner') %}
+                <td>
+                  <form method="post" action="{{ url_for('poultry.egg_record_delete', record_id=r.id) }}" onsubmit='return confirm({{ _("Supprimer cette saisie ?")|tojson }});'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger" title="{{ _('Supprimer') }}"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          </div>
+          {% endif %}
+          <p class="text-muted small">{{ _('Comptez les oeufs ramasses (matin, soir...). Vous pouvez faire plusieurs saisies dans la journee.') }}</p>
+          {{ fm.render_field(egg_form.eggs_collected) }}
+          {{ fm.render_field(egg_form.eggs_broken) }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Annuler') }}</button>
+          <button type="submit" class="btn btn-primary">{{ _('Enregistrer') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <!-- ============================= Modale Mortalite ============================= -->
 <div class="modal fade" id="mortalityModal" tabindex="-1" aria-hidden="true">
