@@ -18,12 +18,13 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle">
-      <thead><tr><th>{{ _('Ferme') }}</th><th>{{ _('Lot') }}</th><th>{{ _('Souche') }}</th><th>{{ _('Debut') }}</th><th>{{ _('Nombre de poulets') }}</th>{% if current_user.has_role('owner') %}<th>{{ _('Benefice') }}</th><th>{{ _('Prix de revient/kg') }}</th>{% endif %}<th></th></tr></thead>
+      <thead><tr><th>{{ _('Ferme') }}</th><th>{{ _('Lot') }}</th><th>{{ _('Type') }}</th><th>{{ _('Souche') }}</th><th>{{ _('Debut') }}</th><th>{{ _('Nombre de poulets') }}</th>{% if current_user.has_role('owner') %}<th>{{ _('Benefice') }}</th><th>{{ _('Prix de revient/kg') }}</th>{% endif %}<th></th></tr></thead>
       <tbody>
         {% for batch in pagination.items %}
         <tr>
           <td>{{ batch.farm.name }}</td>
           <td>{{ batch.code }}</td>
+          <td>{{ batch.species_label }}</td>
           <td>{{ batch.breed or "-" }}</td>
           <td>{{ batch.start_date.strftime('%d/%m/%Y') }}</td>
           <td>{{ batch.current_count }} / {{ batch.initial_count }}</td>

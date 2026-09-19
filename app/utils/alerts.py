@@ -130,6 +130,11 @@ def check_fcr_alert(batch):
     (aucun seuil renseigne) : le FCR normal varie beaucoup selon l'age du
     lot, un seuil errone genererait trop de fausses alertes. Au plus une
     alerte par jour et par lot, pour ne pas spammer a chaque saisie."""
+    # Le seuil du proprietaire est pense pour le poulet de chair : les autres
+    # especes (pintade, dinde...) ont un indice normal tres different.
+    if not batch.is_broiler:
+        return None
+
     tenant = _get_tenant(get_current_tenant_id())
     if not tenant or not tenant.fcr_alert_threshold:
         return None

@@ -109,6 +109,8 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     farm_id = db.Column(db.Integer, db.ForeignKey("farms.id"), nullable=False, index=True)
 
     code = db.Column(db.String(50), nullable=False)
+    # Type d'elevage (poulet de chair, pintade, dinde...) - voir app/utils/species.py
+    species = db.Column(db.String(30), nullable=False, default="broiler", server_default="broiler")
     breed = db.Column(db.String(100), nullable=True)  # souche
     initial_count = db.Column(db.Integer, nullable=False)
     chick_unit_price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
@@ -172,6 +174,16 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     @property
     def total_feed_kg(self):
         return sum(r.quantity_kg for day in self.days for r in day.feed_records)
+
+    @property
+    def species_label(self):
+        from app.utils.species import SPECIES_LABELS
+
+        return SPECIES_LABELS.get(self.species, self.species)
+
+    @property
+    def is_broiler(self) -> bool:
+        return self.species == "broiler"
 
     @property
     def contributors(self):

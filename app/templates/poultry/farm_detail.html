@@ -13,11 +13,12 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle">
-      <thead><tr><th>{{ _('Lot') }}</th><th>{{ _('Souche') }}</th><th>{{ _('Debut') }}</th><th>{{ _('Statut') }}</th><th>{{ _('Nombre de poulets') }}</th><th></th></tr></thead>
+      <thead><tr><th>{{ _('Lot') }}</th><th>{{ _('Type') }}</th><th>{{ _('Souche') }}</th><th>{{ _('Debut') }}</th><th>{{ _('Statut') }}</th><th>{{ _('Nombre de poulets') }}</th><th></th></tr></thead>
       <tbody>
         {% for batch in batches %}
         <tr>
           <td>{{ batch.code }}</td>
+          <td>{{ batch.species_label }}</td>
           <td>{{ batch.breed or "-" }}</td>
           <td>{{ batch.start_date.strftime('%d/%m/%Y') }}</td>
           <td>{% if batch.is_active %}<span class="badge bg-success">{{ _('Actif') }}</span>{% else %}<span class="badge bg-secondary">{{ _('Cloture') }}</span>{% endif %}</td>

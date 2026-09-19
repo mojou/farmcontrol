@@ -10,6 +10,7 @@
 </div>
 
 <div class="row g-3 mb-4">
+  {% if batch.is_broiler %}
   <div class="col-6 col-lg-4">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ water_today }} L</div>
@@ -22,6 +23,7 @@
       <div class="fc-kpi-label">{{ _('Aliment recommande aujourd\'hui') }}</div>
     </div></div>
   </div>
+  {% endif %}
   <div class="col-6 col-lg-4">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ pending_items|length }}</div>

@@ -12,6 +12,8 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, NumberRange, Optional
 
+from app.utils.species import DEFAULT_SPECIES, SPECIES_CHOICES
+
 
 class FarmForm(FlaskForm):
     name = StringField(_l("Nom de la ferme"), validators=[DataRequired()])
@@ -21,6 +23,7 @@ class FarmForm(FlaskForm):
 
 class BatchForm(FlaskForm):
     farm_id = SelectField(_l("Ferme"), coerce=int, validators=[DataRequired()])
+    species = SelectField(_l("Type d'elevage"), choices=SPECIES_CHOICES, default=DEFAULT_SPECIES)
     code = StringField(_l("Code / nom du lot"), validators=[DataRequired()])
     breed = StringField(_l("Souche"), validators=[Optional()])
     initial_count = IntegerField(_l("Nombre de poulets au depart"), validators=[DataRequired(), NumberRange(min=1)])

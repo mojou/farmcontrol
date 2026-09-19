@@ -4,7 +4,7 @@
 <div class="fc-page-header">
   <div>
     <h1 class="fc-page-title">{{ _('Lot %(code)s', code=(batch.code)) }}</h1>
-    <p class="text-muted mb-0">{{ _('%(name)s - Souche : %(breed)s - Debut : %(start_date)s', name=(batch.farm.name), breed=(batch.breed or "-"), start_date=(batch.start_date.strftime('%d/%m/%Y'))) }}</p>
+    <p class="text-muted mb-0">{{ _('%(name)s - %(species)s - Souche : %(breed)s - Debut : %(start_date)s', name=(batch.farm.name), species=(batch.species_label), breed=(batch.breed or "-"), start_date=(batch.start_date.strftime('%d/%m/%Y'))) }}</p>
   </div>
   <div class="d-flex gap-2">
     <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> {{ _('Saisie quotidienne') }}</a>

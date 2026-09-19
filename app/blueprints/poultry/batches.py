@@ -109,6 +109,7 @@ def batch_new():
             tenant_id=current_user.tenant_id,
             farm_id=form.farm_id.data,
             code=form.code.data,
+            species=form.species.data,
             breed=form.breed.data,
             initial_count=form.initial_count.data,
             chick_unit_price=form.chick_unit_price.data,
@@ -169,6 +170,7 @@ def batch_edit(batch_id):
 
         batch.farm_id = form.farm_id.data
         batch.code = form.code.data
+        batch.species = form.species.data
         batch.breed = form.breed.data
         batch.initial_count = form.initial_count.data
         batch.chick_unit_price = form.chick_unit_price.data
@@ -333,8 +335,8 @@ def sanitary_program(batch_id):
         form=form,
         today_day_number=today_day_number,
         pending_items=pending_items,
-        water_today=estimate_daily_water_liters(batch, today_day_number),
-        feed_today=estimate_daily_feed_kg(batch, today_day_number),
+        water_today=estimate_daily_water_liters(batch, today_day_number) if batch.is_broiler else None,
+        feed_today=estimate_daily_feed_kg(batch, today_day_number) if batch.is_broiler else None,
         medication_stock_choices=_stock_choices(batch.farm_id, "medication"),
     )
 
