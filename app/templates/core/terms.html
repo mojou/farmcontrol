@@ -1,70 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Conditions Generales d'Utilisation - Farm Control{% endblock %}
+{% block title %}{{ _('Conditions Generales d\'Utilisation - Farm Control') }}{% endblock %}
 
 {% set legal_body %}
 <div class="container py-4 py-lg-5" style="max-width: 780px;">
-  <h1 class="fw-bold h3 mb-1">Conditions Generales d'Utilisation</h1>
-  <p class="text-muted small mb-4">Derniere mise a jour : 20 septembre 2026</p>
+  <h1 class="fw-bold h3 mb-1">{{ _('Conditions Generales d\'Utilisation') }}</h1>
+  <p class="text-muted small mb-4">{{ _('Derniere mise a jour : 20 septembre 2026') }}</p>
 
-  <p>Farm Control est une plateforme de gestion d'elevage de poulets de chair, destinee aux eleveurs et
-  exploitations avicoles, notamment en Afrique Centrale. En creant un compte, vous acceptez les presentes
-  conditions.</p>
+  <p>{{ _('Farm Control est une plateforme de gestion d\'elevage de poulets de chair, destinee aux eleveurs et exploitations avicoles, notamment en Afrique Centrale. En creant un compte, vous acceptez les presentes conditions.') }}</p>
 
-  <h5 class="mt-4">1. Le service</h5>
-  <p>Farm Control permet de suivre au quotidien un ou plusieurs elevages : saisie des donnees d'elevage
-  (aliment, eau, mortalite, medicaments, pesees), gestion du stock, suivi des ventes, calcul de rentabilite,
-  alertes automatiques et export de rapports. Le service est propose en francais et en anglais.</p>
+  <h5 class="mt-4">{{ _('1. Le service') }}</h5>
+  <p>{{ _('Farm Control permet de suivre au quotidien un ou plusieurs elevages : saisie des donnees d\'elevage (aliment, eau, mortalite, medicaments, pesees), gestion du stock, suivi des ventes, calcul de rentabilite, alertes automatiques et export de rapports. Le service est propose en francais et en anglais.') }}</p>
 
-  <h5 class="mt-4">2. Compte et inscription</h5>
-  <p>La creation d'un compte est gratuite et immediate. Chaque nouvelle inscription beneficie d'un essai
-  gratuit de 14 jours donnant acces a toutes les fonctionnalites, sans engagement ni carte bancaire requise.
-  A l'issue de l'essai, vous pouvez continuer avec la formule gratuite (limitee en nombre de fermes/lots/
-  utilisateurs) ou souscrire une formule payante.</p>
-  <p>Vous etes responsable de la confidentialite de votre mot de passe et de l'exactitude des informations
-  saisies dans votre compte (nom de l'exploitation, coordonnees). Le proprietaire du compte est responsable
-  des utilisateurs (responsables, travailleurs) qu'il invite a rejoindre son exploitation.</p>
+  <h5 class="mt-4">{{ _('2. Compte et inscription') }}</h5>
+  <p>{{ _('La creation d\'un compte est gratuite et immediate. Chaque nouvelle inscription beneficie d\'un essai gratuit de 14 jours donnant acces a toutes les fonctionnalites, sans engagement ni carte bancaire requise. A l\'issue de l\'essai, vous pouvez continuer avec la formule gratuite (limitee en nombre de fermes/lots/ utilisateurs) ou souscrire une formule payante.') }}</p>
+  <p>{{ _('Vous etes responsable de la confidentialite de votre mot de passe et de l\'exactitude des informations saisies dans votre compte (nom de l\'exploitation, coordonnees). Le proprietaire du compte est responsable des utilisateurs (responsables, travailleurs) qu\'il invite a rejoindre son exploitation.') }}</p>
 
-  <h5 class="mt-4">3. Abonnement et paiement</h5>
-  <p>Les formules payantes sont facturees en Francs CFA (FCFA/XAF), par mois, via notre prestataire de
-  paiement mobile money/carte. Le paiement d'un mois donne acces au service pour la periode correspondante ;
-  l'abonnement n'est pas renouvele automatiquement sans action de votre part tant que le paiement automatique
-  recurrent n'est pas explicitement propose sur la page Facturation.</p>
+  <h5 class="mt-4">{{ _('3. Abonnement et paiement') }}</h5>
+  <p>{{ _('Les formules payantes sont facturees en Francs CFA (FCFA/XAF), par mois, via notre prestataire de paiement mobile money/carte. Le paiement d\'un mois donne acces au service pour la periode correspondante ; l\'abonnement n\'est pas renouvele automatiquement sans action de votre part tant que le paiement automatique recurrent n\'est pas explicitement propose sur la page Facturation.') }}</p>
 
-  <h5 class="mt-4">4. Annulation et remboursement</h5>
-  <p>Vous pouvez arreter d'utiliser une formule payante a tout moment : vos donnees restent accessibles sur
-  la formule gratuite (dans la limite de ses plafonds). Un paiement pour une periode deja entamee n'est pas
-  remboursable, sauf erreur de facturation averee de notre part (double prelevement, montant incorrect) :
-  dans ce cas, contactez-nous a l'adresse ci-dessous et le trop-percu sera rembourse ou credite sur votre
-  compte.</p>
+  <h5 class="mt-4">{{ _('4. Annulation et remboursement') }}</h5>
+  <p>{{ _('Vous pouvez arreter d\'utiliser une formule payante a tout moment : vos donnees restent accessibles sur la formule gratuite (dans la limite de ses plafonds). Un paiement pour une periode deja entamee n\'est pas remboursable, sauf erreur de facturation averee de notre part (double prelevement, montant incorrect) : dans ce cas, contactez-nous a l\'adresse ci-dessous et le trop-percu sera rembourse ou credite sur votre compte.') }}</p>
 
-  <h5 class="mt-4">5. Vos donnees vous appartiennent</h5>
-  <p>Les donnees que vous saisissez (fermes, lots, saisies quotidiennes, stock, ventes) restent votre
-  propriete. Vous pouvez a tout moment exporter l'integralite des donnees de votre exploitation depuis les
-  Parametres. Voir aussi notre <a href="{{ url_for('core.privacy') }}">Politique de Confidentialite</a> pour
-  le detail du traitement de vos donnees personnelles.</p>
+  <h5 class="mt-4">{{ _('5. Vos donnees vous appartiennent') }}</h5>
+  <p>{{ _('Les donnees que vous saisissez (fermes, lots, saisies quotidiennes, stock, ventes) restent votre propriete. Vous pouvez a tout moment exporter l\'integralite des donnees de votre exploitation depuis les Parametres. Voir aussi notre') }} <a href="{{ url_for('core.privacy') }}">{{ _('Politique de Confidentialite') }}</a> {{ _('pour le detail du traitement de vos donnees personnelles.') }}</p>
 
-  <h5 class="mt-4">6. Disponibilite du service</h5>
-  <p>Nous mettons tout en oeuvre pour assurer un service disponible et fiable, mais ne pouvons garantir une
-  disponibilite ininterrompue (maintenance, panne d'un prestataire technique tiers). En cas d'indisponibilite
-  prolongee affectant une formule payante, une compensation (prolongation de la periode) pourra etre
-  accordee sur demande.</p>
+  <h5 class="mt-4">{{ _('6. Disponibilite du service') }}</h5>
+  <p>{{ _('Nous mettons tout en oeuvre pour assurer un service disponible et fiable, mais ne pouvons garantir une disponibilite ininterrompue (maintenance, panne d\'un prestataire technique tiers). En cas d\'indisponibilite prolongee affectant une formule payante, une compensation (prolongation de la periode) pourra etre accordee sur demande.') }}</p>
 
-  <h5 class="mt-4">7. Usage autorise</h5>
-  <p>Vous vous engagez a utiliser le service de maniere licite, a ne pas tenter d'en compromettre la
-  securite, et a ne pas partager votre acces avec des personnes non autorisees par votre exploitation.</p>
+  <h5 class="mt-4">{{ _('7. Usage autorise') }}</h5>
+  <p>{{ _('Vous vous engagez a utiliser le service de maniere licite, a ne pas tenter d\'en compromettre la securite, et a ne pas partager votre acces avec des personnes non autorisees par votre exploitation.') }}</p>
 
-  <h5 class="mt-4">8. Responsabilite</h5>
-  <p>Farm Control est un outil d'aide a la gestion : les estimations (consommation, alertes, calculs de
-  rentabilite) sont indicatives et ne remplacent pas le jugement professionnel de l'eleveur ou l'avis d'un
-  veterinaire pour les questions sanitaires. Nous ne pourrions etre tenus responsables des decisions
-  d'elevage prises sur la seule base des chiffres du service.</p>
+  <h5 class="mt-4">{{ _('8. Responsabilite') }}</h5>
+  <p>{{ _('Farm Control est un outil d\'aide a la gestion : les estimations (consommation, alertes, calculs de rentabilite) sont indicatives et ne remplacent pas le jugement professionnel de l\'eleveur ou l\'avis d\'un veterinaire pour les questions sanitaires. Nous ne pourrions etre tenus responsables des decisions d\'elevage prises sur la seule base des chiffres du service.') }}</p>
 
-  <h5 class="mt-4">9. Modification des presentes conditions</h5>
-  <p>Ces conditions peuvent evoluer pour refleter de nouvelles fonctionnalites ou obligations legales. En
-  cas de changement important, vous en serez informe (email ou notification dans l'application).</p>
+  <h5 class="mt-4">{{ _('9. Modification des presentes conditions') }}</h5>
+  <p>{{ _('Ces conditions peuvent evoluer pour refleter de nouvelles fonctionnalites ou obligations legales. En cas de changement important, vous en serez informe (email ou notification dans l\'application).') }}</p>
 
-  <h5 class="mt-4">10. Contact</h5>
-  <p>Pour toute question sur ces conditions : <a href="mailto:{{ support_email }}">{{ support_email }}</a></p>
+  <h5 class="mt-4">{{ _('10. Contact') }}</h5>
+  <p>{{ _('Pour toute question sur ces conditions :') }} <a href="mailto:{{ support_email }}">{{ support_email }}</a></p>
 </div>
 {% endset %}
 
@@ -75,8 +48,8 @@
   <div class="container">
     <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
     <div class="d-flex gap-2">
-      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
-      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">{{ _('Se connecter') }}</a>
+      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">{{ _('Creer mon compte') }}</a>
     </div>
   </div>
 </nav>

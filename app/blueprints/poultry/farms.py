@@ -1,4 +1,5 @@
 from flask import abort, flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 
 from app.blueprints.poultry import poultry_bp
@@ -27,8 +28,7 @@ def farm_new():
     plan = get_current_plan(current_user.tenant)
     if plan.max_farms is not None and Farm.query.count() >= plan.max_farms:
         flash(
-            f"Votre plan {plan.name} est limite a {plan.max_farms} ferme(s). "
-            "Passez a un plan superieur pour en ajouter davantage.",
+            _("Votre plan %(name)s est limite a %(max_farms)s ferme(s). Passez a un plan superieur pour en ajouter davantage.", name=_(plan.name), max_farms=plan.max_farms),
             "warning",
         )
         return redirect(url_for("billing.pricing"))
@@ -44,7 +44,7 @@ def farm_new():
         db.session.flush()
         log_action("create", "farms", farm.id, {"name": farm.name})
         db.session.commit()
-        flash(f"Ferme {farm.name} creee avec succes.", "success")
+        flash(_("Ferme %(name)s creee avec succes.", name=farm.name), "success")
         return redirect(url_for("poultry.farms_list"))
     return render_template("poultry/farm_form.html", form=form)
 
@@ -72,7 +72,7 @@ def farm_edit(farm_id):
         farm.location = form.location.data
         log_action("update", "farms", farm.id, {"name": farm.name})
         db.session.commit()
-        flash(f"Ferme {farm.name} modifiee.", "success")
+        flash(_("Ferme %(name)s modifiee.", name=farm.name), "success")
         return redirect(url_for("poultry.farm_detail", farm_id=farm.id))
 
     return render_template("poultry/farm_form.html", form=form, farm=farm)
@@ -87,5 +87,8 @@ def farm_toggle(farm_id):
     farm.is_active = not farm.is_active
     log_action("update", "farms", farm.id, {"is_active": farm.is_active})
     db.session.commit()
-    flash(f"Ferme {farm.name} {'activee' if farm.is_active else 'desactivee'}.", "success")
+    flash(
+        _("Ferme %(name)s activee.", name=farm.name) if farm.is_active else _("Ferme %(name)s desactivee.", name=farm.name),
+        "success",
+    )
     return redirect(url_for("poultry.farms_list"))

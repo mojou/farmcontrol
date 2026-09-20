@@ -2,6 +2,7 @@
 credit) - remplace le champ unique historique de BatchFinance pour les
 eleveurs qui vendent progressivement, a plusieurs acheteurs.
 """
+from flask_babel import gettext as _
 from datetime import date
 
 from flask import abort, flash, redirect, render_template, request, url_for
@@ -30,7 +31,7 @@ def sales_list(batch_id):
         total_amount = form.quantity.data * form.unit_price.data
         amount_paid = form.amount_paid.data or 0
         if amount_paid > total_amount:
-            flash("Le montant recu ne peut pas depasser le montant total de la vente.", "danger")
+            flash(_("Le montant recu ne peut pas depasser le montant total de la vente."), "danger")
             return render_template(
                 "poultry/sales_list.html", batch=batch, form=form, sales=batch.sales,
                 cash_collected=sum((s.amount_paid or 0) for s in batch.sales),
@@ -56,7 +57,7 @@ def sales_list(batch_id):
         recompute_batch_finance(batch)
         log_action("create", "poultry_sales", sale.id, {"buyer_name": sale.buyer_name, "total_amount": str(total_amount)})
         db.session.commit()
-        flash(f"Vente a {sale.buyer_name} enregistree.", "success")
+        flash(_("Vente a %(buyer_name)s enregistree.", buyer_name=sale.buyer_name), "success")
         return redirect(url_for("poultry.sales_list", batch_id=batch.id))
 
     sales = sorted(batch.sales, key=lambda s: s.sale_date, reverse=True)
@@ -85,17 +86,16 @@ def sale_payment(sale_id):
         amount = form.amount.data
         if amount > sale.balance_due:
             flash(
-                f"Ce paiement ({amount} FCFA) depasse le solde restant du ({sale.balance_due} FCFA). "
-                "Verifiez le montant.",
+                _("Ce paiement (%(amount)s FCFA) depasse le solde restant du (%(balance_due)s FCFA). Verifiez le montant.", amount=amount, balance_due=sale.balance_due),
                 "danger",
             )
         else:
             sale.amount_paid = (sale.amount_paid or 0) + amount
             log_action("update", "poultry_sales", sale.id, {"payment": str(amount)})
             db.session.commit()
-            flash("Paiement enregistre.", "success")
+            flash(_("Paiement enregistre."), "success")
     else:
-        flash("Montant invalide.", "danger")
+        flash(_("Montant invalide."), "danger")
 
     return redirect(request.referrer or url_for("poultry.sales_list", batch_id=sale.batch_id))
 
@@ -110,7 +110,7 @@ def sale_delete(sale_id):
     db.session.flush()
     recompute_batch_finance(batch)
     db.session.commit()
-    flash("Vente supprimee.", "success")
+    flash(_("Vente supprimee."), "success")
     return redirect(url_for("poultry.sales_list", batch_id=batch.id))
 
 
@@ -182,5 +182,5 @@ def expenses_summary():
         chick_cost_total=chick_cost_total,
         labor_cost_total=labor_cost_total,
         grand_total=grand_total,
-        category_labels={"feed": "Aliment", "wood": "Bois / litiere", "medication": "Medicament"},
+        category_labels={"feed": _("Aliment"), "wood": _("Bois / litiere"), "medication": _("Medicament")},
     )

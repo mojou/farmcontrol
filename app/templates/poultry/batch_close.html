@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Cloturer le lot - Farm Control{% endblock %}
+{% block title %}{{ _('Cloturer le lot - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Cloturer le lot {{ batch.code }}</h1>
+  <h1 class="fc-page-title">{{ _('Cloturer le lot %(code)s', code=(batch.code)) }}</h1>
 </div>
 <div class="row"><div class="col-lg-6">
-  {{ fm.form_card(form, "Confirmer la cloture") }}
+  {{ fm.form_card(form, _("Confirmer la cloture")) }}
 </div></div>
 {% endblock %}

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "partials/_pagination.html" as pg %}
-{% block title %}Fermes - Farm Control{% endblock %}
+{% block title %}{{ _('Fermes - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Fermes</h1>
+  <h1 class="fc-page-title">{{ _('Fermes') }}</h1>
   {% if current_user.has_role('owner') %}
-  <a href="{{ url_for('poultry.farm_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouvelle ferme</a>
+  <a href="{{ url_for('poultry.farm_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> {{ _('Nouvelle ferme') }}</a>
   {% endif %}
 </div>
 
@@ -16,17 +16,17 @@
       <div class="card-body">
         <h5 class="card-title">
           {{ farm.name }}
-          {% if not farm.is_active %}<span class="badge bg-secondary">Desactivee</span>{% endif %}
+          {% if not farm.is_active %}<span class="badge bg-secondary">{{ _('Desactivee') }}</span>{% endif %}
         </h5>
-        <p class="text-muted small">{{ farm.location or "Localisation non renseignee" }}</p>
-        <p class="mb-3">{{ farm.batches|length }} lot(s)</p>
+        <p class="text-muted small">{{ farm.location or _("Localisation non renseignee") }}</p>
+        <p class="mb-3">{{ _('%(batches)s lot(s)', batches=(farm.batches|length)) }}</p>
         <div class="d-flex gap-1 flex-wrap">
-          <a href="{{ url_for('poultry.farm_detail', farm_id=farm.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a>
+          <a href="{{ url_for('poultry.farm_detail', farm_id=farm.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Ouvrir') }}</a>
           {% if current_user.has_role('owner') %}
-          <a href="{{ url_for('poultry.farm_edit', farm_id=farm.id) }}" class="btn btn-sm btn-outline-secondary" title="Modifier"><i class="bi bi-pencil"></i></a>
-          <form method="post" action="{{ url_for('poultry.farm_toggle', farm_id=farm.id) }}" onsubmit="return confirm('{{ 'Reactiver' if not farm.is_active else 'Desactiver' }} cette ferme ?');">
+          <a href="{{ url_for('poultry.farm_edit', farm_id=farm.id) }}" class="btn btn-sm btn-outline-secondary" title="{{ _('Modifier') }}"><i class="bi bi-pencil"></i></a>
+          <form method="post" action="{{ url_for('poultry.farm_toggle', farm_id=farm.id) }}" onsubmit='return confirm({{ (_("Reactiver cette ferme ?") if not farm.is_active else _("Desactiver cette ferme ?"))|tojson }});'>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button class="btn btn-sm btn-outline-secondary" title="{{ 'Reactiver' if not farm.is_active else 'Desactiver' }}">
+            <button class="btn btn-sm btn-outline-secondary" title="{{ _('Reactiver') if not farm.is_active else _('Desactiver') }}">
               <i class="bi {{ 'bi-toggle-on' if farm.is_active else 'bi-toggle-off' }}"></i>
             </button>
           </form>
@@ -36,7 +36,7 @@
     </div>
   </div>
   {% else %}
-  <div class="col-12"><div class="alert alert-info">Aucune ferme enregistree.</div></div>
+  <div class="col-12"><div class="alert alert-info">{{ _('Aucune ferme enregistree.') }}</div></div>
   {% endfor %}
 </div>
 {{ pg.render_pagination(pagination, 'poultry.farms_list') }}

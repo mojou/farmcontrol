@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Argent qu'on vous doit - Farm Control{% endblock %}
+{% block title %}{{ _('Argent qu\'on vous doit - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Argent qu'on vous doit (ventes a credit)</h1>
+  <h1 class="fc-page-title">{{ _('Argent qu\'on vous doit (ventes a credit)') }}</h1>
 </div>
-<p class="text-muted small">Toutes les ventes, tous lots confondus, dont le paiement n'est pas encore complet.</p>
+<p class="text-muted small">{{ _('Toutes les ventes, tous lots confondus, dont le paiement n\'est pas encore complet.') }}</p>
 
 <div class="card mb-4">
   <div class="card-body d-flex justify-content-between align-items-center">
-    <span class="text-muted small text-uppercase">Total que vos acheteurs vous doivent</span>
+    <span class="text-muted small text-uppercase">{{ _('Total que vos acheteurs vous doivent') }}</span>
     <span class="h4 fw-bold text-danger mb-0">{{ total_due|number }} FCFA</span>
   </div>
 </div>
@@ -17,7 +17,7 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle">
-      <thead><tr><th>Date</th><th>Lot</th><th>Acheteur</th><th>Montant total</th><th>Recu</th><th>Solde du</th><th></th></tr></thead>
+      <thead><tr><th>{{ _('Date') }}</th><th>{{ _('Lot') }}</th><th>{{ _('Acheteur') }}</th><th>{{ _('Montant total') }}</th><th>{{ _('Recu') }}</th><th>{{ _('Solde du') }}</th><th></th></tr></thead>
       <tbody>
         {% for sale in sales %}
         <tr>
@@ -30,13 +30,13 @@
           <td>
             <form method="post" action="{{ url_for('poultry.sale_payment', sale_id=sale.id) }}" class="d-flex gap-1">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-              <input type="number" step="0.01" name="amount" class="form-control form-control-sm" style="width:100px" placeholder="Montant" required>
-              <button class="btn btn-sm btn-outline-success">Encaisser</button>
+              <input type="number" step="0.01" name="amount" class="form-control form-control-sm" style="width:100px" placeholder="{{ _('Montant') }}" required>
+              <button class="btn btn-sm btn-outline-success">{{ _('Encaisser') }}</button>
             </form>
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="7" class="text-muted text-center py-4">Personne ne vous doit d'argent en ce moment : tout est paye !</td></tr>
+        <tr><td colspan="7" class="text-muted text-center py-4">{{ _('Personne ne vous doit d\'argent en ce moment : tout est paye !') }}</td></tr>
         {% endfor %}
       </tbody>
     </table>

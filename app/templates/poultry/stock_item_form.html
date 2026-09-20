@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}{{ "Modifier l'article de stock" if item else "Nouvel article de stock" }} - Farm Control{% endblock %}
+{% block title %}{{ _("Modifier l'article de stock") if item else _("Nouvel article de stock") }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">{{ "Modifier " ~ item.name if item else "Nouvel article de stock" }}</h1>
+  <h1 class="fc-page-title">{{ _("Modifier ") ~ item.name if item else _("Nouvel article de stock") }}</h1>
   {% if item %}
   <form method="post" action="{{ url_for('poultry.stock_item_delete', item_id=item.id) }}"
-        onsubmit="return confirm('Supprimer definitivement l\'article {{ item.name|e }} ? Cette action est irreversible.');">
+        onsubmit='return confirm({{ _("Supprimer definitivement l'article %(name)s ? Cette action est irreversible.", name=item.name)|tojson }});'>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Supprimer cet article</button>
+    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> {{ _('Supprimer cet article') }}</button>
   </form>
   {% endif %}
 </div>
 <div class="alert alert-light border">
-  <i class="bi bi-info-circle"></i> Utilisez l'unite qui correspond a la maniere dont vous achetez le
-  produit : par exemple <strong>sac</strong> pour l'aliment, <strong>morceau</strong> pour le bois/litiere,
-  <strong>L (litre)</strong> pour un medicament ou complement liquide (Bio Select, Belgo...). Les vaccins a
-  dose unique n'ont generalement pas besoin d'etre suivis en stock : vous pouvez les administrer directement
-  depuis la saisie quotidienne sans les relier a un article de stock.
+  <i class="bi bi-info-circle"></i> {{ _('Utilisez l\'unite qui correspond a la maniere dont vous achetez le produit : par exemple') }} <strong>{{ _('sac') }}</strong> {{ _('pour l\'aliment,') }} <strong>{{ _('morceau') }}</strong> {{ _('pour le bois/litiere,') }}
+  <strong>{{ _('L (litre)') }}</strong> {{ _('pour un medicament ou complement liquide (Bio Select, Belgo...). Les vaccins a dose unique n\'ont generalement pas besoin d\'etre suivis en stock : vous pouvez les administrer directement depuis la saisie quotidienne sans les relier a un article de stock.') }}
   <span id="feed-hint" class="d-none">
-    <br><strong>Aliment :</strong> la saisie quotidienne se fait en kg (pour calculer l'indice de consommation),
-    mais votre stock se gere en sacs. Indiquez ci-dessous le poids d'un sac (ex : 50 kg) pour que le stock se
-    decompte correctement en sacs a chaque saisie.
+    <br><strong>{{ _('Aliment :') }}</strong> {{ _('la saisie quotidienne se fait en kg (pour calculer l\'indice de consommation), mais votre stock se gere en sacs. Indiquez ci-dessous le poids d\'un sac (ex : 50 kg) pour que le stock se decompte correctement en sacs a chaque saisie.') }}
   </span>
   <span id="medication-hint" class="d-none">
-    <br><strong>Medicament liquide :</strong> la saisie quotidienne se fait en ml (dose administree), mais vous
-    achetez le produit en litres. Indiquez ci-dessous le volume d'une unite de stock (ex : 1000 pour 1 litre,
-    3000 pour une bouteille de 3 litres comme les produits Belgo) pour que le stock se decompte correctement.
+    <br><strong>{{ _('Medicament liquide :') }}</strong> {{ _('la saisie quotidienne se fait en ml (dose administree), mais vous achetez le produit en litres. Indiquez ci-dessous le volume d\'une unite de stock (ex : 1000 pour 1 litre, 3000 pour une bouteille de 3 litres comme les produits Belgo) pour que le stock se decompte correctement.') }}
   </span>
 </div>
 <div class="row"><div class="col-lg-6">{{ fm.form_card(form, None) }}</div></div>

@@ -1,49 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Depenses - Farm Control{% endblock %}
+{% block title %}{{ _('Depenses - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Toutes les depenses</h1>
+  <h1 class="fc-page-title">{{ _('Toutes les depenses') }}</h1>
 </div>
 <p class="text-muted small">
-  Vue consolidee de l'argent depense, toutes fermes et tous lots confondus. Ce total compte chaque achat une
-  seule fois (au moment ou vous l'avez achete) ; il ne recoupe pas le "Cout aliment/medicaments/bois" du rapport
-  d'un lot, qui lui ne fait que repartir la valeur de ce qui a ete consomme par ce lot precis dans un stock deja
-  paye ici.
+  {{ _('Vue consolidee de l\'argent depense, toutes fermes et tous lots confondus. Ce total compte chaque achat une seule fois (au moment ou vous l\'avez achete) ; il ne recoupe pas le "Cout aliment/medicaments/bois" du rapport d\'un lot, qui lui ne fait que repartir la valeur de ce qui a ete consomme par ce lot precis dans un stock deja paye ici.') }}
 </p>
 
 <div class="row g-3 mb-4">
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ purchases_total|currency }}</div>
-      <div class="fc-kpi-label">Achats de stock (aliment, bois, medicaments)</div>
+      <div class="fc-kpi-label">{{ _('Achats de stock (aliment, bois, medicaments)') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ chick_cost_total|currency }}</div>
-      <div class="fc-kpi-label">Poussins</div>
+      <div class="fc-kpi-label">{{ _('Poussins') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ labor_cost_total|currency }}</div>
-      <div class="fc-kpi-label">Main d'oeuvre</div>
+      <div class="fc-kpi-label">{{ _('Main d\'oeuvre') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100" style="border: 2px solid var(--fc-primary);"><div class="card-body">
       <div class="fc-kpi-value fw-bold">{{ grand_total|currency }}</div>
-      <div class="fc-kpi-label">Total general</div>
+      <div class="fc-kpi-label">{{ _('Total general') }}</div>
     </div></div>
   </div>
 </div>
 
 <div class="card">
   <div class="card-body">
-    <h6 class="text-muted small text-uppercase mb-3">Detail des achats de stock par categorie</h6>
+    <h6 class="text-muted small text-uppercase mb-3">{{ _('Detail des achats de stock par categorie') }}</h6>
     <div class="table-responsive">
     <table class="table table-sm align-middle">
-      <thead><tr><th>Categorie</th><th class="text-end">Montant depense</th></tr></thead>
+      <thead><tr><th>{{ _('Categorie') }}</th><th class="text-end">{{ _('Montant depense') }}</th></tr></thead>
       <tbody>
         {% if purchases_by_category %}
         {% for key, label in category_labels.items() %}
@@ -53,13 +50,13 @@
         </tr>
         {% endfor %}
         {% else %}
-        <tr><td colspan="2" class="text-muted text-center py-4">Aucun achat de stock enregistre pour le moment.</td></tr>
+        <tr><td colspan="2" class="text-muted text-center py-4">{{ _('Aucun achat de stock enregistre pour le moment.') }}</td></tr>
         {% endif %}
       </tbody>
     </table>
     </div>
     <a href="{{ url_for('poultry.stock_list') }}" class="btn btn-sm btn-outline-secondary">
-      <i class="bi bi-box-seam"></i> Voir le stock
+      <i class="bi bi-box-seam"></i> {{ _('Voir le stock') }}
     </a>
   </div>
 </div>

@@ -1,49 +1,48 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Ce que vous gagnez - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}{{ _('Ce que vous gagnez - Lot %(code)s - Farm Control', code=(batch.code)) }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Ce que vous gagnez - Lot {{ batch.code }}</h1>
+  <h1 class="fc-page-title">{{ _('Ce que vous gagnez - Lot %(code)s', code=(batch.code)) }}</h1>
 </div>
 
 <div class="row g-3">
   <div class="col-lg-6">
-    {{ fm.form_card(form, "Revenu de vente et cout main d'oeuvre") }}
+    {{ fm.form_card(form, _("Revenu de vente et cout main d'oeuvre")) }}
   </div>
   <div class="col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-3">Depenses calculees automatiquement</h6>
+        <h6 class="text-muted small text-uppercase mb-3">{{ _('Depenses calculees automatiquement') }}</h6>
         {% if batch.finance %}
         <div class="table-responsive">
         <table class="table table-sm mb-0">
-          <tr><td>Poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
-          <tr><td>Aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
-          <tr><td>Medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
-          <tr><td>Bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
-          <tr><td>Main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
-          <tr class="fw-bold"><td>Total des depenses</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
-          <tr><td>Argent des ventes</td><td class="text-end">{{ batch.finance.sale_revenue|currency }}</td></tr>
-          <tr class="fw-bold"><td>Benefice</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
-          <tr class="fw-bold"><td>Prix de revient par kilo</td><td class="text-end">{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
+          <tr><td>{{ _('Poussins') }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+          <tr><td>{{ _('Aliment') }}</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
+          <tr><td>{{ _('Medicaments') }}</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
+          <tr><td>{{ _('Bois / litiere') }}</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
+          <tr><td>{{ _('Main d\'oeuvre') }}</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
+          <tr class="fw-bold"><td>{{ _('Total des depenses') }}</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
+          <tr><td>{{ _('Argent des ventes') }}</td><td class="text-end">{{ batch.finance.sale_revenue|currency }}</td></tr>
+          <tr class="fw-bold"><td>{{ _('Benefice') }}</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
+          <tr class="fw-bold"><td>{{ _('Prix de revient par kilo') }}</td><td class="text-end">{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
         </table>
         </div>
         {% else %}
-        <p class="text-muted mb-0">Les depenses seront calculees des l'enregistrement d'un premier cout.</p>
+        <p class="text-muted mb-0">{{ _('Les depenses seront calculees des l\'enregistrement d\'un premier cout.') }}</p>
         {% endif %}
       </div>
     </div>
 
     <div class="card mt-3">
       <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-2">Achats de stock sur la ferme pendant cette periode</h6>
+        <h6 class="text-muted small text-uppercase mb-2">{{ _('Achats de stock sur la ferme pendant cette periode') }}</h6>
         <div class="d-flex justify-content-between align-items-center">
           <span class="h5 mb-0">{{ stock_purchases_total|currency }}</span>
-          <a href="{{ url_for('poultry.expenses_summary') }}" class="btn btn-sm btn-outline-secondary">Voir le detail</a>
+          <a href="{{ url_for('poultry.expenses_summary') }}" class="btn btn-sm btn-outline-secondary">{{ _('Voir le detail') }}</a>
         </div>
         <p class="text-muted small mb-0 mt-2">
-          Different du "Total des depenses" ci-dessus : ce montant compte tout ce qui a ete achete pour
-          cette ferme sur la periode du lot, meme ce qui a servi a un autre lot actif en meme temps.
+          {{ _('Different du "Total des depenses" ci-dessus : ce montant compte tout ce qui a ete achete pour cette ferme sur la periode du lot, meme ce qui a servi a un autre lot actif en meme temps.') }}
         </p>
       </div>
     </div>

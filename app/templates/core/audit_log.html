@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 {% import "partials/_pagination.html" as pg %}
-{% block title %}Journal d'activite - Farm Control{% endblock %}
+{% block title %}{{ _('Journal d\'activite - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Journal d'activite</h1>
+  <h1 class="fc-page-title">{{ _('Journal d\'activite') }}</h1>
   <a href="{{ url_for('core.export_data') }}" class="btn btn-outline-secondary btn-sm">
-    <i class="bi bi-download"></i> Exporter toutes mes donnees
+    <i class="bi bi-download"></i> {{ _('Exporter toutes mes donnees') }}
   </a>
 </div>
-<p class="text-muted small">Chaque creation, modification ou suppression effectuee dans votre espace est enregistree
-  ici automatiquement, avec la date, l'auteur et l'element concerne. Utile pour retrouver qui a fait quoi.</p>
+<p class="text-muted small">{{ _('Chaque creation, modification ou suppression effectuee dans votre espace est enregistree ici automatiquement, avec la date, l\'auteur et l\'element concerne. Utile pour retrouver qui a fait quoi.') }}</p>
 
 <div class="card">
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle table-sm">
       <thead>
-        <tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Element concerne</th></tr>
+        <tr><th>{{ _('Date') }}</th><th>{{ _('Utilisateur') }}</th><th>{{ _('Action') }}</th><th>{{ _('Element concerne') }}</th></tr>
       </thead>
       <tbody>
         {% for entry in pagination.items %}
         <tr>
           <td class="text-nowrap">{{ entry.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
-          <td>{{ entry.user.full_name if entry.user else "Systeme" }}</td>
+          <td>{{ entry.user.full_name if entry.user else _("Systeme") }}</td>
           <td>
             {% set badge = {"create": "bg-success", "update": "bg-primary", "delete": "bg-danger"} %}
             <span class="badge {{ badge.get(entry.action, 'bg-secondary') }}">{{ action_labels.get(entry.action, entry.action) }}</span>
@@ -38,7 +37,7 @@
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="4" class="text-muted text-center py-4">Aucune activite enregistree pour le moment.</td></tr>
+        <tr><td colspan="4" class="text-muted text-center py-4">{{ _('Aucune activite enregistree pour le moment.') }}</td></tr>
         {% endfor %}
       </tbody>
     </table>

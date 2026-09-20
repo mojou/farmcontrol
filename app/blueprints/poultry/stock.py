@@ -3,6 +3,8 @@ from datetime import date
 from sqlalchemy import func
 
 from flask import abort, flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
 from wtforms import DecimalField
 from wtforms.validators import DataRequired, NumberRange, Optional
@@ -18,10 +20,10 @@ from app.utils.audit import log_action
 
 class RestockForm(FlaskForm):
     quantity_added = DecimalField(
-        "Quantite ajoutee", validators=[DataRequired(), NumberRange(min=0.01)], places=2
+        _l("Quantite ajoutee"), validators=[DataRequired(), NumberRange(min=0.01)], places=2
     )
     unit_price = DecimalField(
-        "Prix paye cette fois (FCFA, facultatif)",
+        _l("Prix paye cette fois (FCFA, facultatif)"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
     )
@@ -98,7 +100,7 @@ def stock_item_new():
             log_action("create", "poultry_stock_purchases", None, {"item_name": item.name, "total_cost": str(purchase.total_cost)})
         log_action("create", "poultry_stock_items", item.id, {"name": item.name})
         db.session.commit()
-        flash(f"Article de stock {item.name} cree.", "success")
+        flash(_("Article de stock %(name)s cree.", name=item.name), "success")
         return redirect(url_for("poultry.stock_list"))
 
     return render_template("poultry/stock_item_form.html", form=form)
@@ -136,9 +138,9 @@ def stock_item_restock(item_id):
         log_action("create", "poultry_stock_purchases", None, {"item_name": item.name, "total_cost": str(purchase.total_cost)})
         log_action("update", "poultry_stock_items", item.id, {"quantity_added": str(form.quantity_added.data)})
         db.session.commit()
-        flash(f"Stock de {item.name} ajoute.", "success")
+        flash(_("Stock de %(name)s ajoute.", name=item.name), "success")
     else:
-        flash("Quantite invalide.", "danger")
+        flash(_("Quantite invalide."), "danger")
     return redirect(url_for("poultry.stock_list"))
 
 
@@ -168,7 +170,7 @@ def stock_item_edit(item_id):
 
         log_action("update", "poultry_stock_items", item.id, {"name": item.name})
         db.session.commit()
-        flash(f"Article de stock {item.name} modifie.", "success")
+        flash(_("Article de stock %(name)s modifie.", name=item.name), "success")
         return redirect(url_for("poultry.stock_list"))
 
     return render_template("poultry/stock_item_form.html", form=form, item=item)
@@ -190,5 +192,5 @@ def stock_item_delete(item_id):
     log_action("delete", "poultry_stock_items", item.id, {"name": name})
     db.session.delete(item)
     db.session.commit()
-    flash(f"Article de stock {name} supprime.", "success")
+    flash(_("Article de stock %(name)s supprime.", name=name), "success")
     return redirect(url_for("poultry.stock_list"))

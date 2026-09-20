@@ -171,7 +171,7 @@ def profile():
                     User.email == new_email, User.id != current_user.id
                 ).first()
             if existing:
-                flash("Un utilisateur existe deja avec cet email.", "danger")
+                flash(_("Un utilisateur existe deja avec cet email."), "danger")
                 return render_template("core/profile.html", form=form)
             current_user.email = new_email
 
@@ -189,7 +189,7 @@ def profile():
         current_user.email_notifications_enabled = form.email_notifications_enabled.data
         log_action("update", "users", current_user.id, {"action": "profile_update"})
         db.session.commit()
-        flash("Profil mis a jour.", "success")
+        flash(_("Profil mis a jour."), "success")
         return redirect(url_for("core.profile"))
     return render_template("core/profile.html", form=form)
 
@@ -200,7 +200,7 @@ def profile_avatar_remove():
     delete_photo(current_user.avatar_path)
     current_user.avatar_path = None
     db.session.commit()
-    flash("Photo de profil supprimee.", "success")
+    flash(_("Photo de profil supprimee."), "success")
     return redirect(url_for("core.profile"))
 
 
@@ -279,14 +279,13 @@ def user_new():
     plan = get_current_plan(current_user.tenant)
     if plan.max_users is not None and User.query.count() >= plan.max_users:
         flash(
-            f"Votre plan {plan.name} est limite a {plan.max_users} utilisateur(s). "
-            "Passez a un plan superieur pour en ajouter davantage.",
+            _("Votre plan %(name)s est limite a %(max_users)s utilisateur(s). Passez a un plan superieur pour en ajouter davantage.", name=_(plan.name), max_users=plan.max_users),
             "warning",
         )
         return redirect(url_for("billing.pricing"))
 
     form = UserForm()
-    form.farm_id.choices = [(0, "Toutes les fermes")] + [
+    form.farm_id.choices = [(0, _("Toutes les fermes"))] + [
         (f.id, f.name) for f in Farm.query.order_by(Farm.name).all()
     ]
 
@@ -300,7 +299,7 @@ def user_new():
         with tenant_bypass():
             existing = User.query.filter_by(email=form.email.data.strip().lower()).first()
         if existing:
-            flash("Un utilisateur existe deja avec cet email.", "danger")
+            flash(_("Un utilisateur existe deja avec cet email."), "danger")
             return render_template("core/user_form.html", form=form)
 
         user = User(
@@ -317,7 +316,7 @@ def user_new():
         db.session.flush()
         log_action("create", "users", user.id, {"email": user.email, "role": user.role})
         db.session.commit()
-        flash(f"Utilisateur {user.full_name} cree avec succes.", "success")
+        flash(_("Utilisateur %(full_name)s cree avec succes.", full_name=user.full_name), "success")
         return redirect(url_for("core.users_list"))
 
     return render_template("core/user_form.html", form=form)
@@ -332,11 +331,11 @@ def user_edit(user_id):
     un autre, ce qui perdrait le lien avec ses saisies passees."""
     user = User.query.get_or_404(user_id)
     if user.role == ROLE_OWNER:
-        flash("Le compte proprietaire ne peut pas etre modifie ici.", "danger")
+        flash(_("Le compte proprietaire ne peut pas etre modifie ici."), "danger")
         return redirect(url_for("core.users_list"))
 
     form = UserEditForm(obj=user)
-    form.farm_id.choices = [(0, "Toutes les fermes")] + [
+    form.farm_id.choices = [(0, _("Toutes les fermes"))] + [
         (f.id, f.name) for f in Farm.query.order_by(Farm.name).all()
     ]
     if request.method == "GET":
@@ -355,7 +354,7 @@ def user_edit(user_id):
                 User.email == form.email.data.strip().lower(), User.id != user.id
             ).first()
         if existing:
-            flash("Un autre utilisateur existe deja avec cet email.", "danger")
+            flash(_("Un autre utilisateur existe deja avec cet email."), "danger")
             return render_template("core/user_form.html", form=form, user=user)
 
         user.first_name = form.first_name.data
@@ -367,7 +366,7 @@ def user_edit(user_id):
             user.set_password(form.password.data)
         log_action("update", "users", user.id, {"email": user.email, "role": user.role})
         db.session.commit()
-        flash(f"Utilisateur {user.full_name} modifie.", "success")
+        flash(_("Utilisateur %(full_name)s modifie.", full_name=user.full_name), "success")
         return redirect(url_for("core.users_list"))
 
     return render_template("core/user_form.html", form=form, user=user)
@@ -378,12 +377,12 @@ def user_edit(user_id):
 def user_toggle(user_id):
     user = User.query.get_or_404(user_id)
     if user.role == ROLE_OWNER:
-        flash("Impossible de desactiver un compte proprietaire.", "danger")
+        flash(_("Impossible de desactiver un compte proprietaire."), "danger")
         return redirect(url_for("core.users_list"))
     user.is_active = not user.is_active
     log_action("update", "users", user.id, {"is_active": user.is_active})
     db.session.commit()
-    flash("Statut de l'utilisateur mis a jour.", "success")
+    flash(_("Statut de l'utilisateur mis a jour."), "success")
     return redirect(url_for("core.users_list"))
 
 
@@ -412,10 +411,10 @@ def tenant_new():
             email_taken = User.query.filter_by(email=form.owner_email.data.strip().lower()).first()
 
         if slug_taken:
-            flash("Cet identifiant (slug) est deja utilise.", "danger")
+            flash(_("Cet identifiant (slug) est deja utilise."), "danger")
             return render_template("core/tenant_form.html", form=form)
         if email_taken:
-            flash("Un utilisateur existe deja avec cet email.", "danger")
+            flash(_("Un utilisateur existe deja avec cet email."), "danger")
             return render_template("core/tenant_form.html", form=form)
 
         errors = validate_password_policy(form.owner_password.data)
@@ -460,7 +459,7 @@ def tenant_new():
             log_action("create", "tenants", tenant.id, {"name": tenant.name, "slug": tenant.slug})
             db.session.commit()
 
-        flash(f"Client {tenant.name} cree avec succes.", "success")
+        flash(_("Client %(name)s cree avec succes.", name=tenant.name), "success")
         return redirect(url_for("core.admin_dashboard"))
 
     return render_template("core/tenant_form.html", form=form)
@@ -474,7 +473,7 @@ def tenant_toggle(tenant_id):
         tenant.is_active = not tenant.is_active
         log_action("update", "tenants", tenant.id, {"is_active": tenant.is_active})
         db.session.commit()
-    flash("Statut du client mis a jour.", "success")
+    flash(_("Statut du client mis a jour."), "success")
     return redirect(url_for("core.admin_dashboard"))
 
 
@@ -491,7 +490,7 @@ def tenant_grant_plan(tenant_id):
         tenant = Tenant.query.get_or_404(tenant_id)
         plan = Plan.query.filter_by(code=plan_code, is_active=True).first()
         if plan is None:
-            flash("Formule invalide.", "danger")
+            flash(_("Formule invalide."), "danger")
             return redirect(url_for("core.admin_dashboard"))
 
         subscription = tenant.subscription
@@ -509,7 +508,7 @@ def tenant_grant_plan(tenant_id):
         log_action("update", "billing_subscriptions", subscription.id, {"admin_grant": plan.code})
         db.session.commit()
 
-    flash(f"Le plan {plan.name} a ete offert gratuitement a {tenant.name}.", "success")
+    flash(_("Le plan %(name)s a ete offert gratuitement a %(name2)s.", name=_(plan.name), name2=tenant.name), "success")
     return redirect(url_for("core.admin_dashboard"))
 
 
@@ -534,7 +533,7 @@ def tenant_revoke_plan(tenant_id):
         log_action("update", "billing_subscriptions", tenant.id, {"admin_grant_revoked": True})
         db.session.commit()
 
-    flash(f"L'offre gratuite a ete retiree pour {tenant.name} (retour au plan {free_plan.name}).", "success")
+    flash(_("L'offre gratuite a ete retiree pour %(name)s (retour au plan %(name2)s).", name=tenant.name, name2=_(free_plan.name)), "success")
     return redirect(url_for("core.admin_dashboard"))
 
 

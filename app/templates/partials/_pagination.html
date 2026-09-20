@@ -1,9 +1,9 @@
 {% macro render_pagination(pagination, endpoint) %}
 {% if pagination.pages > 1 %}
-<nav aria-label="Pagination">
+<nav aria-label="{{ _('Pagination') }}">
   <ul class="pagination pagination-sm mb-0 mt-3">
     <li class="page-item {{ 'disabled' if not pagination.has_prev }}">
-      <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev_num, **kwargs) if pagination.has_prev else '#' }}">Precedent</a>
+      <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev_num, **kwargs) if pagination.has_prev else '#' }}">{{ _('Precedent') }}</a>
     </li>
     {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
     <li class="page-item {{ 'active' if page_num == pagination.page }} {{ 'disabled' if not page_num }}">
@@ -15,11 +15,11 @@
     </li>
     {% endfor %}
     <li class="page-item {{ 'disabled' if not pagination.has_next }}">
-      <a class="page-link" href="{{ url_for(endpoint, page=pagination.next_num, **kwargs) if pagination.has_next else '#' }}">Suivant</a>
+      <a class="page-link" href="{{ url_for(endpoint, page=pagination.next_num, **kwargs) if pagination.has_next else '#' }}">{{ _('Suivant') }}</a>
     </li>
   </ul>
   <p class="text-muted small mt-2 mb-0">
-    {{ pagination.total }} resultat(s) - page {{ pagination.page }} sur {{ pagination.pages }}
+    {{ _('%(total)s resultat(s) - page %(page)s sur %(pages)s', total=(pagination.total), page=(pagination.page), pages=(pagination.pages)) }}
   </p>
 </nav>
 {% endif %}

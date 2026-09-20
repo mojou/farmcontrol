@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% import "partials/_pagination.html" as pg %}
-{% block title %}Messages envoyes - Farm Control{% endblock %}
+{% block title %}{{ _('Messages envoyes - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Messages envoyes</h1>
+  <h1 class="fc-page-title">{{ _('Messages envoyes') }}</h1>
   <div class="d-flex gap-2">
-    <a href="{{ url_for('messaging.inbox') }}" class="btn btn-outline-secondary btn-sm">Boite de reception</a>
-    <a href="{{ url_for('messaging.compose') }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Nouveau message</a>
+    <a href="{{ url_for('messaging.inbox') }}" class="btn btn-outline-secondary btn-sm">{{ _('Boite de reception') }}</a>
+    <a href="{{ url_for('messaging.compose') }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> {{ _('Nouveau message') }}</a>
   </div>
 </div>
 
@@ -14,18 +14,18 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle mb-0">
-      <thead><tr><th>A</th><th>Sujet</th><th>Date</th><th>Statut</th><th></th></tr></thead>
+      <thead><tr><th>{{ _('Destinataire') }}</th><th>{{ _('Sujet') }}</th><th>{{ _('Date') }}</th><th>{{ _('Statut') }}</th><th></th></tr></thead>
       <tbody>
         {% for message in pagination.items %}
         <tr>
-          <td>{{ message.recipient.full_name if message.recipient else "Utilisateur supprime" }}</td>
+          <td>{{ message.recipient.full_name if message.recipient else _("Utilisateur supprime") }}</td>
           <td>{{ message.subject }}</td>
           <td class="small text-muted">{{ message.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
-          <td>{% if message.is_read %}<span class="badge bg-success">Lu</span>{% else %}<span class="badge bg-secondary">Non lu</span>{% endif %}</td>
-          <td><a href="{{ url_for('messaging.view', message_id=message.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a></td>
+          <td>{% if message.is_read %}<span class="badge bg-success">{{ _('Lu') }}</span>{% else %}<span class="badge bg-secondary">{{ _('Non lu') }}</span>{% endif %}</td>
+          <td><a href="{{ url_for('messaging.view', message_id=message.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Ouvrir') }}</a></td>
         </tr>
         {% else %}
-        <tr><td colspan="5" class="text-muted text-center py-4">Aucun message envoye.</td></tr>
+        <tr><td colspan="5" class="text-muted text-center py-4">{{ _('Aucun message envoye.') }}</td></tr>
         {% endfor %}
       </tbody>
     </table>

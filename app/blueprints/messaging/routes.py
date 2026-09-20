@@ -7,6 +7,7 @@ le nombre de messages envoyes par jour et par utilisateur (voir Plan.
 max_messages_per_day) ; les plans payants (Standard/Pro, actives via
 CinetPay - voir app/blueprints/billing) levent cette limite.
 """
+from flask_babel import gettext as _
 from datetime import datetime, time, timezone
 
 from flask import abort, flash, redirect, render_template, request, url_for
@@ -71,13 +72,12 @@ def compose():
     form.recipient_id.choices = _recipient_choices()
 
     if not form.recipient_id.choices:
-        flash("Aucun autre utilisateur a qui envoyer un message pour le moment.", "warning")
+        flash(_("Aucun autre utilisateur a qui envoyer un message pour le moment."), "warning")
         return redirect(url_for("messaging.inbox"))
 
     if limit_reached:
         flash(
-            f"Votre plan {plan.name} est limite a {plan.max_messages_per_day} message(s) par jour. "
-            "Passez a un plan superieur pour envoyer des messages illimites.",
+            _("Votre plan %(name)s est limite a %(max_messages_per_day)s message(s) par jour. Passez a un plan superieur pour envoyer des messages illimites.", name=_(plan.name), max_messages_per_day=plan.max_messages_per_day),
             "warning",
         )
         return render_template(
@@ -94,7 +94,7 @@ def compose():
         )
         db.session.add(message)
         db.session.commit()
-        flash("Message envoye.", "success")
+        flash(_("Message envoye."), "success")
         return redirect(url_for("messaging.sent"))
 
     remaining = None if plan.max_messages_per_day is None else max(plan.max_messages_per_day - sent_today, 0)
@@ -141,8 +141,8 @@ def reply(message_id):
         )
         db.session.add(reply_message)
         db.session.commit()
-        flash("Reponse envoyee.", "success")
+        flash(_("Reponse envoyee."), "success")
     else:
-        flash("Impossible d'envoyer la reponse (message vide ?).", "danger")
+        flash(_("Impossible d'envoyer la reponse (message vide ?)."), "danger")
 
     return redirect(url_for("messaging.view", message_id=message_id))

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}{{ "Modifier la ferme" if farm else "Nouvelle ferme" }} - Farm Control{% endblock %}
+{% block title %}{{ _("Modifier la ferme") if farm else _("Nouvelle ferme") }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">{{ "Modifier la ferme" if farm else "Nouvelle ferme" }}</h1>
+  <h1 class="fc-page-title">{{ _("Modifier la ferme") if farm else _("Nouvelle ferme") }}</h1>
 </div>
 <div class="row"><div class="col-lg-6">{{ fm.form_card(form, None) }}</div></div>
 {% endblock %}

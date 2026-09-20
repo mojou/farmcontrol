@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Mon profil - Farm Control{% endblock %}
+{% block title %}{{ _('Mon profil - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Mon profil</h1>
+  <h1 class="fc-page-title">{{ _('Mon profil') }}</h1>
 </div>
 <div class="row g-3">
   <div class="col-lg-5">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title mb-3">Informations personnelles</h5>
+        <h5 class="card-title mb-3">{{ _('Informations personnelles') }}</h5>
         <div class="d-flex align-items-center gap-3 mb-3">
           {% if current_user.avatar_path %}
-          <img src="{{ url_for('core.uploaded_file', filename=current_user.avatar_path) }}" alt="Photo de profil"
+          <img src="{{ url_for('core.uploaded_file', filename=current_user.avatar_path) }}" alt="{{ _('Photo de profil') }}"
                class="rounded-circle" style="width: 72px; height: 72px; object-fit: cover;">
           {% else %}
           <i class="bi bi-person-circle" style="font-size: 72px; color: #b6c0b8;"></i>
@@ -20,7 +20,7 @@
           {% if current_user.avatar_path %}
           <form method="post" action="{{ url_for('core.profile_avatar_remove') }}">
             {{ form.hidden_tag() }}
-            <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer la photo</button>
+            <button type="submit" class="btn btn-sm btn-outline-danger">{{ _('Supprimer la photo') }}</button>
           </form>
           {% endif %}
         </div>
@@ -39,10 +39,10 @@
   <div class="col-lg-5">
     <div class="card">
       <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-3">Compte</h6>
-        <p class="mb-1"><strong>Role :</strong> {{ current_user.role_label }}</p>
-        <p class="mb-3"><strong>Exploitation :</strong> {{ current_user.tenant.name if current_user.tenant else "-" }}</p>
-        <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-secondary btn-sm">Changer le mot de passe</a>
+        <h6 class="text-muted small text-uppercase mb-3">{{ _('Compte') }}</h6>
+        <p class="mb-1"><strong>{{ _('Role :') }}</strong> {{ current_user.role_label }}</p>
+        <p class="mb-3"><strong>{{ _('Exploitation :') }}</strong> {{ current_user.tenant.name if current_user.tenant else "-" }}</p>
+        <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-secondary btn-sm">{{ _('Changer le mot de passe') }}</a>
       </div>
     </div>
   </div>

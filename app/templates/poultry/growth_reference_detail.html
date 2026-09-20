@@ -3,7 +3,7 @@
 {% block title %}{{ reference.name }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Poids normal attendu : {{ reference.name }}</h1>
+  <h1 class="fc-page-title">{{ _('Poids normal attendu : %(name)s', name=(reference.name)) }}</h1>
 </div>
 
 <div class="row g-3">
@@ -12,12 +12,12 @@
       <div class="card-body">
         <div class="table-responsive">
         <table class="table align-middle">
-          <thead><tr><th>Jour</th><th>Poids attendu (g)</th></tr></thead>
+          <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids attendu (g)') }}</th></tr></thead>
           <tbody>
             {% for point in reference.points %}
-            <tr><td>J{{ point.day_number }}</td><td>{{ point.expected_weight }}</td></tr>
+            <tr><td>{{ _('J') }}{{ point.day_number }}</td><td>{{ point.expected_weight }}</td></tr>
             {% else %}
-            <tr><td colspan="2" class="text-muted text-center py-4">Aucun point defini.</td></tr>
+            <tr><td colspan="2" class="text-muted text-center py-4">{{ _('Aucun point defini.') }}</td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="col-lg-5">
-    {{ fm.form_card(form, "Ajouter un point") }}
+    {{ fm.form_card(form, _("Ajouter un point")) }}
   </div>
 </div>
 {% endblock %}

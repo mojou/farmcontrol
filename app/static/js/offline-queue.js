@@ -73,7 +73,7 @@
     if (!badge) return;
     const label = badge.querySelector("span");
     if (count > 0) {
-      if (label) label.textContent = count === 1 ? "1 saisie en attente d'envoi" : count + " saisies en attente d'envoi";
+      if (label) label.textContent = count === 1 ? FC_I18N.offlineOne : FC_I18N.offlineMany.replace("%(count)s", count);
       badge.classList.remove("d-none");
     } else {
       badge.classList.add("d-none");
@@ -135,12 +135,12 @@
         }
         // Le serveur a repondu mais a refuse (session expiree, formulaire
         // invalide...) : ne pas faire semblant d'avoir reussi.
-        alert("Le serveur a refuse cette saisie (session expiree ?). Rechargez la page et reessayez.");
+        alert(FC_I18N.serverRefused);
       } catch (e) {
         // Echec reseau (vraiment hors-ligne) : on garde la saisie localement.
         await queueSubmission(url, formData, label || "Saisie");
         await refreshBadge();
-        alert("Pas de connexion : votre saisie est enregistree sur cet appareil et sera envoyee automatiquement des que la connexion reviendra.");
+        alert(FC_I18N.savedOffline);
         form.reset();
         const modalEl = form.closest(".modal");
         if (modalEl && window.bootstrap) {

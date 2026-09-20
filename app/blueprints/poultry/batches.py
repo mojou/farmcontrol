@@ -1,6 +1,7 @@
 from datetime import date
 
 from flask import abort, flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 
 from app.blueprints.poultry import poultry_bp
@@ -82,18 +83,17 @@ def batch_new():
         active_count = Batch.query.filter_by(status=BATCH_STATUS_ACTIVE).count()
         if active_count >= plan.max_active_batches:
             flash(
-                f"Votre plan {plan.name} est limite a {plan.max_active_batches} lot(s) actif(s). "
-                "Cloturez un lot existant ou passez a un plan superieur.",
+                _("Votre plan %(name)s est limite a %(max_active_batches)s lot(s) actif(s). Cloturez un lot existant ou passez a un plan superieur.", name=_(plan.name), max_active_batches=plan.max_active_batches),
                 "warning",
             )
             return redirect(url_for("billing.pricing"))
 
     form = BatchForm()
     form.farm_id.choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
-    form.growth_reference_id.choices = [(0, "Aucun")] + [
+    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
         (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
     ]
-    form.supplier_id.choices = [(0, "Aucun")] + [
+    form.supplier_id.choices = [(0, _("Aucun"))] + [
         (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
     ]
     if request.method == "GET" and current_user.tenant and current_user.tenant.default_breed:
@@ -102,7 +102,7 @@ def batch_new():
     if form.validate_on_submit():
         existing = Batch.query.filter_by(farm_id=form.farm_id.data, code=form.code.data).first()
         if existing:
-            flash("Un lot avec ce code existe deja pour cette ferme.", "danger")
+            flash(_("Un lot avec ce code existe deja pour cette ferme."), "danger")
             return render_template("poultry/batch_form.html", form=form)
 
         batch = Batch(
@@ -123,8 +123,7 @@ def batch_new():
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
         flash(
-            f"Lot {batch.code} cree avec succes. Ajoutez vous-meme les vaccins et "
-            "traitements prevus dans son calendrier des soins.",
+            _("Lot %(code)s cree avec succes. Ajoutez vous-meme les vaccins et traitements prevus dans son calendrier des soins.", code=batch.code),
             "success",
         )
         return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
@@ -140,7 +139,7 @@ def batch_edit(batch_id):
     lots encore actifs : un lot cloture garde son bilan final tel quel."""
     batch = _get_batch_or_403(batch_id)
     if not batch.is_active:
-        flash("Un lot cloture ne peut plus etre modifie.", "warning")
+        flash(_("Un lot cloture ne peut plus etre modifie."), "warning")
         return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
 
     form = BatchForm(obj=batch)
@@ -148,10 +147,10 @@ def batch_edit(batch_id):
     if batch.farm_id not in [f[0] for f in farm_choices]:
         farm_choices = [(batch.farm_id, batch.farm.name)] + farm_choices
     form.farm_id.choices = farm_choices
-    form.growth_reference_id.choices = [(0, "Aucun")] + [
+    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
         (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
     ]
-    form.supplier_id.choices = [(0, "Aucun")] + [
+    form.supplier_id.choices = [(0, _("Aucun"))] + [
         (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
     ]
     if request.method == "GET":
@@ -165,7 +164,7 @@ def batch_edit(batch_id):
             .first()
         )
         if existing:
-            flash("Un lot avec ce code existe deja pour cette ferme.", "danger")
+            flash(_("Un lot avec ce code existe deja pour cette ferme."), "danger")
             return render_template("poultry/batch_form.html", form=form, batch=batch)
 
         batch.farm_id = form.farm_id.data
@@ -179,7 +178,7 @@ def batch_edit(batch_id):
         recompute_batch_finance(batch)
         log_action("update", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
-        flash(f"Lot {batch.code} modifie.", "success")
+        flash(_("Lot %(code)s modifie.", code=batch.code), "success")
         return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
 
     return render_template("poultry/batch_form.html", form=form, batch=batch)
@@ -208,7 +207,7 @@ def batch_close(batch_id):
         recompute_batch_finance(batch)
         log_action("update", "poultry_batches", batch.id, {"status": "closed"})
         db.session.commit()
-        flash(f"Lot {batch.code} cloture.", "success")
+        flash(_("Lot %(code)s cloture.", code=batch.code), "success")
         return redirect(url_for("poultry.batch_report", batch_id=batch.id))
     return render_template("poultry/batch_close.html", batch=batch, form=form)
 
@@ -239,10 +238,10 @@ def batch_finance(batch_id):
         recompute_batch_finance(batch)
         log_action("update", "poultry_batch_finance", finance.id, {"sale_quantity": finance.sale_quantity})
         db.session.commit()
-        flash("Informations sur ce que vous gagnez mises a jour.", "success")
+        flash(_("Informations sur ce que vous gagnez mises a jour."), "success")
         return redirect(url_for("poultry.batch_report", batch_id=batch.id))
 
-    stock_purchases_total, _ = _stock_purchases_during(batch)
+    stock_purchases_total, _unused = _stock_purchases_during(batch)
     return render_template(
         "poultry/batch_finance_form.html", batch=batch, form=form, stock_purchases_total=stock_purchases_total
     )
@@ -282,7 +281,7 @@ def batch_report(batch_id):
     # tracabilite des ventes).
     cash_collected = sum((s.amount_paid or 0) for s in batch.sales)
     cash_outstanding = sum((s.balance_due or 0) for s in batch.sales)
-    stock_purchases_total, _ = _stock_purchases_during(batch)
+    stock_purchases_total, _unused = _stock_purchases_during(batch)
     return render_template(
         "poultry/batch_report.html",
         batch=batch,
@@ -317,7 +316,7 @@ def sanitary_program(batch_id):
         )
         db.session.add(item)
         db.session.commit()
-        flash("Element du programme sanitaire ajoute.", "success")
+        flash(_("Element du programme sanitaire ajoute."), "success")
         return redirect(url_for("poultry.sanitary_program", batch_id=batch.id))
 
     items = (
@@ -372,8 +371,8 @@ def sanitary_program_mark_done(item_id):
         )
         if batch_day is None:
             flash(
-                "Impossible d'enregistrer la quantite : creez d'abord un jour de suivi pour ce lot "
-                "(Saisie quotidienne).",
+                _("Impossible d'enregistrer la quantite : creez d'abord un jour de suivi pour ce lot "
+                "(Saisie quotidienne)."),
                 "danger",
             )
             return redirect(url_for("poultry.sanitary_program", batch_id=item.batch_id))
@@ -402,7 +401,7 @@ def sanitary_program_mark_done(item_id):
     item.done_by = current_user.id
     log_action("update", "poultry_sanitary_program_items", item.id, {"is_done": True})
     db.session.commit()
-    flash("Element marque comme realise.", "success")
+    flash(_("Element marque comme realise."), "success")
     return redirect(url_for("poultry.sanitary_program", batch_id=item.batch_id))
 
 
@@ -421,7 +420,7 @@ def sanitary_program_item_delete(item_id):
     log_action("delete", "poultry_sanitary_program_items", item.id, {"product_name": item.product_name})
     db.session.delete(item)
     db.session.commit()
-    flash("Element retire du calendrier des soins.", "success")
+    flash(_("Element retire du calendrier des soins."), "success")
     return redirect(url_for("poultry.sanitary_program", batch_id=batch_id))
 
 
@@ -439,7 +438,7 @@ def growth_references():
         )
         db.session.add(reference)
         db.session.commit()
-        flash(f"Poids de reference pour {reference.name} cree.", "success")
+        flash(_("Poids de reference pour %(name)s cree.", name=reference.name), "success")
         return redirect(url_for("poultry.growth_references"))
 
     references = GrowthReference.query.order_by(GrowthReference.name).all()
@@ -460,7 +459,7 @@ def growth_reference_detail(reference_id):
         )
         db.session.add(point)
         db.session.commit()
-        flash("Point de courbe ajoute.", "success")
+        flash(_("Point de courbe ajoute."), "success")
         return redirect(url_for("poultry.growth_reference_detail", reference_id=reference.id))
 
     return render_template("poultry/growth_reference_detail.html", reference=reference, form=form)

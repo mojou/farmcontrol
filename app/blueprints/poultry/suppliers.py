@@ -3,6 +3,8 @@ trace de qui fournit quoi, pour comparer prix/qualite/fiabilite dans le
 temps plutot que de perdre cette information a chaque achat.
 """
 from flask import flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 from flask_login import current_user
 
 from app.blueprints.poultry import poultry_bp
@@ -13,10 +15,10 @@ from app.models.poultry import Supplier
 from app.utils.audit import log_action
 
 CATEGORY_LABELS = {
-    "chick": "Poussins",
-    "feed": "Aliment",
-    "medication": "Medicaments",
-    "other": "Autre",
+    "chick": _l("Poussins"),
+    "feed": _l("Aliment"),
+    "medication": _l("Medicaments"),
+    "other": _l("Autre"),
 }
 
 
@@ -44,7 +46,7 @@ def supplier_new():
         db.session.flush()
         log_action("create", "poultry_suppliers", supplier.id, {"name": supplier.name})
         db.session.commit()
-        flash("Fournisseur enregistre.", "success")
+        flash(_("Fournisseur enregistre."), "success")
         return redirect(url_for("poultry.suppliers_list"))
 
     return render_template("poultry/supplier_form.html", form=form)
@@ -63,7 +65,7 @@ def supplier_edit(supplier_id):
         supplier.notes = form.notes.data
         log_action("update", "poultry_suppliers", supplier.id, {"name": supplier.name})
         db.session.commit()
-        flash("Fournisseur modifie.", "success")
+        flash(_("Fournisseur modifie."), "success")
         return redirect(url_for("poultry.suppliers_list"))
 
     return render_template("poultry/supplier_form.html", form=form, supplier=supplier)

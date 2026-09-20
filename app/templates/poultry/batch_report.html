@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Rapport - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}{{ _('Rapport - Lot %(code)s - Farm Control', code=(batch.code)) }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
   <div>
-    <h1 class="fc-page-title">Rapport du lot {{ batch.code }}</h1>
+    <h1 class="fc-page-title">{{ _('Rapport du lot %(code)s', code=(batch.code)) }}</h1>
     <p class="text-muted mb-0">{{ batch.farm.name }} - {{ batch.start_date.strftime('%d/%m/%Y') }} {% if batch.end_date %}au {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}</p>
   </div>
   <div class="d-flex gap-2">
     <a href="{{ url_for('poultry.batch_report_csv', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">
-      <i class="bi bi-file-earmark-spreadsheet"></i> Exporter en Excel/CSV
+      <i class="bi bi-file-earmark-spreadsheet"></i> {{ _('Exporter en Excel/CSV') }}
     </a>
     <a href="{{ url_for('poultry.batch_report_pdf', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-      <i class="bi bi-file-earmark-pdf"></i> Exporter en PDF
+      <i class="bi bi-file-earmark-pdf"></i> {{ _('Exporter en PDF') }}
     </a>
   </div>
 </div>
@@ -20,25 +20,25 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">Aliment par poulet</div>
+      <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_mortality }}</div>
-      <div class="fc-kpi-label">Mortalite totale</div>
+      <div class="fc-kpi-label">{{ _('Mortalite totale') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
-      <div class="fc-kpi-label">Benefice</div>
+      <div class="fc-kpi-label">{{ _('Benefice') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.finance.cost_per_kg|currency if batch.finance and batch.finance.cost_per_kg is not none else "-" }}</div>
-      <div class="fc-kpi-label">Prix de revient par kilo</div>
+      <div class="fc-kpi-label">{{ _('Prix de revient par kilo') }}</div>
     </div></div>
   </div>
 </div>
@@ -46,13 +46,13 @@
 <div class="row g-4 mb-4">
   <div class="col-lg-6">
     <div class="card"><div class="card-body">
-      <h6 class="text-muted small text-uppercase">Mortalite cumulee</h6>
+      <h6 class="text-muted small text-uppercase">{{ _('Mortalite cumulee') }}</h6>
       <canvas id="mortalityChart" height="200"></canvas>
     </div></div>
   </div>
   <div class="col-lg-6">
     <div class="card"><div class="card-body">
-      <h6 class="text-muted small text-uppercase">Consommation d'aliment cumulee</h6>
+      <h6 class="text-muted small text-uppercase">{{ _('Consommation d\'aliment cumulee') }}</h6>
       <canvas id="feedChart" height="200"></canvas>
     </div></div>
   </div>
@@ -60,36 +60,36 @@
 
 {% if growth_data %}
 <div class="card mb-4"><div class="card-body">
-  <h6 class="text-muted small text-uppercase">Courbe de croissance (reel vs reference)</h6>
+  <h6 class="text-muted small text-uppercase">{{ _('Courbe de croissance (reel vs reference)') }}</h6>
   <canvas id="growthChart" height="120"></canvas>
 </div></div>
 {% endif %}
 
 <div class="card">
   <div class="card-body">
-    <h6 class="text-muted small text-uppercase mb-3">Detail financier</h6>
+    <h6 class="text-muted small text-uppercase mb-3">{{ _('Detail financier') }}</h6>
     {% if batch.finance %}
     <div class="table-responsive">
     <table class="table table-sm">
-      <tr><td>Poussins</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
-      <tr><td>Aliment</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
-      <tr><td>Medicaments</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
-      <tr><td>Bois / litiere</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
-      <tr><td>Main d'oeuvre</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
-      <tr class="fw-bold"><td>Total des depenses</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
+      <tr><td>{{ _('Poussins') }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+      <tr><td>{{ _('Aliment') }}</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
+      <tr><td>{{ _('Medicaments') }}</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
+      <tr><td>{{ _('Bois / litiere') }}</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>
+      <tr><td>{{ _('Main d\'oeuvre') }}</td><td class="text-end">{{ batch.finance.labor_cost|currency }}</td></tr>
+      <tr class="fw-bold"><td>{{ _('Total des depenses') }}</td><td class="text-end">{{ batch.finance.total_charges|currency }}</td></tr>
       <tr>
-        <td>Argent des ventes {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">(detail des ventes)</a>{% endif %}</td>
+        <td>{{ _('Argent des ventes') }} {% if current_user.has_role('owner') %}<a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="small">{{ _('(detail des ventes)') }}</a>{% endif %}</td>
         <td class="text-end">{{ batch.finance.sale_revenue|currency }}</td>
       </tr>
-      <tr class="text-success"><td>dont argent recu</td><td class="text-end">{{ cash_collected|currency }}</td></tr>
+      <tr class="text-success"><td>{{ _('dont argent recu') }}</td><td class="text-end">{{ cash_collected|currency }}</td></tr>
       {% if cash_outstanding > 0 %}
-      <tr class="text-danger"><td>dont on vous doit encore (non paye)</td><td class="text-end">{{ cash_outstanding|currency }}</td></tr>
+      <tr class="text-danger"><td>{{ _('dont on vous doit encore (non paye)') }}</td><td class="text-end">{{ cash_outstanding|currency }}</td></tr>
       {% endif %}
-      <tr class="fw-bold"><td>Benefice</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
+      <tr class="fw-bold"><td>{{ _('Benefice') }}</td><td class="text-end">{{ batch.finance.net_result|currency }}</td></tr>
     </table>
     </div>
     {% else %}
-    <p class="text-muted mb-0">Aucune donnee financiere pour ce lot.</p>
+    <p class="text-muted mb-0">{{ _('Aucune donnee financiere pour ce lot.') }}</p>
     {% endif %}
   </div>
 </div>
@@ -97,15 +97,13 @@
 {% if current_user.has_role('owner') %}
 <div class="card mt-3">
   <div class="card-body">
-    <h6 class="text-muted small text-uppercase mb-2">Achats de stock sur la ferme pendant cette periode</h6>
+    <h6 class="text-muted small text-uppercase mb-2">{{ _('Achats de stock sur la ferme pendant cette periode') }}</h6>
     <div class="d-flex justify-content-between align-items-center">
       <span class="h5 mb-0">{{ stock_purchases_total|currency }}</span>
-      <a href="{{ url_for('poultry.expenses_summary') }}" class="btn btn-sm btn-outline-secondary">Voir le detail des depenses</a>
+      <a href="{{ url_for('poultry.expenses_summary') }}" class="btn btn-sm btn-outline-secondary">{{ _('Voir le detail des depenses') }}</a>
     </div>
     <p class="text-muted small mb-0 mt-2">
-      Ce montant est different du "Total des depenses" ci-dessus : il compte tout ce qui a ete achete pour
-      cette ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif
-      en meme temps. Le "Total des depenses" du lot, lui, ne compte que ce que CE lot a reellement consomme.
+      {{ _('Ce montant est different du "Total des depenses" ci-dessus : il compte tout ce qui a ete achete pour cette ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif en meme temps. Le "Total des depenses" du lot, lui, ne compte que ce que CE lot a reellement consomme.') }}
     </p>
   </div>
 </div>
@@ -125,16 +123,16 @@
     new Chart(growthCanvas, {
       type: "line",
       data: {
-        labels: growthData.map(function (p) { return "J" + p.day; }),
+        labels: growthData.map(function (p) { return {{ _("J")|tojson }} + p.day; }),
         datasets: [
           {
-            label: "Poids reel (g)",
+            label: {{ _("Poids reel (g)")|tojson }},
             data: growthData.map(function (p) { return p.actual_weight; }),
             borderColor: "#2f5233",
             tension: 0.25,
           },
           {
-            label: "Poids de reference (g)",
+            label: {{ _("Poids de reference (g)")|tojson }},
             data: growthData.map(function (p) { return p.expected_weight; }),
             borderColor: "#c98a2c",
             borderDash: [6, 4],

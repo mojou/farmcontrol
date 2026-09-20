@@ -47,6 +47,18 @@
     {% block guest_content %}{% endblock %}
   {% endif %}
 
+  <script>
+    window.FC_I18N = {
+      dayPrefix: {{ _('J')|tojson }},
+      mortalityCumulative: {{ _('Mortalite cumulee')|tojson }},
+      feedCumulativeKg: {{ _('Aliment consomme cumule (kg)')|tojson }},
+      reminderContext: {{ _('Lot %(batch)s (%(farm)s) - Jour %(day)s', batch='%(batch)s', farm='%(farm)s', day='%(day)s')|tojson }},
+      offlineOne: {{ _("1 saisie en attente d'envoi")|tojson }},
+      offlineMany: {{ _("%(count)s saisies en attente d'envoi", count='%(count)s')|tojson }},
+      serverRefused: {{ _('Le serveur a refuse cette saisie (session expiree ?). Rechargez la page et reessayez.')|tojson }},
+      savedOffline: {{ _('Pas de connexion : votre saisie est enregistree sur cet appareil et sera envoyee automatiquement des que la connexion reviendra.')|tojson }},
+    };
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>

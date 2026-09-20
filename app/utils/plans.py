@@ -4,6 +4,8 @@ Tarifs volontairement accessibles pour le marche camerounais / CEMAC (FCFA).
 """
 from datetime import timedelta
 
+from flask_babel import lazy_gettext as _l
+
 from app.extensions import db
 from app.models import utcnow
 from app.models.billing import SUBSCRIPTION_STATUS_TRIALING, Plan, Subscription
@@ -51,6 +53,17 @@ DEFAULT_PLANS = [
         "sort_order": 3,
     },
 ]
+
+
+# Les plans sont stockes en base (texte francais) : ces marqueurs servent
+# uniquement a l'extraction des traductions (les gabarits affichent
+# _(plan.name) / _(plan.description)).
+_PLAN_TEXT_MARKERS = (
+    _l("Decouverte"),
+    _l("Pour demarrer : 1 ferme, 1 lot actif, jusqu'a 3 utilisateurs, 2 messages/jour."),
+    _l("Jusqu'a 3 fermes, lots illimites, messagerie illimitee, alertes email, export PDF."),
+    _l("Fermes, lots, utilisateurs et messagerie illimites, support prioritaire."),
+)
 
 
 def ensure_plans_seeded():

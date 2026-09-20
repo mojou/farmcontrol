@@ -1,3 +1,4 @@
+from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from wtforms import (
@@ -13,291 +14,291 @@ from wtforms.validators import DataRequired, NumberRange, Optional
 
 
 class FarmForm(FlaskForm):
-    name = StringField("Nom de la ferme", validators=[DataRequired()])
-    location = StringField("Localisation", validators=[Optional()])
-    submit = SubmitField("Enregistrer")
+    name = StringField(_l("Nom de la ferme"), validators=[DataRequired()])
+    location = StringField(_l("Localisation"), validators=[Optional()])
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class BatchForm(FlaskForm):
-    farm_id = SelectField("Ferme", coerce=int, validators=[DataRequired()])
-    code = StringField("Code / nom du lot", validators=[DataRequired()])
-    breed = StringField("Souche", validators=[Optional()])
-    initial_count = IntegerField("Nombre de poulets au depart", validators=[DataRequired(), NumberRange(min=1)])
-    chick_unit_price = DecimalField("Prix unitaire poussin", validators=[DataRequired(), NumberRange(min=0)], places=2)
-    supplier_id = SelectField("Fournisseur des poussins (facultatif)", coerce=int, validators=[Optional()])
-    start_date = DateField("Date de mise en place", validators=[DataRequired()])
-    growth_reference_id = SelectField("Poids normal attendu (souche)", coerce=int, validators=[Optional()])
-    submit = SubmitField("Enregistrer")
+    farm_id = SelectField(_l("Ferme"), coerce=int, validators=[DataRequired()])
+    code = StringField(_l("Code / nom du lot"), validators=[DataRequired()])
+    breed = StringField(_l("Souche"), validators=[Optional()])
+    initial_count = IntegerField(_l("Nombre de poulets au depart"), validators=[DataRequired(), NumberRange(min=1)])
+    chick_unit_price = DecimalField(_l("Prix unitaire poussin"), validators=[DataRequired(), NumberRange(min=0)], places=2)
+    supplier_id = SelectField(_l("Fournisseur des poussins (facultatif)"), coerce=int, validators=[Optional()])
+    start_date = DateField(_l("Date de mise en place"), validators=[DataRequired()])
+    growth_reference_id = SelectField(_l("Poids normal attendu (souche)"), coerce=int, validators=[Optional()])
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class SupplierForm(FlaskForm):
     name = StringField(
-        "Nom du fournisseur",
+        _l("Nom du fournisseur"),
         validators=[DataRequired()],
-        render_kw={"placeholder": "Ex : Couvoir Nord, Ferme Avicole du Littoral..."},
+        render_kw={"placeholder": _l("Ex : Couvoir Nord, Ferme Avicole du Littoral...")},
     )
     category = SelectField(
-        "Fournit principalement",
+        _l("Fournit principalement"),
         choices=[
-            ("chick", "Poussins"),
-            ("feed", "Aliment"),
-            ("medication", "Medicaments"),
-            ("other", "Autre"),
+            ("chick", _l("Poussins")),
+            ("feed", _l("Aliment")),
+            ("medication", _l("Medicaments")),
+            ("other", _l("Autre")),
         ],
     )
-    phone = StringField("Telephone (facultatif)", validators=[Optional()], render_kw={"placeholder": "Ex : 6XX XXX XXX"})
-    notes = TextAreaField("Notes (facultatif)", validators=[Optional()], render_kw={"placeholder": "Fiabilite, delais, qualite..."})
-    submit = SubmitField("Enregistrer")
+    phone = StringField(_l("Telephone (facultatif)"), validators=[Optional()], render_kw={"placeholder": _l("Ex : 6XX XXX XXX")})
+    notes = TextAreaField(_l("Notes (facultatif)"), validators=[Optional()], render_kw={"placeholder": _l("Fiabilite, delais, qualite...")})
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class SaleForm(FlaskForm):
-    sale_date = DateField("Date de la vente", validators=[DataRequired()])
+    sale_date = DateField(_l("Date de la vente"), validators=[DataRequired()])
     buyer_name = StringField(
-        "Nom de l'acheteur", validators=[DataRequired()], render_kw={"placeholder": "Ex : Mme Njoya"}
+        _l("Nom de l'acheteur"), validators=[DataRequired()], render_kw={"placeholder": _l("Ex : Mme Njoya")}
     )
-    buyer_phone = StringField("Telephone de l'acheteur (facultatif)", validators=[Optional()])
+    buyer_phone = StringField(_l("Telephone de l'acheteur (facultatif)"), validators=[Optional()])
     quantity = DecimalField(
-        "Quantite vendue", validators=[DataRequired(), NumberRange(min=0.01)], places=2,
-        render_kw={"placeholder": "Ex : 50"},
+        _l("Quantite vendue"), validators=[DataRequired(), NumberRange(min=0.01)], places=2,
+        render_kw={"placeholder": _l("Ex : 50")},
     )
-    unit = SelectField("Unite", choices=[("unit", "Poulets"), ("kg", "Kilogrammes")], default="unit")
+    unit = SelectField(_l("Unite"), choices=[("unit", _l("Poulets")), ("kg", _l("Kilogrammes"))], default="unit")
     unit_price = DecimalField(
-        "Prix unitaire (FCFA)", validators=[DataRequired(), NumberRange(min=0)], places=2,
-        render_kw={"placeholder": "Ex : 3500"},
+        _l("Prix unitaire (FCFA)"), validators=[DataRequired(), NumberRange(min=0)], places=2,
+        render_kw={"placeholder": _l("Ex : 3500")},
     )
     amount_paid = DecimalField(
-        "Montant deja recu (FCFA)",
+        _l("Montant deja recu (FCFA)"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
         default=0,
-        render_kw={"placeholder": "Ex : 0 si tout est a credit, ou le montant total si tout est paye"},
+        render_kw={"placeholder": _l("Ex : 0 si tout est a credit, ou le montant total si tout est paye")},
     )
-    notes = TextAreaField("Notes (facultatif)", validators=[Optional()])
-    submit = SubmitField("Enregistrer la vente")
+    notes = TextAreaField(_l("Notes (facultatif)"), validators=[Optional()])
+    submit = SubmitField(_l("Enregistrer la vente"))
 
 
 class SalePaymentForm(FlaskForm):
     amount = DecimalField(
-        "Montant recu", validators=[DataRequired(), NumberRange(min=0.01)], places=2,
-        render_kw={"placeholder": "Ex : 20000"},
+        _l("Montant recu"), validators=[DataRequired(), NumberRange(min=0.01)], places=2,
+        render_kw={"placeholder": _l("Ex : 20000")},
     )
-    submit = SubmitField("Enregistrer le paiement")
+    submit = SubmitField(_l("Enregistrer le paiement"))
 
 
 class BatchCloseForm(FlaskForm):
-    end_date = DateField("Date de cloture", validators=[DataRequired()])
-    submit = SubmitField("Cloturer le lot")
+    end_date = DateField(_l("Date de cloture"), validators=[DataRequired()])
+    submit = SubmitField(_l("Cloturer le lot"))
 
 
 class FeedRecordForm(FlaskForm):
     feed_type = StringField(
-        "Type d'aliment donne",
+        _l("Type d'aliment donne"),
         validators=[DataRequired()],
-        render_kw={"placeholder": "Ex : Demarrage, Croissance, Finition"},
+        render_kw={"placeholder": _l("Ex : Demarrage, Croissance, Finition")},
     )
     quantity_kg = DecimalField(
-        "Quantite donnee (kg)",
+        _l("Quantite donnee (kg)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 25"},
+        render_kw={"placeholder": _l("Ex : 25")},
     )
     stock_item_id = SelectField(
-        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        _l("Prelever depuis un stock enregistre (le prix est calcule automatiquement)"),
         coerce=int, validators=[Optional()],
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class WaterRecordForm(FlaskForm):
     quantity_liters = DecimalField(
-        "Quantite d'eau donnee (litres)",
+        _l("Quantite d'eau donnee (litres)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 80"},
+        render_kw={"placeholder": _l("Ex : 80")},
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class MortalityRecordForm(FlaskForm):
     quantity_dead = IntegerField(
-        "Nombre de poulets morts aujourd'hui",
+        _l("Nombre de poulets morts aujourd'hui"),
         validators=[DataRequired(), NumberRange(min=0)],
-        render_kw={"placeholder": "Ex : 2 (mettre 0 si aucun mort)"},
+        render_kw={"placeholder": _l("Ex : 2 (mettre 0 si aucun mort)")},
     )
     cause = StringField(
-        "Cause probable (si connue)",
+        _l("Cause probable (si connue)"),
         validators=[Optional()],
-        render_kw={"placeholder": "Ex : Chaleur, ecrasement, maladie..."},
+        render_kw={"placeholder": _l("Ex : Chaleur, ecrasement, maladie...")},
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class WoodRecordForm(FlaskForm):
     quantity = DecimalField(
-        "Quantite de bois / litiere ajoutee",
+        _l("Quantite de bois / litiere ajoutee"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 10"},
+        render_kw={"placeholder": _l("Ex : 10")},
     )
     stock_item_id = SelectField(
-        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        _l("Prelever depuis un stock enregistre (le prix est calcule automatiquement)"),
         coerce=int, validators=[Optional()],
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class MedicationRecordForm(FlaskForm):
     medication_name = StringField(
-        "Nom du medicament / vaccin",
+        _l("Nom du medicament / vaccin"),
         validators=[DataRequired()],
-        render_kw={"placeholder": "Ex : Newcastle, Vitamines, Anticoccidien..."},
+        render_kw={"placeholder": _l("Ex : Newcastle, Vitamines, Anticoccidien...")},
     )
     quantity = DecimalField(
-        "Quantite administree (en ml)",
+        _l("Quantite administree (en ml)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 50 (pour 50 ml, verse dans l'eau de boisson)"},
+        render_kw={"placeholder": _l("Ex : 50 (pour 50 ml, verse dans l'eau de boisson)")},
     )
     notes = TextAreaField(
-        "Comment l'avez-vous administre ? (facultatif)",
+        _l("Comment l'avez-vous administre ? (facultatif)"),
         validators=[Optional()],
-        render_kw={"placeholder": "Ex : dans l'eau de boisson, en injection..."},
+        render_kw={"placeholder": _l("Ex : dans l'eau de boisson, en injection...")},
     )
     stock_item_id = SelectField(
-        "Prelever depuis un stock enregistre (le prix est calcule automatiquement)",
+        _l("Prelever depuis un stock enregistre (le prix est calcule automatiquement)"),
         coerce=int, validators=[Optional()],
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class ObservationForm(FlaskForm):
     description = TextAreaField(
-        "Que remarquez-vous ?",
+        _l("Que remarquez-vous ?"),
         validators=[DataRequired()],
-        render_kw={"placeholder": "Ex : 3 poussins faibles dans le coin nord de la ferme"},
+        render_kw={"placeholder": _l("Ex : 3 poussins faibles dans le coin nord de la ferme")},
     )
     severity = SelectField(
-        "Est-ce urgent ?",
-        choices=[("normal", "Non, simple remarque"), ("urgent", "Oui, prevenir immediatement le proprietaire")],
+        _l("Est-ce urgent ?"),
+        choices=[("normal", _l("Non, simple remarque")), ("urgent", _l("Oui, prevenir immediatement le proprietaire"))],
         default="normal",
     )
     photo = FileField(
-        "Ajouter une photo (facultatif)",
-        validators=[Optional(), FileAllowed(["png", "jpg", "jpeg", "webp"], "Format d'image non autorise.")],
+        _l("Ajouter une photo (facultatif)"),
+        validators=[Optional(), FileAllowed(["png", "jpg", "jpeg", "webp"], _l("Format d'image non autorise."))],
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class WeightRecordForm(FlaskForm):
     average_weight = DecimalField(
-        "Poids moyen d'un poulet (grammes)",
+        _l("Poids moyen d'un poulet (grammes)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=1,
-        render_kw={"placeholder": "Ex : 450"},
+        render_kw={"placeholder": _l("Ex : 450")},
     )
     sample_size = IntegerField(
-        "Nombre de poulets peses",
+        _l("Nombre de poulets peses"),
         validators=[DataRequired(), NumberRange(min=1)],
-        render_kw={"placeholder": "Ex : 10"},
+        render_kw={"placeholder": _l("Ex : 10")},
     )
-    observation = TextAreaField("Remarque (facultatif)", validators=[Optional()])
-    submit = SubmitField("Enregistrer")
+    observation = TextAreaField(_l("Remarque (facultatif)"), validators=[Optional()])
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class BatchFinanceForm(FlaskForm):
-    labor_cost = DecimalField("Cout main d'oeuvre", validators=[Optional(), NumberRange(min=0)], places=2, default=0)
-    sale_quantity = IntegerField("Quantite vendue", validators=[Optional(), NumberRange(min=0)])
-    sale_unit = SelectField("Unite de vente", choices=[("kg", "Kilogramme"), ("unit", "Unite (par sujet)")], default="kg")
-    sale_unit_price = DecimalField("Prix de vente unitaire", validators=[Optional(), NumberRange(min=0)], places=2)
-    submit = SubmitField("Enregistrer")
+    labor_cost = DecimalField(_l("Cout main d'oeuvre"), validators=[Optional(), NumberRange(min=0)], places=2, default=0)
+    sale_quantity = IntegerField(_l("Quantite vendue"), validators=[Optional(), NumberRange(min=0)])
+    sale_unit = SelectField(_l("Unite de vente"), choices=[("kg", _l("Kilogramme")), ("unit", _l("Unite (par sujet)"))], default="kg")
+    sale_unit_price = DecimalField(_l("Prix de vente unitaire"), validators=[Optional(), NumberRange(min=0)], places=2)
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class StockItemForm(FlaskForm):
-    farm_id = SelectField("Ferme", coerce=int, validators=[DataRequired()])
+    farm_id = SelectField(_l("Ferme"), coerce=int, validators=[DataRequired()])
     category = SelectField(
-        "Categorie",
-        choices=[("feed", "Aliment"), ("wood", "Bois / litiere"), ("medication", "Medicament")],
+        _l("Categorie"),
+        choices=[("feed", _l("Aliment")), ("wood", _l("Bois / litiere")), ("medication", _l("Medicament"))],
     )
     name = StringField(
-        "Nom de l'article",
+        _l("Nom de l'article"),
         validators=[DataRequired()],
-        render_kw={"placeholder": "Ex : Aliment demarrage, Copeaux de bois, Vitamines..."},
+        render_kw={"placeholder": _l("Ex : Aliment demarrage, Copeaux de bois, Vitamines...")},
     )
     unit = StringField(
-        "Unite de mesure",
+        _l("Unite de mesure"),
         validators=[DataRequired()],
         default="sac",
-        render_kw={"placeholder": "Ex : sac, morceau, L (litre), kg..."},
+        render_kw={"placeholder": _l("Ex : sac, morceau, L (litre), kg...")},
         id="stock-unit",
     )
     quantity_on_hand = DecimalField(
-        "Quantite actuellement en stock",
+        _l("Quantite actuellement en stock"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 10"},
+        render_kw={"placeholder": _l("Ex : 10")},
     )
     min_threshold = DecimalField(
-        "Seuil d'alerte (stock faible)",
+        _l("Seuil d'alerte (stock faible)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 2"},
+        render_kw={"placeholder": _l("Ex : 2")},
     )
     unit_price = DecimalField(
-        "Prix par unite (FCFA)",
+        _l("Prix par unite (FCFA)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 15000"},
+        render_kw={"placeholder": _l("Ex : 15000")},
     )
     kg_per_unit = DecimalField(
-        "Poids en kg d'une unite (uniquement pour l'aliment)",
+        _l("Poids en kg d'une unite (uniquement pour l'aliment)"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 50 (un sac de 50 kg)"},
+        render_kw={"placeholder": _l("Ex : 50 (un sac de 50 kg)")},
         id="stock-kg-per-unit",
     )
     ml_per_unit = DecimalField(
-        "Volume en ml d'une unite (uniquement pour les medicaments liquides)",
+        _l("Volume en ml d'une unite (uniquement pour les medicaments liquides)"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
-        render_kw={"placeholder": "Ex : 1000 (1 litre) ou 3000 (bouteille de 3 litres)"},
+        render_kw={"placeholder": _l("Ex : 1000 (1 litre) ou 3000 (bouteille de 3 litres)")},
         id="stock-ml-per-unit",
     )
-    submit = SubmitField("Enregistrer")
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class GrowthReferenceForm(FlaskForm):
-    name = StringField("Nom de la souche", validators=[DataRequired()])
-    submit = SubmitField("Enregistrer")
+    name = StringField(_l("Nom de la souche"), validators=[DataRequired()])
+    submit = SubmitField(_l("Enregistrer"))
 
 
 class GrowthReferencePointForm(FlaskForm):
-    day_number = IntegerField("Jour", validators=[DataRequired(), NumberRange(min=0)])
-    expected_weight = DecimalField("Poids attendu (grammes)", validators=[DataRequired(), NumberRange(min=0)], places=1)
-    submit = SubmitField("Ajouter le point")
+    day_number = IntegerField(_l("Jour"), validators=[DataRequired(), NumberRange(min=0)])
+    expected_weight = DecimalField(_l("Poids attendu (grammes)"), validators=[DataRequired(), NumberRange(min=0)], places=1)
+    submit = SubmitField(_l("Ajouter le point"))
 
 
 class SanitaryProgramItemForm(FlaskForm):
-    day_number = IntegerField("Jour", validators=[DataRequired(), NumberRange(min=0)])
+    day_number = IntegerField(_l("Jour"), validators=[DataRequired(), NumberRange(min=0)])
     program_type = SelectField(
-        "Type",
+        _l("Type"),
         choices=[
-            ("vaccination", "Vaccination"),
-            ("traitement", "Traitement"),
-            ("alimentation", "Alimentation"),
-            ("complement", "Complement (probiotique, anti-stress, litiere...)"),
+            ("vaccination", _l("Vaccination")),
+            ("traitement", _l("Traitement")),
+            ("alimentation", _l("Alimentation")),
+            ("complement", _l("Complement (probiotique, anti-stress, litiere...)")),
         ],
         default="vaccination",
     )
-    product_name = StringField("Produit", validators=[DataRequired()])
-    notes = TextAreaField("Notes", validators=[Optional()])
-    submit = SubmitField("Ajouter")
+    product_name = StringField(_l("Produit"), validators=[DataRequired()])
+    notes = TextAreaField(_l("Notes"), validators=[Optional()])
+    submit = SubmitField(_l("Ajouter"))
 
 
 class DailyReportSubmitForm(FlaskForm):
-    notes = TextAreaField("Notes", validators=[Optional()])
-    submit = SubmitField("Soumettre le rapport")
+    notes = TextAreaField(_l("Notes"), validators=[Optional()])
+    submit = SubmitField(_l("Soumettre le rapport"))
 
 
 class DailyReportReviewForm(FlaskForm):
-    notes = TextAreaField("Commentaire du responsable", validators=[Optional()])
-    submit = SubmitField("Valider le rapport")
+    notes = TextAreaField(_l("Commentaire du responsable"), validators=[Optional()])
+    submit = SubmitField(_l("Valider le rapport"))

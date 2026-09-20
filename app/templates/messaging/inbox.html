@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% import "partials/_pagination.html" as pg %}
-{% block title %}Messages - Farm Control{% endblock %}
+{% block title %}{{ _('Messages - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Messages recus</h1>
+  <h1 class="fc-page-title">{{ _('Messages recus') }}</h1>
   <div class="d-flex gap-2">
-    <a href="{{ url_for('messaging.sent') }}" class="btn btn-outline-secondary btn-sm">Messages envoyes</a>
-    <a href="{{ url_for('messaging.compose') }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Nouveau message</a>
+    <a href="{{ url_for('messaging.sent') }}" class="btn btn-outline-secondary btn-sm">{{ _('Messages envoyes') }}</a>
+    <a href="{{ url_for('messaging.compose') }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> {{ _('Nouveau message') }}</a>
   </div>
 </div>
 
@@ -14,20 +14,20 @@
   <div class="card-body">
     <div class="table-responsive">
     <table class="table align-middle mb-0">
-      <thead><tr><th>De</th><th>Sujet</th><th>Date</th><th></th></tr></thead>
+      <thead><tr><th>{{ _('De') }}</th><th>{{ _('Sujet') }}</th><th>{{ _('Date') }}</th><th></th></tr></thead>
       <tbody>
         {% for message in pagination.items %}
         <tr class="{{ '' if message.is_read else 'table-warning' }}">
-          <td>{{ message.sender.full_name if message.sender else "Utilisateur supprime" }}</td>
+          <td>{{ message.sender.full_name if message.sender else _("Utilisateur supprime") }}</td>
           <td>
-            {% if not message.is_read %}<span class="badge bg-danger">Nouveau</span>{% endif %}
+            {% if not message.is_read %}<span class="badge bg-danger">{{ _('Nouveau') }}</span>{% endif %}
             {{ message.subject }}
           </td>
           <td class="small text-muted">{{ message.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
-          <td><a href="{{ url_for('messaging.view', message_id=message.id) }}" class="btn btn-sm btn-outline-secondary">Ouvrir</a></td>
+          <td><a href="{{ url_for('messaging.view', message_id=message.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Ouvrir') }}</a></td>
         </tr>
         {% else %}
-        <tr><td colspan="4" class="text-muted text-center py-4">Aucun message recu.</td></tr>
+        <tr><td colspan="4" class="text-muted text-center py-4">{{ _('Aucun message recu.') }}</td></tr>
         {% endfor %}
       </tbody>
     </table>

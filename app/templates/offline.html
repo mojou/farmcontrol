@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hors ligne - Farm Control</title>
+  <title>{{ _('Hors ligne - Farm Control') }}</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f7f5f0; color: #22291f; margin: 0; }
     .wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
@@ -18,9 +18,9 @@
   <div class="wrap">
     <div class="card">
       <div class="icon">📡</div>
-      <h1>Pas de connexion internet</h1>
-      <p>Cette page necessite une connexion pour se charger la premiere fois. Si vous etiez en train de remplir un formulaire de saisie quotidienne, vos donnees ont ete gardees localement et s'enverront automatiquement des que la connexion reviendra.</p>
-      <button onclick="window.location.reload()">Reessayer</button>
+      <h1>{{ _('Pas de connexion internet') }}</h1>
+      <p>{{ _('Cette page necessite une connexion pour se charger la premiere fois. Si vous etiez en train de remplir un formulaire de saisie quotidienne, vos donnees ont ete gardees localement et s\'enverront automatiquement des que la connexion reviendra.') }}</p>
+      <button onclick="window.location.reload()">{{ _('Reessayer') }}</button>
     </div>
   </div>
 </body>

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Calendrier des soins - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}{{ _('Calendrier des soins - Lot %(code)s - Farm Control', code=(batch.code)) }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
   <div>
-    <h1 class="fc-page-title">Calendrier des soins - Lot {{ batch.code }}</h1>
-    <p class="text-muted mb-0">{{ batch.farm.name }} - Jour {{ today_day_number }} depuis la mise en place</p>
+    <h1 class="fc-page-title">{{ _('Calendrier des soins - Lot %(code)s', code=(batch.code)) }}</h1>
+    <p class="text-muted mb-0">{{ _('%(name)s - Jour %(today_day_number)s depuis la mise en place', name=(batch.farm.name), today_day_number=(today_day_number)) }}</p>
   </div>
 </div>
 
@@ -13,19 +13,19 @@
   <div class="col-6 col-lg-4">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ water_today }} L</div>
-      <div class="fc-kpi-label">Eau de boisson recommandee aujourd'hui</div>
+      <div class="fc-kpi-label">{{ _('Eau de boisson recommandee aujourd\'hui') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-4">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ feed_today }} kg</div>
-      <div class="fc-kpi-label">Aliment recommande aujourd'hui</div>
+      <div class="fc-kpi-label">{{ _('Aliment recommande aujourd\'hui') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-4">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ pending_items|length }}</div>
-      <div class="fc-kpi-label">Tache(s) en attente</div>
+      <div class="fc-kpi-label">{{ _('Tache(s) en attente') }}</div>
     </div></div>
   </div>
 </div>
@@ -34,17 +34,17 @@
 <div class="card mb-4 border-danger">
   <div class="card-body">
     <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--fc-danger);">
-      <i class="bi bi-exclamation-triangle-fill"></i> A administrer maintenant
+      <i class="bi bi-exclamation-triangle-fill"></i> {{ _('A administrer maintenant') }}
     </h6>
     {% for item in pending_items %}
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 py-2 {{ 'border-top' if not loop.first }}">
       <div>
-        <span class="badge bg-secondary me-2">Jour {{ item.day_number }}</span>
+        <span class="badge bg-secondary me-2">{{ _('Jour %(day_number)s', day_number=(item.day_number)) }}</span>
         <strong>{{ item.product_name }}</strong>
         <p class="text-muted small mb-0 mt-1">{{ item.notes }}</p>
       </div>
       <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#doneModalPending{{ item.id }}">
-        <i class="bi bi-check-lg"></i> Administre
+        <i class="bi bi-check-lg"></i> {{ _('Administre') }}
       </button>
     </div>
     {% with modal_id="doneModalPending" ~ item.id %}
@@ -54,60 +54,59 @@
   </div>
 </div>
 {% else %}
-<div class="alert alert-success"><i class="bi bi-check-circle"></i> Aucune tache en attente pour aujourd'hui.</div>
+<div class="alert alert-success"><i class="bi bi-check-circle"></i> {{ _('Aucune tache en attente pour aujourd\'hui.') }}</div>
 {% endif %}
 
 <div class="row g-3">
   <div class="col-lg-7">
     <div class="card">
       <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-3">Programme complet du lot</h6>
+        <h6 class="text-muted small text-uppercase mb-3">{{ _('Programme complet du lot') }}</h6>
         <div class="table-responsive">
         <table class="table table-sm align-middle">
-          <thead><tr><th>Jour</th><th>Type</th><th>Produit / action</th><th>Statut</th><th></th></tr></thead>
+          <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Type') }}</th><th>{{ _('Produit / action') }}</th><th>{{ _('Statut') }}</th><th></th></tr></thead>
           <tbody>
             {% for item in items %}
             <tr class="{{ 'table-warning' if item.day_number == today_day_number and not item.is_done }}">
-              <td>J{{ item.day_number }}</td>
-              <td><span class="badge bg-secondary">{{ item.program_type }}</span></td>
+              <td>{{ _('J') }}{{ item.day_number }}</td>
+              <td><span class="badge bg-secondary">{{ {'vaccination': _('Vaccination'), 'traitement': _('Traitement'), 'alimentation': _('Alimentation'), 'complement': _('Complement')}.get(item.program_type, item.program_type) }}</span></td>
               <td>
                 {{ item.product_name }}
                 {% if item.notes %}<div class="text-muted small">{{ item.notes }}</div>{% endif %}
               </td>
-              <td>{% if item.is_done %}<span class="badge bg-success">Realise</span>{% else %}<span class="badge bg-secondary">Planifie</span>{% endif %}</td>
+              <td>{% if item.is_done %}<span class="badge bg-success">{{ _('Realise') }}</span>{% else %}<span class="badge bg-secondary">{{ _('Planifie') }}</span>{% endif %}</td>
               <td class="d-flex gap-1">
                 {% if not item.is_done %}
                 <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#doneModalTable{{ item.id }}">
-                  Marquer realise
+                  {{ _('Marquer realise') }}
                 </button>
                 {% with modal_id="doneModalTable" ~ item.id %}
                   {% include "poultry/_sanitary_done_modal.html" %}
                 {% endwith %}
                 {% endif %}
                 {% if current_user.has_role('owner', 'manager') %}
-                <form method="post" action="{{ url_for('poultry.sanitary_program_item_delete', item_id=item.id) }}" onsubmit="return confirm('Retirer cet element du calendrier ?');">
+                <form method="post" action="{{ url_for('poultry.sanitary_program_item_delete', item_id=item.id) }}" onsubmit='return confirm({{ _("Retirer cet element du calendrier ?")|tojson }});'>
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                  <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                  <button class="btn btn-sm btn-outline-danger" title="{{ _('Supprimer') }}"><i class="bi bi-trash"></i></button>
                 </form>
                 {% endif %}
               </td>
             </tr>
             {% else %}
-            <tr><td colspan="5" class="text-muted text-center py-4">Aucun element planifie.</td></tr>
+            <tr><td colspan="5" class="text-muted text-center py-4">{{ _('Aucun element planifie.') }}</td></tr>
             {% endfor %}
           </tbody>
         </table>
         </div>
         <p class="text-muted small mb-0">
-          Ajoutez ici chaque vaccin, traitement ou vitamine prevu pour ce lot, au jour par jour, selon les
-          recommandations de votre veterinaire ou de votre couvoir.
+          {{ _('Ajoutez ici chaque vaccin, traitement ou vitamine prevu pour ce lot, au jour par jour, selon les recommandations de votre veterinaire ou de votre couvoir.') }}
         </p>
       </div>
     </div>
   </div>
   {% if current_user.has_role('owner', 'manager') %}
   <div class="col-lg-5">
-    {{ fm.form_card(form, "Ajouter un element") }}
+    {{ fm.form_card(form, _("Ajouter un element")) }}
   </div>
   {% endif %}
 </div>

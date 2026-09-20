@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>Rapport - Lot {{ batch.code }}</title>
+<title>{{ _('Rapport - Lot %(code)s', code=(batch.code)) }}</title>
 <style>
   @page { size: A4; margin: 2cm 1.5cm; }
   body { font-family: "Helvetica Neue", Arial, sans-serif; color: #22291f; font-size: 11pt; }
@@ -22,89 +22,86 @@
 </style>
 </head>
 <body>
-  <h1>Rapport de lot - {{ batch.code }}</h1>
+  <h1>{{ _('Rapport de lot - %(code)s', code=(batch.code)) }}</h1>
   <p class="subtitle">
-    Ferme : {{ batch.farm.name }} | Souche : {{ batch.breed or "-" }} |
-    Periode : {{ batch.start_date.strftime('%d/%m/%Y') }}
-    {% if batch.end_date %} au {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}
+    {{ _('Ferme : %(name)s | Souche : %(breed)s | Periode : %(start_date)s', name=(batch.farm.name), breed=(batch.breed or "-"), start_date=(batch.start_date.strftime('%d/%m/%Y'))) }}
+    {% if batch.end_date %} {{ _('au') }} {{ batch.end_date.strftime('%d/%m/%Y') }}{% endif %}
   </p>
 
   <div class="kpi-row">
     <div class="kpi">
       <div class="kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="kpi-label">Aliment par poulet</div>
+      <div class="kpi-label">{{ _('Aliment par poulet') }}</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.total_mortality }}</div>
-      <div class="kpi-label">Mortalite totale</div>
+      <div class="kpi-label">{{ _('Mortalite totale') }}</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.current_count }} / {{ batch.initial_count }}</div>
-      <div class="kpi-label">Nombre de poulets final / initial</div>
+      <div class="kpi-label">{{ _('Nombre de poulets final / initial') }}</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
-      <div class="kpi-label">Benefice</div>
+      <div class="kpi-label">{{ _('Benefice') }}</div>
     </div>
   </div>
 
-  <div class="section-title">Ce que vous gagnez</div>
+  <div class="section-title">{{ _('Ce que vous gagnez') }}</div>
   {% if batch.finance %}
   <table>
-    <tr><td>Poussins</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
-    <tr><td>Aliment</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
-    <tr><td>Medicaments</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
-    <tr><td>Bois / litiere</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>
-    <tr><td>Main d'oeuvre</td><td>{{ batch.finance.labor_cost|currency }}</td></tr>
-    <tr class="total-row"><td>Total des depenses</td><td>{{ batch.finance.total_charges|currency }}</td></tr>
-    <tr><td>Argent des ventes</td><td>{{ batch.finance.sale_revenue|currency }}</td></tr>
-    <tr class="total-row"><td>Benefice</td><td>{{ batch.finance.net_result|currency }}</td></tr>
-    <tr class="total-row"><td>Prix de revient par kilo</td><td>{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
+    <tr><td>{{ _('Poussins') }}</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
+    <tr><td>{{ _('Aliment') }}</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
+    <tr><td>{{ _('Medicaments') }}</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
+    <tr><td>{{ _('Bois / litiere') }}</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>
+    <tr><td>{{ _('Main d\'oeuvre') }}</td><td>{{ batch.finance.labor_cost|currency }}</td></tr>
+    <tr class="total-row"><td>{{ _('Total des depenses') }}</td><td>{{ batch.finance.total_charges|currency }}</td></tr>
+    <tr><td>{{ _('Argent des ventes') }}</td><td>{{ batch.finance.sale_revenue|currency }}</td></tr>
+    <tr class="total-row"><td>{{ _('Benefice') }}</td><td>{{ batch.finance.net_result|currency }}</td></tr>
+    <tr class="total-row"><td>{{ _('Prix de revient par kilo') }}</td><td>{{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</td></tr>
   </table>
   {% else %}
-  <p>Aucune donnee financiere disponible pour ce lot.</p>
+  <p>{{ _('Aucune donnee financiere disponible pour ce lot.') }}</p>
   {% endif %}
 
-  <div class="section-title">Achats de stock sur la ferme pendant cette periode</div>
+  <div class="section-title">{{ _('Achats de stock sur la ferme pendant cette periode') }}</div>
   <p>{{ stock_purchases_total|currency }}</p>
   <p style="font-size: 9pt; color: #667066;">
-    Different du "Total des depenses" ci-dessus : ce montant compte tout ce qui a ete achete pour cette
-    ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif en
-    meme temps. Le "Total des depenses" du lot ne compte que ce que ce lot a reellement consomme.
+    {{ _('Different du "Total des depenses" ci-dessus : ce montant compte tout ce qui a ete achete pour cette ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif en meme temps. Le "Total des depenses" du lot ne compte que ce que ce lot a reellement consomme.') }}
   </p>
 
-  <div class="section-title">Suivi de mortalite (par jour)</div>
+  <div class="section-title">{{ _('Suivi de mortalite (par jour)') }}</div>
   <table>
-    <thead><tr><th>Jour</th><th>Date</th><th>Morts du jour</th><th>Cumul</th></tr></thead>
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Date') }}</th><th>{{ _('Morts du jour') }}</th><th>{{ _('Cumul') }}</th></tr></thead>
     <tbody>
       {% for row in mortality_data %}
-      <tr><td>J{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.daily }}</td><td>{{ row.cumulative }}</td></tr>
+      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.daily }}</td><td>{{ row.cumulative }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <div class="section-title">Consommation d'aliment (par jour)</div>
+  <div class="section-title">{{ _('Consommation d\'aliment (par jour)') }}</div>
   <table>
-    <thead><tr><th>Jour</th><th>Date</th><th>Aliment du jour (kg)</th><th>Cumul (kg)</th></tr></thead>
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Date') }}</th><th>{{ _('Aliment du jour (kg)') }}</th><th>{{ _('Cumul (kg)') }}</th></tr></thead>
     <tbody>
       {% for row in feed_data %}
-      <tr><td>J{{ row.day }}</td><td>{{ row.date }}</td><td>{{ "%.1f"|format(row.daily) }}</td><td>{{ "%.1f"|format(row.cumulative) }}</td></tr>
+      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.date }}</td><td>{{ "%.1f"|format(row.daily) }}</td><td>{{ "%.1f"|format(row.cumulative) }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
 
   {% if growth_data %}
-  <div class="section-title">Suivi de croissance</div>
+  <div class="section-title">{{ _('Suivi de croissance') }}</div>
   <table>
-    <thead><tr><th>Jour</th><th>Poids reel (g)</th><th>Poids de reference (g)</th></tr></thead>
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids reel (g)') }}</th><th>{{ _('Poids de reference (g)') }}</th></tr></thead>
     <tbody>
       {% for row in growth_data %}
-      <tr><td>J{{ row.day }}</td><td>{{ row.actual_weight }}</td><td>{{ row.expected_weight if row.expected_weight is not none else "-" }}</td></tr>
+      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.actual_weight }}</td><td>{{ row.expected_weight if row.expected_weight is not none else "-" }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
   {% endif %}
 
-  <p class="footer">Document genere automatiquement par Farm Control le {{ batch.updated_at.strftime('%d/%m/%Y') if batch.updated_at else "" }}.</p>
+  <p class="footer">{{ _('Document genere automatiquement par Farm Control le %(updated_at)s.', updated_at=(batch.updated_at.strftime('%d/%m/%Y') if batch.updated_at else "")) }}</p>
 </body>
 </html>

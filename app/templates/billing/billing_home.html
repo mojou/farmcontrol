@@ -1,37 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Facturation - Farm Control{% endblock %}
+{% block title %}{{ _('Facturation - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Facturation</h1>
-  <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-secondary btn-sm">Voir tous les plans</a>
+  <h1 class="fc-page-title">{{ _('Facturation') }}</h1>
+  <a href="{{ url_for('billing.pricing') }}" class="btn btn-outline-secondary btn-sm">{{ _('Voir tous les plans') }}</a>
 </div>
 
 <div class="card mb-4">
   <div class="card-body">
-    <h6 class="text-muted small text-uppercase mb-3">Abonnement actuel</h6>
+    <h6 class="text-muted small text-uppercase mb-3">{{ _('Abonnement actuel') }}</h6>
     {% if subscription %}
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <div>
-        <span class="h4 fw-bold">{{ subscription.plan.name }}</span>
-        {% if subscription.granted_by_admin %}<span class="badge bg-warning text-dark ms-2">Offert gratuitement</span>
-        {% elif subscription.status == 'trialing' %}<span class="badge bg-info text-dark ms-2">Essai gratuit</span>
-        {% elif subscription.status == 'active' %}<span class="badge bg-success ms-2">Actif</span>
+        <span class="h4 fw-bold">{{ _(subscription.plan.name) }}</span>
+        {% if subscription.granted_by_admin %}<span class="badge bg-warning text-dark ms-2">{{ _('Offert gratuitement') }}</span>
+        {% elif subscription.status == 'trialing' %}<span class="badge bg-info text-dark ms-2">{{ _('Essai gratuit') }}</span>
+        {% elif subscription.status == 'active' %}<span class="badge bg-success ms-2">{{ _('Actif') }}</span>
         {% else %}<span class="badge bg-danger ms-2">{{ subscription.status }}</span>{% endif %}
       </div>
       <div class="text-muted small">
         {% if subscription.granted_by_admin %}
-        Offert par l'equipe Farm Control, sans date d'expiration
+        {{ _('Offert par l\'equipe Farm Control, sans date d\'expiration') }}
         {% elif subscription.status == 'trialing' and subscription.current_period_end %}
-        Essai gratuit jusqu'au {{ subscription.current_period_end.strftime('%d/%m/%Y') }}, puis retour automatique au plan Decouverte si vous ne souscrivez pas
+        {{ _('Essai gratuit jusqu\'au %(current_period_end)s, puis retour automatique au plan Decouverte si vous ne souscrivez pas', current_period_end=(subscription.current_period_end.strftime('%d/%m/%Y'))) }}
         {% elif subscription.current_period_end %}
-        Renouvellement / expiration le {{ subscription.current_period_end.strftime('%d/%m/%Y') }}
+        {{ _('Renouvellement / expiration le %(current_period_end)s', current_period_end=(subscription.current_period_end.strftime('%d/%m/%Y'))) }}
         {% else %}
-        Plan gratuit, sans expiration
+        {{ _('Plan gratuit, sans expiration') }}
         {% endif %}
       </div>
     </div>
     {% else %}
-    <p class="text-muted mb-0">Aucun abonnement actif.</p>
+    <p class="text-muted mb-0">{{ _('Aucun abonnement actif.') }}</p>
     {% endif %}
   </div>
 </div>
@@ -40,22 +40,22 @@
 
 <div class="card mt-4">
   <div class="card-body">
-    <h6 class="text-muted small text-uppercase mb-3">Historique des paiements</h6>
+    <h6 class="text-muted small text-uppercase mb-3">{{ _('Historique des paiements') }}</h6>
     {% if transactions %}
     <div class="table-responsive">
     <table class="table table-sm">
-      <thead><tr><th>Date</th><th>Plan</th><th>Montant</th><th>Methode</th><th>Statut</th></tr></thead>
+      <thead><tr><th>{{ _('Date') }}</th><th>{{ _('Plan') }}</th><th>{{ _('Montant') }}</th><th>{{ _('Methode') }}</th><th>{{ _('Statut') }}</th></tr></thead>
       <tbody>
         {% for tx in transactions %}
         <tr>
           <td>{{ tx.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
-          <td>{{ tx.plan.name }}</td>
+          <td>{{ _(tx.plan.name) }}</td>
           <td>{{ tx.amount_xaf|number }} FCFA</td>
           <td>{{ tx.payment_method or "-" }}</td>
           <td>
-            {% if tx.status == 'completed' %}<span class="badge bg-success">Reussi</span>
-            {% elif tx.status == 'pending' %}<span class="badge bg-warning text-dark">En attente</span>
-            {% else %}<span class="badge bg-danger">Echoue</span>{% endif %}
+            {% if tx.status == 'completed' %}<span class="badge bg-success">{{ _('Reussi') }}</span>
+            {% elif tx.status == 'pending' %}<span class="badge bg-warning text-dark">{{ _('En attente') }}</span>
+            {% else %}<span class="badge bg-danger">{{ _('Echoue') }}</span>{% endif %}
           </td>
         </tr>
         {% endfor %}
@@ -63,7 +63,7 @@
     </table>
     </div>
     {% else %}
-    <p class="text-muted mb-0">Aucun paiement pour le moment.</p>
+    <p class="text-muted mb-0">{{ _('Aucun paiement pour le moment.') }}</p>
     {% endif %}
   </div>
 </div>

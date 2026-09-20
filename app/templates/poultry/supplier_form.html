@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}{{ "Modifier le fournisseur" if supplier else "Nouveau fournisseur" }} - Farm Control{% endblock %}
+{% block title %}{{ _("Modifier le fournisseur") if supplier else _("Nouveau fournisseur") }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">{{ "Modifier " ~ supplier.name if supplier else "Nouveau fournisseur" }}</h1>
+  <h1 class="fc-page-title">{{ _("Modifier ") ~ supplier.name if supplier else _("Nouveau fournisseur") }}</h1>
 </div>
 <div class="row"><div class="col-lg-6">{{ fm.form_card(form, None) }}</div></div>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Tableau de bord - Farm Control{% endblock %}
+{% block title %}{{ _('Tableau de bord - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">Mon espace de saisie</h1>
+  <h1 class="fc-page-title">{{ _('Mon espace de saisie') }}</h1>
 </div>
 
 {% if active_batches %}
@@ -12,15 +12,15 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">{{ batch.code }}</h5>
-        <p class="text-muted small mb-2">{{ batch.farm.name }} - Souche : {{ batch.breed or "-" }}</p>
-        <p class="mb-1">Nombre de poulets : <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
-        <p class="mb-3">Jours enregistres : {{ batch.days|length }}</p>
+        <p class="text-muted small mb-2">{{ _('%(name)s - Souche : %(breed)s', name=(batch.farm.name), breed=(batch.breed or "-")) }}</p>
+        <p class="mb-1">{{ _('Nombre de poulets :') }} <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
+        <p class="mb-3">{{ _('Jours enregistres : %(days)s', days=(batch.days|length)) }}</p>
         <div class="d-flex gap-2">
           <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-clipboard-plus"></i> Saisie quotidienne
+            <i class="bi bi-clipboard-plus"></i> {{ _('Saisie quotidienne') }}
           </a>
           <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-clipboard2-pulse"></i> Calendrier des soins
+            <i class="bi bi-clipboard2-pulse"></i> {{ _('Calendrier des soins') }}
           </a>
         </div>
       </div>
@@ -29,6 +29,6 @@
   {% endfor %}
 </div>
 {% else %}
-<div class="alert alert-info">Aucun lot en cours ne vous est assigne pour le moment.</div>
+<div class="alert alert-info">{{ _('Aucun lot en cours ne vous est assigne pour le moment.') }}</div>
 {% endif %}
 {% endblock %}

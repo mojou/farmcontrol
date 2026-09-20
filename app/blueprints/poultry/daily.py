@@ -2,6 +2,7 @@ from datetime import date, datetime, timezone
 from decimal import Decimal
 
 from flask import abort, flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 
@@ -59,9 +60,9 @@ def _get_day_or_403(day_id):
 
 def _stock_choices(farm_id, category):
     items = StockItem.query.filter_by(farm_id=farm_id, category=category, is_active=True).order_by(StockItem.name).all()
-    choices = [(0, "Aucun (saisie libre)")]
+    choices = [(0, _("Aucun (saisie libre)"))]
     for i in items:
-        label = f"{i.name} ({i.quantity_on_hand} {i.unit} en stock)"
+        label = _("%(name)s (%(qty)s %(unit)s en stock)", name=i.name, qty=i.quantity_on_hand, unit=i.unit)
         if i.kg_per_unit:
             label += f" - 1 {i.unit} = {i.kg_per_unit} kg"
         elif i.ml_per_unit:
@@ -179,7 +180,7 @@ def batch_day_new(batch_id):
     db.session.add(report)
     log_action("create", "poultry_batch_days", day.id, {"day_number": day.day_number})
     db.session.commit()
-    flash(f"Jour {day.day_number} cree.", "success")
+    flash(_("Jour %(day_number)s cree.", day_number=day.day_number), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -248,9 +249,9 @@ def feed_record_new(day_id):
             check_stock_alert(stock_item)
         log_action("create", "poultry_feed_records", None, {"quantity_kg": str(form.quantity_kg.data)})
         db.session.commit()
-        flash("Consommation d'aliment enregistree.", "success")
+        flash(_("Consommation d'aliment enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire aliment.", "danger")
+        flash(_("Erreur dans le formulaire aliment."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -268,7 +269,7 @@ def feed_record_delete(record_id):
     db.session.flush()
     recompute_batch_finance(batch)
     db.session.commit()
-    flash("Saisie d'aliment supprimee.", "success")
+    flash(_("Saisie d'aliment supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -289,9 +290,9 @@ def water_record_new(day_id):
         db.session.flush()
         log_action("create", "poultry_water_records", None, {"quantity_liters": str(form.quantity_liters.data)})
         db.session.commit()
-        flash("Consommation d'eau enregistree.", "success")
+        flash(_("Consommation d'eau enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire eau.", "danger")
+        flash(_("Erreur dans le formulaire eau."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -305,7 +306,7 @@ def water_record_delete(record_id):
     log_action("delete", "poultry_water_records", record.id, {"quantity_liters": str(record.quantity_liters)})
     db.session.delete(record)
     db.session.commit()
-    flash("Saisie d'eau supprimee.", "success")
+    flash(_("Saisie d'eau supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -328,9 +329,9 @@ def mortality_record_new(day_id):
         check_mortality_alert(day.batch, day)
         log_action("create", "poultry_mortality_records", None, {"quantity_dead": form.quantity_dead.data})
         db.session.commit()
-        flash("Mortalite enregistree.", "success")
+        flash(_("Mortalite enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire mortalite.", "danger")
+        flash(_("Erreur dans le formulaire mortalite."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -344,7 +345,7 @@ def mortality_record_delete(record_id):
     log_action("delete", "poultry_mortality_records", record.id, {"quantity_dead": record.quantity_dead})
     db.session.delete(record)
     db.session.commit()
-    flash("Saisie de mortalite supprimee.", "success")
+    flash(_("Saisie de mortalite supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -373,9 +374,9 @@ def wood_record_new(day_id):
             check_stock_alert(stock_item)
         log_action("create", "poultry_wood_records", None, {"quantity": str(form.quantity.data)})
         db.session.commit()
-        flash("Consommation de bois/litiere enregistree.", "success")
+        flash(_("Consommation de bois/litiere enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire bois.", "danger")
+        flash(_("Erreur dans le formulaire bois."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -393,7 +394,7 @@ def wood_record_delete(record_id):
     db.session.flush()
     recompute_batch_finance(batch)
     db.session.commit()
-    flash("Saisie de bois/litiere supprimee.", "success")
+    flash(_("Saisie de bois/litiere supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -424,9 +425,9 @@ def medication_record_new(day_id):
             check_stock_alert(stock_item)
         log_action("create", "poultry_medication_records", None, {"medication_name": form.medication_name.data})
         db.session.commit()
-        flash("Traitement medical enregistre.", "success")
+        flash(_("Traitement medical enregistre."), "success")
     else:
-        flash("Erreur dans le formulaire medicaments.", "danger")
+        flash(_("Erreur dans le formulaire medicaments."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -444,7 +445,7 @@ def medication_record_delete(record_id):
     db.session.flush()
     recompute_batch_finance(batch)
     db.session.commit()
-    flash("Saisie de medicament supprimee.", "success")
+    flash(_("Saisie de medicament supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -476,9 +477,9 @@ def observation_new(day_id):
         check_urgent_observation_alert(record, day.batch)
         log_action("create", "poultry_observations", record.id, {"severity": record.severity})
         db.session.commit()
-        flash("Observation enregistree.", "success")
+        flash(_("Observation enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire observation.", "danger")
+        flash(_("Erreur dans le formulaire observation."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -494,7 +495,7 @@ def observation_delete(record_id):
     log_action("delete", "poultry_observations", record.id, {"severity": record.severity})
     db.session.delete(record)
     db.session.commit()
-    flash("Observation supprimee.", "success")
+    flash(_("Observation supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -520,9 +521,9 @@ def weight_record_new(day_id):
         check_fcr_alert(day.batch)
         log_action("create", "poultry_weight_records", record.id, {"average_weight": str(form.average_weight.data)})
         db.session.commit()
-        flash("Pesee enregistree.", "success")
+        flash(_("Pesee enregistree."), "success")
     else:
-        flash("Erreur dans le formulaire pesee.", "danger")
+        flash(_("Erreur dans le formulaire pesee."), "danger")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -539,7 +540,7 @@ def weight_record_delete(record_id):
     db.session.flush()
     recompute_batch_finance(batch)
     db.session.commit()
-    flash("Pesee supprimee.", "success")
+    flash(_("Pesee supprimee."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
@@ -554,7 +555,7 @@ def daily_report_submit(day_id):
     report = day.report
     form = DailyReportSubmitForm()
     if report.status != REPORT_STATUS_DRAFT:
-        flash("Ce rapport a deja ete soumis.", "warning")
+        flash(_("Ce rapport a deja ete soumis."), "warning")
         return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
     report.notes = form.notes.data
@@ -570,7 +571,7 @@ def daily_report_submit(day_id):
 
     log_action("update", "poultry_daily_reports", report.id, {"status": report.status})
     db.session.commit()
-    flash("Rapport journalier soumis.", "success")
+    flash(_("Rapport journalier soumis."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
 
@@ -584,7 +585,7 @@ def daily_report_review(day_id):
     report = day.report
     form = DailyReportReviewForm()
     if report.status != REPORT_STATUS_SUBMITTED:
-        flash("Ce rapport n'est pas en attente de validation.", "warning")
+        flash(_("Ce rapport n'est pas en attente de validation."), "warning")
         return redirect(url_for("poultry.batch_day_detail", day_id=day.id))
 
     report.notes = form.notes.data or report.notes
@@ -594,5 +595,5 @@ def daily_report_review(day_id):
 
     log_action("update", "poultry_daily_reports", report.id, {"status": "reviewed"})
     db.session.commit()
-    flash("Rapport journalier valide.", "success")
+    flash(_("Rapport journalier valide."), "success")
     return redirect(url_for("poultry.batch_day_detail", day_id=day.id))

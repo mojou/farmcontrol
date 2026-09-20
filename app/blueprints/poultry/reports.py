@@ -2,6 +2,7 @@ import csv
 import io
 
 from flask import Response
+from flask_babel import gettext as _
 from flask_login import login_required
 
 from app.blueprints.poultry import poultry_bp
@@ -15,7 +16,7 @@ from app.utils.zootechnie import compute_fcr, feed_series, growth_curve_comparis
 def batch_report_pdf(batch_id):
     """Export PDF du rapport de lot (paragraphe 6)."""
     batch = _get_batch_or_403(batch_id)
-    stock_purchases_total, _ = _stock_purchases_during(batch)
+    stock_purchases_total, _unused = _stock_purchases_during(batch)
     context = {
         "batch": batch,
         "fcr": compute_fcr(batch),
@@ -44,8 +45,8 @@ def batch_report_csv(batch_id):
     buffer = io.StringIO()
     writer = csv.writer(buffer, delimiter=";")
     writer.writerow([
-        "Jour", "Date", "Aliment (kg)", "Eau (litres)", "Morts du jour",
-        "Poids moyen (g)", "Cout aliment (FCFA)", "Cout medicaments (FCFA)", "Cout bois/litiere (FCFA)",
+        _("Jour"), _("Date"), _("Aliment (kg)"), _("Eau (litres)"), _("Morts du jour"),
+        _("Poids moyen (g)"), _("Cout aliment (FCFA)"), _("Cout medicaments (FCFA)"), _("Cout bois/litiere (FCFA)"),
     ])
 
     for day in sorted(batch.days, key=lambda d: d.day_number):

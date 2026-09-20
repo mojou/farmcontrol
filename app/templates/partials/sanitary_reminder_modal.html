@@ -3,8 +3,8 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header" style="background-color: var(--fc-primary); color: #fff;">
-        <h5 class="modal-title"><i class="bi bi-bell-fill"></i> Rappel a administrer</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        <h5 class="modal-title"><i class="bi bi-bell-fill"></i> {{ _('Rappel a administrer') }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{{ _('Fermer') }}"></button>
       </div>
       <div class="modal-body">
         <p class="text-muted small mb-2" id="sanitaryReminderContext"></p>
@@ -12,10 +12,10 @@
         <p id="sanitaryReminderNotes" class="mb-0"></p>
       </div>
       <div class="modal-footer">
-        <a href="#" id="sanitaryReminderRoadmapLink" class="btn btn-outline-secondary btn-sm">Voir le calendrier des soins</a>
-        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Plus tard</button>
+        <a href="#" id="sanitaryReminderRoadmapLink" class="btn btn-outline-secondary btn-sm">{{ _('Voir le calendrier des soins') }}</a>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{{ _('Plus tard') }}</button>
         <button type="button" class="btn btn-success btn-sm" id="sanitaryReminderDoneBtn">
-          <i class="bi bi-check-lg"></i> C'est fait
+          <i class="bi bi-check-lg"></i> {{ _('C\'est fait') }}
         </button>
       </div>
     </div>

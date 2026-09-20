@@ -8,6 +8,7 @@ import os
 import uuid
 
 from flask import current_app
+from flask_babel import gettext as _
 from PIL import Image
 from werkzeug.utils import secure_filename
 
@@ -29,7 +30,7 @@ def save_photo(file_storage, tenant_id: int, category: str, max_dimension: int) 
     if not file_storage or not file_storage.filename:
         return None
     if not allowed_image(file_storage.filename):
-        raise ValueError("Format d'image non autorise. Formats acceptes : png, jpg, jpeg, webp.")
+        raise ValueError(_("Format d'image non autorise. Formats acceptes : png, jpg, jpeg, webp."))
 
     ext = secure_filename(file_storage.filename).rsplit(".", 1)[1].lower()
     unique_name = f"{uuid.uuid4().hex}.{ext}"

@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_wtf import CSRFProtect
-from flask_babel import Babel
+from flask_babel import Babel, lazy_gettext as _l
 
 # expire_on_commit=False : evite qu'un objet ne redemande une lecture en base
 # juste apres un commit(). Important ici car la RLS PostgreSQL (couche 2,
@@ -21,5 +21,5 @@ csrf = CSRFProtect()
 babel = Babel()
 
 login_manager.login_view = "auth.login"
-login_manager.login_message = "Veuillez vous connecter pour acceder a cette page."
+login_manager.login_message = _l("Veuillez vous connecter pour acceder a cette page.")
 login_manager.login_message_category = "warning"

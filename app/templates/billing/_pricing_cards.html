@@ -1,7 +1,7 @@
 <div class="text-center mb-5">
-  <h1 class="fw-bold mb-2">Des tarifs accessibles, en FCFA</h1>
+  <h1 class="fw-bold mb-2">{{ _('Des tarifs accessibles, en FCFA') }}</h1>
   <p class="text-muted" style="max-width: 560px; margin-inline: auto;">
-    Choisissez la formule adaptee a la taille de votre exploitation. Changement de formule possible a tout moment.
+    {{ _('Choisissez la formule adaptee a la taille de votre exploitation. Changement de formule possible a tout moment.') }}
   </p>
 </div>
 
@@ -10,41 +10,41 @@
   <div class="col-md-4">
     <div class="card h-100 {{ 'border-primary shadow' if plan.code == 'standard' else '' }}">
       {% if plan.code == 'standard' %}
-      <div class="text-center text-white small fw-bold py-1" style="background-color: var(--fc-primary);">LE PLUS CHOISI</div>
+      <div class="text-center text-white small fw-bold py-1" style="background-color: var(--fc-primary);">{{ _('LE PLUS CHOISI') }}</div>
       {% endif %}
       <div class="card-body d-flex flex-column">
-        <h4 class="fw-bold">{{ plan.name }}</h4>
+        <h4 class="fw-bold">{{ _(plan.name) }}</h4>
         <div class="my-3">
           {% if plan.price_xaf == 0 %}
-          <span class="display-6 fw-bold">Gratuit</span>
+          <span class="display-6 fw-bold">{{ _('Gratuit') }}</span>
           {% else %}
           <span class="display-6 fw-bold">{{ plan.price_xaf|number }}</span>
-          <span class="text-muted"> FCFA / mois</span>
+          <span class="text-muted"> {{ _('FCFA / mois') }}</span>
           {% endif %}
         </div>
-        <p class="text-muted flex-grow-1">{{ plan.description }}</p>
+        <p class="text-muted flex-grow-1">{{ _(plan.description) }}</p>
         <ul class="list-unstyled small mb-4">
           <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>
-            {{ plan.max_farms if plan.max_farms else "Fermes illimitees" }}{% if plan.max_farms %} ferme(s) maximum{% endif %}</li>
+            {{ plan.max_farms if plan.max_farms else _("Fermes illimitees") }}{% if plan.max_farms %} {{ _('ferme(s) maximum') }}{% endif %}</li>
           <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>
-            {{ plan.max_active_batches if plan.max_active_batches else "Lots actifs illimites" }}{% if plan.max_active_batches %} lot(s) actif(s) maximum{% endif %}</li>
+            {{ plan.max_active_batches if plan.max_active_batches else _("Lots actifs illimites") }}{% if plan.max_active_batches %} {{ _('lot(s) actif(s) maximum') }}{% endif %}</li>
           <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>
-            {{ plan.max_users if plan.max_users else "Utilisateurs illimites" }}{% if plan.max_users %} utilisateur(s) maximum{% endif %}</li>
-          <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>Aliment par poulet, ce que vous gagnez, alertes email, export PDF</li>
+            {{ plan.max_users if plan.max_users else _("Utilisateurs illimites") }}{% if plan.max_users %} {{ _('utilisateur(s) maximum') }}{% endif %}</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i>{{ _('Aliment par poulet, ce que vous gagnez, alertes email, export PDF') }}</li>
         </ul>
 
         {% if not current_user.is_authenticated %}
         <a href="{{ url_for('auth.signup') }}" class="btn {{ 'btn-primary' if plan.code == 'standard' else 'btn-outline-primary' }} mt-auto">
-          Creer mon compte
+          {{ _('Creer mon compte') }}
         </a>
         {% elif current_user.has_role('owner') %}
           {% if current_plan_code == plan.code %}
-          <button class="btn btn-outline-secondary mt-auto" disabled>Plan actuel</button>
+          <button class="btn btn-outline-secondary mt-auto" disabled>{{ _('Plan actuel') }}</button>
           {% else %}
           <form method="post" action="{{ url_for('billing.subscribe', plan_code=plan.code) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn {{ 'btn-primary' if plan.code == 'standard' else 'btn-outline-primary' }} w-100">
-              {{ "Passer a ce plan" if plan.price_xaf > 0 else "Choisir ce plan" }}
+              {{ _("Passer a ce plan") if plan.price_xaf > 0 else _("Choisir ce plan") }}
             </button>
           </form>
           {% endif %}
@@ -57,15 +57,15 @@
 
 {% if not saspay_enabled %}
 <p class="text-center text-muted small mt-4">
-  <i class="bi bi-info-circle"></i> Le paiement en ligne sera bientot disponible (Mobile Money MTN/Orange, carte bancaire).
+  <i class="bi bi-info-circle"></i> {{ _('Le paiement en ligne sera bientot disponible (Mobile Money MTN/Orange, carte bancaire).') }}
 </p>
 {% endif %}
 
 <div class="text-center text-muted small mt-4">
-  <p class="mb-1">Paiement mensuel, sans engagement. Vous pouvez changer de formule ou arreter a tout moment.</p>
-  <p class="mb-1">Un souci avec un paiement ? <a href="{{ url_for('core.contact') }}">Contactez-nous</a></p>
+  <p class="mb-1">{{ _('Paiement mensuel, sans engagement. Vous pouvez changer de formule ou arreter a tout moment.') }}</p>
+  <p class="mb-1">{{ _('Un souci avec un paiement ?') }} <a href="{{ url_for('core.contact') }}">{{ _('Contactez-nous') }}</a></p>
   <p class="mb-0">
-    <a href="{{ url_for('core.terms') }}">Conditions Generales d'Utilisation</a> ·
-    <a href="{{ url_for('core.privacy') }}">Politique de Confidentialite</a>
+    <a href="{{ url_for('core.terms') }}">{{ _('Conditions Generales d\'Utilisation') }}</a> ·
+    <a href="{{ url_for('core.privacy') }}">{{ _('Politique de Confidentialite') }}</a>
   </p>
 </div>

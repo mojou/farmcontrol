@@ -13,6 +13,7 @@ Parcours :
 Le fournisseur precedent (CinetPay) reste disponible dans app.utils.cinetpay
 mais n'est plus branche ici - voir SASPAY_ENABLED dans app/config.py.
 """
+from flask_babel import gettext as _
 import uuid
 from datetime import timedelta
 
@@ -76,7 +77,7 @@ def subscribe(plan_code):
 
     if plan.price_xaf == 0:
         _activate_subscription(tenant, plan)
-        flash(f"Plan {plan.name} active.", "success")
+        flash(_("Plan %(name)s active.", name=_(plan.name)), "success")
         return redirect(url_for("billing.billing_home"))
 
     transaction_id = f"fc-{tenant.id}-{uuid.uuid4().hex[:12]}"
@@ -104,7 +105,7 @@ def subscribe(plan_code):
     except SaspayError as exc:
         payment_tx.status = PAYMENT_STATUS_FAILED
         db.session.commit()
-        flash(f"Erreur lors de l'initialisation du paiement : {exc}", "danger")
+        flash(_("Erreur lors de l'initialisation du paiement : %(exc)s", exc=exc), "danger")
         return redirect(url_for("billing.billing_home"))
 
     if result["simulated"]:
@@ -115,8 +116,7 @@ def subscribe(plan_code):
         db.session.commit()
         _activate_subscription(tenant, plan)
         flash(
-            f"Mode demonstration : paiement simule et plan {plan.name} active "
-            "(SasPay n'est pas encore configure).",
+            _("Mode demonstration : paiement simule et plan %(name)s active (SasPay n'est pas encore configure).", name=_(plan.name)),
             "warning",
         )
         return redirect(url_for("billing.billing_home"))

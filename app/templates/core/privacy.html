@@ -1,74 +1,53 @@
 {% extends "base.html" %}
-{% block title %}Politique de Confidentialite - Farm Control{% endblock %}
+{% block title %}{{ _('Politique de Confidentialite - Farm Control') }}{% endblock %}
 
 {% set legal_body %}
 <div class="container py-4 py-lg-5" style="max-width: 780px;">
-  <h1 class="fw-bold h3 mb-1">Politique de Confidentialite</h1>
-  <p class="text-muted small mb-4">Derniere mise a jour : 20 septembre 2026</p>
+  <h1 class="fw-bold h3 mb-1">{{ _('Politique de Confidentialite') }}</h1>
+  <p class="text-muted small mb-4">{{ _('Derniere mise a jour : 20 septembre 2026') }}</p>
 
-  <p>Cette page explique quelles donnees Farm Control collecte, pourquoi, et comment elles sont protegees.</p>
+  <p>{{ _('Cette page explique quelles donnees Farm Control collecte, pourquoi, et comment elles sont protegees.') }}</p>
 
-  <h5 class="mt-4">1. Donnees collectees</h5>
+  <h5 class="mt-4">{{ _('1. Donnees collectees') }}</h5>
   <ul>
-    <li><strong>A l'inscription :</strong> nom, prenom, adresse email, mot de passe (jamais stocke en clair -
-    voir securite ci-dessous), nom de l'exploitation, pays.</li>
-    <li><strong>Donnees d'elevage :</strong> tout ce que vous saisissez pour gerer vos fermes et lots
-    (effectifs, consommation, mortalite, stock, fournisseurs, ventes, prix).</li>
-    <li><strong>Photos :</strong> si vous joignez une photo a une observation, elle est stockee pour
-    illustrer cette observation.</li>
-    <li><strong>Donnees techniques :</strong> adresse IP et horodatage des connexions (pour la securite,
-    notamment le verrouillage de compte apres des tentatives de connexion echouees), langue preferee.</li>
+    <li><strong>{{ _('A l\'inscription :') }}</strong> {{ _('nom, prenom, adresse email, mot de passe (jamais stocke en clair - voir securite ci-dessous), nom de l\'exploitation, pays.') }}</li>
+    <li><strong>{{ _('Donnees d\'elevage :') }}</strong> {{ _('tout ce que vous saisissez pour gerer vos fermes et lots (effectifs, consommation, mortalite, stock, fournisseurs, ventes, prix).') }}</li>
+    <li><strong>{{ _('Photos :') }}</strong> {{ _('si vous joignez une photo a une observation, elle est stockee pour illustrer cette observation.') }}</li>
+    <li><strong>{{ _('Donnees techniques :') }}</strong> {{ _('adresse IP et horodatage des connexions (pour la securite, notamment le verrouillage de compte apres des tentatives de connexion echouees), langue preferee.') }}</li>
   </ul>
-  <p>Nous ne collectons jamais de donnees dont nous n'avons pas besoin pour faire fonctionner le service :
-  pas de suivi publicitaire, pas de revente de donnees a des tiers.</p>
+  <p>{{ _('Nous ne collectons jamais de donnees dont nous n\'avons pas besoin pour faire fonctionner le service : pas de suivi publicitaire, pas de revente de donnees a des tiers.') }}</p>
 
-  <h5 class="mt-4">2. Pourquoi ces donnees</h5>
-  <p>Ces informations servent uniquement a fournir le service : faire fonctionner votre espace de gestion,
-  vous envoyer les emails necessaires (confirmation de compte, alertes que vous avez activees, factures),
-  et assurer la securite de votre compte.</p>
+  <h5 class="mt-4">{{ _('2. Pourquoi ces donnees') }}</h5>
+  <p>{{ _('Ces informations servent uniquement a fournir le service : faire fonctionner votre espace de gestion, vous envoyer les emails necessaires (confirmation de compte, alertes que vous avez activees, factures), et assurer la securite de votre compte.') }}</p>
 
-  <h5 class="mt-4">3. Qui a acces a vos donnees</h5>
-  <p>Vos donnees sont strictement isolees de celles des autres clients de Farm Control (isolation technique
-  a deux niveaux, y compris au niveau de la base de donnees). Au sein de votre exploitation, l'acces depend
-  du role de chaque utilisateur (proprietaire, responsable, travailleur) - voir la
-  <a href="{{ url_for('core.documentation') }}">documentation</a> pour le detail des permissions.</p>
-  <p>Nous faisons appel a des prestataires techniques pour faire fonctionner le service, qui traitent vos
-  donnees uniquement pour cet usage :</p>
+  <h5 class="mt-4">{{ _('3. Qui a acces a vos donnees') }}</h5>
+  <p>{{ _('Vos donnees sont strictement isolees de celles des autres clients de Farm Control (isolation technique a deux niveaux, y compris au niveau de la base de donnees). Au sein de votre exploitation, l\'acces depend du role de chaque utilisateur (proprietaire, responsable, travailleur) - voir la') }}
+  <a href="{{ url_for('core.documentation') }}">{{ _('documentation') }}</a> {{ _('pour le detail des permissions.') }}</p>
+  <p>{{ _('Nous faisons appel a des prestataires techniques pour faire fonctionner le service, qui traitent vos donnees uniquement pour cet usage :') }}</p>
   <ul>
-    <li><strong>Hebergement du site et de la base de donnees</strong> (infrastructure cloud).</li>
-    <li><strong>Envoi des emails transactionnels</strong> (confirmation de compte, reinitialisation de mot
-    de passe, alertes).</li>
-    <li><strong>Traitement des paiements</strong> pour les formules payantes (numero de telephone mobile
-    money traite directement par ce prestataire, jamais stocke par Farm Control).</li>
+    <li><strong>{{ _('Hebergement du site et de la base de donnees') }}</strong> {{ _('(infrastructure cloud).') }}</li>
+    <li><strong>{{ _('Envoi des emails transactionnels') }}</strong> {{ _('(confirmation de compte, reinitialisation de mot de passe, alertes).') }}</li>
+    <li><strong>{{ _('Traitement des paiements') }}</strong> {{ _('pour les formules payantes (numero de telephone mobile money traite directement par ce prestataire, jamais stocke par Farm Control).') }}</li>
   </ul>
 
-  <h5 class="mt-4">4. Securite</h5>
-  <p>Les mots de passe sont chiffres (jamais stockes en clair), les connexions au site sont chiffrees
-  (HTTPS), et un compte est temporairement verrouille apres plusieurs echecs de connexion consecutifs. Les
-  donnees de chaque exploitation sont isolees de celles des autres, y compris directement au niveau de la
-  base de donnees (Row Level Security).</p>
+  <h5 class="mt-4">{{ _('4. Securite') }}</h5>
+  <p>{{ _('Les mots de passe sont chiffres (jamais stockes en clair), les connexions au site sont chiffrees (HTTPS), et un compte est temporairement verrouille apres plusieurs echecs de connexion consecutifs. Les donnees de chaque exploitation sont isolees de celles des autres, y compris directement au niveau de la base de donnees (Row Level Security).') }}</p>
 
-  <h5 class="mt-4">5. Conservation des donnees</h5>
-  <p>Vos donnees sont conservees tant que votre compte est actif. Si vous souhaitez la suppression complete
-  de votre compte et de vos donnees, contactez-nous a l'adresse ci-dessous.</p>
+  <h5 class="mt-4">{{ _('5. Conservation des donnees') }}</h5>
+  <p>{{ _('Vos donnees sont conservees tant que votre compte est actif. Si vous souhaitez la suppression complete de votre compte et de vos donnees, contactez-nous a l\'adresse ci-dessous.') }}</p>
 
-  <h5 class="mt-4">6. Vos droits</h5>
+  <h5 class="mt-4">{{ _('6. Vos droits') }}</h5>
   <ul>
-    <li><strong>Acces et export :</strong> vous pouvez exporter l'integralite des donnees de votre
-    exploitation a tout moment depuis les Parametres.</li>
-    <li><strong>Correction :</strong> vous pouvez corriger vos informations de profil et la plupart de vos
-    saisies directement dans l'application.</li>
-    <li><strong>Suppression :</strong> sur simple demande par email, vos donnees personnelles et celles de
-    votre exploitation seront supprimees, sauf obligation legale de conservation (ex : historique de
-    facturation).</li>
+    <li><strong>{{ _('Acces et export :') }}</strong> {{ _('vous pouvez exporter l\'integralite des donnees de votre exploitation a tout moment depuis les Parametres.') }}</li>
+    <li><strong>{{ _('Correction :') }}</strong> {{ _('vous pouvez corriger vos informations de profil et la plupart de vos saisies directement dans l\'application.') }}</li>
+    <li><strong>{{ _('Suppression :') }}</strong> {{ _('sur simple demande par email, vos donnees personnelles et celles de votre exploitation seront supprimees, sauf obligation legale de conservation (ex : historique de facturation).') }}</li>
   </ul>
 
-  <h5 class="mt-4">7. Cookies</h5>
-  <p>Farm Control utilise uniquement un cookie de session necessaire pour rester connecte, et un cookie de
-  preference de langue. Aucun cookie publicitaire ou de suivi tiers n'est utilise.</p>
+  <h5 class="mt-4">{{ _('7. Cookies') }}</h5>
+  <p>{{ _('Farm Control utilise uniquement un cookie de session necessaire pour rester connecte, et un cookie de preference de langue. Aucun cookie publicitaire ou de suivi tiers n\'est utilise.') }}</p>
 
-  <h5 class="mt-4">8. Contact</h5>
-  <p>Pour toute question sur vos donnees personnelles ou pour exercer vos droits :
+  <h5 class="mt-4">{{ _('8. Contact') }}</h5>
+  <p>{{ _('Pour toute question sur vos donnees personnelles ou pour exercer vos droits :') }}
   <a href="mailto:{{ support_email }}">{{ support_email }}</a></p>
 </div>
 {% endset %}
@@ -80,8 +59,8 @@
   <div class="container">
     <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
     <div class="d-flex gap-2">
-      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
-      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">{{ _('Se connecter') }}</a>
+      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">{{ _('Creer mon compte') }}</a>
     </div>
   </div>
 </nav>

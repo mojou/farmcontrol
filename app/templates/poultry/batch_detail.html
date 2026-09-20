@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% block title %}Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}{{ _('Lot %(code)s - Farm Control', code=(batch.code)) }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
   <div>
-    <h1 class="fc-page-title">Lot {{ batch.code }}</h1>
-    <p class="text-muted mb-0">{{ batch.farm.name }} - Souche : {{ batch.breed or "-" }} - Debut : {{ batch.start_date.strftime('%d/%m/%Y') }}</p>
+    <h1 class="fc-page-title">{{ _('Lot %(code)s', code=(batch.code)) }}</h1>
+    <p class="text-muted mb-0">{{ _('%(name)s - Souche : %(breed)s - Debut : %(start_date)s', name=(batch.farm.name), breed=(batch.breed or "-"), start_date=(batch.start_date.strftime('%d/%m/%Y'))) }}</p>
   </div>
   <div class="d-flex gap-2">
-    <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> Saisie quotidienne</a>
-    <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Rapport complet</a>
+    <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm"><i class="bi bi-clipboard-plus"></i> {{ _('Saisie quotidienne') }}</a>
+    <a href="{{ url_for('poultry.batch_report', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">{{ _('Rapport complet') }}</a>
     {% if current_user.has_role('owner') %}
-    <a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cash-coin"></i> Ventes</a>
-    <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">Ce que vous gagnez</a>
+    <a href="{{ url_for('poultry.sales_list', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cash-coin"></i> {{ _('Ventes') }}</a>
+    <a href="{{ url_for('poultry.batch_finance', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm">{{ _('Ce que vous gagnez') }}</a>
     {% if batch.is_active %}
-    <a href="{{ url_for('poultry.batch_edit', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" title="Modifier"><i class="bi bi-pencil"></i></a>
-    <a href="{{ url_for('poultry.batch_close', batch_id=batch.id) }}" class="btn btn-outline-danger btn-sm">Cloturer</a>
+    <a href="{{ url_for('poultry.batch_edit', batch_id=batch.id) }}" class="btn btn-outline-secondary btn-sm" title="{{ _('Modifier') }}"><i class="bi bi-pencil"></i></a>
+    <a href="{{ url_for('poultry.batch_close', batch_id=batch.id) }}" class="btn btn-outline-danger btn-sm">{{ _('Cloturer') }}</a>
     {% endif %}
     {% endif %}
   </div>
@@ -24,25 +24,25 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">Nombre de poulets / {{ batch.initial_count }}</div>
+      <div class="fc-kpi-label">{{ _('Nombre de poulets / %(initial_count)s', initial_count=(batch.initial_count)) }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_mortality }}</div>
-      <div class="fc-kpi-label">Mortalite totale</div>
+      <div class="fc-kpi-label">{{ _('Mortalite totale') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">Aliment par poulet</div>
+      <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_feed_kg|number(1) }}</div>
-      <div class="fc-kpi-label">Aliment total (kg)</div>
+      <div class="fc-kpi-label">{{ _('Aliment total (kg)') }}</div>
     </div></div>
   </div>
 </div>
@@ -50,27 +50,27 @@
 <div class="row g-3">
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">
-      <h6 class="text-muted small text-uppercase mb-3">Programme sanitaire</h6>
-      <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">Gerer le programme sanitaire</a>
+      <h6 class="text-muted small text-uppercase mb-3">{{ _('Programme sanitaire') }}</h6>
+      <a href="{{ url_for('poultry.sanitary_program', batch_id=batch.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Gerer le programme sanitaire') }}</a>
     </div></div>
   </div>
   {% if current_user.has_role('owner') %}
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">
-      <h6 class="text-muted small text-uppercase mb-3">Ce que vous gagnez</h6>
+      <h6 class="text-muted small text-uppercase mb-3">{{ _('Ce que vous gagnez') }}</h6>
       {% if batch.finance %}
-      <p class="mb-1">Depenses totales : {{ batch.finance.total_charges|currency }}</p>
-      <p class="mb-1">Benefice : {{ batch.finance.net_result|currency }}</p>
-      <p class="mb-0">Prix de revient par kilo : {{ batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-" }}</p>
+      <p class="mb-1">{{ _('Depenses totales : %(total_charges)s', total_charges=(batch.finance.total_charges|currency)) }}</p>
+      <p class="mb-1">{{ _('Benefice : %(net_result)s', net_result=(batch.finance.net_result|currency)) }}</p>
+      <p class="mb-0">{{ _('Prix de revient par kilo : %(cost_per_kg)s', cost_per_kg=(batch.finance.cost_per_kg|currency if batch.finance.cost_per_kg is not none else "-")) }}</p>
       {% else %}
-      <p class="text-muted mb-0">Pas encore calculee.</p>
+      <p class="text-muted mb-0">{{ _('Pas encore calculee.') }}</p>
       {% endif %}
     </div></div>
   </div>
   {% endif %}
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">
-      <h6 class="text-muted small text-uppercase mb-3">Qui a travaille sur ce lot</h6>
+      <h6 class="text-muted small text-uppercase mb-3">{{ _('Qui a travaille sur ce lot') }}</h6>
       {% if batch.contributors %}
       <ul class="list-unstyled mb-0">
         {% for user in batch.contributors %}
@@ -81,7 +81,7 @@
         {% endfor %}
       </ul>
       {% else %}
-      <p class="text-muted mb-0">Aucune saisie enregistree pour l'instant.</p>
+      <p class="text-muted mb-0">{{ _('Aucune saisie enregistree pour l\'instant.') }}</p>
       {% endif %}
     </div></div>
   </div>

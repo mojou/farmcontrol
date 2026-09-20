@@ -1,66 +1,66 @@
 {% extends "base.html" %}
 {% import "partials/_form_macros.html" as fm %}
-{% block title %}Ventes - Lot {{ batch.code }} - Farm Control{% endblock %}
+{% block title %}{{ _('Ventes - Lot %(code)s - Farm Control', code=(batch.code)) }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
   <div>
-    <h1 class="fc-page-title">Ventes du lot {{ batch.code }}</h1>
-    <p class="text-muted mb-0">Enregistrez chaque vente separement : plusieurs acheteurs, plusieurs dates, paiement partiel possible.</p>
+    <h1 class="fc-page-title">{{ _('Ventes du lot %(code)s', code=(batch.code)) }}</h1>
+    <p class="text-muted mb-0">{{ _('Enregistrez chaque vente separement : plusieurs acheteurs, plusieurs dates, paiement partiel possible.') }}</p>
   </div>
-  <a href="{{ url_for('poultry.credits_list') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-exclamation-circle"></i> Voir tout l'argent qu'on vous doit</a>
+  <a href="{{ url_for('poultry.credits_list') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-exclamation-circle"></i> {{ _('Voir tout l\'argent qu\'on vous doit') }}</a>
 </div>
 
 <div class="row g-3 mb-4">
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value text-success">{{ cash_collected|currency }}</div>
-      <div class="fc-kpi-label">Argent recu (dans la caisse)</div>
+      <div class="fc-kpi-label">{{ _('Argent recu (dans la caisse)') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value {{ 'text-danger' if cash_outstanding > 0 }}">{{ cash_outstanding|currency }}</div>
-      <div class="fc-kpi-label">On vous doit encore</div>
+      <div class="fc-kpi-label">{{ _('On vous doit encore') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_sold_subjects }}</div>
-      <div class="fc-kpi-label">Poulets vendus (retires du nombre de poulets)</div>
+      <div class="fc-kpi-label">{{ _('Poulets vendus (retires du nombre de poulets)') }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">Nombre de poulets restants</div>
+      <div class="fc-kpi-label">{{ _('Nombre de poulets restants') }}</div>
     </div></div>
   </div>
 </div>
 
 <div class="row g-4">
   <div class="col-lg-4">
-    {{ fm.form_card(form, "Nouvelle vente") }}
+    {{ fm.form_card(form, _("Nouvelle vente")) }}
   </div>
   <div class="col-lg-8">
     <div class="card">
       <div class="card-body">
-        <h6 class="text-muted small text-uppercase mb-3">Historique des ventes</h6>
+        <h6 class="text-muted small text-uppercase mb-3">{{ _('Historique des ventes') }}</h6>
         <div class="table-responsive">
         <table class="table table-sm align-middle">
-          <thead><tr><th>Date</th><th>Acheteur</th><th>Quantite</th><th>Montant</th><th>Recu</th><th>Solde</th><th></th></tr></thead>
+          <thead><tr><th>{{ _('Date') }}</th><th>{{ _('Acheteur') }}</th><th>{{ _('Quantite') }}</th><th>{{ _('Montant') }}</th><th>{{ _('Recu') }}</th><th>{{ _('Solde') }}</th><th></th></tr></thead>
           <tbody>
             {% for sale in sales %}
             <tr class="{{ 'table-warning' if not sale.is_paid }}">
               <td class="text-nowrap">{{ sale.sale_date.strftime('%d/%m/%Y') }}</td>
               <td>{{ sale.buyer_name }}{% if sale.buyer_phone %}<br><span class="text-muted small">{{ sale.buyer_phone }}</span>{% endif %}</td>
-              <td>{{ sale.quantity }} {{ "kg" if sale.unit == "kg" else "poulets" }}</td>
+              <td>{{ sale.quantity }} {{ "kg" if sale.unit == "kg" else _("poulets") }}</td>
               <td>{{ sale.total_amount|number }} FCFA</td>
               <td>{{ sale.amount_paid|number }} FCFA</td>
               <td>
                 {% if sale.is_paid %}
-                <span class="badge bg-success">Solde</span>
+                <span class="badge bg-success">{{ _('Paye') }}</span>
                 {% else %}
-                <span class="badge bg-danger">{{ sale.balance_due|number }} FCFA du</span>
+                <span class="badge bg-danger">{{ _('%(balance_due)s FCFA du', balance_due=(sale.balance_due|number)) }}</span>
                 {% endif %}
               </td>
               <td>
@@ -68,20 +68,20 @@
                   {% if not sale.is_paid %}
                   <form method="post" action="{{ url_for('poultry.sale_payment', sale_id=sale.id) }}" class="d-flex gap-1">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="number" step="0.01" name="amount" class="form-control form-control-sm" style="width:100px" placeholder="Montant" required>
-                    <button class="btn btn-sm btn-outline-success" title="Enregistrer un paiement"><i class="bi bi-cash"></i></button>
+                    <input type="number" step="0.01" name="amount" class="form-control form-control-sm" style="width:100px" placeholder="{{ _('Montant') }}" required>
+                    <button class="btn btn-sm btn-outline-success" title="{{ _('Enregistrer un paiement') }}"><i class="bi bi-cash"></i></button>
                   </form>
                   {% endif %}
                   <form method="post" action="{{ url_for('poultry.sale_delete', sale_id=sale.id) }}"
-                        onsubmit="return confirm('Supprimer cette vente ?');">
+                        onsubmit='return confirm({{ _("Supprimer cette vente ?")|tojson }});'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button class="btn btn-sm btn-outline-danger" title="Supprimer"><i class="bi bi-trash"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" title="{{ _('Supprimer') }}"><i class="bi bi-trash"></i></button>
                   </form>
                 </div>
               </td>
             </tr>
             {% else %}
-            <tr><td colspan="7" class="text-muted text-center py-4">Aucune vente enregistree pour ce lot.</td></tr>
+            <tr><td colspan="7" class="text-muted text-center py-4">{{ _('Aucune vente enregistree pour ce lot.') }}</td></tr>
             {% endfor %}
           </tbody>
         </table>

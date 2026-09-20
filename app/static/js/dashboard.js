@@ -34,10 +34,10 @@ function renderBatchCharts(canvasIds, series) {
     new Chart(mortalityCanvas, {
       type: "line",
       data: {
-        labels: series.mortality.map(function (p) { return "J" + p.day; }),
+        labels: series.mortality.map(function (p) { return FC_I18N.dayPrefix + p.day; }),
         datasets: [
           {
-            label: "Mortalite cumulee",
+            label: FC_I18N.mortalityCumulative,
             data: series.mortality.map(function (p) { return p.cumulative; }),
             borderColor: "#b3261e",
             backgroundColor: "rgba(179, 38, 30, 0.12)",
@@ -58,10 +58,10 @@ function renderBatchCharts(canvasIds, series) {
     new Chart(feedCanvas, {
       type: "line",
       data: {
-        labels: series.feed.map(function (p) { return "J" + p.day; }),
+        labels: series.feed.map(function (p) { return FC_I18N.dayPrefix + p.day; }),
         datasets: [
           {
-            label: "Aliment consomme cumule (kg)",
+            label: FC_I18N.feedCumulativeKg,
             data: series.feed.map(function (p) { return p.cumulative; }),
             borderColor: "#2f5233",
             backgroundColor: "rgba(47, 82, 51, 0.12)",
@@ -108,7 +108,7 @@ function initSanitaryReminders(options) {
           return;
         }
         document.getElementById("sanitaryReminderContext").textContent =
-          "Lot " + data.batch_code + " (" + data.farm_name + ") - Jour " + data.day_number;
+          FC_I18N.reminderContext.replace("%(batch)s", data.batch_code).replace("%(farm)s", data.farm_name).replace("%(day)s", data.day_number);
         document.getElementById("sanitaryReminderProduct").textContent = data.product_name;
         document.getElementById("sanitaryReminderNotes").textContent = data.notes || "";
         document.getElementById("sanitaryReminderRoadmapLink").href = data.roadmap_url;
