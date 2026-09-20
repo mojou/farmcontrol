@@ -39,7 +39,7 @@ from app.models.poultry import (
     WeightRecord,
     WoodRecord,
 )
-from app.utils.alerts import check_fcr_alert, check_mortality_alert, check_stock_alert, check_urgent_observation_alert
+from app.utils.alerts import check_fcr_alert, check_low_laying_alert, check_mortality_alert, check_stock_alert, check_urgent_observation_alert
 from app.utils.audit import log_action
 from app.utils.sanitary import get_pending_items
 from app.utils.uploads import delete_photo, save_observation_photo
@@ -322,6 +322,8 @@ def egg_record_new(day_id):
         db.session.add(record)
         db.session.flush()
         log_action("create", "poultry_egg_records", None, {"eggs_collected": form.eggs_collected.data})
+        db.session.expire(day, ["egg_records"])
+        check_low_laying_alert(day.batch)
         db.session.commit()
         flash(_("Ramassage d'oeufs enregistre."), "success")
     else:

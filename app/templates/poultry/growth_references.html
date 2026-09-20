@@ -3,7 +3,7 @@
 {% block title %}{{ _('Poids normal attendu - Farm Control') }}{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">{{ _('Poids normal attendu par souche') }}</h1>
+  <h1 class="fc-page-title">{{ _('Poids et ponte attendus par souche') }}</h1>
 </div>
 
 <div class="row g-3">
@@ -12,16 +12,17 @@
       <div class="card-body">
         <div class="table-responsive">
         <table class="table align-middle">
-          <thead><tr><th>{{ _('Souche') }}</th><th>{{ _('Points') }}</th><th></th></tr></thead>
+          <thead><tr><th>{{ _('Souche') }}</th><th>{{ _('Type de courbe') }}</th><th>{{ _('Points') }}</th><th></th></tr></thead>
           <tbody>
             {% for ref in references %}
             <tr>
               <td>{{ ref.name }}</td>
+              <td>{{ _('Ponte attendue (pondeuses)') if ref.kind == 'laying' else _('Poids attendu (poulets)') }}</td>
               <td>{{ ref.points|length }}</td>
               <td><a href="{{ url_for('poultry.growth_reference_detail', reference_id=ref.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Gerer') }}</a></td>
             </tr>
             {% else %}
-            <tr><td colspan="3" class="text-muted text-center py-4">{{ _('Aucun poids de reference enregistre.') }}</td></tr>
+            <tr><td colspan="4" class="text-muted text-center py-4">{{ _('Aucun poids de reference enregistre.') }}</td></tr>
             {% endfor %}
           </tbody>
         </table>

@@ -84,6 +84,7 @@ class Tenant(TimestampMixin, db.Model):
         "SanitaryProgramTemplateItem", cascade="all, delete-orphan"
     )
     suppliers = db.relationship("Supplier", cascade="all, delete-orphan")
+    growth_references = db.relationship("GrowthReference", cascade="all, delete-orphan")
     # Une alerte n'est pas toujours rattachee a une ferme/un lot (farm_id et
     # batch_id sont nullable) : sans ce lien direct depuis Tenant, ces
     # alertes "orphelines" n'etaient couvertes par aucune cascade et

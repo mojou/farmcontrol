@@ -123,11 +123,18 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
     growth_reference_id = db.Column(
         db.Integer, db.ForeignKey("poultry_growth_references.id", ondelete="SET NULL"), nullable=True
     )
+    # Poules pondeuses : age des poules a la mise en place (en semaines) et
+    # courbe de ponte attendue (GrowthReference de type "laying").
+    start_age_weeks = db.Column(db.Integer, nullable=False, default=0, server_default="0")
+    laying_reference_id = db.Column(
+        db.Integer, db.ForeignKey("poultry_growth_references.id", ondelete="SET NULL"), nullable=True
+    )
 
     created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     farm = db.relationship("Farm", back_populates="batches")
-    growth_reference = db.relationship("GrowthReference")
+    growth_reference = db.relationship("GrowthReference", foreign_keys=[growth_reference_id])
+    laying_reference = db.relationship("GrowthReference", foreign_keys=[laying_reference_id])
     supplier = db.relationship("Supplier")
     sales = db.relationship("Sale", back_populates="batch", cascade="all, delete-orphan")
     days = db.relationship(
@@ -656,8 +663,14 @@ class GrowthReference(TimestampMixin, TenantMixin, db.Model):
 
     __tablename__ = "poultry_growth_references"
 
+    # "weight" : poids attendu (g) par jour d'age ; "laying" : taux de ponte
+    # attendu (%) par semaine d'age (voir app/utils/laying.py).
+    KIND_WEIGHT = "weight"
+    KIND_LAYING = "laying"
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)  # ex: "Ross 308"
+    kind = db.Column(db.String(10), nullable=False, default=KIND_WEIGHT, server_default=KIND_WEIGHT)
     created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     points = db.relationship(

@@ -6,6 +6,7 @@ faciles a tester unitairement.
 from decimal import Decimal
 
 from app.models.poultry import BatchFinance
+from app.utils.laying import expected_laying_rate
 
 
 def latest_weight_record(batch):
@@ -74,9 +75,11 @@ def egg_production_series(batch):
         eggs = sum(r.eggs_collected for r in day.egg_records)
         broken = sum(r.eggs_broken for r in day.egg_records)
         rate = round(eggs * 100 / hens, 1) if hens and day.egg_records else None
+        age_weeks = (batch.start_age_weeks or 0) + max((day.date - batch.start_date).days, 0) // 7
+        expected = expected_laying_rate(batch.laying_reference, age_weeks)
         series.append(
             {"day": day.day_number, "date": day.date.isoformat(), "eggs": eggs, "broken": broken,
-             "hens": hens, "rate": rate}
+             "hens": hens, "rate": rate, "age_weeks": age_weeks, "expected": expected}
         )
     return series
 
@@ -86,6 +89,14 @@ def average_laying_rate(batch, last_days=7):
     saisis, ou None s'il n'y en a pas encore."""
     rates = [p["rate"] for p in egg_production_series(batch) if p["rate"] is not None][-last_days:]
     return round(sum(rates) / len(rates), 1) if rates else None
+
+
+def average_expected_laying_rate(batch, last_days=7):
+    """Taux de ponte attendu (%) moyen sur ces memes derniers jours, ou None
+    si aucune courbe de ponte n'est associee au lot."""
+    points = [p for p in egg_production_series(batch) if p["rate"] is not None][-last_days:]
+    expected = [p["expected"] for p in points if p["expected"] is not None]
+    return round(sum(expected) / len(expected), 1) if expected else None
 
 
 def feed_series(batch):

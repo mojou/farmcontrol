@@ -21,7 +21,7 @@
     <div class="card fc-kpi-card h-100"><div class="card-body">
       {% if batch.is_layer %}
       <div class="fc-kpi-value">{{ (laying_rate ~ " %") if laying_rate is not none else "-" }}</div>
-      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}</div>
+      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}{% if expected_rate is not none %} - {{ _('attendu : %(rate)s', rate=(expected_rate ~ ' %')) }}{% endif %}</div>
       {% else %}
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
       <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
@@ -74,10 +74,10 @@
   {% if egg_data|selectattr('eggs')|list %}
   <div class="table-responsive">
   <table class="table table-sm mb-0">
-    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Date') }}</th><th>{{ _('Oeufs ramasses') }}</th><th>{{ _('Dont casses') }}</th><th>{{ _('Poules') }}</th><th>{{ _('Taux de ponte') }}</th></tr></thead>
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Date') }}</th><th>{{ _('Oeufs ramasses') }}</th><th>{{ _('Dont casses') }}</th><th>{{ _('Poules') }}</th><th>{{ _('Taux de ponte') }}</th><th>{{ _('Attendu') }}</th></tr></thead>
     <tbody>
       {% for row in egg_data if row.eggs %}
-      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.eggs }}</td><td>{{ row.broken }}</td><td>{{ row.hens }}</td><td>{{ row.rate }} %</td></tr>
+      <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.date }}</td><td>{{ row.eggs }}</td><td>{{ row.broken }}</td><td>{{ row.hens }}</td><td>{{ row.rate }} %</td><td class="text-muted">{{ (row.expected ~ " %") if row.expected is not none else "-" }}</td></tr>
       {% endfor %}
     </tbody>
   </table>

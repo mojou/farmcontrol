@@ -37,7 +37,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ (laying_rate ~ " %") if laying_rate is not none else "-" }}</div>
-      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}</div>
+      <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}{% if expected_rate is not none %} - {{ _('attendu : %(rate)s', rate=(expected_rate ~ ' %')) }}{% endif %}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">

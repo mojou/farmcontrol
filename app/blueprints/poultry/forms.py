@@ -31,6 +31,13 @@ class BatchForm(FlaskForm):
     supplier_id = SelectField(_l("Fournisseur des poussins (facultatif)"), coerce=int, validators=[Optional()])
     start_date = DateField(_l("Date de mise en place"), validators=[DataRequired()])
     growth_reference_id = SelectField(_l("Poids normal attendu (souche)"), coerce=int, validators=[Optional()])
+    start_age_weeks = IntegerField(
+        _l("Age des poules a la mise en place (en semaines)"),
+        validators=[Optional(), NumberRange(min=0, max=120)],
+        default=0,
+        render_kw={"placeholder": _l("Ex : 18 (0 si poussins d'un jour)")},
+    )
+    laying_reference_id = SelectField(_l("Ponte attendue (courbe)"), coerce=int, validators=[Optional()])
     submit = SubmitField(_l("Enregistrer"))
 
 
@@ -286,7 +293,18 @@ class StockItemForm(FlaskForm):
 
 class GrowthReferenceForm(FlaskForm):
     name = StringField(_l("Nom de la souche"), validators=[DataRequired()])
+    kind = SelectField(
+        _l("Type de courbe"),
+        choices=[("weight", _l("Poids attendu (poulets)")), ("laying", _l("Ponte attendue (pondeuses)"))],
+        default="weight",
+    )
     submit = SubmitField(_l("Enregistrer"))
+
+
+class LayingPointForm(FlaskForm):
+    week = IntegerField(_l("Semaine d'age"), validators=[DataRequired(), NumberRange(min=0, max=120)])
+    rate = DecimalField(_l("Taux de ponte attendu (%)"), validators=[DataRequired(), NumberRange(min=0, max=100)], places=1)
+    submit = SubmitField(_l("Ajouter le point"))
 
 
 class GrowthReferencePointForm(FlaskForm):

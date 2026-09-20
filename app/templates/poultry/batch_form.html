@@ -7,3 +7,26 @@
 </div>
 <div class="row"><div class="col-lg-6">{{ fm.form_card(form, None) }}</div></div>
 {% endblock %}
+{% block scripts %}
+<script>
+  // Champs propres aux pondeuses : visibles seulement pour ce type d'elevage
+  // (et le poids attendu des poulets est masque pour les pondeuses).
+  (function () {
+    var species = document.getElementById("species");
+    if (!species) return;
+    function row(id) {
+      var el = document.getElementById(id);
+      return el ? (el.closest(".mb-3") || el.parentElement) : null;
+    }
+    function refresh() {
+      var layer = species.value === "layer";
+      ["start_age_weeks", "laying_reference_id"].forEach(function (id) {
+        var r = row(id); if (r) r.style.display = layer ? "" : "none";
+      });
+      var w = row("growth_reference_id"); if (w) w.style.display = layer ? "none" : "";
+    }
+    species.addEventListener("change", refresh);
+    refresh();
+  })();
+</script>
+{% endblock %}

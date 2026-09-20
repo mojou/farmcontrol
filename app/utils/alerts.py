@@ -166,6 +166,45 @@ def check_fcr_alert(batch):
     )
 
 
+def check_low_laying_alert(batch):
+    """Alerte si le taux de ponte reste nettement sous la courbe attendue
+    pendant plusieurs jours de saisie consecutifs (maladie, stress,
+    alimentation...). Au plus une alerte par jour et par lot."""
+    from app.utils.laying import LOW_LAYING_DAYS, LOW_LAYING_GAP_POINTS
+    from app.utils.zootechnie import egg_production_series
+
+    if not batch.is_layer:
+        return None
+    recent = [p for p in egg_production_series(batch) if p["rate"] is not None][-LOW_LAYING_DAYS:]
+    if len(recent) < LOW_LAYING_DAYS or any(p["expected"] is None for p in recent):
+        return None
+    if any(p["rate"] > p["expected"] - LOW_LAYING_GAP_POINTS for p in recent):
+        return None
+
+    today = datetime.now(timezone.utc).date()
+    already_alerted = (
+        Alert.query.filter_by(batch_id=batch.id, type="laying")
+        .filter(Alert.created_at >= datetime(today.year, today.month, today.day, tzinfo=timezone.utc))
+        .first()
+    )
+    if already_alerted:
+        return None
+
+    avg_rate = sum(p["rate"] for p in recent) / len(recent)
+    avg_expected = sum(p["expected"] for p in recent) / len(recent)
+    return create_alert(
+        title=f"Ponte faible - Lot {batch.code}",
+        message=(
+            f"Le lot {batch.code} pond {avg_rate:.1f} % ces {len(recent)} derniers jours de saisie, "
+            f"contre {avg_expected:.1f} % attendus. Verifiez la sante des poules, l'eau, "
+            "l'aliment et le stress (chaleur, bruit)."
+        ),
+        alert_type="laying",
+        priority=ALERT_PRIORITY_IMPORTANT,
+        batch=batch,
+    )
+
+
 def check_urgent_observation_alert(observation, batch):
     from app.models.poultry import OBS_SEVERITY_URGENT
 

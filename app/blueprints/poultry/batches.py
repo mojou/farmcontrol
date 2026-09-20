@@ -3,6 +3,7 @@ from datetime import date
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask_babel import gettext as _
 from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 from app.blueprints.poultry import poultry_bp
 from app.blueprints.poultry.daily import _apply_stock_consumption, _stock_choices, _stock_entry_price
@@ -12,6 +13,7 @@ from app.blueprints.poultry.forms import (
     BatchForm,
     GrowthReferenceForm,
     GrowthReferencePointForm,
+    LayingPointForm,
     SanitaryProgramItemForm,
 )
 from app.decorators import ensure_farm_access, owner_required
@@ -31,6 +33,7 @@ from app.models.poultry import (
 )
 from app.utils.alerts import check_stock_alert
 from app.utils.audit import log_action
+from app.utils.laying import DEFAULT_LAYING_REFERENCE_NAME, ensure_default_laying_reference
 from app.utils.plans import get_current_plan
 from app.utils.sanitary import (
     current_batch_day_number,
@@ -39,6 +42,7 @@ from app.utils.sanitary import (
     get_pending_items,
 )
 from app.utils.zootechnie import (
+    average_expected_laying_rate,
     average_laying_rate,
     compute_fcr,
     egg_production_series,
@@ -77,6 +81,34 @@ def batches_list():
     return render_template("poultry/batches_list.html", pagination=pagination, status=status)
 
 
+def _set_reference_choices(form):
+    """Listes deroulantes des courbes : poids attendu (poulets) et ponte
+    attendue (pondeuses). La courbe de ponte standard est proposee via
+    l'entree 0 (creee au besoin a l'enregistrement du lot)."""
+    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
+        (r.id, r.name)
+        for r in GrowthReference.query.filter_by(kind=GrowthReference.KIND_WEIGHT).order_by(GrowthReference.name).all()
+    ]
+    form.laying_reference_id.choices = [(0, _("Courbe standard (indicative)"))] + [
+        (r.id, r.name)
+        for r in GrowthReference.query.filter_by(kind=GrowthReference.KIND_LAYING).order_by(GrowthReference.name).all()
+        if r.name != DEFAULT_LAYING_REFERENCE_NAME
+    ]
+
+
+def _apply_layer_settings(batch, form):
+    """Age des poules et courbe de ponte : uniquement pour les pondeuses."""
+    if batch.is_layer:
+        batch.start_age_weeks = form.start_age_weeks.data or 0
+        if form.laying_reference_id.data:
+            batch.laying_reference_id = form.laying_reference_id.data
+        else:
+            batch.laying_reference_id = ensure_default_laying_reference(current_user.tenant_id).id
+    else:
+        batch.start_age_weeks = 0
+        batch.laying_reference_id = None
+
+
 @poultry_bp.route("/lots/nouveau", methods=["GET", "POST"])
 @owner_required
 def batch_new():
@@ -92,9 +124,7 @@ def batch_new():
 
     form = BatchForm()
     form.farm_id.choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
-    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
-        (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
-    ]
+    _set_reference_choices(form)
     form.supplier_id.choices = [(0, _("Aucun"))] + [
         (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
     ]
@@ -122,6 +152,7 @@ def batch_new():
         )
         db.session.add(batch)
         db.session.flush()
+        _apply_layer_settings(batch, form)
         recompute_batch_finance(batch)
         log_action("create", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
@@ -150,15 +181,16 @@ def batch_edit(batch_id):
     if batch.farm_id not in [f[0] for f in farm_choices]:
         farm_choices = [(batch.farm_id, batch.farm.name)] + farm_choices
     form.farm_id.choices = farm_choices
-    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
-        (r.id, r.name) for r in GrowthReference.query.order_by(GrowthReference.name).all()
-    ]
+    _set_reference_choices(form)
     form.supplier_id.choices = [(0, _("Aucun"))] + [
         (s.id, s.name) for s in Supplier.query.filter_by(is_active=True, category=Supplier.CATEGORY_CHICK).order_by(Supplier.name).all()
     ]
     if request.method == "GET":
         form.supplier_id.data = batch.supplier_id or 0
         form.growth_reference_id.data = batch.growth_reference_id or 0
+        ref = batch.laying_reference
+        form.laying_reference_id.data = 0 if (ref is None or ref.name == DEFAULT_LAYING_REFERENCE_NAME) else ref.id
+        form.start_age_weeks.data = batch.start_age_weeks
 
     if form.validate_on_submit():
         existing = (
@@ -179,6 +211,7 @@ def batch_edit(batch_id):
         batch.supplier_id = form.supplier_id.data or None
         batch.start_date = form.start_date.data
         batch.growth_reference_id = form.growth_reference_id.data or None
+        _apply_layer_settings(batch, form)
         recompute_batch_finance(batch)
         log_action("update", "poultry_batches", batch.id, {"code": batch.code})
         db.session.commit()
@@ -194,7 +227,10 @@ def batch_detail(batch_id):
     batch = _get_batch_or_403(batch_id)
     fcr = compute_fcr(batch)
     laying_rate = average_laying_rate(batch) if batch.is_layer else None
-    return render_template("poultry/batch_detail.html", batch=batch, fcr=fcr, laying_rate=laying_rate)
+    expected_rate = average_expected_laying_rate(batch) if batch.is_layer else None
+    return render_template(
+        "poultry/batch_detail.html", batch=batch, fcr=fcr, laying_rate=laying_rate, expected_rate=expected_rate
+    )
 
 
 @poultry_bp.route("/lots/<int:batch_id>/cloturer", methods=["GET", "POST"])
@@ -296,6 +332,7 @@ def batch_report(batch_id):
         growth_data=growth_curve_comparison(batch),
         egg_data=egg_production_series(batch) if batch.is_layer else [],
         laying_rate=average_laying_rate(batch) if batch.is_layer else None,
+        expected_rate=average_expected_laying_rate(batch) if batch.is_layer else None,
         cash_collected=cash_collected,
         cash_outstanding=cash_outstanding,
         stock_purchases_total=stock_purchases_total,
@@ -441,7 +478,7 @@ def growth_references():
     form = GrowthReferenceForm()
     if form.validate_on_submit():
         reference = GrowthReference(
-            tenant_id=current_user.tenant_id, name=form.name.data, created_by=current_user.id
+            tenant_id=current_user.tenant_id, name=form.name.data, kind=form.kind.data, created_by=current_user.id
         )
         db.session.add(reference)
         db.session.commit()
@@ -456,16 +493,23 @@ def growth_references():
 @owner_required
 def growth_reference_detail(reference_id):
     reference = GrowthReference.query.get_or_404(reference_id)
-    form = GrowthReferencePointForm()
+    is_laying = reference.kind == GrowthReference.KIND_LAYING
+    form = LayingPointForm() if is_laying else GrowthReferencePointForm()
     if form.validate_on_submit():
         point = GrowthReferencePoint(
             tenant_id=current_user.tenant_id,
             reference_id=reference.id,
-            day_number=form.day_number.data,
-            expected_weight=form.expected_weight.data,
+            day_number=form.week.data if is_laying else form.day_number.data,
+            expected_weight=form.rate.data if is_laying else form.expected_weight.data,
         )
         db.session.add(point)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            # Un point existe deja pour ce jour / cette semaine.
+            db.session.rollback()
+            flash(_("Un point existe deja pour cette valeur : supprimez-le ou choisissez une autre."), "danger")
+            return redirect(url_for("poultry.growth_reference_detail", reference_id=reference.id))
         flash(_("Point de courbe ajoute."), "success")
         return redirect(url_for("poultry.growth_reference_detail", reference_id=reference.id))
 
