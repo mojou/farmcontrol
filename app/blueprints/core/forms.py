@@ -266,7 +266,7 @@ class SettingsForm(FlaskForm):
     )
     default_sale_unit = SelectField(
         _l("Mode de vente par defaut"),
-        choices=[("unit", _l("Au sujet (par poulet)")), ("kg", _l("Au kilogramme"))],
+        choices=[("unit", _l("A la piece (par animal)")), ("kg", _l("Au kilogramme"))],
         default="unit",
     )
 

@@ -200,7 +200,7 @@ class ObservationForm(FlaskForm):
     description = TextAreaField(
         _l("Que remarquez-vous ?"),
         validators=[DataRequired()],
-        render_kw={"placeholder": _l("Ex : 3 poussins faibles dans le coin nord de la ferme")},
+        render_kw={"placeholder": _l("Ex : 3 animaux faibles dans le coin nord de la ferme")},
     )
     severity = SelectField(
         _l("Est-ce urgent ?"),
@@ -233,7 +233,7 @@ class WeightRecordForm(FlaskForm):
 class BatchFinanceForm(FlaskForm):
     labor_cost = DecimalField(_l("Cout main d'oeuvre"), validators=[Optional(), NumberRange(min=0)], places=2, default=0)
     sale_quantity = IntegerField(_l("Quantite vendue"), validators=[Optional(), NumberRange(min=0)])
-    sale_unit = SelectField(_l("Unite de vente"), choices=[("kg", _l("Kilogramme")), ("unit", _l("Unite (par sujet)"))], default="kg")
+    sale_unit = SelectField(_l("Unite de vente"), choices=[("kg", _l("Kilogramme")), ("unit", _l("A la piece (par animal)"))], default="kg")
     sale_unit_price = DecimalField(_l("Prix de vente unitaire"), validators=[Optional(), NumberRange(min=0)], places=2)
     submit = SubmitField(_l("Enregistrer"))
 

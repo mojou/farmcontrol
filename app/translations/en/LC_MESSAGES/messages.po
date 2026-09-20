@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-20 04:33+0100\n"
+"POT-Creation-Date: 2026-09-20 04:53+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -600,9 +600,9 @@ msgstr "E.g. 2000"
 msgid "Mode de vente par defaut"
 msgstr "Default sale mode"
 
-#: app/blueprints/core/forms.py:269
-msgid "Au sujet (par poulet)"
-msgstr "Per subject (per chicken)"
+#: app/blueprints/core/forms.py:269 app/blueprints/poultry/forms.py:236
+msgid "A la piece (par animal)"
+msgstr "Per head (per animal)"
 
 #: app/blueprints/core/forms.py:269
 msgid "Au kilogramme"
@@ -1268,8 +1268,8 @@ msgid "Que remarquez-vous ?"
 msgstr "What did you notice?"
 
 #: app/blueprints/poultry/forms.py:203
-msgid "Ex : 3 poussins faibles dans le coin nord de la ferme"
-msgstr "E.g. 3 weak chicks in the north corner of the farm"
+msgid "Ex : 3 animaux faibles dans le coin nord de la ferme"
+msgstr "E.g. 3 weak animals in the north corner of the farm"
 
 #: app/blueprints/poultry/forms.py:206
 msgid "Est-ce urgent ?"
@@ -1314,10 +1314,6 @@ msgstr "Sale unit"
 #: app/blueprints/poultry/forms.py:236
 msgid "Kilogramme"
 msgstr "Kilogram"
-
-#: app/blueprints/poultry/forms.py:236
-msgid "Unite (par sujet)"
-msgstr "Unit (per chicken)"
 
 #: app/blueprints/poultry/forms.py:237
 msgid "Prix de vente unitaire"
@@ -4876,4 +4872,10 @@ msgstr "Image format not allowed. Accepted formats: png, jpg, jpeg, webp."
 
 #~ msgid "Poulets vendus (retires du nombre de poulets)"
 #~ msgstr "Chickens sold (removed from the number of chickens)"
+
+#~ msgid "Au sujet (par poulet)"
+#~ msgstr "Per subject (per chicken)"
+
+#~ msgid "Unite (par sujet)"
+#~ msgstr "Unit (per chicken)"
 
