@@ -74,7 +74,7 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.documentation' }}" href="{{ url_for('core.documentation') }}" target="_blank">
       <i class="bi bi-book"></i> {{ _('Documentation') }}
     </a>
-    <a class="fc-nav-link" href="mailto:{{ support_email }}">
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'core.contact' }}" href="{{ url_for('core.contact') }}">
       <i class="bi bi-envelope"></i> {{ _('Contacter le support') }}
     </a>
     <a class="fc-nav-link" href="{{ url_for('auth.logout') }}">

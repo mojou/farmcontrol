@@ -75,6 +75,15 @@ def privacy():
     return render_template("core/privacy.html")
 
 
+@core_bp.route("/contact")
+def contact():
+    """Page de contact simple : un lien mailto: seul se comporte de facon
+    imprevisible selon l'appareil/le client email installe (ou son absence) -
+    ici, l'adresse reste toujours lisible et copiable meme si l'ouverture
+    automatique du logiciel de messagerie ne fonctionne pas."""
+    return render_template("core/contact.html")
+
+
 @core_bp.route("/")
 def index():
     if current_user.is_authenticated:

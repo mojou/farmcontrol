@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Contact - Farm Control{% endblock %}
+
+{% set contact_body %}
+<div class="container py-4 py-lg-5" style="max-width: 600px;">
+  <h1 class="fw-bold h3 mb-3">Nous contacter</h1>
+  <p class="text-muted mb-4">Une question, un probleme de paiement, ou besoin d'aide ? Ecrivez-nous a
+  l'adresse ci-dessous, nous repondons personnellement.</p>
+
+  <div class="card">
+    <div class="card-body text-center py-4">
+      <i class="bi bi-envelope-fill fs-1 mb-3 d-block" style="color: var(--fc-primary);"></i>
+      <p class="mb-3">
+        <a href="mailto:{{ support_email }}" class="h5 text-decoration-none">{{ support_email }}</a>
+      </p>
+      <p class="text-muted small mb-0">
+        Si le clic n'ouvre pas votre messagerie automatiquement, copiez simplement l'adresse ci-dessus
+        dans votre application email habituelle.
+      </p>
+    </div>
+  </div>
+
+  <p class="text-muted small mt-4 mb-0">
+    Voir aussi la <a href="{{ url_for('core.documentation') }}">documentation</a>,
+    les <a href="{{ url_for('core.terms') }}">Conditions Generales d'Utilisation</a>
+    et la <a href="{{ url_for('core.privacy') }}">Politique de Confidentialite</a>.
+  </p>
+</div>
+{% endset %}
+
+{% block content %}{{ contact_body }}{% endblock %}
+
+{% block guest_content %}
+<nav class="navbar navbar-expand navbar-light border-bottom bg-white">
+  <div class="container">
+    <a class="navbar-brand fw-bold" style="color: var(--fc-primary);" href="{{ url_for('core.index') }}">Farm Control</a>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">Se connecter</a>
+      <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Creer mon compte</a>
+    </div>
+  </div>
+</nav>
+{{ contact_body }}
+{% endblock %}
