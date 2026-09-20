@@ -242,7 +242,10 @@ def batch_finance(batch_id):
         flash("Informations sur ce que vous gagnez mises a jour.", "success")
         return redirect(url_for("poultry.batch_report", batch_id=batch.id))
 
-    return render_template("poultry/batch_finance_form.html", batch=batch, form=form)
+    stock_purchases_total, _ = _stock_purchases_during(batch)
+    return render_template(
+        "poultry/batch_finance_form.html", batch=batch, form=form, stock_purchases_total=stock_purchases_total
+    )
 
 
 def _stock_purchases_during(batch):
