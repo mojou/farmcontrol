@@ -119,6 +119,11 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     email_notifications_enabled = db.Column(db.Boolean, nullable=False, default=True)
     avatar_path = db.Column(db.String(255), nullable=True)
     email_verified_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    # Inscription libre : le compte proprietaire est bloque si l'email n'est
+    # pas confirme avant cette date (EMAIL_VERIFICATION_TOKEN_HOURS apres
+    # l'inscription). NULL = pas d'echeance (comptes crees par un
+    # administrateur ou un proprietaire, comptes deja confirmes).
+    email_confirm_deadline = db.Column(db.DateTime(timezone=True), nullable=True)
     preferred_language = db.Column(db.String(5), nullable=False, default="fr")
 
     failed_login_count = db.Column(db.Integer, nullable=False, default=0)
@@ -190,6 +195,23 @@ class User(TimestampMixin, TenantMixin, UserMixin, db.Model):
     @property
     def is_email_verified(self) -> bool:
         return self.email_verified_at is not None
+
+    @property
+    def is_blocked_unconfirmed(self) -> bool:
+        """Compte proprietaire dont l'email n'a pas ete confirme dans le delai :
+        il ne peut plus servir tant que le lien de confirmation n'a pas ete utilise."""
+        return (
+            self.email_verified_at is None
+            and self.email_confirm_deadline is not None
+            and utcnow() > self.email_confirm_deadline
+        )
+
+    @property
+    def email_minutes_left(self):
+        """Minutes restantes pour confirmer l'email avant blocage (None si pas d'echeance)."""
+        if self.email_verified_at is not None or self.email_confirm_deadline is None:
+            return None
+        return max(int((self.email_confirm_deadline - utcnow()).total_seconds() // 60), 0)
 
     def __repr__(self):
         return f"<User {self.email} ({self.role})>"

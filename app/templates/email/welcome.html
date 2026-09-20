@@ -10,7 +10,7 @@
     <p style="color: #667066; font-size: 13px;">Nous vous recommandons de changer votre mot de passe des la premiere connexion.</p>
     {% if verify_url %}
     <p><a href="{{ verify_url }}" style="background-color: #2f5233; color: #ffffff; padding: 10px 18px; text-decoration: none; display: inline-block;">Confirmer mon email</a></p>
-    <p style="color: #667066; font-size: 13px;">Ce lien est valable {{ config.EMAIL_VERIFICATION_TOKEN_HOURS }} heures. Passe ce delai, connectez-vous : un bouton vous permettra d'en recevoir un nouveau.</p>
+    <p style="color: #667066; font-size: 13px;">Ce lien est valable {{ config.EMAIL_VERIFICATION_TOKEN_HOURS }} heures. Passe ce delai, votre compte est bloque tant que l'email n'est pas confirme : connectez-vous, un bouton vous permettra d'en recevoir un nouveau.</p>
     <p style="color: #667066; font-size: 13px;">Important : c'est cette adresse qui sera utilisee si vous devez reinitialiser votre mot de passe.</p>
     {% endif %}
   </div>

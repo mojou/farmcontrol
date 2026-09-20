@@ -17,6 +17,13 @@
         {{ fm.render_field(form.remember_me) }}
         <button type="submit" class="btn btn-primary w-100">{{ form.submit.label.text }}</button>
       </form>
+      {% if blocked_email %}
+      <form method="post" action="{{ url_for('auth.request_new_confirmation_link') }}" class="mt-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="email" value="{{ blocked_email }}">
+        <button type="submit" class="btn btn-outline-primary w-100">{{ _('Recevoir un nouveau lien de confirmation') }}</button>
+      </form>
+      {% endif %}
       <div class="text-center mt-3">
         <a href="{{ url_for('auth.forgot_password') }}" class="small">{{ _('Mot de passe oublie ?') }}</a>
       </div>

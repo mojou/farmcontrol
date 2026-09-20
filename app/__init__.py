@@ -60,6 +60,28 @@ def _init_extensions(app):
 
     register_tenant_filter(db)
 
+    @app.before_request
+    def block_unconfirmed_accounts():
+        """Un compte proprietaire dont l'email n'a pas ete confirme dans le
+        delai (voir User.email_confirm_deadline) est deconnecte et ne peut
+        plus rien faire tant que le lien de confirmation n'a pas ete utilise,
+        y compris s'il avait une session ouverte."""
+        from flask import flash, redirect, request, url_for
+        from flask_login import logout_user
+
+        if not current_user.is_authenticated or not current_user.is_blocked_unconfirmed:
+            return None
+        from app.blueprints.auth.routes import UNCONFIRMED_BLOCKED_MESSAGE
+
+        logout_user()
+        endpoint = request.endpoint or ""
+        public = {"core.index", "core.terms", "core.privacy", "core.contact", "core.documentation",
+                  "core.set_language", "core.service_worker", "core.offline", "billing.pricing"}
+        if endpoint == "static" or endpoint.startswith("auth.") or endpoint in public:
+            return None
+        flash(str(UNCONFIRMED_BLOCKED_MESSAGE), "danger")
+        return redirect(url_for("auth.login"))
+
     @login_manager.user_loader
     def load_user(user_id):
         from app.models.core import User

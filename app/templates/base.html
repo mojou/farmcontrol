@@ -30,7 +30,13 @@
         </div>
         {% if not current_user.is_super_admin() and not current_user.is_email_verified %}
         <div class="alert alert-warning d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <span><i class="bi bi-envelope-exclamation"></i> {{ _("Votre adresse email n'est pas encore confirmee. Verifiez votre boite de reception (et vos spams).") }}</span>
+          <span><i class="bi bi-envelope-exclamation"></i>
+            {% if current_user.email_minutes_left is not none %}
+            {{ _("Confirmez votre adresse email dans les %(time)s qui viennent : passe ce delai, votre compte sera bloque. Verifiez votre boite de reception (et vos spams).", time=((current_user.email_minutes_left // 60)|string ~ " h " ~ (current_user.email_minutes_left % 60)|string ~ " min")) }}
+            {% else %}
+            {{ _("Votre adresse email n'est pas encore confirmee. Verifiez votre boite de reception (et vos spams).") }}
+            {% endif %}
+          </span>
           <form method="post" action="{{ url_for('auth.resend_verification_email') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-sm btn-outline-dark">{{ _("Renvoyer l'email de confirmation") }}</button>

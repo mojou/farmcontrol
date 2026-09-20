@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
 
-from flask import current_app, flash, redirect, render_template, url_for
+from flask import current_app, flash, redirect, render_template, request, url_for
 from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required, login_user, logout_user
 
 from app.blueprints.auth import auth_bp
@@ -19,6 +20,14 @@ from app.utils.emailing import send_email_verification_email, send_password_rese
 from app.utils.plans import TRIAL_DAYS, start_trial_subscription
 from app.utils.security import generate_unique_slug, validate_password_policy
 from app.utils.tenant import tenant_bypass
+
+
+UNCONFIRMED_BLOCKED_MESSAGE = _l(
+    "Votre compte n'a pas ete confirme dans les 3 heures qui ont suivi l'inscription : il est bloque. "
+    "Recevez un nouveau lien de confirmation pour le reactiver."
+)
+
+RESEND_COOLDOWN_MINUTES = 2
 
 
 def _redirect_after_login():
@@ -78,6 +87,12 @@ def login():
                 flash(_("Ce compte est desactive. Contactez votre administrateur."), "danger")
                 return render_template("auth/login.html", form=form)
 
+            if user.is_blocked_unconfirmed:
+                # Mot de passe correct mais email jamais confirme dans le delai :
+                # le compte est bloque, on propose un nouveau lien de confirmation.
+                flash(str(UNCONFIRMED_BLOCKED_MESSAGE), "danger")
+                return render_template("auth/login.html", form=form, blocked_email=user.email)
+
             user.register_successful_login()
             db.session.commit()
 
@@ -133,6 +148,9 @@ def signup():
             db.session.flush()
 
             start_trial_subscription(tenant)
+            owner.email_confirm_deadline = datetime.now(timezone.utc) + timedelta(
+                hours=current_app.config["EMAIL_VERIFICATION_TOKEN_HOURS"]
+            )
             raw_verify_token = _create_verification_token(owner)
 
             log_action("create", "tenants", tenant.id, {"name": tenant.name, "slug": tenant.slug, "via": "signup"})
@@ -177,6 +195,31 @@ def verify_email(token):
     flash(_("Votre adresse email est confirmee. Merci !"), "success")
     if current_user.is_authenticated:
         return _redirect_after_login()
+    return redirect(url_for("auth.login"))
+
+
+@auth_bp.route("/confirmer-email/nouveau-lien", methods=["POST"])
+def request_new_confirmation_link():
+    """Depuis la page de connexion (compte bloque faute de confirmation) :
+    envoie un nouveau lien de confirmation. La reponse est toujours la meme,
+    que l'adresse existe ou non, pour ne pas reveler quels comptes existent."""
+    email = (request.form.get("email") or "").strip().lower()
+    with tenant_bypass():
+        user = User.query.filter_by(email=email).first() if email else None
+        if user is not None and user.is_active and user.email_verified_at is None:
+            recent = (
+                EmailVerificationToken.query.filter_by(user_id=user.id)
+                .filter(EmailVerificationToken.created_at > datetime.now(timezone.utc) - timedelta(minutes=RESEND_COOLDOWN_MINUTES))
+                .first()
+            )
+            if recent is None:
+                raw_token = _create_verification_token(user)
+                db.session.commit()
+                try:
+                    send_email_verification_email(user, url_for("auth.verify_email", token=raw_token, _external=True))
+                except Exception:
+                    current_app.logger.exception("Echec de l'envoi du nouveau lien de confirmation")
+    flash(_("Si un compte non confirme existe avec cette adresse, un nouveau lien de confirmation vient d'etre envoye."), "info")
     return redirect(url_for("auth.login"))
 
 
@@ -275,6 +318,9 @@ def reset_password(token):
             user = db.session.get(User, matching_token.user_id)
             user.set_password(form.password.data)
             matching_token.used_at = datetime.now(timezone.utc)
+            # Le lien a ete recu dans la boite mail du compte : l'adresse est prouvee.
+            if user.email_verified_at is None:
+                user.email_verified_at = datetime.now(timezone.utc)
             log_action("update", "users", user.id, {"action": "password_reset"})
             db.session.commit()
         flash(_("Votre mot de passe a ete reinitialise. Vous pouvez vous connecter."), "success")
