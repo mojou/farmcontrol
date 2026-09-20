@@ -40,6 +40,10 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "notifications@farmcontrol.app")
+    # Contact affiche publiquement (accueil, tarifs, pages legales) pour
+    # qu'un client puisse joindre le support. A ajuster via la variable
+    # d'environnement si une adresse dediee est preferee a celle d'envoi.
+    SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", MAIL_DEFAULT_SENDER)
     MAIL_SUPPRESS_SEND = _bool_env("MAIL_SUPPRESS_SEND", False)
 
     # Envoi transactionnel via l'API HTTP Brevo (voir app/utils/brevo.py) :

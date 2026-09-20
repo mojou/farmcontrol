@@ -19,6 +19,16 @@
         {{ fm.render_field(form.email) }}
         {{ fm.render_field(form.password) }}
         {{ fm.render_field(form.password_confirm) }}
+        <div class="form-check mb-3">
+          {{ form.accept_terms(class="form-check-input" ~ (" is-invalid" if form.accept_terms.errors else "")) }}
+          <label class="form-check-label small" for="{{ form.accept_terms.id }}">
+            {{ _("J'accepte les") }} <a href="{{ url_for('core.terms') }}" target="_blank">{{ _('Conditions Generales d\'Utilisation') }}</a>
+            {{ _('et la') }} <a href="{{ url_for('core.privacy') }}" target="_blank">{{ _('Politique de Confidentialite') }}</a>
+          </label>
+          {% if form.accept_terms.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.accept_terms.errors %}<div>{{ error }}</div>{% endfor %}</div>
+          {% endif %}
+        </div>
         <button type="submit" class="btn btn-primary w-100">{{ form.submit.label.text }}</button>
       </form>
       <div class="text-center mt-3">

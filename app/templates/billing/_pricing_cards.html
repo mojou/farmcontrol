@@ -55,8 +55,17 @@
   {% endfor %}
 </div>
 
-{% if not cinetpay_enabled %}
+{% if not saspay_enabled %}
 <p class="text-center text-muted small mt-4">
   <i class="bi bi-info-circle"></i> Le paiement en ligne sera bientot disponible (Mobile Money MTN/Orange, carte bancaire).
 </p>
 {% endif %}
+
+<div class="text-center text-muted small mt-4">
+  <p class="mb-1">Paiement mensuel, sans engagement. Vous pouvez changer de formule ou arreter a tout moment.</p>
+  <p class="mb-1">Un souci avec un paiement ? <a href="mailto:{{ support_email }}">{{ support_email }}</a></p>
+  <p class="mb-0">
+    <a href="{{ url_for('core.terms') }}">Conditions Generales d'Utilisation</a> ·
+    <a href="{{ url_for('core.privacy') }}">Politique de Confidentialite</a>
+  </p>
+</div>

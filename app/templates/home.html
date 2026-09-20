@@ -169,7 +169,12 @@
   </section>
 
   <footer class="py-4 border-top text-center text-muted small">
-    Farm Control - {{ _("Plateforme de gestion d'elevage") }}
+    <p class="mb-2">Farm Control - {{ _("Plateforme de gestion d'elevage") }}</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="{{ url_for('core.terms') }}" class="text-muted">{{ _("Conditions Generales d'Utilisation") }}</a>
+      <a href="{{ url_for('core.privacy') }}" class="text-muted">{{ _('Politique de Confidentialite') }}</a>
+      <a href="mailto:{{ support_email }}" class="text-muted">{{ _('Contact') }} : {{ support_email }}</a>
+    </div>
   </footer>
 
 </div>

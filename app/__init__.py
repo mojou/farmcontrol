@@ -169,4 +169,6 @@ def _register_template_helpers(app):
             "unread_alerts_count": unread_alerts_count,
             "unread_messages_count": unread_messages_count,
             "cinetpay_enabled": current_app.config.get("CINETPAY_ENABLED"),
+            "saspay_enabled": current_app.config.get("SASPAY_ENABLED"),
+            "support_email": current_app.config.get("SUPPORT_EMAIL"),
         }

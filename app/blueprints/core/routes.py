@@ -65,6 +65,16 @@ def documentation():
     return render_template("core/documentation.html")
 
 
+@core_bp.route("/conditions-generales")
+def terms():
+    return render_template("core/terms.html")
+
+
+@core_bp.route("/politique-confidentialite")
+def privacy():
+    return render_template("core/privacy.html")
+
+
 @core_bp.route("/")
 def index():
     if current_user.is_authenticated:

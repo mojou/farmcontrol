@@ -16,6 +16,10 @@ class SignupForm(FlaskForm):
         _l("Confirmer le mot de passe"),
         validators=[DataRequired(), EqualTo("password", message=_l("Les mots de passe ne correspondent pas."))],
     )
+    accept_terms = BooleanField(
+        _l("J'accepte les Conditions Generales d'Utilisation et la Politique de Confidentialite"),
+        validators=[DataRequired(message=_l("Vous devez accepter les conditions pour continuer."))],
+    )
     submit = SubmitField(_l("Creer mon compte"))
 
 
