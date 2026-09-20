@@ -33,6 +33,7 @@ from app.models.poultry import (
 )
 from app.utils.alerts import check_stock_alert
 from app.utils.audit import log_action
+from app.utils.species import choices_for, cycle_days_for, parse_enabled
 from app.utils.laying import DEFAULT_LAYING_REFERENCE_NAME, ensure_default_laying_reference
 from app.utils.plans import get_current_plan
 from app.utils.sanitary import (
@@ -123,6 +124,10 @@ def batch_new():
             return redirect(url_for("billing.pricing"))
 
     form = BatchForm()
+    tenant = current_user.tenant
+    form.species.choices = choices_for(parse_enabled(tenant.enabled_species))
+    if request.method == "GET":
+        form.species.data = tenant.primary_species
     form.farm_id.choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
     _set_reference_choices(form)
     form.supplier_id.choices = [(0, _("Aucun"))] + [
@@ -177,6 +182,7 @@ def batch_edit(batch_id):
         return redirect(url_for("poultry.batch_detail", batch_id=batch.id))
 
     form = BatchForm(obj=batch)
+    form.species.choices = choices_for(parse_enabled(current_user.tenant.enabled_species), always_include=batch.species)
     farm_choices = [(f.id, f.name) for f in Farm.query.filter_by(is_active=True).order_by(Farm.name).all()]
     if batch.farm_id not in [f[0] for f in farm_choices]:
         farm_choices = [(batch.farm_id, batch.farm.name)] + farm_choices
@@ -238,10 +244,10 @@ def batch_detail(batch_id):
 def batch_close(batch_id):
     batch = _get_batch_or_403(batch_id)
     form = BatchCloseForm()
-    if request.method == "GET" and current_user.tenant and current_user.tenant.default_cycle_days:
+    if request.method == "GET":
         from datetime import timedelta
 
-        form.end_date.data = batch.start_date + timedelta(days=current_user.tenant.default_cycle_days)
+        form.end_date.data = batch.start_date + timedelta(days=cycle_days_for(batch.species, current_user.tenant))
     if form.validate_on_submit():
         batch.status = BATCH_STATUS_CLOSED
         batch.end_date = form.end_date.data

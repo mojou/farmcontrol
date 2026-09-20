@@ -1,10 +1,21 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from wtforms import BooleanField, DecimalField, IntegerField, PasswordField, SelectField, StringField, SubmitField
+from wtforms import (
+    BooleanField,
+    DecimalField,
+    IntegerField,
+    PasswordField,
+    SelectField,
+    SelectMultipleField,
+    StringField,
+    SubmitField,
+)
+from wtforms.widgets import CheckboxInput, ListWidget
 from wtforms.validators import DataRequired, Email, Length, NumberRange, Optional
 
 from app.models.core import ROLE_LABELS, ROLE_MANAGER, ROLE_WORKER
+from app.utils.species import DEFAULT_SPECIES, SPECIES_CHOICES
 
 
 class TenantForm(FlaskForm):
@@ -182,7 +193,7 @@ class SettingsForm(FlaskForm):
     name = StringField(_l("Nom de l'exploitation"), validators=[DataRequired(), Length(max=150)])
     country = SelectField(_l("Pays"), choices=COUNTRY_CHOICES, validators=[Optional()])
     default_language = SelectField(
-        _l("Langue par defaut pour les nouveaux utilisateurs"),
+        _l("Langue de l'application (pour vous, et par defaut pour les nouveaux utilisateurs)"),
         choices=[("fr", _l("Francais")), ("en", _l("English"))],
         default="fr",
     )
@@ -194,6 +205,17 @@ class SettingsForm(FlaskForm):
     )
 
     # -- Elevage ---------------------------------------------------------
+    primary_species = SelectField(
+        _l("Type d'elevage principal"),
+        choices=SPECIES_CHOICES,
+        default=DEFAULT_SPECIES,
+    )
+    livestock_types = SelectMultipleField(
+        _l("Autres types d'elevage que vous pratiquez"),
+        choices=SPECIES_CHOICES,
+        widget=ListWidget(prefix_label=False),
+        option_widget=CheckboxInput(),
+    )
     default_breed = StringField(
         _l("Souche par defaut pour les nouveaux lots"),
         validators=[Optional(), Length(max=100)],
@@ -205,7 +227,7 @@ class SettingsForm(FlaskForm):
         render_kw={"placeholder": _l("Ex : 42")},
     )
     fcr_alert_threshold = DecimalField(
-        _l("Seuil d'alerte pour l'aliment par poulet"),
+        _l("Seuil d'alerte pour l'aliment par poulet de chair"),
         validators=[Optional(), NumberRange(min=0)],
         places=2,
         render_kw={"placeholder": _l("Ex : 2.0")},

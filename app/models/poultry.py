@@ -189,6 +189,12 @@ class Batch(TimestampMixin, TenantMixin, db.Model):
         return SPECIES_LABELS.get(self.species, self.species)
 
     @property
+    def species_info(self):
+        from app.utils.species import get_species
+
+        return get_species(self.species)
+
+    @property
     def is_broiler(self) -> bool:
         return self.species == "broiler"
 

@@ -26,13 +26,13 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.total_sold_subjects }}</div>
-      <div class="fc-kpi-label">{{ _('Poulets vendus (retires du nombre de poulets)') }}</div>
+      <div class="fc-kpi-label">{{ _('%(animals)s vendus (retires de l\'effectif)', animals=(animals(batch)|capitalize)) }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">{{ _('Nombre de poulets restants') }}</div>
+      <div class="fc-kpi-label">{{ _('Nombre %(de_animals)s restants', de_animals=de(animals(batch))) }}</div>
     </div></div>
   </div>
 </div>
@@ -53,7 +53,7 @@
             <tr class="{{ 'table-warning' if not sale.is_paid }}">
               <td class="text-nowrap">{{ sale.sale_date.strftime('%d/%m/%Y') }}</td>
               <td>{{ sale.buyer_name }}{% if sale.buyer_phone %}<br><span class="text-muted small">{{ sale.buyer_phone }}</span>{% endif %}</td>
-              <td>{{ sale.quantity }} {{ {"kg": "kg", "egg": _("oeufs"), "tray": _("plateaux")}.get(sale.unit, _("poulets")) }}</td>
+              <td>{{ sale.quantity }} {{ {"kg": "kg", "egg": _("oeufs"), "tray": _("plateaux")}.get(sale.unit, animals(batch)) }}</td>
               <td>{{ sale.total_amount|number }} FCFA</td>
               <td>{{ sale.amount_paid|number }} FCFA</td>
               <td>

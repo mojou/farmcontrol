@@ -48,7 +48,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">{{ _('Nombre de poulets restants') }}</div>
+      <div class="fc-kpi-label">{{ _('Nombre %(de_animals)s restants', de_animals=de(animals(batch))) }}</div>
     </div></div>
   </div>
 </div>
@@ -97,12 +97,16 @@
   {% endmacro %}
 
   {{ tile("feed", "bi-basket2-fill", _("Aliment"), _("%(count)s entree(s) aujourd\'hui", count=day.feed_records|length)) }}
+  {% if batch.species_info.drinks_water %}
   {{ tile("water", "bi-droplet-fill", _("Eau"), _("%(count)s entree(s) aujourd\'hui", count=day.water_records|length)) }}
+  {% endif %}
   {% if batch.is_layer %}
   {{ tile("eggs", "bi-egg-fill", _("Oeufs"), _("%(count)s entree(s) aujourd\'hui", count=day.egg_records|length)) }}
   {% endif %}
   {{ tile("mortality", "bi-exclamation-octagon-fill", _("Mortalite"), _("%(count)s entree(s) aujourd\'hui", count=day.mortality_records|length)) }}
+  {% if batch.species_info.uses_litter %}
   {{ tile("wood", "bi-layers-fill", _("Bois / litiere"), _("%(count)s entree(s) aujourd\'hui", count=day.wood_records|length)) }}
+  {% endif %}
   {{ tile("medication", "bi-capsule", _("Medicaments / vaccins"), _("%(count)s entree(s) aujourd\'hui", count=day.medication_records|length)) }}
   {{ tile("observation", "bi-eye-fill", _("Observation"), _("%(count)s entree(s) aujourd\'hui", count=day.observations|length)) }}
   {{ tile("weight", "bi-speedometer2", _("Pesee"), _("%(count)s entree(s) aujourd\'hui", count=day.weight_records|length)) }}
@@ -283,7 +287,7 @@
           </table>
           </div>
           {% endif %}
-          <p class="text-muted small">{{ _('Combien de poulets sont morts aujourd\'hui ? Mettez 0 si aucun.') }}</p>
+          <p class="text-muted small">{{ _('Combien %(de_animals)s sont morts aujourd\'hui ? Mettez 0 si aucun.', de_animals=de(animals(batch))) }}</p>
           {{ fm.render_field(mortality_form.quantity_dead) }}
           {{ fm.render_field(mortality_form.cause) }}
         </div>
@@ -423,7 +427,7 @@
             {% endfor %}
           </div>
           {% endif %}
-          <p class="text-muted small">{{ _('Decrivez ce que vous avez remarque (poussin malade, probleme de materiel...). Choisissez "Urgente" si le proprietaire doit etre prevenu immediatement.') }}</p>
+          <p class="text-muted small">{{ _('Decrivez ce que vous avez remarque (animal malade, probleme de materiel...). Choisissez "Urgente" si le proprietaire doit etre prevenu immediatement.') }}</p>
           {{ fm.render_field(observation_form.description) }}
           {{ fm.render_field(observation_form.severity) }}
           {{ fm.render_field(observation_form.photo) }}
@@ -451,7 +455,7 @@
           {% if day.weight_records %}
           <div class="table-responsive">
           <table class="table table-sm mb-3">
-            <thead><tr><th>{{ _('Poids moyen') }}</th><th>{{ _('Poulets peses') }}</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
+            <thead><tr><th>{{ _('Poids moyen') }}</th><th>{{ _('%(animals)s peses', animals=(animals(batch)|capitalize)) }}</th>{% if current_user.has_role('owner') %}<th></th>{% endif %}</tr></thead>
             <tbody>
               {% for r in day.weight_records %}
               <tr>
@@ -470,7 +474,7 @@
           </table>
           </div>
           {% endif %}
-          <p class="text-muted small">{{ _('Pesez quelques poussins au hasard et indiquez leur poids moyen en grammes.') }}</p>
+          <p class="text-muted small">{{ _('Pesez quelques %(animals)s au hasard et indiquez leur poids moyen en grammes.', animals=animals(batch)) }}</p>
           {{ fm.render_field(weight_form.average_weight) }}
           {{ fm.render_field(weight_form.sample_size) }}
           {{ fm.render_field(weight_form.observation) }}

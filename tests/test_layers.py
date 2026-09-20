@@ -1,11 +1,27 @@
 """Poules pondeuses : saisie des oeufs, taux de ponte, ventes d'oeufs."""
 from datetime import date
 
+import pytest
+
 from app.models.poultry import Batch, BatchDay, EggRecord, Sale
 from app.utils.tenant import tenant_bypass
 from app.utils.zootechnie import average_laying_rate, egg_production_series
 from tests.conftest import login
 
+
+
+@pytest.fixture(autouse=True)
+def _all_species_enabled(app, tenant):
+    """Par defaut une exploitation ne propose que le poulet de chair (voir
+    /parametres) : ces tests utilisent les autres types."""
+    from app.extensions import db
+    from app.models.core import Tenant
+    from app.utils.species import ALL_CODES, serialize_enabled
+
+    with app.app_context():
+        with tenant_bypass():
+            db.session.get(Tenant, tenant.id).enabled_species = serialize_enabled(ALL_CODES)
+            db.session.commit()
 
 def _layer_batch_with_day(app, client, tenant, farm, owner, species="layer", code="PON-01"):
     login(client, owner)

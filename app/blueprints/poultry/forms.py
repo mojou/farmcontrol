@@ -26,9 +26,9 @@ class BatchForm(FlaskForm):
     species = SelectField(_l("Type d'elevage"), choices=SPECIES_CHOICES, default=DEFAULT_SPECIES)
     code = StringField(_l("Code / nom du lot"), validators=[DataRequired()])
     breed = StringField(_l("Souche"), validators=[Optional()])
-    initial_count = IntegerField(_l("Nombre de poulets au depart"), validators=[DataRequired(), NumberRange(min=1)])
-    chick_unit_price = DecimalField(_l("Prix unitaire poussin"), validators=[DataRequired(), NumberRange(min=0)], places=2)
-    supplier_id = SelectField(_l("Fournisseur des poussins (facultatif)"), coerce=int, validators=[Optional()])
+    initial_count = IntegerField(_l("Nombre d'animaux au depart"), validators=[DataRequired(), NumberRange(min=1)])
+    chick_unit_price = DecimalField(_l("Prix d'achat unitaire (poussin, porcelet, alevin...)"), validators=[DataRequired(), NumberRange(min=0)], places=2)
+    supplier_id = SelectField(_l("Fournisseur des jeunes animaux (facultatif)"), coerce=int, validators=[Optional()])
     start_date = DateField(_l("Date de mise en place"), validators=[DataRequired()])
     growth_reference_id = SelectField(_l("Poids normal attendu (souche)"), coerce=int, validators=[Optional()])
     start_age_weeks = IntegerField(
@@ -50,7 +50,7 @@ class SupplierForm(FlaskForm):
     category = SelectField(
         _l("Fournit principalement"),
         choices=[
-            ("chick", _l("Poussins")),
+            ("chick", _l("Jeunes animaux (poussins, porcelets...)")),
             ("feed", _l("Aliment")),
             ("medication", _l("Medicaments")),
             ("other", _l("Autre")),
@@ -146,7 +146,7 @@ class WaterRecordForm(FlaskForm):
 
 class MortalityRecordForm(FlaskForm):
     quantity_dead = IntegerField(
-        _l("Nombre de poulets morts aujourd'hui"),
+        _l("Nombre d'animaux morts aujourd'hui"),
         validators=[DataRequired(), NumberRange(min=0)],
         render_kw={"placeholder": _l("Ex : 2 (mettre 0 si aucun mort)")},
     )
@@ -216,13 +216,13 @@ class ObservationForm(FlaskForm):
 
 class WeightRecordForm(FlaskForm):
     average_weight = DecimalField(
-        _l("Poids moyen d'un poulet (grammes)"),
+        _l("Poids moyen d'un animal (grammes)"),
         validators=[DataRequired(), NumberRange(min=0)],
         places=1,
         render_kw={"placeholder": _l("Ex : 450")},
     )
     sample_size = IntegerField(
-        _l("Nombre de poulets peses"),
+        _l("Nombre d'animaux peses"),
         validators=[DataRequired(), NumberRange(min=1)],
         render_kw={"placeholder": _l("Ex : 10")},
     )
@@ -295,7 +295,7 @@ class GrowthReferenceForm(FlaskForm):
     name = StringField(_l("Nom de la souche"), validators=[DataRequired()])
     kind = SelectField(
         _l("Type de courbe"),
-        choices=[("weight", _l("Poids attendu (poulets)")), ("laying", _l("Ponte attendue (pondeuses)"))],
+        choices=[("weight", _l("Poids attendu (croissance)")), ("laying", _l("Ponte attendue (pondeuses)"))],
         default="weight",
     )
     submit = SubmitField(_l("Enregistrer"))

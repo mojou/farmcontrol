@@ -60,6 +60,12 @@ class Tenant(TimestampMixin, db.Model):
     sanitary_reminder_interval_minutes = db.Column(db.Integer, nullable=False, default=10)
     email_alerts_enabled = db.Column(db.Boolean, nullable=False, default=True)
 
+    # -- Types d'elevage (voir app/utils/species.py) ----------------------
+    # Type principal (propose par defaut a la creation d'un lot) et liste
+    # des types pratiques, separes par des virgules.
+    primary_species = db.Column(db.String(30), nullable=False, default="broiler", server_default="broiler")
+    enabled_species = db.Column(db.String(255), nullable=False, default="broiler", server_default="broiler")
+
     # -- Stock -----------------------------------------------------------
     default_stock_low_threshold = db.Column(db.Numeric(10, 2), nullable=True)
 

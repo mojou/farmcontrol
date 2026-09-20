@@ -15,7 +15,7 @@ from app.models.poultry import Supplier
 from app.utils.audit import log_action
 
 CATEGORY_LABELS = {
-    "chick": _l("Poussins"),
+    "chick": _l("Jeunes animaux (poussins, porcelets...)"),
     "feed": _l("Aliment"),
     "medication": _l("Medicaments"),
     "other": _l("Autre"),

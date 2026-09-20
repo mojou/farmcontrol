@@ -24,7 +24,7 @@
       <div class="fc-kpi-label">{{ _('Taux de ponte (7 derniers jours)') }}{% if expected_rate is not none %} - {{ _('attendu : %(rate)s', rate=(expected_rate ~ ' %')) }}{% endif %}</div>
       {% else %}
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
+      <div class="fc-kpi-label">{{ _('Aliment par %(animal)s', animal=animal(batch)) }}</div>
       {% endif %}
     </div></div>
   </div>
@@ -101,7 +101,7 @@
     {% if batch.finance %}
     <div class="table-responsive">
     <table class="table table-sm">
-      <tr><td>{{ _('Poussins') }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+      <tr><td>{{ young(batch)|capitalize }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
       <tr><td>{{ _('Aliment') }}</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
       <tr><td>{{ _('Medicaments') }}</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
       <tr><td>{{ _('Bois / litiere') }}</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>

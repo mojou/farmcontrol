@@ -27,11 +27,22 @@
       <div class="card h-100">
         <div class="card-body">
           <h6 class="text-muted small text-uppercase mb-3"><i class="bi bi-egg-fried"></i> {{ _('Elevage') }}</h6>
+          {{ fm.render_field(form.primary_species) }}
+          <div class="mb-3">
+            {{ form.livestock_types.label(class="form-label") }}
+            {% for option in form.livestock_types %}
+            <div class="form-check">
+              {{ option(class="form-check-input") }}
+              {{ option.label(class="form-check-label") }}
+            </div>
+            {% endfor %}
+            <p class="text-muted small mt-2 mb-0">{{ _("Seuls les types coches sont proposes quand vous creez un lot ; le type principal est propose en premier. Vos lots existants ne changent pas.") }}</p>
+          </div>
           {{ fm.render_field(form.default_breed) }}
           {{ fm.render_field(form.default_cycle_days) }}
           <p class="text-muted small mb-2">{{ _("Utilise pour pre-remplir la date de fin prevue quand vous cloturez un lot.") }}</p>
           {{ fm.render_field(form.fcr_alert_threshold) }}
-          <p class="text-muted small mb-0">{{ _("Laissez vide pour ne pas etre alerte sur l'aliment par poulet.") }}</p>
+          <p class="text-muted small mb-0">{{ _("Laissez vide pour ne pas etre alerte sur l'aliment par poulet de chair.") }}</p>
         </div>
       </div>
     </div>

@@ -163,7 +163,17 @@ def _register_template_helpers(app):
             unread_messages_count = Message.query.filter_by(
                 recipient_id=current_user.id, is_read=False
             ).count()
+        from app.utils.species import animal_term, animals_term, de_term, young_term
+
+        tenant = current_user.tenant if current_user.is_authenticated and not current_user.is_super_admin() else None
         return {
+            # Vocabulaire selon le type d'elevage : animals(lot) = "poulets",
+            # "porcs"...; sans argument, celui de l'exploitation ("animaux" si
+            # plusieurs types sont pratiques). Voir app/utils/species.py.
+            "animals": lambda target=None: animals_term(target, tenant),
+            "animal": lambda target=None: animal_term(target, tenant),
+            "young": lambda target=None: young_term(target, tenant),
+            "de": de_term,
             "role_labels": ROLE_LABELS,
             "current_user_obj": current_user,
             "unread_alerts_count": unread_alerts_count,

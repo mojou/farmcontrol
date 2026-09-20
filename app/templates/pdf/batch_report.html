@@ -31,7 +31,7 @@
   <div class="kpi-row">
     <div class="kpi">
       <div class="kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="kpi-label">{{ _('Aliment par poulet') }}</div>
+      <div class="kpi-label">{{ _('Aliment par %(animal)s', animal=animal(batch)) }}</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.total_mortality }}</div>
@@ -39,7 +39,7 @@
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.current_count }} / {{ batch.initial_count }}</div>
-      <div class="kpi-label">{{ _('Nombre de poulets final / initial') }}</div>
+      <div class="kpi-label">{{ _('Nombre %(de_animals)s final / initial', de_animals=de(animals(batch))) }}</div>
     </div>
     <div class="kpi">
       <div class="kpi-value">{{ batch.finance.net_result|currency if batch.finance else "-" }}</div>
@@ -50,7 +50,7 @@
   <div class="section-title">{{ _('Ce que vous gagnez') }}</div>
   {% if batch.finance %}
   <table>
-    <tr><td>{{ _('Poussins') }}</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
+    <tr><td>{{ young(batch)|capitalize }}</td><td>{{ batch.finance.chick_cost|currency }}</td></tr>
     <tr><td>{{ _('Aliment') }}</td><td>{{ batch.finance.total_feed_cost|currency }}</td></tr>
     <tr><td>{{ _('Medicaments') }}</td><td>{{ batch.finance.total_medication_cost|currency }}</td></tr>
     <tr><td>{{ _('Bois / litiere') }}</td><td>{{ batch.finance.total_wood_cost|currency }}</td></tr>

@@ -17,7 +17,7 @@
         {% if batch.finance %}
         <div class="table-responsive">
         <table class="table table-sm mb-0">
-          <tr><td>{{ _('Poussins') }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
+          <tr><td>{{ young(batch)|capitalize }}</td><td class="text-end">{{ batch.finance.chick_cost|currency }}</td></tr>
           <tr><td>{{ _('Aliment') }}</td><td class="text-end">{{ batch.finance.total_feed_cost|currency }}</td></tr>
           <tr><td>{{ _('Medicaments') }}</td><td class="text-end">{{ batch.finance.total_medication_cost|currency }}</td></tr>
           <tr><td>{{ _('Bois / litiere') }}</td><td class="text-end">{{ batch.finance.total_wood_cost|currency }}</td></tr>

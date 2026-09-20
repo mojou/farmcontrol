@@ -16,6 +16,7 @@ from app.models.billing import SUBSCRIPTION_STATUS_ACTIVE, SUBSCRIPTION_STATUS_T
 from app.models.core import ROLE_OWNER, AuditLog, Tenant, User
 from app.models.poultry import Alert, Batch, Farm
 from app.utils.audit import ACTION_LABELS, TABLE_LABELS, log_action
+from app.utils.species import parse_enabled, serialize_enabled
 from app.utils.data_export import build_tenant_export
 from app.utils.plans import ensure_plans_seeded, get_current_plan, get_free_plan
 from app.utils.security import validate_password_policy
@@ -215,12 +216,26 @@ def settings():
     les dupliquer ici."""
     tenant = current_user.tenant
     form = SettingsForm(obj=tenant)
+    if request.method == "GET":
+        form.livestock_types.data = parse_enabled(tenant.enabled_species)
 
     if form.validate_on_submit():
+        old_country, old_currency = tenant.country, tenant.currency_label
         tenant.name = form.name.data
         tenant.country = form.country.data
         tenant.default_language = form.default_language.data
-        tenant.currency_label = form.currency_label.data.strip()
+        currency = form.currency_label.data.strip()
+        # Pays change sans toucher a la devise : elle suit le nouveau pays.
+        if tenant.country != old_country and currency == old_currency and tenant.country in COUNTRY_CURRENCY:
+            currency = COUNTRY_CURRENCY[tenant.country]
+        tenant.currency_label = currency
+        # Types d'elevage : le type principal est toujours actif.
+        tenant.primary_species = form.primary_species.data
+        tenant.enabled_species = serialize_enabled(set(form.livestock_types.data or []) | {form.primary_species.data})
+        # La langue choisie s'applique tout de suite a l'utilisateur qui
+        # enregistre (les autres gardent leur propre choix).
+        session["lang"] = form.default_language.data
+        current_user.preferred_language = form.default_language.data
         tenant.default_breed = form.default_breed.data or None
         tenant.default_cycle_days = form.default_cycle_days.data
         tenant.fcr_alert_threshold = form.fcr_alert_threshold.data

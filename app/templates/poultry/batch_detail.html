@@ -24,7 +24,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ batch.current_count }}</div>
-      <div class="fc-kpi-label">{{ _('Nombre de poulets / %(initial_count)s', initial_count=(batch.initial_count)) }}</div>
+      <div class="fc-kpi-label">{{ _('Nombre %(de_animals)s / %(initial_count)s', de_animals=de(animals(batch)), initial_count=(batch.initial_count)) }}</div>
     </div></div>
   </div>
   <div class="col-6 col-lg-3">
@@ -50,7 +50,7 @@
   <div class="col-6 col-lg-3">
     <div class="card fc-kpi-card h-100"><div class="card-body">
       <div class="fc-kpi-value">{{ fcr if fcr is not none else "-" }}</div>
-      <div class="fc-kpi-label">{{ _('Aliment par poulet') }}</div>
+      <div class="fc-kpi-label">{{ _('Aliment par %(animal)s', animal=animal(batch)) }}</div>
     </div></div>
   </div>
   {% endif %}

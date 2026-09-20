@@ -1,10 +1,26 @@
 """Type d'elevage d'un lot (poulet de chair par defaut, pintade, dinde...)."""
 from datetime import date
 
+import pytest
+
 from app.models.poultry import Batch
 from app.utils.tenant import tenant_bypass
 from tests.conftest import login
 
+
+
+@pytest.fixture(autouse=True)
+def _all_species_enabled(app, tenant):
+    """Par defaut une exploitation ne propose que le poulet de chair (voir
+    /parametres) : ces tests utilisent les autres types."""
+    from app.extensions import db
+    from app.models.core import Tenant
+    from app.utils.species import ALL_CODES, serialize_enabled
+
+    with app.app_context():
+        with tenant_bypass():
+            db.session.get(Tenant, tenant.id).enabled_species = serialize_enabled(ALL_CODES)
+            db.session.commit()
 
 def _post_batch(client, farm, code, **extra):
     data = {

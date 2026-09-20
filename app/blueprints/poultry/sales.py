@@ -16,6 +16,7 @@ from app.decorators import ensure_farm_access, owner_required
 from app.extensions import db
 from app.models.poultry import Batch, BatchFinance, Sale, StockPurchase
 from app.utils.audit import log_action
+from app.utils.species import animals_term
 from app.utils.zootechnie import recompute_batch_finance
 
 
@@ -26,6 +27,11 @@ def sales_list(batch_id):
     form = SaleForm(sale_date=date.today())
     if request.method == "GET" and current_user.tenant and current_user.tenant.default_sale_unit:
         form.unit.data = current_user.tenant.default_sale_unit
+    if not batch.is_layer:
+        form.unit.choices = [
+            (Sale.UNIT_SUBJECT, str(animals_term(batch)).capitalize()),
+            (Sale.UNIT_KG, _("Kilogrammes")),
+        ]
     if batch.is_layer:
         # Poules pondeuses : on vend surtout des oeufs (plateaux de 30 ou a
         # l'unite), et parfois les poules de reforme.

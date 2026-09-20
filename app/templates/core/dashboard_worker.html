@@ -13,7 +13,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ batch.code }}</h5>
         <p class="text-muted small mb-2">{{ _('%(name)s - Souche : %(breed)s', name=(batch.farm.name), breed=(batch.breed or "-")) }}</p>
-        <p class="mb-1">{{ _('Nombre de poulets :') }} <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
+        <p class="mb-1">{{ _('Nombre %(de_animals)s :', de_animals=de(animals(batch))) }} <strong>{{ batch.current_count }}</strong> / {{ batch.initial_count }}</p>
         <p class="mb-3">{{ _('Jours enregistres : %(days)s', days=(batch.days|length)) }}</p>
         <div class="d-flex gap-2">
           <a href="{{ url_for('poultry.batch_days_list', batch_id=batch.id) }}" class="btn btn-primary btn-sm">

@@ -6,7 +6,7 @@
   <h1 class="fc-page-title">{{ _('Fournisseurs') }}</h1>
   <a href="{{ url_for('poultry.supplier_new') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> {{ _('Nouveau fournisseur') }}</a>
 </div>
-<p class="text-muted small">{{ _('Gardez ici vos fournisseurs de poussins, d\'aliment ou de medicaments pour suivre leur fiabilite (prix, delais, qualite) dans le temps.') }}</p>
+<p class="text-muted small">{{ _('Gardez ici vos fournisseurs %(de_young)s, d\'aliment ou de medicaments pour suivre leur fiabilite (prix, delais, qualite) dans le temps.', de_young=de(young())) }}</p>
 
 <div class="card">
   <div class="card-body">
