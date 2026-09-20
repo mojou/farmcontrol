@@ -1,14 +1,17 @@
-"""Abonnement et paiement (CinetPay - Mobile Money / carte, tarifs en FCFA).
+"""Abonnement et paiement (SasPay - Mobile Money / carte, tarifs en FCFA).
 
 Parcours :
   1. Le proprietaire choisit un plan sur /tarifs ou /facturation.
-  2. POST /facturation/souscrire/<code> cree une transaction et redirige
-     vers la page de paiement CinetPay (ou simule le succes si CinetPay
-     n'est pas configure, en mode demonstration).
-  3. CinetPay redirige l'utilisateur vers /facturation/retour (confirmation
+  2. POST /facturation/souscrire/<code> cree une session de paiement et
+     redirige vers la page de paiement SasPay (ou simule le succes si
+     SasPay n'est pas configure, en mode demonstration).
+  3. SasPay redirige l'utilisateur vers /facturation/retour (confirmation
      visuelle) ET notifie le serveur en arriere-plan sur /facturation/notify
      (source de verite : ne jamais activer un abonnement sur la seule foi
      de la redirection navigateur).
+
+Le fournisseur precedent (CinetPay) reste disponible dans app.utils.cinetpay
+mais n'est plus branche ici - voir SASPAY_ENABLED dans app/config.py.
 """
 import uuid
 from datetime import timedelta
@@ -31,7 +34,7 @@ from app.models.billing import (
     Subscription,
 )
 from app.utils.audit import log_action
-from app.utils.cinetpay import CinetPayError, init_payment, verify_payment
+from app.utils.saspay import SaspayError, init_payment, verify_checkout_session, verify_webhook_signature
 from app.utils.plans import ensure_plans_seeded
 from app.utils.tenant import tenant_bypass
 
@@ -80,7 +83,7 @@ def subscribe(plan_code):
     payment_tx = PaymentTransaction(
         tenant_id=tenant.id,
         plan_id=plan.id,
-        provider="cinetpay",
+        provider="saspay",
         provider_transaction_id=transaction_id,
         amount_xaf=plan.price_xaf,
         status=PAYMENT_STATUS_PENDING,
@@ -98,14 +101,14 @@ def subscribe(plan_code):
             notify_url=url_for("billing.payment_notify", _external=True),
             return_url=url_for("billing.payment_return", transaction_id=transaction_id, _external=True),
         )
-    except CinetPayError as exc:
+    except SaspayError as exc:
         payment_tx.status = PAYMENT_STATUS_FAILED
         db.session.commit()
         flash(f"Erreur lors de l'initialisation du paiement : {exc}", "danger")
         return redirect(url_for("billing.billing_home"))
 
     if result["simulated"]:
-        # CinetPay non configure : simule un paiement reussi pour permettre
+        # SasPay non configure : simule un paiement reussi pour permettre
         # de demontrer le parcours complet avant la mise en production.
         payment_tx.status = PAYMENT_STATUS_COMPLETED
         payment_tx.payment_method = "SIMULATION"
@@ -113,7 +116,7 @@ def subscribe(plan_code):
         _activate_subscription(tenant, plan)
         flash(
             f"Mode demonstration : paiement simule et plan {plan.name} active "
-            "(CinetPay n'est pas encore configure).",
+            "(SasPay n'est pas encore configure).",
             "warning",
         )
         return redirect(url_for("billing.billing_home"))
@@ -141,37 +144,49 @@ def payment_return():
 @billing_bp.route("/facturation/notify", methods=["POST"])
 @csrf.exempt
 def payment_notify():
-    """Webhook serveur-a-serveur CinetPay : source de verite du paiement."""
-    transaction_id = request.form.get("cpm_trans_id") or request.args.get("cpm_trans_id")
-    if not transaction_id:
-        return "missing transaction_id", 400
+    """Webhook serveur-a-serveur SasPay : source de verite du paiement.
+
+    SasPay ne renvoie pas notre propre identifiant de transaction dans
+    l'evenement (voir app.utils.saspay) : plutot que de deviner une
+    correlation fragile, cet appel sert de simple declencheur pour
+    revalider aupres de l'API chacune des transactions encore en attente -
+    conforme a leur propre recommandation ("jamais confiance dans un statut
+    memorise").
+    """
+    signature = request.headers.get("X-Webhook-Signature", "")
+    timestamp = request.headers.get("X-Webhook-Timestamp", "")
+    if not verify_webhook_signature(request.get_data(), signature, timestamp):
+        return "invalid signature", 401
 
     with tenant_bypass():
-        payment_tx = PaymentTransaction.query.filter_by(provider_transaction_id=transaction_id).first()
+        pending = PaymentTransaction.query.filter_by(provider="saspay", status=PAYMENT_STATUS_PENDING).all()
 
-    if payment_tx is None:
-        return "unknown transaction", 404
-
-    if payment_tx.status == PAYMENT_STATUS_PENDING:
+    for payment_tx in pending:
         _confirm_payment(payment_tx)
 
     return "OK", 200
 
 
 def _confirm_payment(payment_tx):
-    """Verifie aupres de CinetPay et active l'abonnement si le paiement est accepte."""
+    """Verifie aupres de SasPay et active l'abonnement si le paiement est accepte."""
+    session_id = (payment_tx.raw_response or {}).get("id")
+    if not session_id:
+        return
+
     try:
         with tenant_bypass():
-            result = verify_payment(payment_tx.provider_transaction_id)
-    except CinetPayError:
-        current_app.logger.exception("Echec de verification du paiement CinetPay")
+            result = verify_checkout_session(session_id)
+    except SaspayError:
+        current_app.logger.exception("Echec de verification du paiement SasPay")
+        return
+
+    if result["status"] == "PENDING":
         return
 
     with tenant_bypass():
         payment_tx.raw_response = result["raw"]
-        payment_tx.payment_method = result.get("payment_method")
 
-        if result["status"] == "ACCEPTED":
+        if result["status"] == "SUCCESS":
             payment_tx.status = PAYMENT_STATUS_COMPLETED
             db.session.commit()
             tenant = payment_tx.tenant

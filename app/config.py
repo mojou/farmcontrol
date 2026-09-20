@@ -53,14 +53,28 @@ class Config:
     ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
     # Paiement (CinetPay - Mobile Money / carte, tarifs en FCFA/XAF)
+    # Conserve mais inactif : voir SASPAY ci-dessous, le fournisseur utilise
+    # actuellement. CINETPAY_ENABLED redeviendra vrai le jour ou ses
+    # identifiants sont a nouveau renseignes.
     CINETPAY_API_KEY = os.environ.get("CINETPAY_API_KEY")
     CINETPAY_SITE_ID = os.environ.get("CINETPAY_SITE_ID")
     CINETPAY_BASE_URL = os.environ.get("CINETPAY_BASE_URL", "https://api-checkout.cinetpay.com/v2")
     CINETPAY_CURRENCY = "XAF"
-    # Actif seulement si les identifiants marchand sont renseignes. Sinon
-    # l'abonnement passe en mode demonstration (paiement simule, clairement
-    # annonce a l'ecran) pour ne jamais bloquer la demonstration du produit.
     CINETPAY_ENABLED = bool(CINETPAY_API_KEY and CINETPAY_SITE_ID)
+
+    # Paiement (SasPay - agregateur mobile money/carte, Afrique de l'Ouest et
+    # Centrale). Documentation : https://docs.saspay.me
+    SASPAY_SECRET_KEY = os.environ.get("SASPAY_SECRET_KEY")
+    SASPAY_BASE_URL = os.environ.get("SASPAY_BASE_URL", "https://api.saspay.me/api/v1")
+    SASPAY_CURRENCY = "XAF"
+    SASPAY_COUNTRY = "CM"
+    # Secret de signature des webhooks (distinct de la clef API), affiche une
+    # seule fois a la creation du webhook dans le tableau de bord SasPay.
+    SASPAY_WEBHOOK_SECRET = os.environ.get("SASPAY_WEBHOOK_SECRET")
+    # Actif seulement si la clef secrete est renseignee. Sinon l'abonnement
+    # passe en mode demonstration (paiement simule, clairement annonce a
+    # l'ecran) pour ne jamais bloquer la demonstration du produit.
+    SASPAY_ENABLED = bool(SASPAY_SECRET_KEY)
 
     # Securite authentification
     PASSWORD_MIN_LENGTH = int(os.environ.get("PASSWORD_MIN_LENGTH", 10))
