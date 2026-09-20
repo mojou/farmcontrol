@@ -85,7 +85,9 @@ class Config:
     MAX_LOGIN_ATTEMPTS = int(os.environ.get("MAX_LOGIN_ATTEMPTS", 5))
     LOGIN_LOCKOUT_MINUTES = int(os.environ.get("LOGIN_LOCKOUT_MINUTES", 15))
     PASSWORD_RESET_TOKEN_MINUTES = int(os.environ.get("PASSWORD_RESET_TOKEN_MINUTES", 30))
-    EMAIL_VERIFICATION_TOKEN_HOURS = int(os.environ.get("EMAIL_VERIFICATION_TOKEN_HOURS", 48))
+    # Le lien de confirmation envoye par email expire apres 3 heures ; le compte
+    # reste utilisable, un nouveau lien se demande depuis l'application.
+    EMAIL_VERIFICATION_TOKEN_HOURS = int(os.environ.get("EMAIL_VERIFICATION_TOKEN_HOURS", 3))
 
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
     SESSION_COOKIE_HTTPONLY = True

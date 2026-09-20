@@ -51,7 +51,7 @@ def data(app, client, tenant, owner, farm, manager):
 def _pages(ids):
     b, d = ids["batch"], ids["day"]
     return [
-        "/dashboard", "/alerts", "/journal", "/profile", "/parametres", "/users", "/users/new",
+        "/dashboard", "/alerts", "/journal", "/profile", "/parametres", "/users",
         "/facturation", "/messages/", "/messages/envoyes", "/messages/nouveau",
         "/elevage/fermes", f"/elevage/fermes/{ids['farm']}",
         f"/elevage/fermes/{ids['farm']}/modifier",

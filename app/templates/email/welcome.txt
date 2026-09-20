@@ -12,4 +12,6 @@ Merci de confirmer votre adresse email en cliquant sur ce lien (important : c'es
 qui sera utilisee si vous devez reinitialiser votre mot de passe) :
 
 {{ verify_url }}
+
+Ce lien est valable {{ config.EMAIL_VERIFICATION_TOKEN_HOURS }} heures. Passe ce delai, connectez-vous : un bouton vous permettra d'en recevoir un nouveau.
 {% endif %}

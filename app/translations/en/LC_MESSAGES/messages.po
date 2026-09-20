@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Farm Control\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-20 05:20+0100\n"
+"POT-Creation-Date: 2026-09-20 06:25+0100\n"
 "PO-Revision-Date: 2026-09-15 14:07+0100\n"
 "Last-Translator: Farm Control\n"
 "Language: en\n"
@@ -4836,8 +4836,8 @@ msgid "Decouverte"
 msgstr "Discovery"
 
 #: app/utils/plans.py:63
-msgid "Pour demarrer : 1 ferme, 1 lot actif, jusqu'a 3 utilisateurs, 2 messages/jour."
-msgstr "To get started: 1 farm, 1 active batch, up to 3 users, 2 messages/day."
+msgid "Pour demarrer : 1 ferme, 1 lot actif, 1 utilisateur (le proprietaire)."
+msgstr "To get started: 1 farm, 1 active batch, 1 user (the owner)."
 
 #: app/utils/plans.py:64
 msgid "Jusqu'a 3 fermes, lots illimites, messagerie illimitee, alertes email, export PDF."

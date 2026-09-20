@@ -25,9 +25,9 @@ DEFAULT_PLANS = [
         "price_xaf": 0,
         "max_farms": 1,
         "max_active_batches": 1,
-        "max_users": 3,
+        "max_users": 1,
         "max_messages_per_day": 2,
-        "description": "Pour demarrer : 1 ferme, 1 lot actif, jusqu'a 3 utilisateurs, 2 messages/jour.",
+        "description": "Pour demarrer : 1 ferme, 1 lot actif, 1 utilisateur (le proprietaire).",
         "sort_order": 1,
     },
     {
@@ -60,7 +60,7 @@ DEFAULT_PLANS = [
 # _(plan.name) / _(plan.description)).
 _PLAN_TEXT_MARKERS = (
     _l("Decouverte"),
-    _l("Pour demarrer : 1 ferme, 1 lot actif, jusqu'a 3 utilisateurs, 2 messages/jour."),
+    _l("Pour demarrer : 1 ferme, 1 lot actif, 1 utilisateur (le proprietaire)."),
     _l("Jusqu'a 3 fermes, lots illimites, messagerie illimitee, alertes email, export PDF."),
     _l("Fermes, lots, utilisateurs et messagerie illimites, support prioritaire."),
 )
