@@ -8,6 +8,7 @@ from flask_login import login_required
 from app.blueprints.poultry import poultry_bp
 from app.blueprints.poultry.batches import _get_batch_or_403, _stock_purchases_during
 from app.utils.pdf import render_batch_report_pdf
+from app.utils.references import to_display_unit
 from app.utils.zootechnie import compute_fcr, feed_series, growth_curve_comparison, mortality_series
 
 
@@ -22,7 +23,8 @@ def batch_report_pdf(batch_id):
         "fcr": compute_fcr(batch),
         "mortality_data": mortality_series(batch),
         "feed_data": feed_series(batch),
-        "growth_data": growth_curve_comparison(batch),
+        "growth_data": growth_curve_comparison(batch, batch.species_info.profile.weight_unit),
+        "weight_unit": batch.species_info.profile.weight_unit,
         "stock_purchases_total": stock_purchases_total,
     }
     pdf_bytes = render_batch_report_pdf(context)
@@ -42,18 +44,19 @@ def batch_report_csv(batch_id):
     a la manipulation des chiffres."""
     batch = _get_batch_or_403(batch_id)
 
+    weight_unit = batch.species_info.profile.weight_unit
     buffer = io.StringIO()
     writer = csv.writer(buffer, delimiter=";")
     writer.writerow([
         _("Jour"), _("Date"), _("Aliment (kg)"), _("Eau (litres)"), _("Morts du jour"),
-        _("Poids moyen (g)"), _("Cout aliment (FCFA)"), _("Cout medicaments (FCFA)"), _("Cout bois/litiere (FCFA)"),
+        _("Poids moyen (%(unit)s)", unit=weight_unit), _("Cout aliment (FCFA)"), _("Cout medicaments (FCFA)"), _("Cout bois/litiere (FCFA)"),
     ] + ([_("Oeufs ramasses"), _("Dont casses")] if batch.is_layer else []))
 
     for day in sorted(batch.days, key=lambda d: d.day_number):
         feed_cost = sum((r.quantity_kg or 0) * (r.unit_price or 0) for r in day.feed_records)
         medication_cost = sum((r.quantity or 0) * (r.unit_price or 0) for r in day.medication_records)
         wood_cost = sum((r.quantity or 0) * (r.unit_price or 0) for r in day.wood_records)
-        last_weight = day.weight_records[-1].average_weight if day.weight_records else ""
+        last_weight = to_display_unit(day.weight_records[-1].average_weight, weight_unit) if day.weight_records else ""
         writer.writerow([
             day.day_number,
             day.date.strftime("%d/%m/%Y"),

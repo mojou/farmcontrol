@@ -62,6 +62,43 @@
   </div>
 </div>
 
+
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <h6 class="text-muted small text-uppercase mb-0"><i class="bi bi-info-circle"></i> {{ _('Reperes pour ce type d\'elevage : %(type)s', type=(batch.species_label)) }}</h6>
+      <a href="{{ url_for('poultry.species_list') }}#{{ batch.species }}" class="small">{{ _('Voir la fiche complete') }}</a>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-3">
+        <div class="small text-muted">{{ _('Age dans le cycle') }}</div>
+        <div class="fw-bold">{{ _('Jour %(age)s sur environ %(cycle)s', age=(bench.age_days), cycle=(bench.cycle_days)) }}</div>
+        <div class="progress mt-1" style="height: 6px;"><div class="progress-bar" role="progressbar" style="width: {{ bench.age_percent }}%;"></div></div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="small text-muted">{{ _('Mortalite totale') }}</div>
+        <div class="fw-bold text-{{ {'ok': 'success', 'warn': 'warning', 'bad': 'danger'}[bench.mortality_status] }}">{{ bench.mortality_percent }} %</div>
+        <div class="small text-muted">{{ _('normale : jusqu\'a %(normal)s %%', normal=(bench.mortality_normal)) }}</div>
+      </div>
+      {% if not batch.is_layer and bench.fcr_range %}
+      <div class="col-md-6 col-lg-3">
+        <div class="small text-muted">{{ _('Aliment par %(animal)s', animal=animal(batch)) }}</div>
+        <div class="fw-bold {{ 'text-success' if bench.fcr_status == 'ok' else ('text-warning' if bench.fcr_status == 'warn' else '') }}">{{ bench.fcr if bench.fcr is not none else "-" }}</div>
+        <div class="small text-muted">{{ _('normal : %(low)s a %(high)s', low=(bench.fcr_range[0]), high=(bench.fcr_range[1])) }}</div>
+      </div>
+      {% endif %}
+      <div class="col-md-6 col-lg-3">
+        <div class="small text-muted">{{ _('Poids de vente habituel') }}</div>
+        <div class="fw-bold">{{ bench.profile.market_weight_g[0]|weight(batch) }} - {{ bench.profile.market_weight_g[1]|weight(batch) }}</div>
+        {% if bench.weight_g is not none %}
+        <div class="small text-muted">{{ _('dernier poids : %(w)s', w=(bench.weight_g|weight(batch))) }}{% if bench.expected_weight_g %} ({{ _('attendu : %(w)s', w=(bench.expected_weight_g|weight(batch))) }}){% endif %}</div>
+        {% endif %}
+      </div>
+    </div>
+    <p class="text-muted small mt-3 mb-0">{{ _('Ces reperes sont des ordres de grandeur pour situer votre lot ; ils varient selon la souche, l\'aliment et le climat.') }}</p>
+  </div>
+</div>
+
 <div class="row g-3">
   <div class="col-lg-6">
     <div class="card h-100"><div class="card-body">

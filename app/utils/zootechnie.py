@@ -117,11 +117,36 @@ def feed_series(batch):
     return series
 
 
-def growth_curve_comparison(batch):
-    """Compare le poids reel enregistre a la courbe de reference (paragraphe 1.3)."""
-    reference_points = {}
+def interpolate_curve(points, x):
+    """Valeur de la courbe (liste de (x, y)) en x, interpolee lineairement
+    entre deux points connus. None hors de la plage de la courbe."""
+    points = sorted(points)
+    if not points or x < points[0][0] or x > points[-1][0]:
+        return None
+    for (x1, y1), (x2, y2) in zip(points, points[1:]):
+        if x1 <= x <= x2:
+            return y1 if x2 == x1 else y1 + (y2 - y1) * (x - x1) / (x2 - x1)
+    return points[-1][1]
+
+
+def growth_curve_comparison(batch, unit="g"):
+    """Compare le poids reel enregistre a la courbe de reference (paragraphe 1.3).
+
+    Le poids attendu est interpole entre les points de la courbe (une courbe
+    par semaine ou par mois ne tombe presque jamais pile sur le jour de la
+    pesee). Les poids sont rendus dans `unit` ("g" ou "kg")."""
+    reference_points = []
     if batch.growth_reference:
-        reference_points = {p.day_number: float(p.expected_weight) for p in batch.growth_reference.points}
+        reference_points = [(p.day_number, float(p.expected_weight)) for p in batch.growth_reference.points]
+
+    def convert(grams):
+        if grams is None:
+            return None
+        return round(grams / 1000, 2) if unit == "kg" else round(grams, 1)
+
+    # Les courbes sont indexees sur l'AGE (jours depuis la naissance) ; le
+    # numero de jour du lot compte depuis la mise en place.
+    start_age_days = (batch.start_age_weeks or 0) * 7
 
     comparison = []
     for day in batch.days:
@@ -129,8 +154,8 @@ def growth_curve_comparison(batch):
             comparison.append(
                 {
                     "day": day.day_number,
-                    "actual_weight": float(weight.average_weight),
-                    "expected_weight": reference_points.get(day.day_number),
+                    "actual_weight": convert(float(weight.average_weight)),
+                    "expected_weight": convert(interpolate_curve(reference_points, start_age_days + day.day_number)),
                 }
             )
     return comparison

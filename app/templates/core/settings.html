@@ -36,6 +36,7 @@
               {{ option.label(class="form-check-label") }}
             </div>
             {% endfor %}
+            <p class="text-muted small mt-2 mb-1"><a href="{{ url_for('poultry.species_list') }}">{{ _('Voir la fiche de chaque type d\'elevage') }}</a></p>
             <p class="text-muted small mt-2 mb-0">{{ _("Seuls les types coches sont proposes quand vous creez un lot ; le type principal est propose en premier. Vos lots existants ne changent pas.") }}</p>
           </div>
           {{ fm.render_field(form.default_breed) }}

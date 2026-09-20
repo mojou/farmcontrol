@@ -33,8 +33,10 @@ from app.models.poultry import (
 )
 from app.utils.alerts import check_stock_alert
 from app.utils.audit import log_action
-from app.utils.species import choices_for, cycle_days_for, parse_enabled
+from app.utils.benchmarks import batch_benchmarks
+from app.utils.species import choices_for, cycle_days_for, get_species, parse_enabled
 from app.utils.laying import DEFAULT_LAYING_REFERENCE_NAME, ensure_default_laying_reference
+from app.utils.references import default_curve_names, ensure_standard_references, from_display_unit
 from app.utils.plans import get_current_plan
 from app.utils.sanitary import (
     current_batch_day_number,
@@ -86,27 +88,47 @@ def _set_reference_choices(form):
     """Listes deroulantes des courbes : poids attendu (poulets) et ponte
     attendue (pondeuses). La courbe de ponte standard est proposee via
     l'entree 0 (creee au besoin a l'enregistrement du lot)."""
-    form.growth_reference_id.choices = [(0, _("Aucun"))] + [
-        (r.id, r.name)
+    standard_names = default_curve_names()
+    form.growth_reference_id.choices = [
+        (0, _("Courbe standard du type d'elevage (indicative)")),
+        (-1, _("Aucune")),
+    ] + [
+        (r.id, _(r.name))
         for r in GrowthReference.query.filter_by(kind=GrowthReference.KIND_WEIGHT).order_by(GrowthReference.name).all()
+        if r.name not in standard_names
     ]
     form.laying_reference_id.choices = [(0, _("Courbe standard (indicative)"))] + [
-        (r.id, r.name)
+        (r.id, _(r.name))
         for r in GrowthReference.query.filter_by(kind=GrowthReference.KIND_LAYING).order_by(GrowthReference.name).all()
         if r.name != DEFAULT_LAYING_REFERENCE_NAME
     ]
 
 
+def _apply_growth_reference(batch, form):
+    """Courbe de poids attendu : 0 = courbe standard du type d'elevage
+    (creee au besoin), -1 = aucune. Les pondeuses n'en ont pas (leur suivi
+    porte sur la ponte)."""
+    choice = form.growth_reference_id.data
+    if batch.is_layer or choice == -1 or choice is None:
+        batch.growth_reference_id = None
+    elif choice == 0:
+        references = ensure_standard_references(current_user.tenant_id, batch.species)
+        batch.growth_reference_id = references[0].id if references else None
+    else:
+        batch.growth_reference_id = choice
+
+
 def _apply_layer_settings(batch, form):
-    """Age des poules et courbe de ponte : uniquement pour les pondeuses."""
+    """Age des animaux a la mise en place (tous types) et courbe de ponte
+    (pondeuses seulement)."""
+    _apply_growth_reference(batch, form)
+    batch.start_age_weeks = form.start_age_weeks.data or 0
     if batch.is_layer:
-        batch.start_age_weeks = form.start_age_weeks.data or 0
         if form.laying_reference_id.data:
             batch.laying_reference_id = form.laying_reference_id.data
         else:
             batch.laying_reference_id = ensure_default_laying_reference(current_user.tenant_id).id
     else:
-        batch.start_age_weeks = 0
         batch.laying_reference_id = None
 
 
@@ -152,7 +174,7 @@ def batch_new():
             chick_unit_price=form.chick_unit_price.data,
             supplier_id=form.supplier_id.data or None,
             start_date=form.start_date.data,
-            growth_reference_id=form.growth_reference_id.data or None,
+            growth_reference_id=None,  # fixe par _apply_growth_reference apres la creation
             created_by=current_user.id,
         )
         db.session.add(batch)
@@ -193,7 +215,14 @@ def batch_edit(batch_id):
     ]
     if request.method == "GET":
         form.supplier_id.data = batch.supplier_id or 0
-        form.growth_reference_id.data = batch.growth_reference_id or 0
+        ref = batch.growth_reference
+        standard = get_species(batch.species).profile.curves
+        if ref is None:
+            form.growth_reference_id.data = -1
+        elif standard and ref.name == standard[0].name:
+            form.growth_reference_id.data = 0
+        else:
+            form.growth_reference_id.data = ref.id
         ref = batch.laying_reference
         form.laying_reference_id.data = 0 if (ref is None or ref.name == DEFAULT_LAYING_REFERENCE_NAME) else ref.id
         form.start_age_weeks.data = batch.start_age_weeks
@@ -216,7 +245,6 @@ def batch_edit(batch_id):
         batch.chick_unit_price = form.chick_unit_price.data
         batch.supplier_id = form.supplier_id.data or None
         batch.start_date = form.start_date.data
-        batch.growth_reference_id = form.growth_reference_id.data or None
         _apply_layer_settings(batch, form)
         recompute_batch_finance(batch)
         log_action("update", "poultry_batches", batch.id, {"code": batch.code})
@@ -235,7 +263,8 @@ def batch_detail(batch_id):
     laying_rate = average_laying_rate(batch) if batch.is_layer else None
     expected_rate = average_expected_laying_rate(batch) if batch.is_layer else None
     return render_template(
-        "poultry/batch_detail.html", batch=batch, fcr=fcr, laying_rate=laying_rate, expected_rate=expected_rate
+        "poultry/batch_detail.html", batch=batch, fcr=fcr, laying_rate=laying_rate, expected_rate=expected_rate,
+        bench=batch_benchmarks(batch),
     )
 
 
@@ -247,7 +276,7 @@ def batch_close(batch_id):
     if request.method == "GET":
         from datetime import timedelta
 
-        form.end_date.data = batch.start_date + timedelta(days=cycle_days_for(batch.species, current_user.tenant))
+        form.end_date.data = batch.start_date + timedelta(days=cycle_days_for(batch.species, current_user.tenant, batch.start_age_weeks))
     if form.validate_on_submit():
         batch.status = BATCH_STATUS_CLOSED
         batch.end_date = form.end_date.data
@@ -335,7 +364,8 @@ def batch_report(batch_id):
         fcr=fcr,
         mortality_data=mortality_series(batch),
         feed_data=feed_series(batch),
-        growth_data=growth_curve_comparison(batch),
+        growth_data=growth_curve_comparison(batch, get_species(batch.species).profile.weight_unit),
+        weight_unit=get_species(batch.species).profile.weight_unit,
         egg_data=egg_production_series(batch) if batch.is_layer else [],
         laying_rate=average_laying_rate(batch) if batch.is_layer else None,
         expected_rate=average_expected_laying_rate(batch) if batch.is_layer else None,
@@ -484,7 +514,11 @@ def growth_references():
     form = GrowthReferenceForm()
     if form.validate_on_submit():
         reference = GrowthReference(
-            tenant_id=current_user.tenant_id, name=form.name.data, kind=form.kind.data, created_by=current_user.id
+            tenant_id=current_user.tenant_id,
+            name=form.name.data,
+            kind="laying" if form.kind.data == "laying" else "weight",
+            display_unit="kg" if form.kind.data == "weight_kg" else "g",
+            created_by=current_user.id,
         )
         db.session.add(reference)
         db.session.commit()
@@ -501,12 +535,17 @@ def growth_reference_detail(reference_id):
     reference = GrowthReference.query.get_or_404(reference_id)
     is_laying = reference.kind == GrowthReference.KIND_LAYING
     form = LayingPointForm() if is_laying else GrowthReferencePointForm()
+    if not is_laying and reference.display_unit == "kg":
+        form.expected_weight.label.text = _("Poids attendu (kilos)")
     if form.validate_on_submit():
+        # Les points sont toujours stockes en grammes.
         point = GrowthReferencePoint(
             tenant_id=current_user.tenant_id,
             reference_id=reference.id,
             day_number=form.week.data if is_laying else form.day_number.data,
-            expected_weight=form.rate.data if is_laying else form.expected_weight.data,
+            expected_weight=(
+                form.rate.data if is_laying else from_display_unit(form.expected_weight.data, reference.display_unit)
+            ),
         )
         db.session.add(point)
         try:

@@ -42,16 +42,24 @@ class Species:
     uses_litter: bool = True       # rubrique "Bois / litiere"
     drinks_water: bool = True      # rubrique "Eau de boisson"
 
+    @property
+    def profile(self):
+        """Reperes techniques (poids de vente, indice de consommation,
+        mortalite normale, courbes standard) - voir species_profiles.py."""
+        from app.utils.species_profiles import profile_for
+
+        return profile_for(self.code)
+
 
 SPECIES = [
     Species(SPECIES_BROILER, _l("Poulet de chair"), _l("poulets"), _l("poulet"), _l("poussins"), 42),
-    Species(SPECIES_LAYER, _l("Poule pondeuse"), _l("poules"), _l("poule"), _l("poussins"), 540),
+    Species(SPECIES_LAYER, _l("Poule pondeuse"), _l("poules"), _l("poule"), _l("poussins"), 504),
     Species(SPECIES_GUINEA_FOWL, _l("Pintade"), _l("pintades"), _l("pintade"), _l("poussins"), 90),
-    Species(SPECIES_TURKEY, _l("Dinde"), _l("dindes"), _l("dinde"), _l("poussins"), 120),
+    Species(SPECIES_TURKEY, _l("Dinde"), _l("dindes"), _l("dinde"), _l("poussins"), 126),
     Species(SPECIES_DUCK, _l("Canard"), _l("canards"), _l("canard"), _l("poussins"), 70),
-    Species(SPECIES_QUAIL, _l("Caille"), _l("cailles"), _l("caille"), _l("poussins"), 45),
+    Species(SPECIES_QUAIL, _l("Caille"), _l("cailles"), _l("caille"), _l("poussins"), 42),
     Species(SPECIES_PIG, _l("Porc d'engraissement"), _l("porcs"), _l("porc"), _l("porcelets"), 180),
-    Species(SPECIES_RABBIT, _l("Lapin"), _l("lapins"), _l("lapin"), _l("lapereaux"), 90),
+    Species(SPECIES_RABBIT, _l("Lapin"), _l("lapins"), _l("lapin"), _l("lapereaux"), 84),
     Species(SPECIES_FISH, _l("Poisson (tilapia, silure...)"), _l("poissons"), _l("poisson"), _l("alevins"), 180,
             uses_litter=False, drinks_water=False),
 ]
@@ -94,17 +102,19 @@ def choices_for(enabled_codes, always_include=None):
     return [(s.code, s.label) for s in SPECIES if s.code in keep]
 
 
-def cycle_days_for(species_code, tenant=None):
-    """Duree de cycle proposee a la cloture d'un lot : le reglage de
-    l'exploitation s'il existe et que le lot est de son type principal,
-    sinon la duree habituelle du type d'elevage."""
+def cycle_days_for(species_code, tenant=None, start_age_weeks=0):
+    """Duree de cycle proposee a la cloture d'un lot, en jours a partir de
+    la mise en place. Les durees des types d'elevage (Species.cycle_days) sont
+    des AGES de vente : on retire l'age des animaux a l'arrivee (ex : des
+    porcelets achetes a 8 semaines). Le reglage de l'exploitation
+    (duree de cycle) prime pour son type principal."""
     if (
         tenant is not None
         and getattr(tenant, "default_cycle_days", None)
         and species_code == getattr(tenant, "primary_species", DEFAULT_SPECIES)
     ):
         return tenant.default_cycle_days
-    return get_species(species_code).cycle_days
+    return max(get_species(species_code).cycle_days - (start_age_weeks or 0) * 7, 7)
 
 
 def _tenant_species(tenant):

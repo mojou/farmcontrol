@@ -15,8 +15,8 @@ from app.utils.tenant import tenant_bypass
 from tests.conftest import login
 
 # poids moyens realistes (grammes) et effectifs par type
-WEIGHTS = {"broiler": 1800, "layer": 1700, "guinea_fowl": 1400, "turkey": 6000, "duck": 2800, "quail": 220,
-           "pig": 85000, "rabbit": 2300, "fish": 450}
+WEIGHTS = {"broiler": 1800, "layer": 1700, "guinea_fowl": 1400, "turkey": 9, "duck": 2800, "quail": 220,
+           "pig": 85, "rabbit": 2300, "fish": 450}
 COUNTS = {"pig": 30, "fish": 3000, "rabbit": 60}
 
 

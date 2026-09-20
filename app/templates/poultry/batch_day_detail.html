@@ -459,7 +459,7 @@
             <tbody>
               {% for r in day.weight_records %}
               <tr>
-                <td>{{ r.average_weight }} g</td><td>{{ r.sample_size }}</td>
+                <td>{{ r.average_weight|weight(batch) }}</td><td>{{ r.sample_size }}</td>
                 {% if current_user.has_role('owner') %}
                 <td>
                   <form method="post" action="{{ url_for('poultry.weight_record_delete', record_id=r.id) }}" onsubmit='return confirm({{ _("Supprimer cette saisie ?")|tojson }});'>

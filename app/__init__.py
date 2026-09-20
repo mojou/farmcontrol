@@ -143,6 +143,22 @@ def _register_template_helpers(app):
             label = current_user.tenant.currency_label
         return f"{float(value):,.0f} {label}".replace(",", " ")
 
+    @app.template_filter("weight")
+    def weight_filter(grams, target=None):
+        """Poids (stocke en grammes) dans l'unite du type d'elevage : "1 800 g"
+        ou "85 kg". `target` : un lot, un type d'elevage ou "g"/"kg"."""
+        if grams is None:
+            return "-"
+        from app.utils.species import get_species
+
+        if target in ("g", "kg"):
+            unit = target
+        else:
+            unit = get_species(getattr(target, "species", target)).profile.weight_unit
+        if unit == "kg":
+            return f"{float(grams) / 1000:,.1f} kg".replace(",", " ")
+        return f"{float(grams):,.0f} g".replace(",", " ")
+
     @app.template_filter("number")
     def number_filter(value, decimals=0):
         if value is None:

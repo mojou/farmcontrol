@@ -3,7 +3,7 @@
 {% block title %}{{ reference.name }} - Farm Control{% endblock %}
 {% block content %}
 <div class="fc-page-header">
-  <h1 class="fc-page-title">{% if reference.kind == 'laying' %}{{ _('Ponte attendue : %(name)s', name=(reference.name)) }}{% else %}{{ _('Poids normal attendu : %(name)s', name=(reference.name)) }}{% endif %}</h1>
+  <h1 class="fc-page-title">{% if reference.kind == 'laying' %}{{ _('Ponte attendue : %(name)s', name=(_(reference.name))) }}{% else %}{{ _('Poids normal attendu : %(name)s', name=(_(reference.name))) }}{% endif %}</h1>
 </div>
 
 <div class="row g-3">
@@ -15,14 +15,14 @@
           {% if reference.kind == 'laying' %}
           <thead><tr><th>{{ _('Semaine d\'age') }}</th><th>{{ _('Taux de ponte attendu') }} (%)</th></tr></thead>
           {% else %}
-          <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids attendu (g)') }}</th></tr></thead>
+          <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids attendu') }} ({{ reference.display_unit }})</th></tr></thead>
           {% endif %}
           <tbody>
             {% for point in reference.points %}
             {% if reference.kind == 'laying' %}
             <tr><td>{{ point.day_number }}</td><td>{{ point.expected_weight }} %</td></tr>
             {% else %}
-            <tr><td>{{ _('J') }}{{ point.day_number }}</td><td>{{ point.expected_weight }}</td></tr>
+            <tr><td>{{ _('J') }}{{ point.day_number }}</td><td>{{ point.expected_weight|weight(reference.display_unit) }}</td></tr>
             {% endif %}
             {% else %}
             <tr><td colspan="2" class="text-muted text-center py-4">{{ _('Aucun point defini.') }}</td></tr>

@@ -677,6 +677,9 @@ class GrowthReference(TimestampMixin, TenantMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)  # ex: "Ross 308"
     kind = db.Column(db.String(10), nullable=False, default=KIND_WEIGHT, server_default=KIND_WEIGHT)
+    # Unite d'affichage et de saisie des poids de cette courbe ("g" ou "kg") ;
+    # les points sont TOUJOURS stockes en grammes.
+    display_unit = db.Column(db.String(3), nullable=False, default="g", server_default="g")
     created_by = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     points = db.relationship(

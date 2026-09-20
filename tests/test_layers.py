@@ -182,7 +182,7 @@ def test_layer_batch_gets_standard_curve_and_age(app, client, tenant, owner, far
     assert "attendu : 94.0 %" in html
 
 
-def test_broiler_batch_has_no_laying_settings(app, client, tenant, owner, farm):
+def test_broiler_batch_has_no_laying_curve(app, client, tenant, owner, farm):
     login(client, owner)
     client.post(
         "/elevage/lots/nouveau",
@@ -197,8 +197,8 @@ def test_broiler_batch_has_no_laying_settings(app, client, tenant, owner, farm):
     with app.app_context():
         with tenant_bypass():
             batch = Batch.query.filter_by(tenant_id=tenant.id, code="CHR-02").first()
-            assert batch.start_age_weeks == 0
-            assert batch.laying_reference_id is None
+            assert batch.start_age_weeks == 30  # l'age a l'arrivee vaut pour tous les types
+            assert batch.laying_reference_id is None  # mais la courbe de ponte, non
 
 
 def test_low_laying_raises_an_alert_after_three_days(app, client, tenant, owner, farm):

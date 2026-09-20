@@ -20,7 +20,7 @@
     }
     function refresh() {
       var layer = species.value === "layer";
-      ["start_age_weeks", "laying_reference_id"].forEach(function (id) {
+      ["laying_reference_id"].forEach(function (id) {
         var r = row(id); if (r) r.style.display = layer ? "" : "none";
       });
       var w = row("growth_reference_id"); if (w) w.style.display = layer ? "none" : "";

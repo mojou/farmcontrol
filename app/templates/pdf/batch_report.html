@@ -93,7 +93,7 @@
   {% if growth_data %}
   <div class="section-title">{{ _('Suivi de croissance') }}</div>
   <table>
-    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids reel (g)') }}</th><th>{{ _('Poids de reference (g)') }}</th></tr></thead>
+    <thead><tr><th>{{ _('Jour') }}</th><th>{{ _('Poids reel (%(unit)s)', unit=weight_unit) }}</th><th>{{ _('Poids de reference (%(unit)s)', unit=weight_unit) }}</th></tr></thead>
     <tbody>
       {% for row in growth_data %}
       <tr><td>{{ _('J') }}{{ row.day }}</td><td>{{ row.actual_weight }}</td><td>{{ row.expected_weight if row.expected_weight is not none else "-" }}</td></tr>

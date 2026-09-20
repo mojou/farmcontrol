@@ -16,8 +16,8 @@
           <tbody>
             {% for ref in references %}
             <tr>
-              <td>{{ ref.name }}</td>
-              <td>{{ _('Ponte attendue (pondeuses)') if ref.kind == 'laying' else _('Poids attendu (croissance)') }}</td>
+              <td>{{ _(ref.name) }}</td>
+              <td>{{ _('Ponte attendue (pondeuses)') if ref.kind == 'laying' else (_('Poids attendu en kilos (porcs, dindes...)') if ref.display_unit == 'kg' else _('Poids attendu en grammes (croissance)')) }}</td>
               <td>{{ ref.points|length }}</td>
               <td><a href="{{ url_for('poultry.growth_reference_detail', reference_id=ref.id) }}" class="btn btn-sm btn-outline-secondary">{{ _('Gerer') }}</a></td>
             </tr>

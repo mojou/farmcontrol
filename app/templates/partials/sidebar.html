@@ -20,6 +20,9 @@
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.stock_list' }}" href="{{ url_for('poultry.stock_list') }}">
       <i class="bi bi-box-seam"></i> {{ _('Stock') }}
     </a>
+    <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.species_list' }}" href="{{ url_for('poultry.species_list') }}">
+      <i class="bi bi-info-circle"></i> {{ _('Types d\'elevage') }}
+    </a>
     {% if current_user.has_role('owner') %}
     <a class="fc-nav-link {{ 'active' if request.endpoint == 'poultry.suppliers_list' }}" href="{{ url_for('poultry.suppliers_list') }}">
       <i class="bi bi-truck"></i> {{ _('Fournisseurs') }}

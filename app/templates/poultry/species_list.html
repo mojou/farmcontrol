@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Types d\'elevage') }} - Farm Control{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <div>
+    <h1 class="fc-page-title">{{ _('Types d\'elevage') }}</h1>
+    <p class="text-muted mb-0">{{ _('La fiche de chaque type d\'elevage : ce qui le distingue et les reperes pour situer vos lots.') }}</p>
+  </div>
+  {% if current_user.has_role('owner') %}
+  <a href="{{ url_for('core.settings') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-gear"></i> {{ _('Choisir mes types d\'elevage') }}</a>
+  {% endif %}
+</div>
+
+<div class="alert alert-info small">
+  {{ _('Ces chiffres sont des ordres de grandeur releves dans la litterature technique ou courants dans la filiere : ils varient selon la souche, l\'aliment, le climat et la conduite d\'elevage. Comparez-les toujours avec les conseils de votre fournisseur et de votre veterinaire. Aucun calendrier de vaccination n\'est impose : il depend de votre zone et se definit avec un veterinaire.') }}
+</div>
+
+<div class="row g-3">
+  {% for sp in species_list %}
+  {% set p = sp.profile %}
+  <div class="col-lg-6" id="{{ sp.code }}">
+    <div class="card h-100 {{ 'border-primary' if sp.code == primary }}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="mb-0">{{ sp.label }}</h5>
+          <div>
+            {% if sp.code == primary %}<span class="badge bg-primary">{{ _('Type principal') }}</span>
+            {% elif sp.code in enabled %}<span class="badge bg-success">{{ _('Active') }}</span>
+            {% else %}<span class="badge bg-secondary">{{ _('Non active') }}</span>{% endif %}
+          </div>
+        </div>
+        <table class="table table-sm mb-2">
+          <tr><td class="text-muted">{{ _('Cycle habituel') }}</td><td>{{ _('%(days)s jours (environ %(weeks)s semaines)', days=(sp.cycle_days), weeks=((sp.cycle_days / 7)|round|int)) }}</td></tr>
+          <tr><td class="text-muted">{{ _('Poids de vente habituel') }}</td><td>{{ p.market_weight_g[0]|weight(sp.code) }} - {{ p.market_weight_g[1]|weight(sp.code) }}</td></tr>
+          {% if p.fcr_range %}
+          <tr><td class="text-muted">{{ _('Aliment par kilo produit') }}</td><td>{{ p.fcr_range[0] }} - {{ p.fcr_range[1] }}</td></tr>
+          {% endif %}
+          <tr><td class="text-muted">{{ _('Mortalite normale (cycle)') }}</td><td>{{ _('jusqu\'a %(normal)s %%', normal=(p.mortality_normal_percent)) }}</td></tr>
+          <tr><td class="text-muted">{{ _('Poids saisis en') }}</td><td>{{ _('kilos') if p.weight_unit == 'kg' else _('grammes') }}</td></tr>
+          <tr><td class="text-muted">{{ _('Rubriques de saisie') }}</td><td>
+            {{ _('Aliment, mortalite, pesee, medicaments, observations') }}{% if sp.drinks_water %}, {{ _('eau') }}{% endif %}{% if sp.uses_litter %}, {{ _('litiere') }}{% endif %}{% if sp.code == 'layer' %}, {{ _('oeufs') }}{% endif %}
+          </td></tr>
+          {% if p.curves %}
+          <tr><td class="text-muted">{{ _('Courbe de poids standard') }}</td><td>{% for c in p.curves %}{{ _(c.name) }}{% if not loop.last %}<br>{% endif %}{% endfor %}</td></tr>
+          {% elif sp.code == 'layer' %}
+          <tr><td class="text-muted">{{ _('Ponte attendue') }}</td><td>{{ _('Courbe standard selon l\'age des poules') }}</td></tr>
+          {% endif %}
+        </table>
+        <p class="small mb-2">{{ p.notes }}</p>
+        <p class="small text-muted mb-0">
+          {% if p.verified %}<i class="bi bi-patch-check text-success"></i> {{ _('Chiffres releves dans la litterature technique') }}{% else %}<i class="bi bi-exclamation-circle text-warning"></i> {{ _('Chiffres indicatifs, a verifier avec votre fournisseur') }}{% endif %}
+          {% for sid in p.sources_ids %}<a href="#source-{{ sid }}" class="ms-1">[{{ sid }}]</a>{% endfor %}
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card mt-4">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-3">{{ _('Sources consultees') }}</h6>
+    <ol class="small mb-0">
+      {% for sid, source in sources.items() %}
+      <li id="source-{{ sid }}" value="{{ sid }}">{{ source[0] }} - <a href="{{ source[1] }}" target="_blank" rel="noopener">{{ source[1] }}</a></li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endblock %}

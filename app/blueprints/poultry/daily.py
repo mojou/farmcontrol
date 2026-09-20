@@ -39,8 +39,9 @@ from app.models.poultry import (
     WeightRecord,
     WoodRecord,
 )
-from app.utils.alerts import check_fcr_alert, check_low_laying_alert, check_mortality_alert, check_stock_alert, check_urgent_observation_alert
+from app.utils.alerts import check_fcr_alert, check_low_laying_alert, check_mortality_alert, check_total_mortality_alert, check_stock_alert, check_urgent_observation_alert
 from app.utils.audit import log_action
+from app.utils.references import from_display_unit
 from app.utils.sanitary import get_pending_items
 from app.utils.uploads import delete_photo, save_observation_photo
 from app.utils.zootechnie import recompute_batch_finance
@@ -211,7 +212,7 @@ def batch_day_detail(day_id):
         wood_form=wood_form,
         medication_form=medication_form,
         observation_form=ObservationForm(),
-        weight_form=WeightRecordForm(),
+        weight_form=_weight_form_for(day.batch),
         submit_form=DailyReportSubmitForm(),
         review_form=DailyReportReviewForm(),
         pending_today=pending_today,
@@ -376,6 +377,8 @@ def mortality_record_new(day_id):
         db.session.add(record)
         db.session.flush()
         check_mortality_alert(day.batch, day)
+        db.session.expire(day.batch, ["days"])
+        check_total_mortality_alert(day.batch)
         log_action("create", "poultry_mortality_records", None, {"quantity_dead": form.quantity_dead.data})
         db.session.commit()
         flash(_("Mortalite enregistree."), "success")
@@ -548,18 +551,30 @@ def observation_delete(record_id):
     return redirect(url_for("poultry.batch_day_detail", day_id=day_id))
 
 
+def _weight_form_for(batch):
+    """Formulaire de pesee dans l'unite du type d'elevage (kg pour les porcs, les dindes)."""
+    form = WeightRecordForm()
+    if batch.species_info.profile.weight_unit == "kg":
+        form.average_weight.label.text = _("Poids moyen d'un animal (kilos)")
+        form.average_weight.render_kw = {"placeholder": _("Ex : 85")}
+    return form
+
+
 @poultry_bp.route("/jours/<int:day_id>/pesees", methods=["POST"])
 @login_required
 def weight_record_new(day_id):
     day = _get_day_or_403(day_id)
     form = WeightRecordForm()
+    unit = day.batch.species_info.profile.weight_unit
     if form.validate_on_submit():
+        # Saisie en kilos pour les porcs et les dindes ; stockage en grammes.
+        average_weight = from_display_unit(form.average_weight.data, unit)
         record = WeightRecord(
             tenant_id=current_user.tenant_id,
             farm_id=day.batch.farm_id,
             batch_id=day.batch_id,
             batch_day_id=day.id,
-            average_weight=form.average_weight.data,
+            average_weight=average_weight,
             sample_size=form.sample_size.data,
             observation=form.observation.data,
             created_by=current_user.id,
@@ -568,7 +583,7 @@ def weight_record_new(day_id):
         recompute_batch_finance(day.batch)
         db.session.flush()
         check_fcr_alert(day.batch)
-        log_action("create", "poultry_weight_records", record.id, {"average_weight": str(form.average_weight.data)})
+        log_action("create", "poultry_weight_records", record.id, {"average_weight": str(average_weight)})
         db.session.commit()
         flash(_("Pesee enregistree."), "success")
     else:

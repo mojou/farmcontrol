@@ -156,13 +156,13 @@
         labels: growthData.map(function (p) { return {{ _("J")|tojson }} + p.day; }),
         datasets: [
           {
-            label: {{ _("Poids reel (g)")|tojson }},
+            label: {{ _("Poids reel (%(unit)s)", unit=weight_unit)|tojson }},
             data: growthData.map(function (p) { return p.actual_weight; }),
             borderColor: "#2f5233",
             tension: 0.25,
           },
           {
-            label: {{ _("Poids de reference (g)")|tojson }},
+            label: {{ _("Poids de reference (%(unit)s)", unit=weight_unit)|tojson }},
             data: growthData.map(function (p) { return p.expected_weight; }),
             borderColor: "#c98a2c",
             borderDash: [6, 4],

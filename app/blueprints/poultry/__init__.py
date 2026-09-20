@@ -13,3 +13,4 @@ from app.blueprints.poultry import stock  # noqa: E402,F401
 from app.blueprints.poultry import suppliers  # noqa: E402,F401
 from app.blueprints.poultry import sales  # noqa: E402,F401
 from app.blueprints.poultry import api  # noqa: E402,F401
+from app.blueprints.poultry import species_info  # noqa: E402,F401

@@ -124,6 +124,42 @@ def check_mortality_alert(batch, batch_day):
     )
 
 
+def check_total_mortality_alert(batch):
+    """Alerte si la mortalite TOTALE du lot depasse nettement ce qui est
+    normal pour son type d'elevage (voir species_profiles.py) : le seuil
+    quotidien de /parametres ne voit pas une mortalite lente mais reguliere.
+    Il faut au moins 5 morts (petits lots), et au plus une alerte par jour."""
+    from app.utils.species import get_species
+
+    normal = get_species(batch.species).profile.mortality_normal_percent
+    if not batch.initial_count or batch.total_mortality < 5:
+        return None
+    percent = batch.total_mortality * 100 / batch.initial_count
+    if percent <= normal * 1.25:
+        return None
+
+    today = datetime.now(timezone.utc).date()
+    already_alerted = (
+        Alert.query.filter_by(batch_id=batch.id, type="mortality_total")
+        .filter(Alert.created_at >= datetime(today.year, today.month, today.day, tzinfo=timezone.utc))
+        .first()
+    )
+    if already_alerted:
+        return None
+
+    return create_alert(
+        title=f"Mortalite totale elevee - Lot {batch.code}",
+        message=(
+            f"Le lot {batch.code} a perdu {batch.total_mortality} sujets sur {batch.initial_count} "
+            f"({percent:.1f} %), alors qu'une mortalite normale pour ce type d'elevage est "
+            f"d'environ {normal} % sur un cycle."
+        ),
+        alert_type="mortality_total",
+        priority=ALERT_PRIORITY_IMPORTANT,
+        batch=batch,
+    )
+
+
 def check_fcr_alert(batch):
     """Cree une alerte si l'indice de consommation (FCR) du lot depasse le
     seuil defini par le proprietaire (/parametres). Desactive par defaut
