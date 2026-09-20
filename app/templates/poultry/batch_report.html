@@ -93,6 +93,23 @@
     {% endif %}
   </div>
 </div>
+
+{% if current_user.has_role('owner') %}
+<div class="card mt-3">
+  <div class="card-body">
+    <h6 class="text-muted small text-uppercase mb-2">Achats de stock sur la ferme pendant cette periode</h6>
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="h5 mb-0">{{ stock_purchases_total|currency }}</span>
+      <a href="{{ url_for('poultry.expenses_summary') }}" class="btn btn-sm btn-outline-secondary">Voir le detail des depenses</a>
+    </div>
+    <p class="text-muted small mb-0 mt-2">
+      Ce montant est different du "Total des depenses" ci-dessus : il compte tout ce qui a ete achete pour
+      cette ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif
+      en meme temps. Le "Total des depenses" du lot, lui, ne compte que ce que CE lot a reellement consomme.
+    </p>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
@@ -23,6 +25,7 @@ from app.models.poultry import (
     GrowthReferencePoint,
     MedicationRecord,
     SanitaryProgramItem,
+    StockPurchase,
     Supplier,
 )
 from app.utils.alerts import check_stock_alert
@@ -242,6 +245,27 @@ def batch_finance(batch_id):
     return render_template("poultry/batch_finance_form.html", batch=batch, form=form)
 
 
+def _stock_purchases_during(batch):
+    """Achats de stock de la ferme du lot, sur sa periode (mise en place ->
+    cloture ou aujourd'hui). Purement informatif sur le rapport : contrairement
+    au cout aliment/medicaments/bois du lot (ce qui a ete consomme par CE
+    lot), ce total couvre tout ce qui a ete achete pour la ferme pendant la
+    periode, y compris ce qui a servi a d'autres lots actifs en meme temps -
+    les deux chiffres repondent a des questions differentes et ne doivent
+    jamais etre additionnes."""
+    end = batch.end_date or date.today()
+    purchases = (
+        StockPurchase.query.filter(
+            StockPurchase.farm_id == batch.farm_id,
+            StockPurchase.purchase_date >= batch.start_date,
+            StockPurchase.purchase_date <= end,
+        )
+        .all()
+    )
+    total = sum((p.total_cost or 0) for p in purchases)
+    return total, purchases
+
+
 @poultry_bp.route("/lots/<int:batch_id>/rapport")
 @login_required
 def batch_report(batch_id):
@@ -255,6 +279,7 @@ def batch_report(batch_id):
     # tracabilite des ventes).
     cash_collected = sum((s.amount_paid or 0) for s in batch.sales)
     cash_outstanding = sum((s.balance_due or 0) for s in batch.sales)
+    stock_purchases_total, _ = _stock_purchases_during(batch)
     return render_template(
         "poultry/batch_report.html",
         batch=batch,
@@ -264,6 +289,7 @@ def batch_report(batch_id):
         growth_data=growth_curve_comparison(batch),
         cash_collected=cash_collected,
         cash_outstanding=cash_outstanding,
+        stock_purchases_total=stock_purchases_total,
     )
 
 

@@ -65,6 +65,14 @@
   <p>Aucune donnee financiere disponible pour ce lot.</p>
   {% endif %}
 
+  <div class="section-title">Achats de stock sur la ferme pendant cette periode</div>
+  <p>{{ stock_purchases_total|currency }}</p>
+  <p style="font-size: 9pt; color: #667066;">
+    Different du "Total des depenses" ci-dessus : ce montant compte tout ce qui a ete achete pour cette
+    ferme (aliment, bois, medicaments) sur la periode du lot, meme ce qui a servi a un autre lot actif en
+    meme temps. Le "Total des depenses" du lot ne compte que ce que ce lot a reellement consomme.
+  </p>
+
   <div class="section-title">Suivi de mortalite (par jour)</div>
   <table>
     <thead><tr><th>Jour</th><th>Date</th><th>Morts du jour</th><th>Cumul</th></tr></thead>
